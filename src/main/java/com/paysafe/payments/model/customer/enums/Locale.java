@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * This indicates the customer's locale.
  */
 public enum Locale {
+  EN("en"),
+
   EN_US("en_US"),
 
   FR_CA("fr_CA"),
