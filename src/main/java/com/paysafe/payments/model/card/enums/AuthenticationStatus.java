@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * </ul>
  */
 public enum AuthenticationStatus {
-  COMPLETED("COMPLETED "),
+  COMPLETED("COMPLETED"),
 
   FAILED("FAILED");
 
