@@ -11,7 +11,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum CardCategory {
   CREDIT("CREDIT"),
 
-  DEBIT("DEBIT");
+  DEBIT("DEBIT"),
+
+  PREPAID("PREPAID");
 
   private final String value;
 
