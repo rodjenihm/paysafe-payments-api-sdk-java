@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * <li> N – The cardholder failed to successfully authenticate with their card issuer.  </li>
  * <li> U – Authentication with the card issuer was unavailable.  </li>
  * <li> E – An error occurred during authentication. </li>
+ * <li> C – The cardholder cancelled the authentication process. </li>
  * </ul>
  */
 public enum ThreeDResult {
@@ -24,7 +25,9 @@ public enum ThreeDResult {
 
   U("U"),
 
-  E("E");
+  E("E"),
+
+  C("C");
 
   private final String value;
 
