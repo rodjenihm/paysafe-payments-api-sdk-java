@@ -19,7 +19,9 @@ public enum ThreeDResult {
 
   U("U"),
 
-  E("E");
+  E("E"),
+
+  C("C");
 
   private final String value;
 
