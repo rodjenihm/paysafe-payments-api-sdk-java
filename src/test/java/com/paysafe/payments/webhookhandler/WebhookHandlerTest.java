@@ -16,9 +16,8 @@ import org.junit.jupiter.api.Test;
 
 import com.paysafe.payments.logging.SdkLogger;
 import com.paysafe.payments.webhookhandler.exception.SignatureVerificationException;
-import com.paysafe.payments.webhookhandler.model.WebhookEvent;
 import com.paysafe.payments.webhookhandler.exception.WebhookEventParsingException;
-import com.paysafe.payments.webhookhandler.WebhookHandler;
+import com.paysafe.payments.webhookhandler.model.WebhookEvent;
 
 class WebhookHandlerTest {
 

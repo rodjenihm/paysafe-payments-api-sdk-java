@@ -446,5 +446,4 @@ public class PaysafeClient {
       throw new PaysafeSdkException(String.format(DESERIALIZATION_ERROR_MESSAGE, e.getMessage()));
     }
   }
-
 }

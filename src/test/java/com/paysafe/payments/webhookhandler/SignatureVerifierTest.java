@@ -13,7 +13,6 @@ import javax.crypto.Mac;
 
 import org.junit.jupiter.api.Test;
 
-import com.paysafe.payments.webhookhandler.SignatureVerifier;
 import com.paysafe.payments.webhookhandler.exception.SignatureVerificationException;
 
 class SignatureVerifierTest {

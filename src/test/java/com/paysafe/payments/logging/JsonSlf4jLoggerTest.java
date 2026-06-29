@@ -9,11 +9,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.read.ListAppender;
-
 import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
@@ -26,8 +21,11 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paysafe.payments.config.ObjectMapperConfiguration;
-import com.paysafe.payments.logging.JsonSlf4jLogger;
-import com.paysafe.payments.logging.LoggingLevel;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 
 @ExtendWith(MockitoExtension.class)
 class JsonSlf4jLoggerTest {
