@@ -3,7 +3,6 @@
 package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.buildQueryParameters;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
@@ -42,7 +41,7 @@ public class StandaloneCreditServiceImpl implements StandaloneCreditService {
   @Override
   public StandaloneCredit processStandaloneCredit(StandaloneCreditRequest creditRequest, RequestOptions requestOptions) throws PaysafeSdkException {
     PaysafeApiResponse response = paysafeApiClient.executePost(STANDALONE_CREDIT_ENDPOINT, creditRequest, requestOptions);
-    return processResponse(response, StandaloneCredit.class);
+    return paysafeApiClient.processResponse(response, StandaloneCredit.class);
   }
 
   /**
@@ -67,7 +66,7 @@ public class StandaloneCreditServiceImpl implements StandaloneCreditService {
     final String path = String.format("%s%s", STANDALONE_CREDIT_ENDPOINT, buildQueryParameters(merchantRefNum, endDate,
         limit, offset, startDate, null, null));
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, StandaloneCreditList.class);
+    return paysafeApiClient.processResponse(response, StandaloneCreditList.class);
   }
 
   /**
@@ -86,7 +85,7 @@ public class StandaloneCreditServiceImpl implements StandaloneCreditService {
       final RequestOptions requestOptions) throws PaysafeSdkException {
     final String endpoint = String.format(ENDPOINT_PATH_FORMAT, STANDALONE_CREDIT_ENDPOINT, standaloneCreditId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(endpoint, requestOptions);
-    return processResponse(response, StandaloneCredit.class);
+    return paysafeApiClient.processResponse(response, StandaloneCredit.class);
   }
 
   /**
@@ -107,7 +106,7 @@ public class StandaloneCreditServiceImpl implements StandaloneCreditService {
 
     final String path = String.format(ENDPOINT_PATH_FORMAT, STANDALONE_CREDIT_ENDPOINT, standaloneCreditId);
     PaysafeApiResponse response = paysafeApiClient.executePut(path, cancelRequest, requestOptions);
-    return processResponse(response, CancelResponse.class);
+    return paysafeApiClient.processResponse(response, CancelResponse.class);
   }
 
   @Override public StandaloneCredit patchStandaloneCreditStatusForInteracFraud(final String standaloneCreditId,
@@ -120,6 +119,6 @@ public class StandaloneCreditServiceImpl implements StandaloneCreditService {
 
     final String path = String.format(ENDPOINT_PATH_FORMAT, STANDALONE_CREDIT_ENDPOINT, standaloneCreditId);
     PaysafeApiResponse response = paysafeApiClient.executePatch(path, creditUpdateRequest, requestOptions);
-    return processResponse(response, StandaloneCredit.class);
+    return paysafeApiClient.processResponse(response, StandaloneCredit.class);
   }
 }

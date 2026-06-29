@@ -1,15 +1,24 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.applepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.applepay.enums.PaymentDataType;
 import com.paysafe.payments.model.common.enums.CurrencyCode;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * Details of ApplePay Payment token returned by Apple Pay JS.
+ * Details of ApplePay Payment token returned by Apple Pay JS
  */
 public class ApplePayDecryptedData {
 
@@ -34,7 +43,7 @@ public class ApplePayDecryptedData {
     super();
   }
 
-  private ApplePayDecryptedData(Builder builder) {
+  private ApplePayDecryptedData(final Builder builder) {
     setApplicationPrimaryAccountNumber(builder.applicationPrimaryAccountNumber);
     setApplicationExpirationDate(builder.applicationExpirationDate);
     setCurrencyCode(builder.currencyCode);
@@ -49,13 +58,14 @@ public class ApplePayDecryptedData {
     return new Builder();
   }
 
+
   public ApplePayDecryptedData applicationPrimaryAccountNumber(String applicationPrimaryAccountNumber) {
     this.applicationPrimaryAccountNumber = applicationPrimaryAccountNumber;
     return this;
   }
 
   /**
-   * The Device PAN of the ApplePay card.
+   * The Device PAN of the ApplePay card
    *
    * @return applicationPrimaryAccountNumber
    */
@@ -67,13 +77,14 @@ public class ApplePayDecryptedData {
     this.applicationPrimaryAccountNumber = applicationPrimaryAccountNumber;
   }
 
+
   public ApplePayDecryptedData applicationExpirationDate(String applicationExpirationDate) {
     this.applicationExpirationDate = applicationExpirationDate;
     return this;
   }
 
   /**
-   * The expiration date.
+   * The expiration date
    *
    * @return applicationExpirationDate
    */
@@ -85,13 +96,14 @@ public class ApplePayDecryptedData {
     this.applicationExpirationDate = applicationExpirationDate;
   }
 
+
   public ApplePayDecryptedData currencyCode(CurrencyCode currencyCode) {
     this.currencyCode = currencyCode;
     return this;
   }
 
   /**
-   * The currency code.
+   * Get currencyCode
    *
    * @return currencyCode
    */
@@ -103,13 +115,14 @@ public class ApplePayDecryptedData {
     this.currencyCode = currencyCode;
   }
 
+
   public ApplePayDecryptedData transactionAmount(String transactionAmount) {
     this.transactionAmount = transactionAmount;
     return this;
   }
 
   /**
-   * The transaction amount.
+   * The transaction amount
    *
    * @return transactionAmount
    */
@@ -121,13 +134,14 @@ public class ApplePayDecryptedData {
     this.transactionAmount = transactionAmount;
   }
 
+
   public ApplePayDecryptedData cardholderName(String cardholderName) {
     this.cardholderName = cardholderName;
     return this;
   }
 
   /**
-   * The cardholder's name.
+   * The cardholder's name
    *
    * @return cardholderName
    */
@@ -139,13 +153,14 @@ public class ApplePayDecryptedData {
     this.cardholderName = cardholderName;
   }
 
+
   public ApplePayDecryptedData deviceManufacturerIdentifier(String deviceManufacturerIdentifier) {
     this.deviceManufacturerIdentifier = deviceManufacturerIdentifier;
     return this;
   }
 
   /**
-   * The device manufacturer identifier.
+   * The device manufacturer identifier
    *
    * @return deviceManufacturerIdentifier
    */
@@ -157,13 +172,14 @@ public class ApplePayDecryptedData {
     this.deviceManufacturerIdentifier = deviceManufacturerIdentifier;
   }
 
+
   public ApplePayDecryptedData paymentDataType(PaymentDataType paymentDataType) {
     this.paymentDataType = paymentDataType;
     return this;
   }
 
   /**
-   * The payment data type. Possible values: EMV, 3DSecure.
+   * Get paymentDataType
    *
    * @return paymentDataType
    */
@@ -174,6 +190,7 @@ public class ApplePayDecryptedData {
   public void setPaymentDataType(PaymentDataType paymentDataType) {
     this.paymentDataType = paymentDataType;
   }
+
 
   public ApplePayDecryptedData paymentData(ApplePayDecryptedTokenPaymentData paymentData) {
     this.paymentData = paymentData;
@@ -214,8 +231,7 @@ public class ApplePayDecryptedData {
 
   @Override
   public int hashCode() {
-    return Objects.hash(applicationPrimaryAccountNumber, applicationExpirationDate, currencyCode, transactionAmount,
-        cardholderName, deviceManufacturerIdentifier, paymentDataType, paymentData);
+    return Objects.hash(applicationPrimaryAccountNumber, applicationExpirationDate, currencyCode, transactionAmount, cardholderName, deviceManufacturerIdentifier, paymentDataType, paymentData);
   }
 
   @Override
@@ -245,7 +261,7 @@ public class ApplePayDecryptedData {
   }
 
   /**
-   * {@code ApplePayDecryptedData} builder static inner class.
+   * Details of ApplePay Payment token returned by Apple Pay JS builder static inner class.
    */
   public static final class Builder {
     private String applicationPrimaryAccountNumber;
@@ -261,9 +277,11 @@ public class ApplePayDecryptedData {
     }
 
     /**
-     * Sets the {@code applicationPrimaryAccountNumber} and returns a reference to this Builder enabling method chaining.
+     * The Device PAN of the ApplePay card
+     * <p>
+     * Sets the applicationPrimaryAccountNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param applicationPrimaryAccountNumber the {@code applicationPrimaryAccountNumber} to set
+     * @param applicationPrimaryAccountNumber the applicationPrimaryAccountNumber to set
      * @return a reference to this Builder
      */
     public Builder applicationPrimaryAccountNumber(String applicationPrimaryAccountNumber) {
@@ -272,9 +290,11 @@ public class ApplePayDecryptedData {
     }
 
     /**
-     * Sets the {@code applicationExpirationDate} and returns a reference to this Builder enabling method chaining.
+     * The expiration date
+     * <p>
+     * Sets the applicationExpirationDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param applicationExpirationDate the {@code applicationExpirationDate} to set
+     * @param applicationExpirationDate the applicationExpirationDate to set
      * @return a reference to this Builder
      */
     public Builder applicationExpirationDate(String applicationExpirationDate) {
@@ -283,9 +303,9 @@ public class ApplePayDecryptedData {
     }
 
     /**
-     * Sets the {@code currencyCode} and returns a reference to this Builder enabling method chaining.
+     * Sets the currencyCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param currencyCode the {@code currencyCode} to set
+     * @param currencyCode the currencyCode to set
      * @return a reference to this Builder
      */
     public Builder currencyCode(CurrencyCode currencyCode) {
@@ -294,9 +314,11 @@ public class ApplePayDecryptedData {
     }
 
     /**
-     * Sets the {@code transactionAmount} and returns a reference to this Builder enabling method chaining.
+     * The transaction amount
+     * <p>
+     * Sets the transactionAmount and returns a reference to this Builder enabling method chaining.
      *
-     * @param transactionAmount the {@code transactionAmount} to set
+     * @param transactionAmount the transactionAmount to set
      * @return a reference to this Builder
      */
     public Builder transactionAmount(String transactionAmount) {
@@ -305,9 +327,11 @@ public class ApplePayDecryptedData {
     }
 
     /**
-     * Sets the {@code cardholderName} and returns a reference to this Builder enabling method chaining.
+     * The cardholder's name
+     * <p>
+     * Sets the cardholderName and returns a reference to this Builder enabling method chaining.
      *
-     * @param cardholderName the {@code cardholderName} to set
+     * @param cardholderName the cardholderName to set
      * @return a reference to this Builder
      */
     public Builder cardholderName(String cardholderName) {
@@ -316,9 +340,11 @@ public class ApplePayDecryptedData {
     }
 
     /**
-     * Sets the {@code deviceManufacturerIdentifier} and returns a reference to this Builder enabling method chaining.
+     * The device manufacturer identifier
+     * <p>
+     * Sets the deviceManufacturerIdentifier and returns a reference to this Builder enabling method chaining.
      *
-     * @param deviceManufacturerIdentifier the {@code deviceManufacturerIdentifier} to set
+     * @param deviceManufacturerIdentifier the deviceManufacturerIdentifier to set
      * @return a reference to this Builder
      */
     public Builder deviceManufacturerIdentifier(String deviceManufacturerIdentifier) {
@@ -327,9 +353,9 @@ public class ApplePayDecryptedData {
     }
 
     /**
-     * Sets the {@code paymentDataType} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentDataType and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentDataType the {@code paymentDataType} to set, either EMV or 3DSecure.
+     * @param paymentDataType the paymentDataType to set
      * @return a reference to this Builder
      */
     public Builder paymentDataType(PaymentDataType paymentDataType) {
@@ -338,9 +364,9 @@ public class ApplePayDecryptedData {
     }
 
     /**
-     * Sets the {@code paymentData} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentData and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentData the {@code paymentData} to set
+     * @param paymentData the paymentData to set
      * @return a reference to this Builder
      */
     public Builder paymentData(ApplePayDecryptedTokenPaymentData paymentData) {
@@ -349,13 +375,12 @@ public class ApplePayDecryptedData {
     }
 
     /**
-     * Returns a {@code ApplePayDecryptedData} built from the parameters previously set.
+     * Returns a ApplePayDecryptedData built from the parameters previously set.
      *
-     * @return a {@code ApplePayDecryptedData} built with parameters of this {@code ApplePayDecryptedData.Builder}
+     * @return a ApplePayDecryptedData built with parameters of this ApplePayDecryptedData.Builder
      */
     public ApplePayDecryptedData build() {
       return new ApplePayDecryptedData(this);
     }
   }
 }
-

@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.applepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * ApplePayDecryptedTokenPaymentData
+ * Decrypted payment data for Apple Pay
  */
 public class ApplePayDecryptedTokenPaymentData {
 
@@ -22,7 +30,7 @@ public class ApplePayDecryptedTokenPaymentData {
     super();
   }
 
-  private ApplePayDecryptedTokenPaymentData(Builder builder) {
+  private ApplePayDecryptedTokenPaymentData(final Builder builder) {
     setOnlinePaymentCryptogram(builder.onlinePaymentCryptogram);
     setEciIndicator(builder.eciIndicator);
     setEmvData(builder.emvData);
@@ -31,6 +39,7 @@ public class ApplePayDecryptedTokenPaymentData {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public ApplePayDecryptedTokenPaymentData onlinePaymentCryptogram(String onlinePaymentCryptogram) {
     this.onlinePaymentCryptogram = onlinePaymentCryptogram;
@@ -50,13 +59,14 @@ public class ApplePayDecryptedTokenPaymentData {
     this.onlinePaymentCryptogram = onlinePaymentCryptogram;
   }
 
+
   public ApplePayDecryptedTokenPaymentData eciIndicator(String eciIndicator) {
     this.eciIndicator = eciIndicator;
     return this;
   }
 
   /**
-   * The ECI indicator.
+   * The ECI indicator
    *
    * @return eciIndicator
    */
@@ -67,6 +77,7 @@ public class ApplePayDecryptedTokenPaymentData {
   public void setEciIndicator(String eciIndicator) {
     this.eciIndicator = eciIndicator;
   }
+
 
   public ApplePayDecryptedTokenPaymentData emvData(String emvData) {
     this.emvData = emvData;
@@ -127,7 +138,7 @@ public class ApplePayDecryptedTokenPaymentData {
   }
 
   /**
-   * {@code ApplePayDecryptedTokenPaymentData} builder static inner class.
+   * Decrypted payment data for Apple Pay builder static inner class.
    */
   public static final class Builder {
     private String onlinePaymentCryptogram;
@@ -138,9 +149,11 @@ public class ApplePayDecryptedTokenPaymentData {
     }
 
     /**
-     * Sets the {@code onlinePaymentCryptogram} and returns a reference to this Builder enabling method chaining.
+     * The cryptogram for this payment. Required when paymentDataType is '3DSecure'
+     * <p>
+     * Sets the onlinePaymentCryptogram and returns a reference to this Builder enabling method chaining.
      *
-     * @param onlinePaymentCryptogram the {@code onlinePaymentCryptogram} to set
+     * @param onlinePaymentCryptogram the onlinePaymentCryptogram to set
      * @return a reference to this Builder
      */
     public Builder onlinePaymentCryptogram(String onlinePaymentCryptogram) {
@@ -149,9 +162,11 @@ public class ApplePayDecryptedTokenPaymentData {
     }
 
     /**
-     * Sets the {@code eciIndicator} and returns a reference to this Builder enabling method chaining.
+     * The ECI indicator
+     * <p>
+     * Sets the eciIndicator and returns a reference to this Builder enabling method chaining.
      *
-     * @param eciIndicator the {@code eciIndicator} to set
+     * @param eciIndicator the eciIndicator to set
      * @return a reference to this Builder
      */
     public Builder eciIndicator(String eciIndicator) {
@@ -160,9 +175,11 @@ public class ApplePayDecryptedTokenPaymentData {
     }
 
     /**
-     * Sets the {@code emvData} and returns a reference to this Builder enabling method chaining.
+     * Required when paymentDataType is 'EMV'
+     * <p>
+     * Sets the emvData and returns a reference to this Builder enabling method chaining.
      *
-     * @param emvData the {@code emvData} to set
+     * @param emvData the emvData to set
      * @return a reference to this Builder
      */
     public Builder emvData(String emvData) {
@@ -171,14 +188,12 @@ public class ApplePayDecryptedTokenPaymentData {
     }
 
     /**
-     * Returns a {@code ApplePayDecryptedTokenPaymentData} built from the parameters previously set.
+     * Returns a ApplePayDecryptedTokenPaymentData built from the parameters previously set.
      *
-     * @return a {@code ApplePayDecryptedTokenPaymentData} built with parameters of this
-     * {@code ApplePayDecryptedTokenPaymentData.Builder}
+     * @return a ApplePayDecryptedTokenPaymentData built with parameters of this ApplePayDecryptedTokenPaymentData.Builder
      */
     public ApplePayDecryptedTokenPaymentData build() {
       return new ApplePayDecryptedTokenPaymentData(this);
     }
   }
 }
-

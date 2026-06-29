@@ -1,27 +1,36 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.lpm.enums.BankNameCode;
-import com.paysafe.payments.model.lpm.enums.CountryCode;
+import com.paysafe.payments.model.lpm.enums.SafetyPayCashCountryCode;
 
+
+
+/**
+ * SafetyPayCash.
+ */
 public class SafetyPayCash {
 
   @JsonProperty("countryCode")
-  private CountryCode countryCode;
+  private SafetyPayCashCountryCode countryCode;
   @JsonProperty("bankNameCodes")
-  private List<BankNameCode> bankNameCodes = null;
+  private List<BankNameCode> bankNameCodes;
 
   public SafetyPayCash() {
     super();
   }
 
-  private SafetyPayCash(Builder builder) {
+  private SafetyPayCash(final Builder builder) {
     setCountryCode(builder.countryCode);
     setBankNameCodes(builder.bankNameCodes);
   }
@@ -30,23 +39,25 @@ public class SafetyPayCash {
     return new Builder();
   }
 
-  public SafetyPayCash countryCode(CountryCode countryCode) {
+
+  public SafetyPayCash countryCode(SafetyPayCashCountryCode countryCode) {
     this.countryCode = countryCode;
     return this;
   }
 
   /**
-   * Get countryCode.
+   * Get countryCode
    *
    * @return countryCode
    */
-  public CountryCode getCountryCode() {
+  public SafetyPayCashCountryCode getCountryCode() {
     return countryCode;
   }
 
-  public void setCountryCode(CountryCode countryCode) {
+  public void setCountryCode(SafetyPayCashCountryCode countryCode) {
     this.countryCode = countryCode;
   }
+
 
   public SafetyPayCash bankNameCodes(List<BankNameCode> bankNameCodes) {
     this.bankNameCodes = bankNameCodes;
@@ -70,7 +81,7 @@ public class SafetyPayCash {
   }
 
   /**
-   * Get bankNameCodes.
+   * Get bankNameCodes
    *
    * @return bankNameCodes
    */
@@ -121,30 +132,32 @@ public class SafetyPayCash {
   }
 
   /**
-   * {@code SafetyPayCash} builder static inner class.
+   * SafetyPayCash. builder static inner class.
    */
   public static final class Builder {
-    private CountryCode countryCode;
+    private SafetyPayCashCountryCode countryCode;
     private List<BankNameCode> bankNameCodes;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code countryCode} and returns a reference to this Builder enabling method chaining.
+     * Sets the countryCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param countryCode the {@code countryCode} to set
+     * @param countryCode the countryCode to set
      * @return a reference to this Builder
      */
-    public Builder countryCode(CountryCode countryCode) {
+    public Builder countryCode(SafetyPayCashCountryCode countryCode) {
       this.countryCode = countryCode;
       return this;
     }
 
     /**
-     * Sets the {@code bankNameCodes} and returns a reference to this Builder enabling method chaining.
+     * Get bankNameCodes
+     * <p>
+     * Sets the bankNameCodes and returns a reference to this Builder enabling method chaining.
      *
-     * @param bankNameCodes the {@code bankNameCodes} to set
+     * @param bankNameCodes the bankNameCodes to set
      * @return a reference to this Builder
      */
     public Builder bankNameCodes(List<BankNameCode> bankNameCodes) {
@@ -153,13 +166,12 @@ public class SafetyPayCash {
     }
 
     /**
-     * Returns a {@code SafetyPayCash} built from the parameters previously set.
+     * Returns a SafetyPayCash built from the parameters previously set.
      *
-     * @return a {@code SafetyPayCash} built with parameters of this {@code SafetyPayCash.Builder}
+     * @return a SafetyPayCash built with parameters of this SafetyPayCash.Builder
      */
     public SafetyPayCash build() {
       return new SafetyPayCash(this);
     }
   }
 }
-

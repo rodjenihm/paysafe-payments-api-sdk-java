@@ -35,7 +35,7 @@ public interface CustomerService {
    * <p>
    *
    * @param customerRequest containing new Customer's data
-   * @param requestOptions  Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param requestOptions  custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return Customer, if it was created successfully
    * @throws PaysafeSdkException if an error occurs
    */
@@ -65,7 +65,7 @@ public interface CustomerService {
    *
    * @param customerId     the unique ID returned in the response to the Create a Customer request
    * @param fields         list of sub-components (Possible values: addresses, paymenthandles)
-   * @param requestOptions custom connectTimeout, responseTimeout and/or maxAutomaticRetries for this request.
+   * @param requestOptions custom connectTimeout, responseTimeout and/or maxAutomaticRetries for this request
    * @return Customer, if found
    * @throws PaysafeSdkException if an error occurs
    */
@@ -93,7 +93,7 @@ public interface CustomerService {
    *
    * @param merchantCustomerId customer ID that the merchant provided with the customer creation request for their own internal customer identification
    * @param fields             list of sub-components (Possible values: addresses, paymenthandles)
-   * @param requestOptions     custom connectTimeout, responseTimeout and/or maxAutomaticRetries for this request.
+   * @param requestOptions     custom connectTimeout, responseTimeout and/or maxAutomaticRetries for this request
    * @return Customer, if found
    * @throws PaysafeSdkException if an error occurs
    */
@@ -111,7 +111,7 @@ public interface CustomerService {
    * <p>
    *
    * @param customerId      the unique ID returned in the response to the Create a Customer request
-   * @param customerRequest Customer's new details
+   * @param customerRequest customer's new details
    * @return the resulting Customer with updated data
    * @throws PaysafeSdkException if an error occurs
    */
@@ -129,8 +129,8 @@ public interface CustomerService {
    * <p>
    *
    * @param customerId      the unique ID returned in the response to the Create a Customer request
-   * @param customerRequest Customer's new details
-   * @param requestOptions  custom connectTimeout, responseTimeout and/or maxAutomaticRetries for this request.
+   * @param customerRequest customer's new details
+   * @param requestOptions  custom connectTimeout, responseTimeout and/or maxAutomaticRetries for this request
    * @return the resulting Customer with updated data
    * @throws PaysafeSdkException if an error occurs
    */

@@ -1,25 +1,32 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.refund;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.BaseApiResponse;
 import com.paysafe.payments.model.common.GatewayResponse;
 import com.paysafe.payments.model.common.enums.CurrencyCode;
-import com.paysafe.payments.model.common.enums.TransactionRequestStatus;
-import com.paysafe.payments.model.common.error.Error;
 import com.paysafe.payments.model.lpm.Splitpay;
 import com.paysafe.payments.model.paymenthandle.enums.PaymentType;
+import com.paysafe.payments.model.refund.enums.RefundStatus;
+
+
 
 /**
- * Represents the details of a Refund
+ * Represents the details of a refund.
  */
 public class Refund extends BaseApiResponse {
 
+  @JsonProperty("id")
+  private String id;
   @JsonProperty("merchantRefNum")
   private String merchantRefNum;
   @JsonProperty("amount")
@@ -27,9 +34,7 @@ public class Refund extends BaseApiResponse {
   @JsonProperty("dupCheck")
   private Boolean dupCheck = true;
   @JsonProperty("splitpay")
-  private List<Splitpay> splitpay = null;
-  @JsonProperty("id")
-  private String id;
+  private List<Splitpay> splitpay;
   @JsonProperty("paymentType")
   private PaymentType paymentType;
   @JsonProperty("currencyCode")
@@ -37,7 +42,7 @@ public class Refund extends BaseApiResponse {
   @JsonProperty("txnTime")
   private String txnTime;
   @JsonProperty("status")
-  private TransactionRequestStatus status;
+  private RefundStatus status;
   @JsonProperty("gatewayReconciliationId")
   private String gatewayReconciliationId;
   @JsonProperty("updatedTime")
@@ -53,13 +58,14 @@ public class Refund extends BaseApiResponse {
   @JsonProperty("childAccountNum")
   private String childAccountNum;
   @JsonProperty("riskReasonCode")
-  private List<Integer> riskReasonCode = null;
+  private List<Integer> riskReasonCode;
 
   public Refund() {
     super();
   }
 
-  private Refund(Builder builder) {
+  private Refund(final Builder builder) {
+    setId(builder.id);
     setMerchantRefNum(builder.merchantRefNum);
     setAmount(builder.amount);
     setDupCheck(builder.dupCheck);
@@ -75,7 +81,6 @@ public class Refund extends BaseApiResponse {
     setGatewayResponse(builder.gatewayResponse);
     setSource(builder.source);
     setChildAccountNum(builder.childAccountNum);
-    setError(builder.error);
     setRiskReasonCode(builder.riskReasonCode);
   }
 
@@ -83,13 +88,33 @@ public class Refund extends BaseApiResponse {
     return new Builder();
   }
 
+
+  public Refund id(String id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * The unique identifier for the refund transaction
+   *
+   * @return id
+   */
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+
   public Refund merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
     return this;
   }
 
   /**
-   * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
+   * The merchant reference number created by the merchant and submitted as part of the request
    *
    * @return merchantRefNum
    */
@@ -101,14 +126,14 @@ public class Refund extends BaseApiResponse {
     this.merchantRefNum = merchantRefNum;
   }
 
+
   public Refund amount(Integer amount) {
     this.amount = amount;
     return this;
   }
 
   /**
-   * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099.  <br>
-   * Maximum: 99999999999
+   * The amount of the request, in minor units
    *
    * @return amount
    */
@@ -120,14 +145,14 @@ public class Refund extends BaseApiResponse {
     this.amount = amount;
   }
 
+
   public Refund dupCheck(Boolean dupCheck) {
     this.dupCheck = dupCheck;
     return this;
   }
 
   /**
-   * This validates that this request is not a duplicate. A request is considered a duplicate if the merchantRefNum has already been used in a previous
-   * request within the past 90 days.  <b>Note:</b> This value defaults to true.
+   * Indicates whether duplicate transaction checking was applied
    *
    * @return dupCheck
    */
@@ -138,6 +163,7 @@ public class Refund extends BaseApiResponse {
   public void setDupCheck(Boolean dupCheck) {
     this.dupCheck = dupCheck;
   }
+
 
   public Refund splitpay(List<Splitpay> splitpay) {
     this.splitpay = splitpay;
@@ -161,7 +187,7 @@ public class Refund extends BaseApiResponse {
   }
 
   /**
-   * Get splitpay
+   * Split payment details for the refund
    *
    * @return splitpay
    */
@@ -173,23 +199,6 @@ public class Refund extends BaseApiResponse {
     this.splitpay = splitpay;
   }
 
-  public Refund id(String id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * This is the ID returned in the response. This ID can be used for future associated requests.
-   *
-   * @return id
-   */
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
 
   public Refund paymentType(PaymentType paymentType) {
     this.paymentType = paymentType;
@@ -197,7 +206,7 @@ public class Refund extends BaseApiResponse {
   }
 
   /**
-   * This is the payment type of the transaction.
+   * Get paymentType
    *
    * @return paymentType
    */
@@ -209,14 +218,14 @@ public class Refund extends BaseApiResponse {
     this.paymentType = paymentType;
   }
 
+
   public Refund currencyCode(CurrencyCode currencyCode) {
     this.currencyCode = currencyCode;
     return this;
   }
 
   /**
-   * This is the currency of the merchant account, e.g., USD or CAD.
-   * See <a href="https://developer.paysafe.com/en/support/reference-information/codes/#currency-codes">Currency Codes.</a>
+   * Get currencyCode
    *
    * @return currencyCode
    */
@@ -228,13 +237,14 @@ public class Refund extends BaseApiResponse {
     this.currencyCode = currencyCode;
   }
 
+
   public Refund txnTime(String txnTime) {
     this.txnTime = txnTime;
     return this;
   }
 
   /**
-   * This is the date and time the transaction was processed.
+   * The date and time of the transaction
    *
    * @return txnTime
    */
@@ -246,22 +256,25 @@ public class Refund extends BaseApiResponse {
     this.txnTime = txnTime;
   }
 
-  public Refund status(TransactionRequestStatus status) {
+
+  public Refund status(RefundStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the transaction request.
+   * Get status
+   *
    * @return status
    */
-  public TransactionRequestStatus getStatus() {
+  public RefundStatus getStatus() {
     return status;
   }
 
-  public void setStatus(TransactionRequestStatus status) {
+  public void setStatus(RefundStatus status) {
     this.status = status;
   }
+
 
   public Refund gatewayReconciliationId(String gatewayReconciliationId) {
     this.gatewayReconciliationId = gatewayReconciliationId;
@@ -269,7 +282,7 @@ public class Refund extends BaseApiResponse {
   }
 
   /**
-   * Transaction identifier that can be used to reconcile this transaction with the provider gateway.
+   * The reconciliation ID returned by the gateway
    *
    * @return gatewayReconciliationId
    */
@@ -281,13 +294,14 @@ public class Refund extends BaseApiResponse {
     this.gatewayReconciliationId = gatewayReconciliationId;
   }
 
+
   public Refund updatedTime(String updatedTime) {
     this.updatedTime = updatedTime;
     return this;
   }
 
   /**
-   * Indicates the last updated time for the resource.
+   * The date and time the refund response was last updated
    *
    * @return updatedTime
    */
@@ -299,13 +313,14 @@ public class Refund extends BaseApiResponse {
     this.updatedTime = updatedTime;
   }
 
+
   public Refund statusTime(String statusTime) {
     this.statusTime = statusTime;
     return this;
   }
 
   /**
-   * Indicates the last updated time for the resource.
+   * The date and time of the last status change
    *
    * @return statusTime
    */
@@ -317,13 +332,14 @@ public class Refund extends BaseApiResponse {
     this.statusTime = statusTime;
   }
 
+
   public Refund liveMode(Boolean liveMode) {
     this.liveMode = liveMode;
     return this;
   }
 
   /**
-   * This flag indicates the environment.  - true - Production - false - Non-Production
+   * Indicates whether the refund was processed in live mode
    *
    * @return liveMode
    */
@@ -335,13 +351,14 @@ public class Refund extends BaseApiResponse {
     this.liveMode = liveMode;
   }
 
+
   public Refund gatewayResponse(GatewayResponse gatewayResponse) {
     this.gatewayResponse = gatewayResponse;
     return this;
   }
 
   /**
-   * This is the read-only raw response returned by an acquirer or PSP.
+   * Get gatewayResponse
    *
    * @return gatewayResponse
    */
@@ -353,13 +370,14 @@ public class Refund extends BaseApiResponse {
     this.gatewayResponse = gatewayResponse;
   }
 
+
   public Refund source(String source) {
     this.source = source;
     return this;
   }
 
   /**
-   * This is the source of the transaction. Possible value: SingleAPI
+   * The source of the refund
    *
    * @return source
    */
@@ -371,13 +389,14 @@ public class Refund extends BaseApiResponse {
     this.source = source;
   }
 
+
   public Refund childAccountNum(String childAccountNum) {
     this.childAccountNum = childAccountNum;
     return this;
   }
 
   /**
-   * This is child merchant account number. It is returned only if the transaction was processed via a master account.
+   * The child account number if the transaction is processed via a master account
    *
    * @return childAccountNum
    */
@@ -388,6 +407,7 @@ public class Refund extends BaseApiResponse {
   public void setChildAccountNum(String childAccountNum) {
     this.childAccountNum = childAccountNum;
   }
+
 
   public Refund riskReasonCode(List<Integer> riskReasonCode) {
     this.riskReasonCode = riskReasonCode;
@@ -411,8 +431,7 @@ public class Refund extends BaseApiResponse {
   }
 
   /**
-   * An array of integers is returned, displaying the detailed Risk reason codes if your transaction was declined.
-   * It is returned only if your account is configured accordingly.
+   * List of risk-related reason codes
    *
    * @return riskReasonCode
    */
@@ -433,11 +452,11 @@ public class Refund extends BaseApiResponse {
       return false;
     }
     Refund refund = (Refund) o;
-    return Objects.equals(this.merchantRefNum, refund.merchantRefNum) &&
+    return Objects.equals(this.id, refund.id) &&
+        Objects.equals(this.merchantRefNum, refund.merchantRefNum) &&
         Objects.equals(this.amount, refund.amount) &&
         Objects.equals(this.dupCheck, refund.dupCheck) &&
         Objects.equals(this.splitpay, refund.splitpay) &&
-        Objects.equals(this.id, refund.id) &&
         Objects.equals(this.paymentType, refund.paymentType) &&
         Objects.equals(this.currencyCode, refund.currencyCode) &&
         Objects.equals(this.txnTime, refund.txnTime) &&
@@ -449,25 +468,23 @@ public class Refund extends BaseApiResponse {
         Objects.equals(this.gatewayResponse, refund.gatewayResponse) &&
         Objects.equals(this.source, refund.source) &&
         Objects.equals(this.childAccountNum, refund.childAccountNum) &&
-        Objects.equals(this.getError(), refund.getError()) &&
         Objects.equals(this.riskReasonCode, refund.riskReasonCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, amount, dupCheck, splitpay, id, paymentType, currencyCode, txnTime, status, gatewayReconciliationId, updatedTime,
-        statusTime, liveMode, gatewayResponse, source, childAccountNum, getError(), riskReasonCode);
+    return Objects.hash(id, merchantRefNum, amount, dupCheck, splitpay, paymentType, currencyCode, txnTime, status, gatewayReconciliationId, updatedTime, statusTime, liveMode, gatewayResponse, source, childAccountNum, riskReasonCode);
   }
 
   @Override
   public String toString() {
 
     return "class Refund {\n"
+        + "    id: " + toIndentedString(id) + "\n"
         + "    merchantRefNum: " + toIndentedString(merchantRefNum) + "\n"
         + "    amount: " + toIndentedString(amount) + "\n"
         + "    dupCheck: " + toIndentedString(dupCheck) + "\n"
         + "    splitpay: " + toIndentedString(splitpay) + "\n"
-        + "    id: " + toIndentedString(id) + "\n"
         + "    paymentType: " + toIndentedString(paymentType) + "\n"
         + "    currencyCode: " + toIndentedString(currencyCode) + "\n"
         + "    txnTime: " + toIndentedString(txnTime) + "\n"
@@ -479,7 +496,6 @@ public class Refund extends BaseApiResponse {
         + "    gatewayResponse: " + toIndentedString(gatewayResponse) + "\n"
         + "    source: " + toIndentedString(source) + "\n"
         + "    childAccountNum: " + toIndentedString(childAccountNum) + "\n"
-        + "    error: " + toIndentedString(getError()) + "\n"
         + "    riskReasonCode: " + toIndentedString(riskReasonCode) + "\n"
         + "}";
   }
@@ -496,9 +512,10 @@ public class Refund extends BaseApiResponse {
   }
 
   /**
-   * {@code Refund} builder static inner class.
+   * Represents the details of a refund. builder static inner class.
    */
   public static final class Builder {
+    private String id;
     private String merchantRefNum;
     private Integer amount;
     private Boolean dupCheck;
@@ -506,7 +523,7 @@ public class Refund extends BaseApiResponse {
     private PaymentType paymentType;
     private CurrencyCode currencyCode;
     private String txnTime;
-    private TransactionRequestStatus status;
+    private RefundStatus status;
     private String gatewayReconciliationId;
     private String updatedTime;
     private String statusTime;
@@ -514,16 +531,30 @@ public class Refund extends BaseApiResponse {
     private GatewayResponse gatewayResponse;
     private String source;
     private String childAccountNum;
-    private Error error;
     private List<Integer> riskReasonCode;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * The unique identifier for the refund transaction
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
+     * @param id the id to set
+     * @return a reference to this Builder
+     */
+    public Builder id(String id) {
+      this.id = id;
+      return this;
+    }
+
+    /**
+     * The merchant reference number created by the merchant and submitted as part of the request
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
+     *
+     * @param merchantRefNum the merchantRefNum to set
      * @return a reference to this Builder
      */
     public Builder merchantRefNum(String merchantRefNum) {
@@ -532,9 +563,11 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code amount} and returns a reference to this Builder enabling method chaining.
+     * The amount of the request, in minor units
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
      *
-     * @param amount the {@code amount} to set
+     * @param amount the amount to set
      * @return a reference to this Builder
      */
     public Builder amount(Integer amount) {
@@ -543,9 +576,11 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code dupCheck} and returns a reference to this Builder enabling method chaining.
+     * Indicates whether duplicate transaction checking was applied
+     * <p>
+     * Sets the dupCheck and returns a reference to this Builder enabling method chaining.
      *
-     * @param dupCheck the {@code dupCheck} to set
+     * @param dupCheck the dupCheck to set
      * @return a reference to this Builder
      */
     public Builder dupCheck(Boolean dupCheck) {
@@ -554,9 +589,11 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code splitpay} and returns a reference to this Builder enabling method chaining.
+     * Split payment details for the refund
+     * <p>
+     * Sets the splitpay and returns a reference to this Builder enabling method chaining.
      *
-     * @param splitpay the {@code splitpay} to set
+     * @param splitpay the splitpay to set
      * @return a reference to this Builder
      */
     public Builder splitpay(List<Splitpay> splitpay) {
@@ -565,9 +602,9 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code paymentType} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentType and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentType the {@code paymentType} to set
+     * @param paymentType the paymentType to set
      * @return a reference to this Builder
      */
     public Builder paymentType(PaymentType paymentType) {
@@ -576,9 +613,9 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code currencyCode} and returns a reference to this Builder enabling method chaining.
+     * Sets the currencyCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param currencyCode the {@code currencyCode} to set
+     * @param currencyCode the currencyCode to set
      * @return a reference to this Builder
      */
     public Builder currencyCode(CurrencyCode currencyCode) {
@@ -587,9 +624,11 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code txnTime} and returns a reference to this Builder enabling method chaining.
+     * The date and time of the transaction
+     * <p>
+     * Sets the txnTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param txnTime the {@code txnTime} to set
+     * @param txnTime the txnTime to set
      * @return a reference to this Builder
      */
     public Builder txnTime(String txnTime) {
@@ -598,20 +637,22 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
-    public Builder status(TransactionRequestStatus status) {
+    public Builder status(RefundStatus status) {
       this.status = status;
       return this;
     }
 
     /**
-     * Sets the {@code gatewayReconciliationId} and returns a reference to this Builder enabling method chaining.
+     * The reconciliation ID returned by the gateway
+     * <p>
+     * Sets the gatewayReconciliationId and returns a reference to this Builder enabling method chaining.
      *
-     * @param gatewayReconciliationId the {@code gatewayReconciliationId} to set
+     * @param gatewayReconciliationId the gatewayReconciliationId to set
      * @return a reference to this Builder
      */
     public Builder gatewayReconciliationId(String gatewayReconciliationId) {
@@ -620,9 +661,11 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code updatedTime} and returns a reference to this Builder enabling method chaining.
+     * The date and time the refund response was last updated
+     * <p>
+     * Sets the updatedTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param updatedTime the {@code updatedTime} to set
+     * @param updatedTime the updatedTime to set
      * @return a reference to this Builder
      */
     public Builder updatedTime(String updatedTime) {
@@ -631,9 +674,11 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code statusTime} and returns a reference to this Builder enabling method chaining.
+     * The date and time of the last status change
+     * <p>
+     * Sets the statusTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param statusTime the {@code statusTime} to set
+     * @param statusTime the statusTime to set
      * @return a reference to this Builder
      */
     public Builder statusTime(String statusTime) {
@@ -642,9 +687,11 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code liveMode} and returns a reference to this Builder enabling method chaining.
+     * Indicates whether the refund was processed in live mode
+     * <p>
+     * Sets the liveMode and returns a reference to this Builder enabling method chaining.
      *
-     * @param liveMode the {@code liveMode} to set
+     * @param liveMode the liveMode to set
      * @return a reference to this Builder
      */
     public Builder liveMode(Boolean liveMode) {
@@ -653,9 +700,9 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code gatewayResponse} and returns a reference to this Builder enabling method chaining.
+     * Sets the gatewayResponse and returns a reference to this Builder enabling method chaining.
      *
-     * @param gatewayResponse the {@code gatewayResponse} to set
+     * @param gatewayResponse the gatewayResponse to set
      * @return a reference to this Builder
      */
     public Builder gatewayResponse(GatewayResponse gatewayResponse) {
@@ -664,9 +711,11 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code source} and returns a reference to this Builder enabling method chaining.
+     * The source of the refund
+     * <p>
+     * Sets the source and returns a reference to this Builder enabling method chaining.
      *
-     * @param source the {@code source} to set
+     * @param source the source to set
      * @return a reference to this Builder
      */
     public Builder source(String source) {
@@ -675,9 +724,11 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code childAccountNum} and returns a reference to this Builder enabling method chaining.
+     * The child account number if the transaction is processed via a master account
+     * <p>
+     * Sets the childAccountNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param childAccountNum the {@code childAccountNum} to set
+     * @param childAccountNum the childAccountNum to set
      * @return a reference to this Builder
      */
     public Builder childAccountNum(String childAccountNum) {
@@ -686,20 +737,11 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code error} and returns a reference to this Builder enabling method chaining.
+     * List of risk-related reason codes
+     * <p>
+     * Sets the riskReasonCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param error the {@code error} to set
-     * @return a reference to this Builder
-     */
-    public Builder error(Error error) {
-      this.error = error;
-      return this;
-    }
-
-    /**
-     * Sets the {@code riskReasonCode} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param riskReasonCode the {@code riskReasonCode} to set
+     * @param riskReasonCode the riskReasonCode to set
      * @return a reference to this Builder
      */
     public Builder riskReasonCode(List<Integer> riskReasonCode) {
@@ -708,13 +750,12 @@ public class Refund extends BaseApiResponse {
     }
 
     /**
-     * Returns a {@code Refund} built from the parameters previously set.
+     * Returns a Refund built from the parameters previously set.
      *
-     * @return a {@code Refund} built with parameters of this {@code Refund.Builder}
+     * @return a Refund built with parameters of this Refund.Builder
      */
     public Refund build() {
       return new Refund(this);
     }
   }
 }
-

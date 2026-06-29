@@ -1,12 +1,20 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.lpm.enums.CountryCode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.customer.Customer;
 import com.paysafe.payments.model.lpm.enums.LanguageCode;
+
+
 
 /**
  * These are the details of the customer used for the transaction.
@@ -30,13 +38,13 @@ public class Skrill {
   @JsonProperty("detail1Text")
   private String detail1Text;
   @JsonProperty("countryCode")
-  private CountryCode countryCode;
+  private String countryCode;
 
   public Skrill() {
     super();
   }
 
-  private Skrill(Builder builder) {
+  private Skrill(final Builder builder) {
     setConsumerId(builder.consumerId);
     setEmailSubject(builder.emailSubject);
     setEmailMessage(builder.emailMessage);
@@ -52,14 +60,14 @@ public class Skrill {
     return new Builder();
   }
 
+
   public Skrill consumerId(String consumerId) {
     this.consumerId = consumerId;
     return this;
   }
 
   /**
-   * This is the email address of the customer who is  making or receiving the payment. This is to be provided by merchant.
-   * This is sent as \"pay_from_email\" to Skrill.
+   * This is the email address of the customer who is making or receiving the payment. This is to be provided by merchant. This is sent as \"pay_from_email\" to Skrill
    *
    * @return consumerId
    */
@@ -71,14 +79,14 @@ public class Skrill {
     this.consumerId = consumerId;
   }
 
+
   public Skrill emailSubject(String emailSubject) {
     this.emailSubject = emailSubject;
     return this;
   }
 
   /**
-   * <b>Note:</b> Mandatory field for payout only. This is the Subject line to use in the customer email.
-   * This is to be provided by merchant while making a payout.
+   * **Note:** Mandatory field for payout only. This is the Subject line to use in the customer email. This is to be provided by merchant while making a payout
    *
    * @return emailSubject
    */
@@ -90,13 +98,14 @@ public class Skrill {
     this.emailSubject = emailSubject;
   }
 
+
   public Skrill emailMessage(String emailMessage) {
     this.emailMessage = emailMessage;
     return this;
   }
 
   /**
-   * <b>Note:</b> Mandatory field for payout. This is the message to use in the customer email. This is to be provided by merchant while  making a payout.
+   * **Note:** Mandatory field for payout. This is the message to use in the customer email. This is to be provided by merchant while making a payout
    *
    * @return emailMessage
    */
@@ -108,14 +117,14 @@ public class Skrill {
     this.emailMessage = emailMessage;
   }
 
+
   public Skrill recipientDescription(String recipientDescription) {
     this.recipientDescription = recipientDescription;
     return this;
   }
 
   /**
-   * This is a description to be shown on the Skrill payment page in the logo area if there is no logo_url parameter.
-   * If no value is submitted and  there is no logo, the pay_to_email value is shown as the recipient of the payment.
+   * This is a description to be shown on the Skrill payment page in the logo area if there is no logo url parameter. If no value is submitted and there is no logo, the pay_to_email value is shown as the recipient of the payment
    *
    * @return recipientDescription
    */
@@ -127,15 +136,14 @@ public class Skrill {
     this.recipientDescription = recipientDescription;
   }
 
+
   public Skrill language(LanguageCode language) {
     this.language = language;
     return this;
   }
 
   /**
-   * The 2-character preferred language code for the consumer (e.g. AU, AT, BE, BR, CA, CH, CN, DE, ES, GB, FR, IT, NL, PL, PT, RU, or US.)
-   * or A five-character code is also valid for languages in these countries (e.g. da_DK, he_IL, id_ID, ja_JP, no_NO, pt_BR, ru_RU, sv_SE,
-   * th_TH, zh_CN, zh_HK, and zh_TW).  <br>
+   * Get language
    *
    * @return language
    */
@@ -147,17 +155,14 @@ public class Skrill {
     this.language = language;
   }
 
+
   public Skrill logoUrl(String logoUrl) {
     this.logoUrl = logoUrl;
     return this;
   }
 
   /**
-   * This is the URL of the logo that you would like to appear in the top right of the Skrill. The logo must be accessible via HTTPS or it will not be shown.
-   * The logo will be resized to fit. To avoid scaling distortion, the minimum size should be as  follows:  <br>
-   * If the logo width is greater than height - at least 107px wide.  <br>
-   * If logo width is greater than height - at least 65px high.  <br>
-   * Avoid large images (much greater than 256 by 256px) to minimize the page loading time.
+   * This is the URL of the logo that you would like to appear in the top right of the Skrill. The logo must be accessible via HTTPS or it will not be shown. The logo will be resized to fit. To avoid scaling distortion, the minimum size should be as follows: If the logo width is greater than height - at least 107px wide. If logo width is greater than height - at least 65px high. Avoid large images (much greater than 256 by 256px) to minimize the page loading time
    *
    * @return logoUrl
    */
@@ -169,13 +174,14 @@ public class Skrill {
     this.logoUrl = logoUrl;
   }
 
+
   public Skrill detail1Description(String detail1Description) {
     this.detail1Description = detail1Description;
     return this;
   }
 
   /**
-   * You can show additional details about the product  in the More information section in the header.
+   * You can show additional details about the product in the More information section in the header
    *
    * @return detail1Description
    */
@@ -187,14 +193,14 @@ public class Skrill {
     this.detail1Description = detail1Description;
   }
 
+
   public Skrill detail1Text(String detail1Text) {
     this.detail1Text = detail1Text;
     return this;
   }
 
   /**
-   * The detail1Text is shown next to the  detail1Description in the More Information section in the header of the payment form with the other payment details.
-   * The detail1Description combined with the detail1Text is shown in the more information field of the merchant account history CSV file.
+   * The detail1Text is shown next to the detail1Description in the More Information section in the header of the payment form with the other payment details. The detail1Description combined with the detail1Text is shown in the more information field of the merchant account history CSV file
    *
    * @return detail1Text
    */
@@ -206,7 +212,8 @@ public class Skrill {
     this.detail1Text = detail1Text;
   }
 
-  public Skrill countryCode(CountryCode countryCode) {
+
+  public Skrill countryCode(String countryCode) {
     this.countryCode = countryCode;
     return this;
   }
@@ -216,11 +223,11 @@ public class Skrill {
    *
    * @return countryCode
    */
-  public CountryCode getCountryCode() {
+  public String getCountryCode() {
     return countryCode;
   }
 
-  public void setCountryCode(CountryCode countryCode) {
+  public void setCountryCode(String countryCode) {
     this.countryCode = countryCode;
   }
 
@@ -277,7 +284,7 @@ public class Skrill {
   }
 
   /**
-   * {@code Skrill} builder static inner class.
+   * These are the details of the customer used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String consumerId;
@@ -288,15 +295,17 @@ public class Skrill {
     private String logoUrl;
     private String detail1Description;
     private String detail1Text;
-    private CountryCode countryCode;
+    private String countryCode;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code consumerId} and returns a reference to this Builder enabling method chaining.
+     * This is the email address of the customer who is making or receiving the payment. This is to be provided by merchant. This is sent as \"pay_from_email\" to Skrill
+     * <p>
+     * Sets the consumerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param consumerId the {@code consumerId} to set
+     * @param consumerId the consumerId to set
      * @return a reference to this Builder
      */
     public Builder consumerId(String consumerId) {
@@ -305,9 +314,11 @@ public class Skrill {
     }
 
     /**
-     * Sets the {@code emailSubject} and returns a reference to this Builder enabling method chaining.
+     * **Note:** Mandatory field for payout only. This is the Subject line to use in the customer email. This is to be provided by merchant while making a payout
+     * <p>
+     * Sets the emailSubject and returns a reference to this Builder enabling method chaining.
      *
-     * @param emailSubject the {@code emailSubject} to set
+     * @param emailSubject the emailSubject to set
      * @return a reference to this Builder
      */
     public Builder emailSubject(String emailSubject) {
@@ -316,9 +327,11 @@ public class Skrill {
     }
 
     /**
-     * Sets the {@code emailMessage} and returns a reference to this Builder enabling method chaining.
+     * **Note:** Mandatory field for payout. This is the message to use in the customer email. This is to be provided by merchant while making a payout
+     * <p>
+     * Sets the emailMessage and returns a reference to this Builder enabling method chaining.
      *
-     * @param emailMessage the {@code emailMessage} to set
+     * @param emailMessage the emailMessage to set
      * @return a reference to this Builder
      */
     public Builder emailMessage(String emailMessage) {
@@ -327,9 +340,11 @@ public class Skrill {
     }
 
     /**
-     * Sets the {@code recipientDescription} and returns a reference to this Builder enabling method chaining.
+     * This is a description to be shown on the Skrill payment page in the logo area if there is no logo url parameter. If no value is submitted and there is no logo, the pay_to_email value is shown as the recipient of the payment
+     * <p>
+     * Sets the recipientDescription and returns a reference to this Builder enabling method chaining.
      *
-     * @param recipientDescription the {@code recipientDescription} to set
+     * @param recipientDescription the recipientDescription to set
      * @return a reference to this Builder
      */
     public Builder recipientDescription(String recipientDescription) {
@@ -338,9 +353,9 @@ public class Skrill {
     }
 
     /**
-     * Sets the {@code language} and returns a reference to this Builder enabling method chaining.
+     * Sets the language and returns a reference to this Builder enabling method chaining.
      *
-     * @param language the {@code language} to set
+     * @param language the language to set
      * @return a reference to this Builder
      */
     public Builder language(LanguageCode language) {
@@ -349,9 +364,11 @@ public class Skrill {
     }
 
     /**
-     * Sets the {@code logoUrl} and returns a reference to this Builder enabling method chaining.
+     * This is the URL of the logo that you would like to appear in the top right of the Skrill. The logo must be accessible via HTTPS or it will not be shown. The logo will be resized to fit. To avoid scaling distortion, the minimum size should be as follows: If the logo width is greater than height - at least 107px wide. If logo width is greater than height - at least 65px high. Avoid large images (much greater than 256 by 256px) to minimize the page loading time
+     * <p>
+     * Sets the logoUrl and returns a reference to this Builder enabling method chaining.
      *
-     * @param logoUrl the {@code logoUrl} to set
+     * @param logoUrl the logoUrl to set
      * @return a reference to this Builder
      */
     public Builder logoUrl(String logoUrl) {
@@ -360,9 +377,11 @@ public class Skrill {
     }
 
     /**
-     * Sets the {@code detail1Description} and returns a reference to this Builder enabling method chaining.
+     * You can show additional details about the product in the More information section in the header
+     * <p>
+     * Sets the detail1Description and returns a reference to this Builder enabling method chaining.
      *
-     * @param detail1Description the {@code detail1Description} to set
+     * @param detail1Description the detail1Description to set
      * @return a reference to this Builder
      */
     public Builder detail1Description(String detail1Description) {
@@ -371,9 +390,11 @@ public class Skrill {
     }
 
     /**
-     * Sets the {@code detail1Text} and returns a reference to this Builder enabling method chaining.
+     * The detail1Text is shown next to the detail1Description in the More Information section in the header of the payment form with the other payment details. The detail1Description combined with the detail1Text is shown in the more information field of the merchant account history CSV file
+     * <p>
+     * Sets the detail1Text and returns a reference to this Builder enabling method chaining.
      *
-     * @param detail1Text the {@code detail1Text} to set
+     * @param detail1Text the detail1Text to set
      * @return a reference to this Builder
      */
     public Builder detail1Text(String detail1Text) {
@@ -382,24 +403,25 @@ public class Skrill {
     }
 
     /**
-     * Sets the {@code countryCode} and returns a reference to this Builder enabling method chaining.
+     * This is Customer's country of residence
+     * <p>
+     * Sets the countryCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param countryCode the {@code countryCode} to set
+     * @param countryCode the countryCode to set
      * @return a reference to this Builder
      */
-    public Builder countryCode(CountryCode countryCode) {
+    public Builder countryCode(String countryCode) {
       this.countryCode = countryCode;
       return this;
     }
 
     /**
-     * Returns a {@code Skrill} built from the parameters previously set.
+     * Returns a Skrill built from the parameters previously set.
      *
-     * @return a {@code Skrill} built with parameters of this {@code Skrill.Builder}
+     * @return a Skrill built with parameters of this Skrill.Builder
      */
     public Skrill build() {
       return new Skrill(this);
     }
   }
 }
-

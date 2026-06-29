@@ -1,10 +1,18 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.airline;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
  * Information about the travel agency if the ticket was issued by a travel agency.
@@ -13,10 +21,8 @@ public class TravelAgency {
 
   @JsonProperty("code")
   private String code;
-
   @JsonProperty("name")
   private String name;
-
   @JsonProperty("agencyAddress")
   private AgencyAddress agencyAddress;
 
@@ -24,7 +30,7 @@ public class TravelAgency {
     super();
   }
 
-  private TravelAgency(Builder builder) {
+  private TravelAgency(final Builder builder) {
     setCode(builder.code);
     setName(builder.name);
     setAgencyAddress(builder.agencyAddress);
@@ -34,13 +40,14 @@ public class TravelAgency {
     return new Builder();
   }
 
+
   public TravelAgency code(String code) {
     this.code = code;
     return this;
   }
 
   /**
-   * Code identifying travel agency if the ticket was issued by a travel agency.
+   * Code identifying travel agency if the ticket was issued by a travel agency
    *
    * @return code
    */
@@ -52,13 +59,14 @@ public class TravelAgency {
     this.code = code;
   }
 
+
   public TravelAgency name(String name) {
     this.name = name;
     return this;
   }
 
   /**
-   * Information about the travel agency if the ticket was issued by a travel agency.
+   * Name of the travel agency
    *
    * @return name
    */
@@ -70,13 +78,14 @@ public class TravelAgency {
     this.name = name;
   }
 
+
   public TravelAgency agencyAddress(AgencyAddress agencyAddress) {
     this.agencyAddress = agencyAddress;
     return this;
   }
 
   /**
-   * The travel agency address
+   * Get agencyAddress
    *
    * @return agencyAddress
    */
@@ -109,6 +118,7 @@ public class TravelAgency {
 
   @Override
   public String toString() {
+
     return "class TravelAgency {\n"
         + "    code: " + toIndentedString(code) + "\n"
         + "    name: " + toIndentedString(name) + "\n"
@@ -128,7 +138,7 @@ public class TravelAgency {
   }
 
   /**
-   * {@code TravelAgency} builder static inner class.
+   * Information about the travel agency if the ticket was issued by a travel agency. builder static inner class.
    */
   public static final class Builder {
     private String code;
@@ -139,9 +149,11 @@ public class TravelAgency {
     }
 
     /**
-     * Sets the {@code code} and returns a reference to this Builder enabling method chaining.
+     * Code identifying travel agency if the ticket was issued by a travel agency
+     * <p>
+     * Sets the code and returns a reference to this Builder enabling method chaining.
      *
-     * @param code the {@code code} to set
+     * @param code the code to set
      * @return a reference to this Builder
      */
     public Builder code(String code) {
@@ -150,9 +162,11 @@ public class TravelAgency {
     }
 
     /**
-     * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
+     * Name of the travel agency
+     * <p>
+     * Sets the name and returns a reference to this Builder enabling method chaining.
      *
-     * @param name the {@code name} to set
+     * @param name the name to set
      * @return a reference to this Builder
      */
     public Builder name(String name) {
@@ -161,9 +175,9 @@ public class TravelAgency {
     }
 
     /**
-     * Sets the {@code agencyAddress} and returns a reference to this Builder enabling method chaining.
+     * Sets the agencyAddress and returns a reference to this Builder enabling method chaining.
      *
-     * @param agencyAddress the {@code agencyAddress} to set
+     * @param agencyAddress the agencyAddress to set
      * @return a reference to this Builder
      */
     public Builder agencyAddress(AgencyAddress agencyAddress) {
@@ -172,9 +186,9 @@ public class TravelAgency {
     }
 
     /**
-     * Returns a {@code TravelAgency} built from the parameters previously set.
+     * Returns a TravelAgency built from the parameters previously set.
      *
-     * @return a {@code TravelAgency} built with parameters of this {@code TravelAgency.Builder}
+     * @return a TravelAgency built with parameters of this TravelAgency.Builder
      */
     public TravelAgency build() {
       return new TravelAgency(this);

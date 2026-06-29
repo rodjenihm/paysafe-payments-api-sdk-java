@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.error;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Additional details
+ * This is an optional field that provides additional data in case of a reject.
  */
 public class AdditionalDetail {
 
@@ -22,7 +30,7 @@ public class AdditionalDetail {
     super();
   }
 
-  private AdditionalDetail(Builder builder) {
+  private AdditionalDetail(final Builder builder) {
     setType(builder.type);
     setCode(builder.code);
     setMessage(builder.message);
@@ -32,13 +40,14 @@ public class AdditionalDetail {
     return new Builder();
   }
 
+
   public AdditionalDetail type(String type) {
     this.type = type;
     return this;
   }
 
   /**
-   * This is the type of the additional detail.
+   * This is the type of the additional detail
    *
    * @return type
    */
@@ -50,13 +59,14 @@ public class AdditionalDetail {
     this.type = type;
   }
 
+
   public AdditionalDetail code(String code) {
     this.code = code;
     return this;
   }
 
   /**
-   * This is the code of the additional detail.
+   * This is the code of the additional detail
    *
    * @return code
    */
@@ -68,13 +78,14 @@ public class AdditionalDetail {
     this.code = code;
   }
 
+
   public AdditionalDetail message(String message) {
     this.message = message;
     return this;
   }
 
   /**
-   * This is the message of the additional detail.
+   * This is the message of the additional detail
    *
    * @return message
    */
@@ -127,7 +138,7 @@ public class AdditionalDetail {
   }
 
   /**
-   * {@code AdditionalDetail} builder static inner class.
+   * This is an optional field that provides additional data in case of a reject. builder static inner class.
    */
   public static final class Builder {
     private String type;
@@ -138,9 +149,11 @@ public class AdditionalDetail {
     }
 
     /**
-     * Sets the {@code type} and returns a reference to this Builder enabling method chaining.
+     * This is the type of the additional detail
+     * <p>
+     * Sets the type and returns a reference to this Builder enabling method chaining.
      *
-     * @param type the {@code type} to set
+     * @param type the type to set
      * @return a reference to this Builder
      */
     public Builder type(String type) {
@@ -149,9 +162,11 @@ public class AdditionalDetail {
     }
 
     /**
-     * Sets the {@code code} and returns a reference to this Builder enabling method chaining.
+     * This is the code of the additional detail
+     * <p>
+     * Sets the code and returns a reference to this Builder enabling method chaining.
      *
-     * @param code the {@code code} to set
+     * @param code the code to set
      * @return a reference to this Builder
      */
     public Builder code(String code) {
@@ -160,9 +175,11 @@ public class AdditionalDetail {
     }
 
     /**
-     * Sets the {@code message} and returns a reference to this Builder enabling method chaining.
+     * This is the message of the additional detail
+     * <p>
+     * Sets the message and returns a reference to this Builder enabling method chaining.
      *
-     * @param message the {@code message} to set
+     * @param message the message to set
      * @return a reference to this Builder
      */
     public Builder message(String message) {
@@ -171,9 +188,9 @@ public class AdditionalDetail {
     }
 
     /**
-     * Returns a {@code AdditionalDetail} built from the parameters previously set.
+     * Returns a AdditionalDetail built from the parameters previously set.
      *
-     * @return a {@code AdditionalDetail} built with parameters of this {@code AdditionalDetail.Builder}
+     * @return a AdditionalDetail built with parameters of this AdditionalDetail.Builder
      */
     public AdditionalDetail build() {
       return new AdditionalDetail(this);

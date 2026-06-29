@@ -1,21 +1,26 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.card.enums.AcquirerCode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Represents the data provided by the acquirer in a transaction.
- * Acquirer data is additional information about your card acquirer, applicable only when you are using Worldpay (VAN)
- * as your acquirer for authorizations. Contact your account manager for more information.
+ * Acquirer data is additional information about your card acquirer. This is applicable **only when** you are using Worldpay (VAN) as your acquirer for authorizations. Contact your account manager for more information.
  */
 public class AcquirerData {
 
   @JsonProperty("code")
-  private AcquirerCode code;
+  private String code;
   @JsonProperty("discretionaryData")
   private DiscretionaryData discretionaryData;
 
@@ -23,7 +28,7 @@ public class AcquirerData {
     super();
   }
 
-  private AcquirerData(Builder builder) {
+  private AcquirerData(final Builder builder) {
     setCode(builder.code);
     setDiscretionaryData(builder.discretionaryData);
   }
@@ -32,23 +37,25 @@ public class AcquirerData {
     return new Builder();
   }
 
-  public AcquirerData code(AcquirerCode code) {
+
+  public AcquirerData code(String code) {
     this.code = code;
     return this;
   }
 
   /**
-   * This is the code for your card acquirer. Possible values: VAN
+   * Code for your card acquirer
    *
    * @return code
    */
-  public AcquirerCode getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(AcquirerCode code) {
+  public void setCode(String code) {
     this.code = code;
   }
+
 
   public AcquirerData discretionaryData(DiscretionaryData discretionaryData) {
     this.discretionaryData = discretionaryData;
@@ -56,8 +63,7 @@ public class AcquirerData {
   }
 
   /**
-   * Discretionary Data consists of three user-defined data fields containing additional information about your card acquirer.
-   * Contact your account manager for more information.
+   * Get discretionaryData
    *
    * @return discretionaryData
    */
@@ -108,30 +114,32 @@ public class AcquirerData {
   }
 
   /**
-   * {@code AcquirerData} builder static inner class.
+   * Acquirer data is additional information about your card acquirer. This is applicable **only when** you are using Worldpay (VAN) as your acquirer for authorizations. Contact your account manager for more information. builder static inner class.
    */
   public static final class Builder {
-    private AcquirerCode code;
+    private String code;
     private DiscretionaryData discretionaryData;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code code} and returns a reference to this Builder enabling method chaining.
+     * Code for your card acquirer
+     * <p>
+     * Sets the code and returns a reference to this Builder enabling method chaining.
      *
-     * @param code the {@code code} to set
+     * @param code the code to set
      * @return a reference to this Builder
      */
-    public Builder code(AcquirerCode code) {
+    public Builder code(String code) {
       this.code = code;
       return this;
     }
 
     /**
-     * Sets the {@code discretionaryData} and returns a reference to this Builder enabling method chaining.
+     * Sets the discretionaryData and returns a reference to this Builder enabling method chaining.
      *
-     * @param discretionaryData the {@code discretionaryData} to set
+     * @param discretionaryData the discretionaryData to set
      * @return a reference to this Builder
      */
     public Builder discretionaryData(DiscretionaryData discretionaryData) {
@@ -140,13 +148,12 @@ public class AcquirerData {
     }
 
     /**
-     * Returns a {@code AcquirerData} built from the parameters previously set.
+     * Returns a AcquirerData built from the parameters previously set.
      *
-     * @return a {@code AcquirerData} built with parameters of this {@code AcquirerData.Builder}
+     * @return a AcquirerData built with parameters of this AcquirerData.Builder
      */
     public AcquirerData build() {
       return new AcquirerData(this);
     }
   }
 }
-

@@ -3,7 +3,6 @@
 package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.buildQueryParameters;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
@@ -38,7 +37,7 @@ public class VerificationServiceImpl implements VerificationService {
   @Override
   public Verification createVerification(final VerificationRequest verificationRequest, final RequestOptions requestOptions) throws PaysafeSdkException {
     PaysafeApiResponse response = paysafeApiClient.executePost(VERIFICATION_ENDPOINT, verificationRequest, requestOptions);
-    return processResponse(response, Verification.class);
+    return paysafeApiClient.processResponse(response, Verification.class);
   }
 
   /**
@@ -56,7 +55,7 @@ public class VerificationServiceImpl implements VerificationService {
   public Verification getVerificationById(final String verificationId, final RequestOptions requestOptions) throws PaysafeSdkException {
     final String endpoint = String.format("%s/%s", VERIFICATION_ENDPOINT, verificationId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(endpoint, requestOptions);
-    return processResponse(response, Verification.class);
+    return paysafeApiClient.processResponse(response, Verification.class);
   }
 
   /**
@@ -80,6 +79,6 @@ public class VerificationServiceImpl implements VerificationService {
     final String path = String.format("%s%s", VERIFICATION_ENDPOINT,
         buildQueryParameters(merchantRefNum, endDate, limit, offset, startDate, null, null));
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, VerificationList.class);
+    return paysafeApiClient.processResponse(response, VerificationList.class);
   }
 }

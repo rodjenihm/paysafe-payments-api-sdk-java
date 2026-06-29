@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.googlepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * This is the payment data object generated from the Android device for Google Pay.
+ * This is the payment data object generated from the Android device for Google Pay
  */
 public class GooglePayDecryptedToken {
 
@@ -24,7 +32,7 @@ public class GooglePayDecryptedToken {
     super();
   }
 
-  private GooglePayDecryptedToken(Builder builder) {
+  private GooglePayDecryptedToken(final Builder builder) {
     setGatewayMerchantId(builder.gatewayMerchantId);
     setMessageId(builder.messageId);
     setMessageExpiration(builder.messageExpiration);
@@ -35,13 +43,14 @@ public class GooglePayDecryptedToken {
     return new Builder();
   }
 
+
   public GooglePayDecryptedToken gatewayMerchantId(String gatewayMerchantId) {
     this.gatewayMerchantId = gatewayMerchantId;
     return this;
   }
 
   /**
-   * Get gatewayMerchantId
+   * Gateway merchant identifier
    *
    * @return gatewayMerchantId
    */
@@ -53,13 +62,14 @@ public class GooglePayDecryptedToken {
     this.gatewayMerchantId = gatewayMerchantId;
   }
 
+
   public GooglePayDecryptedToken messageId(String messageId) {
     this.messageId = messageId;
     return this;
   }
 
   /**
-   * Get messageId
+   * Message identifier
    *
    * @return messageId
    */
@@ -71,13 +81,14 @@ public class GooglePayDecryptedToken {
     this.messageId = messageId;
   }
 
+
   public GooglePayDecryptedToken messageExpiration(String messageExpiration) {
     this.messageExpiration = messageExpiration;
     return this;
   }
 
   /**
-   * Get messageExpiration
+   * Message expiration timestamp
    *
    * @return messageExpiration
    */
@@ -88,6 +99,7 @@ public class GooglePayDecryptedToken {
   public void setMessageExpiration(String messageExpiration) {
     this.messageExpiration = messageExpiration;
   }
+
 
   public GooglePayDecryptedToken paymentMethodDetails(GooglePayDecryptedTokenPaymentMethodDetails paymentMethodDetails) {
     this.paymentMethodDetails = paymentMethodDetails;
@@ -150,7 +162,7 @@ public class GooglePayDecryptedToken {
   }
 
   /**
-   * {@code GooglePayDecryptedToken} builder static inner class.
+   * This is the payment data object generated from the Android device for Google Pay builder static inner class.
    */
   public static final class Builder {
     private String gatewayMerchantId;
@@ -162,9 +174,11 @@ public class GooglePayDecryptedToken {
     }
 
     /**
-     * Sets the {@code gatewayMerchantId} and returns a reference to this Builder enabling method chaining.
+     * Gateway merchant identifier
+     * <p>
+     * Sets the gatewayMerchantId and returns a reference to this Builder enabling method chaining.
      *
-     * @param gatewayMerchantId the {@code gatewayMerchantId} to set
+     * @param gatewayMerchantId the gatewayMerchantId to set
      * @return a reference to this Builder
      */
     public Builder gatewayMerchantId(String gatewayMerchantId) {
@@ -173,9 +187,11 @@ public class GooglePayDecryptedToken {
     }
 
     /**
-     * Sets the {@code messageId} and returns a reference to this Builder enabling method chaining.
+     * Message identifier
+     * <p>
+     * Sets the messageId and returns a reference to this Builder enabling method chaining.
      *
-     * @param messageId the {@code messageId} to set
+     * @param messageId the messageId to set
      * @return a reference to this Builder
      */
     public Builder messageId(String messageId) {
@@ -184,9 +200,11 @@ public class GooglePayDecryptedToken {
     }
 
     /**
-     * Sets the {@code messageExpiration} and returns a reference to this Builder enabling method chaining.
+     * Message expiration timestamp
+     * <p>
+     * Sets the messageExpiration and returns a reference to this Builder enabling method chaining.
      *
-     * @param messageExpiration the {@code messageExpiration} to set
+     * @param messageExpiration the messageExpiration to set
      * @return a reference to this Builder
      */
     public Builder messageExpiration(String messageExpiration) {
@@ -195,9 +213,9 @@ public class GooglePayDecryptedToken {
     }
 
     /**
-     * Sets the {@code paymentMethodDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentMethodDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentMethodDetails the {@code paymentMethodDetails} to set
+     * @param paymentMethodDetails the paymentMethodDetails to set
      * @return a reference to this Builder
      */
     public Builder paymentMethodDetails(GooglePayDecryptedTokenPaymentMethodDetails paymentMethodDetails) {
@@ -206,14 +224,12 @@ public class GooglePayDecryptedToken {
     }
 
     /**
-     * Returns a {@code GooglePayDecryptedToken} built from the parameters previously set.
+     * Returns a GooglePayDecryptedToken built from the parameters previously set.
      *
-     * @return a {@code GooglePayDecryptedToken} built with parameters of this
-     * {@code GooglePayDecryptedToken.Builder}
+     * @return a GooglePayDecryptedToken built with parameters of this GooglePayDecryptedToken.Builder
      */
     public GooglePayDecryptedToken build() {
       return new GooglePayDecryptedToken(this);
     }
   }
 }
-

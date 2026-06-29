@@ -20,7 +20,7 @@ public interface StandaloneCreditService {
    * <p>Endpoint:
    * <strong>POST /v1/standalonecredits</strong></p>
    *
-   * @param body The request body containing the details for the Standalone Credit.
+   * @param body the request body containing the details for the Standalone Credit
    * @return StandaloneCredit
    * @throws PaysafeSdkException if an error occurs
    */
@@ -34,8 +34,8 @@ public interface StandaloneCreditService {
    * <p>Endpoint:
    * <strong>POST /v1/standalonecredits</strong></p>
    *
-   * @param body           The request body containing the details for the Standalone Credit.
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param body           the request body containing the details for the Standalone Credit
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return StandaloneCredit
    * @throws PaysafeSdkException if an error occurs
    */
@@ -48,13 +48,13 @@ public interface StandaloneCreditService {
    * <p>Endpoint:
    * <strong>GET /v1/standalonecredits</strong></p>
    *
-   * @param merchantRefNum The merchant reference number used in the transactions.
-   * @param startDate      The start date for filtering transactions.
-   * @param endDate        The end date for filtering transactions.
-   * @param limit          The maximum number of records to return.
-   * @param offset         The pagination offset.
-   * @return A list of {@code StandaloneCredit} objects representing the response from Paysafe.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param merchantRefNum the merchant reference number used in the transactions
+   * @param startDate      the start date for filtering transactions
+   * @param endDate        the end date for filtering transactions
+   * @param limit          the maximum number of records to return
+   * @param offset         the pagination offset
+   * @return a list of {@code StandaloneCredit} objects representing the response from Paysafe
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   StandaloneCreditList getStandaloneCreditUsingMerchantReferenceNumber(final String merchantRefNum,
       final String endDate, final Integer limit, final Integer offset,
@@ -68,14 +68,14 @@ public interface StandaloneCreditService {
    * <p>Endpoint:
    * <strong>GET /v1/standalonecredits</strong></p>
    *
-   * @param merchantRefNum The merchant reference number used in the transactions.
-   * @param startDate      The start date for filtering transactions.
-   * @param endDate        The end date for filtering transactions.
-   * @param limit          The maximum number of records to return.
-   * @param offset         The pagination offset.
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return A list of {@code StandaloneCredit} objects representing the response from Paysafe.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param merchantRefNum the merchant reference number used in the transactions
+   * @param startDate      the start date for filtering transactions
+   * @param endDate        the end date for filtering transactions
+   * @param limit          the maximum number of records to return
+   * @param offset         the pagination offset
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return a list of {@code StandaloneCredit} objects representing the response from Paysafe
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   StandaloneCreditList getStandaloneCreditsUsingMerchantReferenceNumber(final String merchantRefNum,
       final String endDate, final Integer limit, final Integer offset,
@@ -91,10 +91,10 @@ public interface StandaloneCreditService {
    * <p>Use this method to look up a Standalone Credit by its ID, which is returned
    * in the response to the original Standalone Credit request.</p>
    *
-   * @param standaloneCreditId The ID returned in the response of the Standalone Credit request.
-   *                           This ID is required for making subsequent requests.
-   * @return A {@code StandaloneCredit} object representing the response from Paysafe, containing details about the standalone credit.
-   * @throws PaysafeSdkException If the request fails, or the response cannot be processed
+   * @param standaloneCreditId the ID returned in the response of the Standalone Credit request;
+   *                           this ID is required for making subsequent requests
+   * @return a {@code StandaloneCredit} object representing the response from Paysafe, containing details about the standalone credit
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   StandaloneCredit getStandaloneCreditById(final String standaloneCreditId) throws PaysafeSdkException;
 
@@ -109,11 +109,11 @@ public interface StandaloneCreditService {
    * <p>Use this method to look up a Standalone Credit by its ID, which is returned
    * in the response to the original Standalone Credit request.</p>
    *
-   * @param standaloneCreditId The ID returned in the response of the Standalone Credit request.
-   *                           This ID is required for making subsequent requests.
-   * @param requestOptions     Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return A {@code StandaloneCredit} object representing the response from Paysafe, containing details about the standalone credit.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param standaloneCreditId the ID returned in the response of the Standalone Credit request;
+   *                           this ID is required for making subsequent requests
+   * @param requestOptions     custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return a {@code StandaloneCredit} object representing the response from Paysafe, containing details about the standalone credit
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   StandaloneCredit getStandaloneCreditById(final String standaloneCreditId, final RequestOptions requestOptions) throws PaysafeSdkException;
 
@@ -126,11 +126,10 @@ public interface StandaloneCreditService {
    *
    * <p>Use this method to cancel a Standalone Credit by its ID.</p>
    *
-   * @param standaloneCreditId The unique ID of the Standalone Credit, returned in the original response.
-   * @param cancelRequest      The request body for canceling a Standalone Credit.
-   *                           This ID is required to process the cancellation request.
-   * @return A {@code CancelResponse} object containing details about the canceled Standalone Credit, including the status and transaction time.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param standaloneCreditId the unique ID of the Standalone Credit, returned in the original response
+   * @param cancelRequest      the request body for canceling a Standalone Credit
+   * @return a {@code CancelResponse} object containing details about the canceled Standalone Credit, including the status and transaction time
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   CancelResponse cancelStandaloneCredit(final String standaloneCreditId, final CancelRequest cancelRequest) throws PaysafeSdkException;
 
@@ -144,11 +143,11 @@ public interface StandaloneCreditService {
    *
    * <p>Use this method to cancel a Standalone Credit by its ID.</p>
    *
-   * @param standaloneCreditId The unique ID of the Standalone Credit, returned in the original response.
-   * @param cancelRequest      The request body for canceling a Standalone Credit.
-   * @param requestOptions     Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return A {@code CancelResponse} object containing details about the canceled Standalone Credit, including the status and transaction time.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param standaloneCreditId the unique ID of the Standalone Credit, returned in the original response
+   * @param cancelRequest      the request body for canceling a Standalone Credit
+   * @param requestOptions     custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return a {@code CancelResponse} object containing details about the canceled Standalone Credit, including the status and transaction time
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   CancelResponse cancelStandaloneCredit(final String standaloneCreditId, final CancelRequest cancelRequest,
       final RequestOptions requestOptions) throws PaysafeSdkException;
@@ -160,10 +159,10 @@ public interface StandaloneCreditService {
    * <p>Endpoint:
    * <strong>PATCH /v1/standalonecredits/{standaloneCreditId}</strong></p>
    *
-   * @param standaloneCreditId  The unique ID of the Standalone Credit to update.
-   * @param creditUpdateRequest The request body containing fraud-related information.
-   * @return An updated {@code StandaloneCredit} object after the fraud update.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param standaloneCreditId  the unique ID of the Standalone Credit to update
+   * @param creditUpdateRequest the request body containing fraud-related information
+   * @return an updated {@code StandaloneCredit} object after the fraud update
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   StandaloneCredit patchStandaloneCreditStatusForInteracFraud(final String standaloneCreditId,
       final StandaloneCreditUpdateRequest creditUpdateRequest) throws PaysafeSdkException;
@@ -176,11 +175,11 @@ public interface StandaloneCreditService {
    * <p>Endpoint:
    * <strong>PATCH /v1/standalonecredits/{standaloneCreditId}</strong></p>
    *
-   * @param standaloneCreditId  The unique ID of the Standalone Credit to update.
-   * @param creditUpdateRequest The request body containing fraud-related information.
-   * @param requestOptions      Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return An updated {@code StandaloneCredit} object after the fraud update.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param standaloneCreditId  the unique ID of the Standalone Credit to update
+   * @param creditUpdateRequest the request body containing fraud-related information
+   * @param requestOptions      custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return an updated {@code StandaloneCredit} object after the fraud update
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   StandaloneCredit patchStandaloneCreditStatusForInteracFraud(final String standaloneCreditId,
       final StandaloneCreditUpdateRequest creditUpdateRequest, final RequestOptions requestOptions) throws PaysafeSdkException;

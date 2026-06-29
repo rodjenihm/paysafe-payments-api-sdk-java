@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.cruise;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * A grouping of up to four cruise line legs. Each leg provides detailed itinerary data. <b>Note:</b> This object is only for Cruise line Merchants.
+ * A grouping of up to four cruise line legs. Each leg provides detailed itinerary data. <br>**Note:** This object is only for Cruise line Merchants.
  */
 public class CruiselineTripLegs {
 
@@ -24,7 +32,7 @@ public class CruiselineTripLegs {
     super();
   }
 
-  private CruiselineTripLegs(Builder builder) {
+  private CruiselineTripLegs(final Builder builder) {
     setLeg1(builder.leg1);
     setLeg2(builder.leg2);
     setLeg3(builder.leg3);
@@ -35,13 +43,14 @@ public class CruiselineTripLegs {
     return new Builder();
   }
 
+
   public CruiselineTripLegs leg1(CruiselineLeg leg1) {
     this.leg1 = leg1;
     return this;
   }
 
   /**
-   * Contains detailed itinerary information for one of the cruise line trip legs  <b>Note:</b> This object is only for Cruise line Merchants.
+   * Get leg1
    *
    * @return leg1
    */
@@ -53,13 +62,14 @@ public class CruiselineTripLegs {
     this.leg1 = leg1;
   }
 
+
   public CruiselineTripLegs leg2(CruiselineLeg leg2) {
     this.leg2 = leg2;
     return this;
   }
 
   /**
-   * Contains detailed itinerary information for one of the cruise line trip legs  <b>Note:</b> This object is only for Cruise line Merchants.
+   * Get leg2
    *
    * @return leg2
    */
@@ -71,13 +81,14 @@ public class CruiselineTripLegs {
     this.leg2 = leg2;
   }
 
+
   public CruiselineTripLegs leg3(CruiselineLeg leg3) {
     this.leg3 = leg3;
     return this;
   }
 
   /**
-   * Contains detailed itinerary information for one of the cruise line trip legs  <b>Note:</b> This object is only for Cruise line Merchants.
+   * Get leg3
    *
    * @return leg3
    */
@@ -89,13 +100,14 @@ public class CruiselineTripLegs {
     this.leg3 = leg3;
   }
 
+
   public CruiselineTripLegs leg4(CruiselineLeg leg4) {
     this.leg4 = leg4;
     return this;
   }
 
   /**
-   * Contains detailed itinerary information for one of the cruise line trip legs  <b>Note:</b> This object is only for Cruise line Merchants.
+   * Get leg4
    *
    * @return leg4
    */
@@ -150,7 +162,7 @@ public class CruiselineTripLegs {
   }
 
   /**
-   * {@code CruiselineTripLegs} builder static inner class.
+   * A grouping of up to four cruise line legs. Each leg provides detailed itinerary data. <br>**Note:** This object is only for Cruise line Merchants. builder static inner class.
    */
   public static final class Builder {
     private CruiselineLeg leg1;
@@ -162,9 +174,9 @@ public class CruiselineTripLegs {
     }
 
     /**
-     * Sets the {@code leg1} and returns a reference to this Builder enabling method chaining.
+     * Sets the leg1 and returns a reference to this Builder enabling method chaining.
      *
-     * @param leg1 the {@code leg1} to set
+     * @param leg1 the leg1 to set
      * @return a reference to this Builder
      */
     public Builder leg1(CruiselineLeg leg1) {
@@ -173,9 +185,9 @@ public class CruiselineTripLegs {
     }
 
     /**
-     * Sets the {@code leg2} and returns a reference to this Builder enabling method chaining.
+     * Sets the leg2 and returns a reference to this Builder enabling method chaining.
      *
-     * @param leg2 the {@code leg2} to set
+     * @param leg2 the leg2 to set
      * @return a reference to this Builder
      */
     public Builder leg2(CruiselineLeg leg2) {
@@ -184,9 +196,9 @@ public class CruiselineTripLegs {
     }
 
     /**
-     * Sets the {@code leg3} and returns a reference to this Builder enabling method chaining.
+     * Sets the leg3 and returns a reference to this Builder enabling method chaining.
      *
-     * @param leg3 the {@code leg3} to set
+     * @param leg3 the leg3 to set
      * @return a reference to this Builder
      */
     public Builder leg3(CruiselineLeg leg3) {
@@ -195,9 +207,9 @@ public class CruiselineTripLegs {
     }
 
     /**
-     * Sets the {@code leg4} and returns a reference to this Builder enabling method chaining.
+     * Sets the leg4 and returns a reference to this Builder enabling method chaining.
      *
-     * @param leg4 the {@code leg4} to set
+     * @param leg4 the leg4 to set
      * @return a reference to this Builder
      */
     public Builder leg4(CruiselineLeg leg4) {
@@ -206,13 +218,12 @@ public class CruiselineTripLegs {
     }
 
     /**
-     * Returns a {@code CruiselineTripLegs} built from the parameters previously set.
+     * Returns a CruiselineTripLegs built from the parameters previously set.
      *
-     * @return a {@code CruiselineTripLegs} built with parameters of this {@code CruiselineTripLegs.Builder}
+     * @return a CruiselineTripLegs built with parameters of this CruiselineTripLegs.Builder
      */
     public CruiselineTripLegs build() {
       return new CruiselineTripLegs(this);
     }
   }
 }
-

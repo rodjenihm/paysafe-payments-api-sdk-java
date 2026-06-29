@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.enums;
 
@@ -6,20 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This is type of card used for the request.
- * <ul>
- * <li>AM – American Express</li>
- * <li>DI – Discover</li>
- * <li>JC – JCB</li>
- * <li>MC – Mastercard</li>
- * <li>MD – Maestro</li>
- * <li>SO – Solo</li>
- * <li>VI – Visa</li>
- * <li>VD – Visa Debit</li>
- * <li>VE – Visa Electron</li>
- * </ul>
+ * This is type of card used for the request. - AM - American Express - DI - Discover - JC - JCB - MC - Mastercard - MD - Maestro - SO - Solo - VI - Visa - VD - Visa Debit - VE - Visa Electron
  */
 public enum CardType {
+
   AM("AM"),
 
   DI("DI"),

@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm.enums;
 
@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * This is the bank account type.
  */
 public enum BankAccountType {
+
   SAVINGS("SAVINGS"),
 
   CHECKING("CHECKING"),

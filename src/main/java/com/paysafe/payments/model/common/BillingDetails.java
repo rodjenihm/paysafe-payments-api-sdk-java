@@ -1,69 +1,23 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.customer.Address;
+import com.paysafe.payments.model.customer.Customer;
+
+
 
 /**
- * Customer's billing details. Required if AVS (Address verification) is enabled.
- * If included in the request, this will serve as the billing address for transaction processing.
- * Any billing details returned in Apple Pay Token by Apple Pay will be ignored.
- * 3DS Flow: It is recommended to send billingDetails to improve acceptance rate.
- *
- * <ul>
- *   <li>
- *     <b>id:</b> This is the ID of the billing address, returned in the response.
- *   </li>
- *   <li>
- *     <b>city:</b> This is the city where the address is located.  <br>
- *     Example: Toronto
- *   </li>
- *   <li>
- *     <b>country:</b> This is the country where the address is located. See
- *     <a href="https://developer.paysafe.com/en/support/reference-information/codes/#country-codes">Country Codes</a> <br>
- *     Example: CA
- *   </li>
- *   <li>
- *     <b>nickName:</b> This is the nickname the merchant has for the billing address.  <br>
- *     Example: Home
- *   </li>
- *   <li>
- *     <b>state:</b> This is the state/province/region in which the customer lives.  <br>
- *     - For Canada see <a href="https://developer.paysafe.com/en/support/reference-information/codes/#province-codes">Province Codes</a>
- *      <br>
- *     - For United States see <a href="https://developer.paysafe.com/en/support/reference-information/codes/#state-codes">State Codes</a>
- *      <br>
- *     - Other countries have no restrictions.  <br>
- *     - For 3DS flow: If billingDetails is provided and country is US or CA, then state is mandatory.  <br>
- *     Example: ON
- *   </li>
- *   <li>
- *     <b>street:</b> This is the first line of the customer's street address.  <br>
- *     Example: Street
- *   </li>
- *   <li>
- *     <b>street1:</b> This is the first line of the street address.  <br>
- *     <b>Note:</b> Mandatory for VIPPreferred  <br>
- *     Example: street1
- *   </li>
- *   <li>
- *     <b>street2:</b> This is the second line of the street address, if required (e.g., apartment number).  <br>
- *     Example: street2
- *   </li>
- *   <li>
- *     <b>zip:</b> This is the zip, postal, or post code of the customer's address.  <br>
- *     Example: M5H 2N2
- *   </li>
- *   <li>
- *     <b>phone:</b> This is the customer's telephone number.  <br>
- *     Example: 8765846321
- *   </li>
- *   <li>
- *     <b>error:</b> This contains error details.  <br>
- *   </li>
- * </ul>
+ * Customer's billing details. You must send billingDetails if AVS (Address verification) is enabled. In 3DS flow, it is recommended to send billingDetails to improve acceptance rate.
  */
 public class BillingDetails {
 
@@ -90,7 +44,7 @@ public class BillingDetails {
     super();
   }
 
-  private BillingDetails(Builder builder) {
+  private BillingDetails(final Builder builder) {
     setNickName(builder.nickName);
     setStreet(builder.street);
     setStreet1(builder.street1);
@@ -106,13 +60,14 @@ public class BillingDetails {
     return new Builder();
   }
 
+
   public BillingDetails nickName(String nickName) {
     this.nickName = nickName;
     return this;
   }
 
   /**
-   * This is the nickname the merchant has for the  billing address.
+   * This is the nickname the merchant has for the billing address.
    *
    * @return nickName
    */
@@ -124,14 +79,14 @@ public class BillingDetails {
     this.nickName = nickName;
   }
 
+
   public BillingDetails street(String street) {
     this.street = street;
     return this;
   }
 
   /**
-   * This is the line of the customer's street address. <br>
-   * If both street and street1 are sent then street1 is ignored.
+   * This is the first line of the customer's street address.
    *
    * @return street
    */
@@ -143,14 +98,14 @@ public class BillingDetails {
     this.street = street;
   }
 
+
   public BillingDetails street1(String street1) {
     this.street1 = street1;
     return this;
   }
 
   /**
-   * This is the first line of the customer's street address. <br>
-   * If both street and street1 are sent then street1 is ignored.
+   * This is the first line of the street address.
    *
    * @return street1
    */
@@ -162,6 +117,7 @@ public class BillingDetails {
     this.street1 = street1;
   }
 
+
   public BillingDetails street2(String street2) {
     this.street2 = street2;
     return this;
@@ -169,7 +125,6 @@ public class BillingDetails {
 
   /**
    * This is the second line of the street address, if required (e.g., apartment number).
-   * If more than 15 characters are sent then address will be truncated to first 15 characters.
    *
    * @return street2
    */
@@ -181,13 +136,14 @@ public class BillingDetails {
     this.street2 = street2;
   }
 
+
   public BillingDetails city(String city) {
     this.city = city;
     return this;
   }
 
   /**
-   * This is the city where the address is located.
+   * The city of the billing address.
    *
    * @return city
    */
@@ -199,18 +155,14 @@ public class BillingDetails {
     this.city = city;
   }
 
+
   public BillingDetails state(String state) {
     this.state = state;
     return this;
   }
 
   /**
-   * This is the state/province/region in which the  customer lives.
-   * In 3DS flow, it is mandatory if country is US or CA.
-   * For Canada see (<a href="https://developer.paysafe.com/en/support/reference-information/codes/#province-codes">Province Codes.</a>) <br>
-   * For the United States see <a href="https://developer.paysafe.com/en/support/reference-information/codes/#state-codes">State Codes.</a> <br>
-   *  <br>
-   * In cases when it is not mandatory, it is recommended to send billingDetails to improve acceptance rate.
+   * The state or province of the billing address. - For Canada see [Province Codes](https://developer.paysafe.com/en/support/reference-information/codes/#province-codes) - For the United States see [State Code](https://developer.paysafe.com/en/support/reference-information/codes/#state-codes)
    *
    * @return state
    */
@@ -222,17 +174,16 @@ public class BillingDetails {
     this.state = state;
   }
 
+
   public BillingDetails country(String country) {
     this.country = country;
     return this;
   }
 
   /**
-   * This is the country where the address is located.
-   * SKRILL - Dummy value can be sent in request as this is not passed to Skrill.
+   * The country of the billing address, in ISO 3166-1 alpha-2 format. See See [Country Codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes).
    *
    * @return country
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#country-codes>Country codes</a>
    */
   public String getCountry() {
     return country;
@@ -242,13 +193,14 @@ public class BillingDetails {
     this.country = country;
   }
 
+
   public BillingDetails zip(String zip) {
     this.zip = zip;
     return this;
   }
 
   /**
-   * This is the zip, postal, or post code of the customer's address.
+   * The zip or postal code of the billing address
    *
    * @return zip
    */
@@ -260,13 +212,14 @@ public class BillingDetails {
     this.zip = zip;
   }
 
+
   public BillingDetails phone(String phone) {
     this.phone = phone;
     return this;
   }
 
   /**
-   * This is the customer's telephone number.
+   * The phone number associated with the billing address
    *
    * @return phone
    */
@@ -331,7 +284,7 @@ public class BillingDetails {
   }
 
   /**
-   * {@code BillingDetails} builder static inner class.
+   * Customer's billing details. You must send billingDetails if AVS (Address verification) is enabled. In 3DS flow, it is recommended to send billingDetails to improve acceptance rate. builder static inner class.
    */
   public static final class Builder {
     private String nickName;
@@ -348,9 +301,11 @@ public class BillingDetails {
     }
 
     /**
-     * Sets the {@code nickName} and returns a reference to this Builder enabling method chaining.
+     * This is the nickname the merchant has for the billing address.
+     * <p>
+     * Sets the nickName and returns a reference to this Builder enabling method chaining.
      *
-     * @param nickName the {@code nickName} to set
+     * @param nickName the nickName to set
      * @return a reference to this Builder
      */
     public Builder nickName(String nickName) {
@@ -359,9 +314,11 @@ public class BillingDetails {
     }
 
     /**
-     * Sets the {@code street} and returns a reference to this Builder enabling method chaining.
+     * This is the first line of the customer's street address.
+     * <p>
+     * Sets the street and returns a reference to this Builder enabling method chaining.
      *
-     * @param street the {@code street} to set
+     * @param street the street to set
      * @return a reference to this Builder
      */
     public Builder street(String street) {
@@ -370,9 +327,11 @@ public class BillingDetails {
     }
 
     /**
-     * Sets the {@code street1} and returns a reference to this Builder enabling method chaining.
+     * This is the first line of the street address.
+     * <p>
+     * Sets the street1 and returns a reference to this Builder enabling method chaining.
      *
-     * @param street1 the {@code street1} to set
+     * @param street1 the street1 to set
      * @return a reference to this Builder
      */
     public Builder street1(String street1) {
@@ -381,9 +340,11 @@ public class BillingDetails {
     }
 
     /**
-     * Sets the {@code street2} and returns a reference to this Builder enabling method chaining.
+     * This is the second line of the street address, if required (e.g., apartment number).
+     * <p>
+     * Sets the street2 and returns a reference to this Builder enabling method chaining.
      *
-     * @param street2 the {@code street2} to set
+     * @param street2 the street2 to set
      * @return a reference to this Builder
      */
     public Builder street2(String street2) {
@@ -392,9 +353,11 @@ public class BillingDetails {
     }
 
     /**
-     * Sets the {@code city} and returns a reference to this Builder enabling method chaining.
+     * The city of the billing address.
+     * <p>
+     * Sets the city and returns a reference to this Builder enabling method chaining.
      *
-     * @param city the {@code city} to set
+     * @param city the city to set
      * @return a reference to this Builder
      */
     public Builder city(String city) {
@@ -403,9 +366,11 @@ public class BillingDetails {
     }
 
     /**
-     * Sets the {@code state} and returns a reference to this Builder enabling method chaining.
+     * The state or province of the billing address. - For Canada see [Province Codes](https://developer.paysafe.com/en/support/reference-information/codes/#province-codes) - For the United States see [State Code](https://developer.paysafe.com/en/support/reference-information/codes/#state-codes)
+     * <p>
+     * Sets the state and returns a reference to this Builder enabling method chaining.
      *
-     * @param state the {@code state} to set
+     * @param state the state to set
      * @return a reference to this Builder
      */
     public Builder state(String state) {
@@ -414,9 +379,11 @@ public class BillingDetails {
     }
 
     /**
-     * Sets the {@code country} and returns a reference to this Builder enabling method chaining.
+     * The country of the billing address, in ISO 3166-1 alpha-2 format. See See [Country Codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes).
+     * <p>
+     * Sets the country and returns a reference to this Builder enabling method chaining.
      *
-     * @param country the {@code country} to set
+     * @param country the country to set
      * @return a reference to this Builder
      */
     public Builder country(String country) {
@@ -425,9 +392,11 @@ public class BillingDetails {
     }
 
     /**
-     * Sets the {@code zip} and returns a reference to this Builder enabling method chaining.
+     * The zip or postal code of the billing address
+     * <p>
+     * Sets the zip and returns a reference to this Builder enabling method chaining.
      *
-     * @param zip the {@code zip} to set
+     * @param zip the zip to set
      * @return a reference to this Builder
      */
     public Builder zip(String zip) {
@@ -436,9 +405,11 @@ public class BillingDetails {
     }
 
     /**
-     * Sets the {@code phone} and returns a reference to this Builder enabling method chaining.
+     * The phone number associated with the billing address
+     * <p>
+     * Sets the phone and returns a reference to this Builder enabling method chaining.
      *
-     * @param phone the {@code phone} to set
+     * @param phone the phone to set
      * @return a reference to this Builder
      */
     public Builder phone(String phone) {
@@ -447,13 +418,12 @@ public class BillingDetails {
     }
 
     /**
-     * Returns a {@code BillingDetails} built from the parameters previously set.
+     * Returns a BillingDetails built from the parameters previously set.
      *
-     * @return a {@code BillingDetails} built with parameters of this {@code BillingDetails.Builder}
+     * @return a BillingDetails built with parameters of this BillingDetails.Builder
      */
     public BillingDetails build() {
       return new BillingDetails(this);
     }
   }
 }
-

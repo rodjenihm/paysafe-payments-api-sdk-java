@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.applepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * This object contains the user's payment credentials.
+ * This object contains the user's payment credentials
  */
 public class ApplePayTokenData {
 
@@ -22,7 +30,7 @@ public class ApplePayTokenData {
     super();
   }
 
-  private ApplePayTokenData(Builder builder) {
+  private ApplePayTokenData(final Builder builder) {
     setPaymentData(builder.paymentData);
     setPaymentMethod(builder.paymentMethod);
     setTransactionIdentifier(builder.transactionIdentifier);
@@ -31,6 +39,7 @@ public class ApplePayTokenData {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public ApplePayTokenData paymentData(ApplePayTokenPaymentData paymentData) {
     this.paymentData = paymentData;
@@ -50,13 +59,14 @@ public class ApplePayTokenData {
     this.paymentData = paymentData;
   }
 
+
   public ApplePayTokenData paymentMethod(ApplePayPaymentMethod paymentMethod) {
     this.paymentMethod = paymentMethod;
     return this;
   }
 
   /**
-   * Payment method parameter returned by Apple Pay JS
+   * Get paymentMethod
    *
    * @return paymentMethod
    */
@@ -67,6 +77,7 @@ public class ApplePayTokenData {
   public void setPaymentMethod(ApplePayPaymentMethod paymentMethod) {
     this.paymentMethod = paymentMethod;
   }
+
 
   public ApplePayTokenData transactionIdentifier(String transactionIdentifier) {
     this.transactionIdentifier = transactionIdentifier;
@@ -108,7 +119,7 @@ public class ApplePayTokenData {
   @Override
   public String toString() {
 
-    return "class ApplePayApplePayPaymentTokenToken {\n"
+    return "class ApplePayTokenData {\n"
         + "    paymentData: " + toIndentedString(paymentData) + "\n"
         + "    paymentMethod: " + toIndentedString(paymentMethod) + "\n"
         + "    transactionIdentifier: " + toIndentedString(transactionIdentifier) + "\n"
@@ -127,7 +138,7 @@ public class ApplePayTokenData {
   }
 
   /**
-   * {@code ApplePayApplePayPaymentTokenToken} builder static inner class.
+   * This object contains the user's payment credentials builder static inner class.
    */
   public static final class Builder {
     private ApplePayTokenPaymentData paymentData;
@@ -138,9 +149,9 @@ public class ApplePayTokenData {
     }
 
     /**
-     * Sets the {@code paymentData} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentData and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentData the {@code paymentData} to set
+     * @param paymentData the paymentData to set
      * @return a reference to this Builder
      */
     public Builder paymentData(ApplePayTokenPaymentData paymentData) {
@@ -149,9 +160,9 @@ public class ApplePayTokenData {
     }
 
     /**
-     * Sets the {@code paymentMethod} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentMethod and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentMethod the {@code paymentMethod} to set
+     * @param paymentMethod the paymentMethod to set
      * @return a reference to this Builder
      */
     public Builder paymentMethod(ApplePayPaymentMethod paymentMethod) {
@@ -160,9 +171,11 @@ public class ApplePayTokenData {
     }
 
     /**
-     * Sets the {@code transactionIdentifier} and returns a reference to this Builder enabling method chaining.
+     * Transaction identifier parameter returned by Apple Pay JS
+     * <p>
+     * Sets the transactionIdentifier and returns a reference to this Builder enabling method chaining.
      *
-     * @param transactionIdentifier the {@code transactionIdentifier} to set
+     * @param transactionIdentifier the transactionIdentifier to set
      * @return a reference to this Builder
      */
     public Builder transactionIdentifier(String transactionIdentifier) {
@@ -171,13 +184,12 @@ public class ApplePayTokenData {
     }
 
     /**
-     * Returns a {@code ApplePayApplePayPaymentTokenToken} built from the parameters previously set.
+     * Returns a ApplePayTokenData built from the parameters previously set.
      *
-     * @return a {@code ApplePayApplePayPaymentTokenToken} built with parameters of this {@code ApplePayApplePayPaymentTokenToken.Builder}
+     * @return a ApplePayTokenData built with parameters of this ApplePayTokenData.Builder
      */
     public ApplePayTokenData build() {
       return new ApplePayTokenData(this);
     }
   }
 }
-

@@ -6,6 +6,7 @@ import static com.paysafe.payments.config.ObjectMapperConfiguration.getObjectMap
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -49,6 +50,8 @@ public class ExceptionBuilder {
    *
    * @param customMessage to use for building exception
    * @param response      Payments API response containing status code, internal correlation id header and error details
+   * @param <T>           the class type of the expected response, for example Payment
+   * @param responseType  the class of the expected response, used for parsing the error response body and extracting error details
    * @return PaysafeSdkException or one of its subclasses
    */
   public static <T> PaysafeSdkException buildPaysafeSdkException(final String customMessage, final PaysafeApiResponse response,
@@ -60,27 +63,16 @@ public class ExceptionBuilder {
     try {
       if (httpStatusCode == HTTP_RESPONSE_CODE_REQUEST_DECLINED) {
         BaseApiResponse apiResponse = (BaseApiResponse) getObjectMapper().readValue(response.getResponseBody(), responseType);
-
-        PaysafeError paysafeError = PaysafeError.Builder.builder()
-            .code(apiResponse.getError().getCode())
-            .message(apiResponse.getError().getMessage())
-            .details(apiResponse.getError().getDetails())
-            .additionalDetails(buildAdditionalDetails(apiResponse.getError().getAdditionalDetails()))
-            .fieldErrors(buildFieldErrors(apiResponse.getError().getFieldErrors()))
-            .build();
-
+        PaysafeError paysafeError = buildPaysafeError(apiResponse.getError());
         return new RequestDeclinedException(customMessage, httpStatusCode, internalCorrelationId, paysafeError, apiResponse);
       }
 
       // in other cases, we receive only error responses
       ErrorResponse errorResponse = getObjectMapper().readValue(response.getResponseBody(), ErrorResponse.class);
-      PaysafeError paysafeError = PaysafeError.Builder.builder()
-          .code(errorResponse.getError().getCode())
-          .message(errorResponse.getError().getMessage())
-          .details(errorResponse.getError().getDetails())
-          .additionalDetails(buildAdditionalDetails(errorResponse.getError().getAdditionalDetails()))
-          .fieldErrors(buildFieldErrors(errorResponse.getError().getFieldErrors()))
-          .build();
+      PaysafeError paysafeError = Optional.ofNullable(errorResponse)
+          .map(ErrorResponse::getError)
+          .map(ExceptionBuilder::buildPaysafeError)
+          .orElse(null);
 
       if (httpStatusCode == HTTP_RESPONSE_CODE_BAD_REQUEST) {
         return new InvalidRequestException(customMessage, httpStatusCode, internalCorrelationId, paysafeError);
@@ -98,6 +90,16 @@ public class ExceptionBuilder {
       logger.error("Exception while processing error response from PaymentsAPI: {}", e.getMessage(), e);
       return new PaysafeSdkException("Exception while processing error response from PaymentsAPI", httpStatusCode, internalCorrelationId);
     }
+  }
+
+  private static PaysafeError buildPaysafeError(final com.paysafe.payments.model.common.error.Error error) {
+    return PaysafeError.Builder.builder()
+        .code(error.getCode())
+        .message(error.getMessage())
+        .details(error.getDetails())
+        .additionalDetails(buildAdditionalDetails(error.getAdditionalDetails()))
+        .fieldErrors(buildFieldErrors(error.getFieldErrors()))
+        .build();
   }
 
   private static List<AdditionalDetail> buildAdditionalDetails(

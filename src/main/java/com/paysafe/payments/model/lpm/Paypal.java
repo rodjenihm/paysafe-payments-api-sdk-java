@@ -1,13 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.lpm.enums.LanguageCode;
 import com.paysafe.payments.model.lpm.enums.PaypalShippingReference;
 import com.paysafe.payments.model.lpm.enums.RecipientType;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
  * These are the details of the PayPal account used for the transaction.
@@ -33,7 +42,7 @@ public class Paypal {
     super();
   }
 
-  private Paypal(Builder builder) {
+  private Paypal(final Builder builder) {
     setConsumerId(builder.consumerId);
     setRecipientDescription(builder.recipientDescription);
     setLanguage(builder.language);
@@ -47,13 +56,14 @@ public class Paypal {
     return new Builder();
   }
 
+
   public Paypal consumerId(String consumerId) {
     this.consumerId = consumerId;
     return this;
   }
 
   /**
-   * The email address of the consumer or payer.
+   * The email address of the consumer or payer
    *
    * @return consumerId
    */
@@ -65,13 +75,14 @@ public class Paypal {
     this.consumerId = consumerId;
   }
 
+
   public Paypal recipientDescription(String recipientDescription) {
     this.recipientDescription = recipientDescription;
     return this;
   }
 
   /**
-   * A label that overrides the business name in the  merchant's PayPal account on the PayPal checkout  pages.
+   * A label that overrides the business name in the merchant's PayPal account on the PayPal checkout pages
    *
    * @return recipientDescription
    */
@@ -83,15 +94,14 @@ public class Paypal {
     this.recipientDescription = recipientDescription;
   }
 
+
   public Paypal language(LanguageCode language) {
     this.language = language;
     return this;
   }
 
   /**
-   * The 2-character preferred language code for the consumer (e.g. AU, AT, BE, BR, CA, CH, CN, DE, ES, GB, FR, IT, NL, PL, PT, RU, or US)
-   * or a five-character code is also valid for languages in these countries (e.g. da_DK, he_IL, id_ID, ja_JP, no_NO, pt_BR, ru_RU,
-   * sv_SE, th_TH, zh_CN, zh_HK, and zh_TW).
+   * Get language
    *
    * @return language
    */
@@ -103,13 +113,14 @@ public class Paypal {
     this.language = language;
   }
 
+
   public Paypal shippingPreference(PaypalShippingReference shippingPreference) {
     this.shippingPreference = shippingPreference;
     return this;
   }
 
   /**
-   * The shipping preference.
+   * Get shippingPreference
    *
    * @return shippingPreference
    */
@@ -121,13 +132,14 @@ public class Paypal {
     this.shippingPreference = shippingPreference;
   }
 
+
   public Paypal consumerMessage(String consumerMessage) {
     this.consumerMessage = consumerMessage;
     return this;
   }
 
   /**
-   * Note to be displayed on the PayPal page.
+   * Note to be displayed on the PayPal page
    *
    * @return consumerMessage
    */
@@ -139,13 +151,14 @@ public class Paypal {
     this.consumerMessage = consumerMessage;
   }
 
+
   public Paypal orderDescription(String orderDescription) {
     this.orderDescription = orderDescription;
     return this;
   }
 
   /**
-   * Order description to display on PayPal page. If merchant does not set this field it defaults to 'Payment for order'.
+   * Order description to display on PayPal page. If merchant does not set this field it defaults to 'Payment for order'
    *
    * @return orderDescription
    */
@@ -157,13 +170,14 @@ public class Paypal {
     this.orderDescription = orderDescription;
   }
 
+
   public Paypal recipientType(RecipientType recipientType) {
     this.recipientType = recipientType;
     return this;
   }
 
   /**
-   * Type of payout recipient. The only supported value is 'PAYPAL_ID'.
+   * Get recipientType
    *
    * @return recipientType
    */
@@ -224,7 +238,7 @@ public class Paypal {
   }
 
   /**
-   * {@code Paypal} builder static inner class.
+   * These are the details of the PayPal account used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String consumerId;
@@ -239,9 +253,11 @@ public class Paypal {
     }
 
     /**
-     * Sets the {@code consumerId} and returns a reference to this Builder enabling method chaining.
+     * The email address of the consumer or payer
+     * <p>
+     * Sets the consumerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param consumerId the {@code consumerId} to set
+     * @param consumerId the consumerId to set
      * @return a reference to this Builder
      */
     public Builder consumerId(String consumerId) {
@@ -250,9 +266,11 @@ public class Paypal {
     }
 
     /**
-     * Sets the {@code recipientDescription} and returns a reference to this Builder enabling method chaining.
+     * A label that overrides the business name in the merchant's PayPal account on the PayPal checkout pages
+     * <p>
+     * Sets the recipientDescription and returns a reference to this Builder enabling method chaining.
      *
-     * @param recipientDescription the {@code recipientDescription} to set
+     * @param recipientDescription the recipientDescription to set
      * @return a reference to this Builder
      */
     public Builder recipientDescription(String recipientDescription) {
@@ -261,9 +279,9 @@ public class Paypal {
     }
 
     /**
-     * Sets the {@code language} and returns a reference to this Builder enabling method chaining.
+     * Sets the language and returns a reference to this Builder enabling method chaining.
      *
-     * @param language the {@code language} to set.
+     * @param language the language to set
      * @return a reference to this Builder
      */
     public Builder language(LanguageCode language) {
@@ -272,9 +290,9 @@ public class Paypal {
     }
 
     /**
-     * Sets the {@code shippingPreference} and returns a reference to this Builder enabling method chaining.
+     * Sets the shippingPreference and returns a reference to this Builder enabling method chaining.
      *
-     * @param shippingPreference the {@code shippingPreference} to set.
+     * @param shippingPreference the shippingPreference to set
      * @return a reference to this Builder
      */
     public Builder shippingPreference(PaypalShippingReference shippingPreference) {
@@ -283,9 +301,11 @@ public class Paypal {
     }
 
     /**
-     * Sets the {@code consumerMessage} and returns a reference to this Builder enabling method chaining.
+     * Note to be displayed on the PayPal page
+     * <p>
+     * Sets the consumerMessage and returns a reference to this Builder enabling method chaining.
      *
-     * @param consumerMessage the {@code consumerMessage} to set
+     * @param consumerMessage the consumerMessage to set
      * @return a reference to this Builder
      */
     public Builder consumerMessage(String consumerMessage) {
@@ -294,9 +314,11 @@ public class Paypal {
     }
 
     /**
-     * Sets the {@code orderDescription} and returns a reference to this Builder enabling method chaining.
+     * Order description to display on PayPal page. If merchant does not set this field it defaults to 'Payment for order'
+     * <p>
+     * Sets the orderDescription and returns a reference to this Builder enabling method chaining.
      *
-     * @param orderDescription the {@code orderDescription} to set
+     * @param orderDescription the orderDescription to set
      * @return a reference to this Builder
      */
     public Builder orderDescription(String orderDescription) {
@@ -305,9 +327,9 @@ public class Paypal {
     }
 
     /**
-     * Sets the {@code recipientType} and returns a reference to this Builder enabling method chaining.
+     * Sets the recipientType and returns a reference to this Builder enabling method chaining.
      *
-     * @param recipientType the {@code recipientType} to set. Possible values: PAYPAL_ID
+     * @param recipientType the recipientType to set
      * @return a reference to this Builder
      */
     public Builder recipientType(RecipientType recipientType) {
@@ -316,13 +338,12 @@ public class Paypal {
     }
 
     /**
-     * Returns a {@code Paypal} built from the parameters previously set.
+     * Returns a Paypal built from the parameters previously set.
      *
-     * @return a {@code Paypal} built with parameters of this {@code Paypal.Builder}
+     * @return a Paypal built with parameters of this Paypal.Builder
      */
     public Paypal build() {
       return new Paypal(this);
     }
   }
 }
-

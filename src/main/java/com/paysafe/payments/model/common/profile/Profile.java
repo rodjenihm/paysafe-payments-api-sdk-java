@@ -1,83 +1,26 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.profile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.common.profile.enums.EmailVerified;
-import com.paysafe.payments.model.common.profile.enums.PhoneVerified;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.common.enums.KycStatus;
+import com.paysafe.payments.model.common.profile.enums.VerifiedStatus;
+import com.paysafe.payments.model.common.travel.airline.enums.Gender;
+import com.paysafe.payments.model.customer.Customer;
 import com.paysafe.payments.model.customer.enums.Locale;
 
+
+
 /**
- * This is customer's profile details. Required for fundingTransaction in CARD payments. Also required for VIP Preferred, Play+ Registration,
- * paysafecard Payout. Optional for Skrill Payment.
- *
- * <ul>
- *   <li>
- *     <b>id:</b> The customer's profile id in the system. If this is present rest all other fields are not required.
- *   </li>
- *   <li>
- *     <b>status:</b> The status of customer in the system, returned in the response.
- *   </li>
- *   <li>
- *     <b>merchantCustomerId:</b> This is the reference number for the customer created by the merchant and submitted
- *     as part of the request. It must be unique for each customer. <br>
- *     <b>Note:</b> This value is mandatory when <i>fundingTransaction</i> is used.  <br>
- *   </li>
- *   <li>
- *     <b>locale:</b> This indicates the customer's locale preference.  <br>
- *     <i>Allowed values: en_US, fr_CA, en_GB, en_CA</i>
- *   </li>
- *   <li>
- *     <b>firstName:</b> This is the customer’s first name.  <br>
- *     Example: Venkata Suresh
- *   </li>
- *   <li>
- *     <b>lastName:</b> This is the customer’s last name.  <br>
- *     Example: Chagalamarri
- *   </li>
- *   <li>
- *     <b>email:</b> This is the customer's email address.  <br>
- *     Example: paysafe@gmail.com
- *   </li>
- *   <li>
- *     <b>phone:</b> This is the customer's phone number.  <br>
- *     Example: 1234567891
- *   </li>
- *   <li>
- *     <b>emailVerified:</b> Is the customer’s email ID verified by merchant or not?  <br>
- *     <b>Note:</b> EmailVerified is optional for Pay by Bank. If this value is not provided, the default value will be set to NOT_VERIFIED.  <br>
- *     <i>Allowed values: NOT_VERIFIED, VERIFIED</i>
- *   </li>
- *   <li>
- *     <b>phoneVerified:</b> Is the customer’s phone number verified by merchant or not?  <br>
- *     <b>Note:</b> PhoneVerified is optional for Pay by Bank. If this value is not provided, the default value will be set to NOT_VERIFIED.  <br>
- *     <i>Allowed values: NOT_VERIFIED, VERIFIED</i>
- *   </li>
- *   <li>
- *     <b>dateOfBirth:</b> Customer's date of birth.  <br>
- *     <b>Note:</b> Required for Pay by Bank.
- *   </li>
- *   <li>
- *     <b>mobile:</b> Customer's mobile number.  <br>
- *     Example: 9846573804
- *   </li>
- *   <li>
- *     <b>gender:</b> This field indicates the Customer's gender.  <br>
- *     <i>Allowed values: M, F</i>
- *   </li>
- *   <li>
- *     <b>nationality:</b> This field indicates the Customer's nationality.  <br>
- *     Example: Indian
- *   </li>
- *   <li>
- *     <b>identityDocuments:</b> Required if at time of onboarding with Paysafe enrolmentType is selected
- *     as "OPEN_LOOP" else optional.
- *   </li>
- * </ul>
+ * Customer profile information - required for fundingTransaction in CARD payments, VIP Preferred, Play+ Registration, and paysafecard Payout
  */
 public class Profile {
 
@@ -97,24 +40,26 @@ public class Profile {
   private String email;
   @JsonProperty("phone")
   private String phone;
-  @JsonProperty("emailverified")
-  private EmailVerified emailVerified;
+  @JsonProperty("emailVerified")
+  private VerifiedStatus emailVerified = VerifiedStatus.NOT_VERIFIED;
   @JsonProperty("phoneVerified")
-  private PhoneVerified phoneVerified;
+  private VerifiedStatus phoneVerified = VerifiedStatus.NOT_VERIFIED;
   @JsonProperty("dateOfBirth")
   private DateOfBirth dateOfBirth;
   @JsonProperty("gender")
-  private String gender;
+  private Gender gender;
   @JsonProperty("nationality")
   private String nationality;
-  @JsonProperty("IdentityDocument")
-  private List<IdentityDocument> identityDocuments = null;
+  @JsonProperty("identityDocuments")
+  private List<IdentityDocument> identityDocuments;
+  @JsonProperty("kycStatus")
+  private KycStatus kycStatus;
 
   public Profile() {
     super();
   }
 
-  private Profile(Builder builder) {
+  private Profile(final Builder builder) {
     setId(builder.id);
     setStatus(builder.status);
     setMerchantCustomerId(builder.merchantCustomerId);
@@ -129,11 +74,13 @@ public class Profile {
     setGender(builder.gender);
     setNationality(builder.nationality);
     setIdentityDocuments(builder.identityDocuments);
+    setKycStatus(builder.kycStatus);
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public Profile id(String id) {
     this.id = id;
@@ -141,7 +88,7 @@ public class Profile {
   }
 
   /**
-   * This is returned in Response. The customer's profile id in the system. If this is present rest all other fields are not required.
+   * The customer's profile ID in the system. If this is present, other fields are not required
    *
    * @return id
    */
@@ -153,13 +100,14 @@ public class Profile {
     this.id = id;
   }
 
+
   public Profile status(String status) {
     this.status = status;
     return this;
   }
 
   /**
-   * The status of customer in the system, returned in the response.
+   * The status of customer in the system, returned in the response
    *
    * @return status
    */
@@ -171,14 +119,14 @@ public class Profile {
     this.status = status;
   }
 
+
   public Profile merchantCustomerId(String merchantCustomerId) {
     this.merchantCustomerId = merchantCustomerId;
     return this;
   }
 
   /**
-   * This is the reference number for the customer created by the merchant and submitted as part of the request. It must be unique for each customer. <br>
-   * <b>Note: </b> This value is mandatory when <i>fundingTransaction</i> is used.
+   * Reference number for the customer created by the merchant. Must be unique for each customer
    *
    * @return merchantCustomerId
    */
@@ -190,13 +138,14 @@ public class Profile {
     this.merchantCustomerId = merchantCustomerId;
   }
 
+
   public Profile locale(Locale locale) {
     this.locale = locale;
     return this;
   }
 
   /**
-   * This indicates the customer's locale preference.
+   * Get locale
    *
    * @return locale
    */
@@ -208,13 +157,14 @@ public class Profile {
     this.locale = locale;
   }
 
+
   public Profile firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
 
   /**
-   * This is the customer’s first name.
+   * The customer's first name
    *
    * @return firstName
    */
@@ -226,13 +176,14 @@ public class Profile {
     this.firstName = firstName;
   }
 
+
   public Profile lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
 
   /**
-   * This is the customer’s last name.
+   * The customer's last name
    *
    * @return lastName
    */
@@ -244,14 +195,14 @@ public class Profile {
     this.lastName = lastName;
   }
 
+
   public Profile email(String email) {
     this.email = email;
     return this;
   }
 
   /**
-   * This is the customer's email address. Max length 40 characters.  <br>
-   * 3DS flow: For VISA card, it is recommended to send either email or phone in the API request.
+   * The customer's email address
    *
    * @return email
    */
@@ -263,14 +214,14 @@ public class Profile {
     this.email = email;
   }
 
+
   public Profile phone(String phone) {
     this.phone = phone;
     return this;
   }
 
   /**
-   * This is the customer's phone number. Max length 40 characters.  <br>
-   * 3DS flow: For VISA card, it is recommended to send either email or phone in the API request
+   * The customer's phone number
    *
    * @return phone
    */
@@ -282,45 +233,44 @@ public class Profile {
     this.phone = phone;
   }
 
-  public Profile emailVerified(EmailVerified emailverified) {
-    this.emailVerified = emailverified;
+
+  public Profile emailVerified(VerifiedStatus emailVerified) {
+    this.emailVerified = emailVerified;
     return this;
   }
 
   /**
-   * <b>Note:</b> For PAY BY BANK payment method only. Defines if the customer’s email ID is verified by merchant or not. <br>
-   * If not sent, default value will be set to NOT_VERIFIED.
-   * Be aware that unverified email may lead to request failures, as this is the part of our risk check parameters.  <br>
+   * Get emailVerified
    *
-   * @return emailverified
+   * @return emailVerified
    */
-  public EmailVerified getEmailVerified() {
+  public VerifiedStatus getEmailVerified() {
     return emailVerified;
   }
 
-  public void setEmailVerified(EmailVerified emailVerified) {
+  public void setEmailVerified(VerifiedStatus emailVerified) {
     this.emailVerified = emailVerified;
   }
 
-  public Profile phoneVerified(PhoneVerified phoneVerified) {
+
+  public Profile phoneVerified(VerifiedStatus phoneVerified) {
     this.phoneVerified = phoneVerified;
     return this;
   }
 
   /**
-   * For PAY BY BANK payment method only. <br> Is the customer’s phone number verified by merchant or not?  <br>
-   * If not sent, default value will be set to NOT_VERIFIED.  <br>
-   * Be aware that unverified email may lead to request failures, as this is the part of our risk check.
+   * Get phoneVerified
    *
    * @return phoneVerified
    */
-  public PhoneVerified getPhoneVerified() {
+  public VerifiedStatus getPhoneVerified() {
     return phoneVerified;
   }
 
-  public void setPhoneVerified(PhoneVerified phoneVerified) {
+  public void setPhoneVerified(VerifiedStatus phoneVerified) {
     this.phoneVerified = phoneVerified;
   }
+
 
   public Profile dateOfBirth(DateOfBirth dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
@@ -340,23 +290,25 @@ public class Profile {
     this.dateOfBirth = dateOfBirth;
   }
 
-  public Profile gender(String gender) {
+
+  public Profile gender(Gender gender) {
     this.gender = gender;
     return this;
   }
 
   /**
-   * This field indicates the Customer's gender. M - Male F - Female
+   * Get gender
    *
    * @return gender
    */
-  public String getGender() {
+  public Gender getGender() {
     return gender;
   }
 
-  public void setGender(String gender) {
+  public void setGender(Gender gender) {
     this.gender = gender;
   }
+
 
   public Profile nationality(String nationality) {
     this.nationality = nationality;
@@ -364,7 +316,7 @@ public class Profile {
   }
 
   /**
-   * This field indicates the Customer's nationality.
+   * The customer's nationality
    *
    * @return nationality
    */
@@ -376,39 +328,58 @@ public class Profile {
     this.nationality = nationality;
   }
 
-  public Profile identityDocument(List<IdentityDocument> IdentityDocument) {
-    this.identityDocuments = IdentityDocument;
+
+  public Profile identityDocuments(List<IdentityDocument> identityDocuments) {
+    this.identityDocuments = identityDocuments;
     return this;
   }
 
-  public Profile addIdentityDocumentItem(IdentityDocument IdentityDocumentItem) {
+  public Profile addIdentityDocumentsItem(IdentityDocument identityDocumentsItem) {
     if (this.identityDocuments == null) {
       this.identityDocuments = new ArrayList<>();
     }
-    this.identityDocuments.add(IdentityDocumentItem);
+    this.identityDocuments.add(identityDocumentsItem);
     return this;
   }
 
-  public Profile removeIdentityDocumentItem(IdentityDocument IdentityDocumentItem) {
-    if (IdentityDocumentItem != null && this.identityDocuments != null) {
-      this.identityDocuments.remove(IdentityDocumentItem);
+  public Profile removeIdentityDocumentsItem(IdentityDocument identityDocumentsItem) {
+    if (identityDocumentsItem != null && this.identityDocuments != null) {
+      this.identityDocuments.remove(identityDocumentsItem);
     }
 
     return this;
   }
 
   /**
-   * For PAY BY BANK and VIPPREFERRED payment methods.  <br> Required for PAY BY BANK Payment if at time of onboarding with Paysafe
-   * enrollmentType is selected as OPEN_LOOP.
+   * Customer's identity documents
    *
-   * @return IdentityDocument
+   * @return identityDocuments
    */
   public List<IdentityDocument> getIdentityDocuments() {
     return identityDocuments;
   }
 
-  public void setIdentityDocuments(List<IdentityDocument> IdentityDocument) {
-    this.identityDocuments = IdentityDocument;
+  public void setIdentityDocuments(List<IdentityDocument> identityDocuments) {
+    this.identityDocuments = identityDocuments;
+  }
+
+
+  public Profile kycStatus(KycStatus kycStatus) {
+    this.kycStatus = kycStatus;
+    return this;
+  }
+
+  /**
+   * Get kycStatus
+   *
+   * @return kycStatus
+   */
+  public KycStatus getKycStatus() {
+    return kycStatus;
+  }
+
+  public void setKycStatus(KycStatus kycStatus) {
+    this.kycStatus = kycStatus;
   }
 
   @Override
@@ -433,13 +404,13 @@ public class Profile {
         Objects.equals(this.dateOfBirth, profile.dateOfBirth) &&
         Objects.equals(this.gender, profile.gender) &&
         Objects.equals(this.nationality, profile.nationality) &&
-        Objects.equals(this.identityDocuments, profile.identityDocuments);
+        Objects.equals(this.identityDocuments, profile.identityDocuments) &&
+        Objects.equals(this.kycStatus, profile.kycStatus);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, status, merchantCustomerId, locale, firstName, lastName, email, phone, emailVerified,
-        phoneVerified, dateOfBirth, gender, nationality, identityDocuments);
+    return Objects.hash(id, status, merchantCustomerId, locale, firstName, lastName, email, phone, emailVerified, phoneVerified, dateOfBirth, gender, nationality, identityDocuments, kycStatus);
   }
 
   @Override
@@ -460,6 +431,7 @@ public class Profile {
         + "    gender: " + toIndentedString(gender) + "\n"
         + "    nationality: " + toIndentedString(nationality) + "\n"
         + "    identityDocuments: " + toIndentedString(identityDocuments) + "\n"
+        + "    kycStatus: " + toIndentedString(kycStatus) + "\n"
         + "}";
   }
 
@@ -475,7 +447,7 @@ public class Profile {
   }
 
   /**
-   * {@code Profile} builder static inner class.
+   * Customer profile information - required for fundingTransaction in CARD payments, VIP Preferred, Play+ Registration, and paysafecard Payout builder static inner class.
    */
   public static final class Builder {
     private String id;
@@ -486,20 +458,23 @@ public class Profile {
     private String lastName;
     private String email;
     private String phone;
-    private EmailVerified emailVerified;
-    private PhoneVerified phoneVerified;
+    private VerifiedStatus emailVerified;
+    private VerifiedStatus phoneVerified;
     private DateOfBirth dateOfBirth;
-    private String gender;
+    private Gender gender;
     private String nationality;
     private List<IdentityDocument> identityDocuments;
+    private KycStatus kycStatus;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
+     * The customer's profile ID in the system. If this is present, other fields are not required
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -508,9 +483,11 @@ public class Profile {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * The status of customer in the system, returned in the response
+     * <p>
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
     public Builder status(String status) {
@@ -519,9 +496,11 @@ public class Profile {
     }
 
     /**
-     * Sets the {@code merchantCustomerId} and returns a reference to this Builder enabling method chaining.
+     * Reference number for the customer created by the merchant. Must be unique for each customer
+     * <p>
+     * Sets the merchantCustomerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantCustomerId the {@code merchantCustomerId} to set
+     * @param merchantCustomerId the merchantCustomerId to set
      * @return a reference to this Builder
      */
     public Builder merchantCustomerId(String merchantCustomerId) {
@@ -530,9 +509,9 @@ public class Profile {
     }
 
     /**
-     * Sets the {@code locale} and returns a reference to this Builder enabling method chaining.
+     * Sets the locale and returns a reference to this Builder enabling method chaining.
      *
-     * @param locale the {@code locale} to set
+     * @param locale the locale to set
      * @return a reference to this Builder
      */
     public Builder locale(Locale locale) {
@@ -541,9 +520,11 @@ public class Profile {
     }
 
     /**
-     * Sets the {@code firstName} and returns a reference to this Builder enabling method chaining.
+     * The customer's first name
+     * <p>
+     * Sets the firstName and returns a reference to this Builder enabling method chaining.
      *
-     * @param firstName the {@code firstName} to set
+     * @param firstName the firstName to set
      * @return a reference to this Builder
      */
     public Builder firstName(String firstName) {
@@ -552,9 +533,11 @@ public class Profile {
     }
 
     /**
-     * Sets the {@code lastName} and returns a reference to this Builder enabling method chaining.
+     * The customer's last name
+     * <p>
+     * Sets the lastName and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastName the {@code lastName} to set
+     * @param lastName the lastName to set
      * @return a reference to this Builder
      */
     public Builder lastName(String lastName) {
@@ -563,9 +546,11 @@ public class Profile {
     }
 
     /**
-     * Sets the {@code email} and returns a reference to this Builder enabling method chaining.
+     * The customer's email address
+     * <p>
+     * Sets the email and returns a reference to this Builder enabling method chaining.
      *
-     * @param email the {@code email} to set
+     * @param email the email to set
      * @return a reference to this Builder
      */
     public Builder email(String email) {
@@ -574,9 +559,11 @@ public class Profile {
     }
 
     /**
-     * Sets the {@code phone} and returns a reference to this Builder enabling method chaining.
+     * The customer's phone number
+     * <p>
+     * Sets the phone and returns a reference to this Builder enabling method chaining.
      *
-     * @param phone the {@code phone} to set
+     * @param phone the phone to set
      * @return a reference to this Builder
      */
     public Builder phone(String phone) {
@@ -585,31 +572,31 @@ public class Profile {
     }
 
     /**
-     * Sets the {@code emailVerified} and returns a reference to this Builder enabling method chaining.
+     * Sets the emailVerified and returns a reference to this Builder enabling method chaining.
      *
-     * @param emailVerified the {@code emailVerified} to set
+     * @param emailVerified the emailVerified to set
      * @return a reference to this Builder
      */
-    public Builder emailVerified(EmailVerified emailVerified) {
+    public Builder emailVerified(VerifiedStatus emailVerified) {
       this.emailVerified = emailVerified;
       return this;
     }
 
     /**
-     * Sets the {@code phoneVerified} and returns a reference to this Builder enabling method chaining.
+     * Sets the phoneVerified and returns a reference to this Builder enabling method chaining.
      *
-     * @param phoneVerified the {@code phoneVerified} to set
+     * @param phoneVerified the phoneVerified to set
      * @return a reference to this Builder
      */
-    public Builder phoneVerified(PhoneVerified phoneVerified) {
+    public Builder phoneVerified(VerifiedStatus phoneVerified) {
       this.phoneVerified = phoneVerified;
       return this;
     }
 
     /**
-     * Sets the {@code dateOfBirth} and returns a reference to this Builder enabling method chaining.
+     * Sets the dateOfBirth and returns a reference to this Builder enabling method chaining.
      *
-     * @param dateOfBirth the {@code dateOfBirth} to set
+     * @param dateOfBirth the dateOfBirth to set
      * @return a reference to this Builder
      */
     public Builder dateOfBirth(DateOfBirth dateOfBirth) {
@@ -618,20 +605,22 @@ public class Profile {
     }
 
     /**
-     * Sets the {@code gender} and returns a reference to this Builder enabling method chaining.
+     * Sets the gender and returns a reference to this Builder enabling method chaining.
      *
-     * @param gender the {@code gender} to set
+     * @param gender the gender to set
      * @return a reference to this Builder
      */
-    public Builder gender(String gender) {
+    public Builder gender(Gender gender) {
       this.gender = gender;
       return this;
     }
 
     /**
-     * Sets the {@code nationality} and returns a reference to this Builder enabling method chaining.
+     * The customer's nationality
+     * <p>
+     * Sets the nationality and returns a reference to this Builder enabling method chaining.
      *
-     * @param nationality the {@code nationality} to set
+     * @param nationality the nationality to set
      * @return a reference to this Builder
      */
     public Builder nationality(String nationality) {
@@ -640,9 +629,11 @@ public class Profile {
     }
 
     /**
-     * Sets the {@code identityDocuments} and returns a reference to this Builder enabling method chaining.
+     * Customer's identity documents
+     * <p>
+     * Sets the identityDocuments and returns a reference to this Builder enabling method chaining.
      *
-     * @param identityDocuments the {@code identityDocuments} to set
+     * @param identityDocuments the identityDocuments to set
      * @return a reference to this Builder
      */
     public Builder identityDocuments(List<IdentityDocument> identityDocuments) {
@@ -651,13 +642,23 @@ public class Profile {
     }
 
     /**
-     * Returns a {@code Profile} built from the parameters previously set.
+     * Sets the kycStatus and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code Profile} built with parameters of this {@code Profile.Builder}
+     * @param kycStatus the kycStatus to set
+     * @return a reference to this Builder
+     */
+    public Builder kycStatus(KycStatus kycStatus) {
+      this.kycStatus = kycStatus;
+      return this;
+    }
+
+    /**
+     * Returns a Profile built from the parameters previously set.
+     *
+     * @return a Profile built with parameters of this Profile.Builder
      */
     public Profile build() {
       return new Profile(this);
     }
   }
 }
-

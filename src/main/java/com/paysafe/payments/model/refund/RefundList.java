@@ -1,13 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.refund;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.Meta;
+
+
 
 /**
  * RefundList
@@ -15,7 +21,7 @@ import com.paysafe.payments.model.common.Meta;
 public class RefundList {
 
   @JsonProperty("refunds")
-  private List<Refund> refunds = null;
+  private List<Refund> refunds;
   @JsonProperty("meta")
   private Meta meta;
 
@@ -23,7 +29,7 @@ public class RefundList {
     super();
   }
 
-  private RefundList(Builder builder) {
+  private RefundList(final Builder builder) {
     setRefunds(builder.refunds);
     setMeta(builder.meta);
   }
@@ -32,22 +38,23 @@ public class RefundList {
     return new Builder();
   }
 
+
   public RefundList refunds(List<Refund> refunds) {
     this.refunds = refunds;
     return this;
   }
 
-  public RefundList addRefundsItem(Refund refundItem) {
+  public RefundList addRefundsItem(Refund refundsItem) {
     if (this.refunds == null) {
       this.refunds = new ArrayList<>();
     }
-    this.refunds.add(refundItem);
+    this.refunds.add(refundsItem);
     return this;
   }
 
-  public RefundList removeRefundsItem(Refund refundItem) {
-    if (refundItem != null && this.refunds != null) {
-      this.refunds.remove(refundItem);
+  public RefundList removeRefundsItem(Refund refundsItem) {
+    if (refundsItem != null && this.refunds != null) {
+      this.refunds.remove(refundsItem);
     }
 
     return this;
@@ -66,13 +73,14 @@ public class RefundList {
     this.refunds = refunds;
   }
 
+
   public RefundList meta(Meta meta) {
     this.meta = meta;
     return this;
   }
 
   /**
-   * Contains meta info for the pagination APIs
+   * Get meta
    *
    * @return meta
    */
@@ -123,7 +131,7 @@ public class RefundList {
   }
 
   /**
-   * {@code RefundList} builder static inner class.
+   * RefundList builder static inner class.
    */
   public static final class Builder {
     private List<Refund> refunds;
@@ -133,9 +141,9 @@ public class RefundList {
     }
 
     /**
-     * Sets the {@code refunds} and returns a reference to this Builder enabling method chaining.
+     * Sets the refunds and returns a reference to this Builder enabling method chaining.
      *
-     * @param refunds the {@code refunds} to set
+     * @param refunds the refunds to set
      * @return a reference to this Builder
      */
     public Builder refunds(List<Refund> refunds) {
@@ -144,9 +152,9 @@ public class RefundList {
     }
 
     /**
-     * Sets the {@code meta} and returns a reference to this Builder enabling method chaining.
+     * Sets the meta and returns a reference to this Builder enabling method chaining.
      *
-     * @param meta the {@code meta} to set
+     * @param meta the meta to set
      * @return a reference to this Builder
      */
     public Builder meta(Meta meta) {
@@ -155,13 +163,12 @@ public class RefundList {
     }
 
     /**
-     * Returns a {@code RefundList} built from the parameters previously set.
+     * Returns a RefundList built from the parameters previously set.
      *
-     * @return a {@code RefundList} built with parameters of this {@code RefundList.Builder}
+     * @return a RefundList built with parameters of this RefundList.Builder
      */
     public RefundList build() {
       return new RefundList(this);
     }
   }
 }
-

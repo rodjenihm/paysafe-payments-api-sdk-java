@@ -1,12 +1,20 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.lpm.enums.AchPayMethod;
 import com.paysafe.payments.model.lpm.enums.BankAccountType;
+
+
 
 /**
  * Details of the ach account to be used for the transaction.
@@ -30,7 +38,7 @@ public class Ach {
     super();
   }
 
-  private Ach(Builder builder) {
+  private Ach(final Builder builder) {
     setAccountHolderName(builder.accountHolderName);
     setPayMethod(builder.payMethod);
     setAccountType(builder.accountType);
@@ -42,6 +50,7 @@ public class Ach {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public Ach accountHolderName(String accountHolderName) {
     this.accountHolderName = accountHolderName;
@@ -61,13 +70,15 @@ public class Ach {
     this.accountHolderName = accountHolderName;
   }
 
+
   public Ach payMethod(AchPayMethod payMethod) {
     this.payMethod = payMethod;
     return this;
   }
 
   /**
-   * This is the ACH payment type.
+   * Get payMethod
+   *
    * @return payMethod
    */
   public AchPayMethod getPayMethod() {
@@ -78,13 +89,14 @@ public class Ach {
     this.payMethod = payMethod;
   }
 
+
   public Ach accountType(BankAccountType accountType) {
     this.accountType = accountType;
     return this;
   }
 
   /**
-   * This is the bank account type.
+   * Get accountType
    *
    * @return accountType
    */
@@ -95,6 +107,7 @@ public class Ach {
   public void setAccountType(BankAccountType accountType) {
     this.accountType = accountType;
   }
+
 
   public Ach accountNumber(String accountNumber) {
     this.accountNumber = accountNumber;
@@ -114,6 +127,7 @@ public class Ach {
     this.accountNumber = accountNumber;
   }
 
+
   public Ach routingNumber(String routingNumber) {
     this.routingNumber = routingNumber;
     return this;
@@ -131,6 +145,7 @@ public class Ach {
   public void setRoutingNumber(String routingNumber) {
     this.routingNumber = routingNumber;
   }
+
 
   public Ach lastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
@@ -197,7 +212,7 @@ public class Ach {
   }
 
   /**
-   * {@code Ach} builder static inner class.
+   * Details of the ach account to be used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String accountHolderName;
@@ -211,9 +226,11 @@ public class Ach {
     }
 
     /**
-     * Sets the {@code accountHolderName} and returns a reference to this Builder enabling method chaining.
+     * This is the name of the customer or company.
+     * <p>
+     * Sets the accountHolderName and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountHolderName the {@code accountHolderName} to set
+     * @param accountHolderName the accountHolderName to set
      * @return a reference to this Builder
      */
     public Builder accountHolderName(String accountHolderName) {
@@ -222,9 +239,9 @@ public class Ach {
     }
 
     /**
-     * Sets the {@code payMethod} and returns a reference to this Builder enabling method chaining.
+     * Sets the payMethod and returns a reference to this Builder enabling method chaining.
      *
-     * @param payMethod the {@code payMethod} to set
+     * @param payMethod the payMethod to set
      * @return a reference to this Builder
      */
     public Builder payMethod(AchPayMethod payMethod) {
@@ -233,9 +250,9 @@ public class Ach {
     }
 
     /**
-     * Sets the {@code accountType} and returns a reference to this Builder enabling method chaining.
+     * Sets the accountType and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountType the {@code accountType} to set
+     * @param accountType the accountType to set
      * @return a reference to this Builder
      */
     public Builder accountType(BankAccountType accountType) {
@@ -244,9 +261,11 @@ public class Ach {
     }
 
     /**
-     * Sets the {@code accountNumber} and returns a reference to this Builder enabling method chaining.
+     * This is the bank account number.
+     * <p>
+     * Sets the accountNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountNumber the {@code accountNumber} to set
+     * @param accountNumber the accountNumber to set
      * @return a reference to this Builder
      */
     public Builder accountNumber(String accountNumber) {
@@ -255,9 +274,11 @@ public class Ach {
     }
 
     /**
-     * Sets the {@code routingNumber} and returns a reference to this Builder enabling method chaining.
+     * For USD accounts, this is the 9-digit routing number of the bank.
+     * <p>
+     * Sets the routingNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param routingNumber the {@code routingNumber} to set
+     * @param routingNumber the routingNumber to set
      * @return a reference to this Builder
      */
     public Builder routingNumber(String routingNumber) {
@@ -266,9 +287,11 @@ public class Ach {
     }
 
     /**
-     * Sets the {@code lastDigits} and returns a reference to this Builder enabling method chaining.
+     * This is returned in response. It contains only last 2 digits of bank account.
+     * <p>
+     * Sets the lastDigits and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastDigits the {@code lastDigits} to set
+     * @param lastDigits the lastDigits to set
      * @return a reference to this Builder
      */
     public Builder lastDigits(String lastDigits) {
@@ -277,13 +300,12 @@ public class Ach {
     }
 
     /**
-     * Returns a {@code Ach} built from the parameters previously set.
+     * Returns a Ach built from the parameters previously set.
      *
-     * @return a {@code Ach} built with parameters of this {@code Ach.Builder}
+     * @return a Ach built with parameters of this Ach.Builder
      */
     public Ach build() {
       return new Ach(this);
     }
   }
 }
-

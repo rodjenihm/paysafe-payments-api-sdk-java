@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.googlepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * GooglePayBillingAddress
+ * Billing address for Google Pay
  */
 public class GooglePayBillingAddress {
 
@@ -34,7 +42,7 @@ public class GooglePayBillingAddress {
     super();
   }
 
-  private GooglePayBillingAddress(Builder builder) {
+  private GooglePayBillingAddress(final Builder builder) {
     setAddress1(builder.address1);
     setAddress2(builder.address2);
     setAddress3(builder.address3);
@@ -50,13 +58,14 @@ public class GooglePayBillingAddress {
     return new Builder();
   }
 
+
   public GooglePayBillingAddress address1(String address1) {
     this.address1 = address1;
     return this;
   }
 
   /**
-   * The address1 of the contact.
+   * The address1 of the contact
    *
    * @return address1
    */
@@ -68,13 +77,14 @@ public class GooglePayBillingAddress {
     this.address1 = address1;
   }
 
+
   public GooglePayBillingAddress address2(String address2) {
     this.address2 = address2;
     return this;
   }
 
   /**
-   * The address2 of the contact.
+   * The address2 of the contact
    *
    * @return address2
    */
@@ -86,13 +96,14 @@ public class GooglePayBillingAddress {
     this.address2 = address2;
   }
 
+
   public GooglePayBillingAddress address3(String address3) {
     this.address3 = address3;
     return this;
   }
 
   /**
-   * The address3 of the contact.
+   * The address3 of the contact
    *
    * @return address3
    */
@@ -104,13 +115,14 @@ public class GooglePayBillingAddress {
     this.address3 = address3;
   }
 
+
   public GooglePayBillingAddress administrativeArea(String administrativeArea) {
     this.administrativeArea = administrativeArea;
     return this;
   }
 
   /**
-   * The state for the contact.
+   * The state for the contact
    *
    * @return administrativeArea
    */
@@ -122,16 +134,16 @@ public class GooglePayBillingAddress {
     this.administrativeArea = administrativeArea;
   }
 
+
   public GooglePayBillingAddress countryCode(String countryCode) {
     this.countryCode = countryCode;
     return this;
   }
 
   /**
-   * The contact’s two-letter ISO 3166 country code.
+   * The contact's two-letter ISO 3166 country code
    *
    * @return countryCode
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#country-codes>Country codes</a>
    */
   public String getCountryCode() {
     return countryCode;
@@ -141,13 +153,14 @@ public class GooglePayBillingAddress {
     this.countryCode = countryCode;
   }
 
+
   public GooglePayBillingAddress locality(String locality) {
     this.locality = locality;
     return this;
   }
 
   /**
-   * The city for the contact.
+   * The city for the contact
    *
    * @return locality
    */
@@ -158,6 +171,7 @@ public class GooglePayBillingAddress {
   public void setLocality(String locality) {
     this.locality = locality;
   }
+
 
   public GooglePayBillingAddress name(String name) {
     this.name = name;
@@ -177,13 +191,14 @@ public class GooglePayBillingAddress {
     this.name = name;
   }
 
+
   public GooglePayBillingAddress postalCode(Integer postalCode) {
     this.postalCode = postalCode;
     return this;
   }
 
   /**
-   * The zip code or postal code, where applicable, for the contact.
+   * The zip code or postal code, where applicable, for the contact
    *
    * @return postalCode
    */
@@ -195,13 +210,14 @@ public class GooglePayBillingAddress {
     this.postalCode = postalCode;
   }
 
+
   public GooglePayBillingAddress sortingCode(Integer sortingCode) {
     this.sortingCode = sortingCode;
     return this;
   }
 
   /**
-   * Get sortingCode
+   * Sorting code
    *
    * @return sortingCode
    */
@@ -266,7 +282,7 @@ public class GooglePayBillingAddress {
   }
 
   /**
-   * {@code GooglePayBillingAddress} builder static inner class.
+   * Billing address for Google Pay builder static inner class.
    */
   public static final class Builder {
     private String address1;
@@ -283,9 +299,11 @@ public class GooglePayBillingAddress {
     }
 
     /**
-     * Sets the {@code address1} and returns a reference to this Builder enabling method chaining.
+     * The address1 of the contact
+     * <p>
+     * Sets the address1 and returns a reference to this Builder enabling method chaining.
      *
-     * @param address1 the {@code address1} to set
+     * @param address1 the address1 to set
      * @return a reference to this Builder
      */
     public Builder address1(String address1) {
@@ -294,9 +312,11 @@ public class GooglePayBillingAddress {
     }
 
     /**
-     * Sets the {@code address2} and returns a reference to this Builder enabling method chaining.
+     * The address2 of the contact
+     * <p>
+     * Sets the address2 and returns a reference to this Builder enabling method chaining.
      *
-     * @param address2 the {@code address2} to set
+     * @param address2 the address2 to set
      * @return a reference to this Builder
      */
     public Builder address2(String address2) {
@@ -305,9 +325,11 @@ public class GooglePayBillingAddress {
     }
 
     /**
-     * Sets the {@code address3} and returns a reference to this Builder enabling method chaining.
+     * The address3 of the contact
+     * <p>
+     * Sets the address3 and returns a reference to this Builder enabling method chaining.
      *
-     * @param address3 the {@code address3} to set
+     * @param address3 the address3 to set
      * @return a reference to this Builder
      */
     public Builder address3(String address3) {
@@ -316,9 +338,11 @@ public class GooglePayBillingAddress {
     }
 
     /**
-     * Sets the {@code administrativeArea} and returns a reference to this Builder enabling method chaining.
+     * The state for the contact
+     * <p>
+     * Sets the administrativeArea and returns a reference to this Builder enabling method chaining.
      *
-     * @param administrativeArea the {@code administrativeArea} to set
+     * @param administrativeArea the administrativeArea to set
      * @return a reference to this Builder
      */
     public Builder administrativeArea(String administrativeArea) {
@@ -327,9 +351,11 @@ public class GooglePayBillingAddress {
     }
 
     /**
-     * Sets the {@code countryCode} and returns a reference to this Builder enabling method chaining.
+     * The contact's two-letter ISO 3166 country code
+     * <p>
+     * Sets the countryCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param countryCode the {@code countryCode} to set
+     * @param countryCode the countryCode to set
      * @return a reference to this Builder
      */
     public Builder countryCode(String countryCode) {
@@ -338,9 +364,11 @@ public class GooglePayBillingAddress {
     }
 
     /**
-     * Sets the {@code locality} and returns a reference to this Builder enabling method chaining.
+     * The city for the contact
+     * <p>
+     * Sets the locality and returns a reference to this Builder enabling method chaining.
      *
-     * @param locality the {@code locality} to set
+     * @param locality the locality to set
      * @return a reference to this Builder
      */
     public Builder locality(String locality) {
@@ -349,9 +377,11 @@ public class GooglePayBillingAddress {
     }
 
     /**
-     * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
+     * The contact's name
+     * <p>
+     * Sets the name and returns a reference to this Builder enabling method chaining.
      *
-     * @param name the {@code name} to set
+     * @param name the name to set
      * @return a reference to this Builder
      */
     public Builder name(String name) {
@@ -360,9 +390,11 @@ public class GooglePayBillingAddress {
     }
 
     /**
-     * Sets the {@code postalCode} and returns a reference to this Builder enabling method chaining.
+     * The zip code or postal code, where applicable, for the contact
+     * <p>
+     * Sets the postalCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param postalCode the {@code postalCode} to set
+     * @param postalCode the postalCode to set
      * @return a reference to this Builder
      */
     public Builder postalCode(Integer postalCode) {
@@ -371,9 +403,11 @@ public class GooglePayBillingAddress {
     }
 
     /**
-     * Sets the {@code sortingCode} and returns a reference to this Builder enabling method chaining.
+     * Sorting code
+     * <p>
+     * Sets the sortingCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param sortingCode the {@code sortingCode} to set
+     * @param sortingCode the sortingCode to set
      * @return a reference to this Builder
      */
     public Builder sortingCode(Integer sortingCode) {
@@ -382,15 +416,12 @@ public class GooglePayBillingAddress {
     }
 
     /**
-     * Returns a {@code GooglePayBillingAddress} built from the parameters previously set.
+     * Returns a GooglePayBillingAddress built from the parameters previously set.
      *
-     * @return a {@code GooglePayBillingAddress} built with parameters of this
-     * {@code GooglePayBillingAddress
-     * .Builder}
+     * @return a GooglePayBillingAddress built with parameters of this GooglePayBillingAddress.Builder
      */
     public GooglePayBillingAddress build() {
       return new GooglePayBillingAddress(this);
     }
   }
 }
-

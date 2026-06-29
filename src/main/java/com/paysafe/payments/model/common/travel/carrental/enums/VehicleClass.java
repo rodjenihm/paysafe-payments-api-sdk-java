@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.carrental.enums;
 
@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * A code that corresponds to the classification  of the rental vehicle (e.g., midsize, luxury, cargo van, etc.).
- * Required during settlement request with Amex for integration with TSYS processor.
+ * A code that corresponds to the classification of the rental vehicle (e.g., midsize, luxury, cargo van, etc.). Required during settlement request with Amex for integration with TSYS processor
  */
 public enum VehicleClass {
+
   MINI("MINI"),
 
   SUBCOMPACT("SUBCOMPACT"),

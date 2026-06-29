@@ -1,12 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.verification.Verification;
+
+
 
 /**
  * These are the details of the vip preferred account used for the transaction.
@@ -22,13 +29,13 @@ public class Vippreferred {
   @JsonProperty("ach")
   private AchBankAccount ach;
   @JsonProperty("achBankAccounts")
-  private List<AchBankAccount> achBankAccounts = null;
+  private List<AchBankAccount> achBankAccounts;
 
   public Vippreferred() {
     super();
   }
 
-  private Vippreferred(Builder builder) {
+  private Vippreferred(final Builder builder) {
     setConsumerId(builder.consumerId);
     setRegistrationId(builder.registrationId);
     setPaymentHandleToken(builder.paymentHandleToken);
@@ -40,14 +47,14 @@ public class Vippreferred {
     return new Builder();
   }
 
+
   public Vippreferred consumerId(String consumerId) {
     this.consumerId = consumerId;
     return this;
   }
 
   /**
-   * The is the consumer social security number (SSN). As it is sensitive data the consumerId will not be passed in the response.
-   * Last 4 digits will be passed as lastDigits.
+   * The is the consumer social security number (SSN). As it is sensitive data the consumerId will not be passed in the response. Last 4 digits will be passed as lastDigits
    *
    * @return consumerId
    */
@@ -59,13 +66,14 @@ public class Vippreferred {
     this.consumerId = consumerId;
   }
 
+
   public Vippreferred registrationId(String registrationId) {
     this.registrationId = registrationId;
     return this;
   }
 
   /**
-   * This is the registrationId of the consumer. You can pass the registrationId in place of consumerId in the setup option call..
+   * This is the registrationId of the consumer. You can pass the registrationId in place of consumerId in the setup option call
    *
    * @return registrationId
    */
@@ -77,13 +85,14 @@ public class Vippreferred {
     this.registrationId = registrationId;
   }
 
+
   public Vippreferred paymentHandleToken(String paymentHandleToken) {
     this.paymentHandleToken = paymentHandleToken;
     return this;
   }
 
   /**
-   * This is the bank token of the registered bank account. The bank token is returned in the Verification API response.
+   * This is the bank token of the registered bank account. The bank token is returned in the Verification API response
    *
    * @return paymentHandleToken
    */
@@ -95,13 +104,14 @@ public class Vippreferred {
     this.paymentHandleToken = paymentHandleToken;
   }
 
+
   public Vippreferred ach(AchBankAccount ach) {
     this.ach = ach;
     return this;
   }
 
   /**
-   * This are the bank details which requires in case of enrollment/payments/payouts
+   * Get ach
    *
    * @return ach
    */
@@ -112,6 +122,7 @@ public class Vippreferred {
   public void setAch(AchBankAccount ach) {
     this.ach = ach;
   }
+
 
   public Vippreferred achBankAccounts(List<AchBankAccount> achBankAccounts) {
     this.achBankAccounts = achBankAccounts;
@@ -135,7 +146,7 @@ public class Vippreferred {
   }
 
   /**
-   * This contains all the registered ach bank accounts.
+   * This contains all the registered ach bank accounts
    *
    * @return achBankAccounts
    */
@@ -192,7 +203,7 @@ public class Vippreferred {
   }
 
   /**
-   * {@code Vippreferred} builder static inner class.
+   * These are the details of the vip preferred account used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String consumerId;
@@ -205,9 +216,11 @@ public class Vippreferred {
     }
 
     /**
-     * Sets the {@code consumerId} and returns a reference to this Builder enabling method chaining.
+     * The is the consumer social security number (SSN). As it is sensitive data the consumerId will not be passed in the response. Last 4 digits will be passed as lastDigits
+     * <p>
+     * Sets the consumerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param consumerId the {@code consumerId} to set
+     * @param consumerId the consumerId to set
      * @return a reference to this Builder
      */
     public Builder consumerId(String consumerId) {
@@ -216,9 +229,11 @@ public class Vippreferred {
     }
 
     /**
-     * Sets the {@code registrationId} and returns a reference to this Builder enabling method chaining.
+     * This is the registrationId of the consumer. You can pass the registrationId in place of consumerId in the setup option call
+     * <p>
+     * Sets the registrationId and returns a reference to this Builder enabling method chaining.
      *
-     * @param registrationId the {@code registrationId} to set
+     * @param registrationId the registrationId to set
      * @return a reference to this Builder
      */
     public Builder registrationId(String registrationId) {
@@ -227,9 +242,11 @@ public class Vippreferred {
     }
 
     /**
-     * Sets the {@code paymentHandleToken} and returns a reference to this Builder enabling method chaining.
+     * This is the bank token of the registered bank account. The bank token is returned in the Verification API response
+     * <p>
+     * Sets the paymentHandleToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentHandleToken the {@code paymentHandleToken} to set
+     * @param paymentHandleToken the paymentHandleToken to set
      * @return a reference to this Builder
      */
     public Builder paymentHandleToken(String paymentHandleToken) {
@@ -238,9 +255,9 @@ public class Vippreferred {
     }
 
     /**
-     * Sets the {@code ach} and returns a reference to this Builder enabling method chaining.
+     * Sets the ach and returns a reference to this Builder enabling method chaining.
      *
-     * @param ach the {@code ach} to set
+     * @param ach the ach to set
      * @return a reference to this Builder
      */
     public Builder ach(AchBankAccount ach) {
@@ -249,9 +266,11 @@ public class Vippreferred {
     }
 
     /**
-     * Sets the {@code achBankAccounts} and returns a reference to this Builder enabling method chaining.
+     * This contains all the registered ach bank accounts
+     * <p>
+     * Sets the achBankAccounts and returns a reference to this Builder enabling method chaining.
      *
-     * @param achBankAccounts the {@code achBankAccounts} to set
+     * @param achBankAccounts the achBankAccounts to set
      * @return a reference to this Builder
      */
     public Builder achBankAccounts(List<AchBankAccount> achBankAccounts) {
@@ -260,13 +279,12 @@ public class Vippreferred {
     }
 
     /**
-     * Returns a {@code Vippreferred} built from the parameters previously set.
+     * Returns a Vippreferred built from the parameters previously set.
      *
-     * @return a {@code Vippreferred} built with parameters of this {@code Vippreferred.Builder}
+     * @return a Vippreferred built with parameters of this Vippreferred.Builder
      */
     public Vippreferred build() {
       return new Vippreferred(this);
     }
   }
 }
-

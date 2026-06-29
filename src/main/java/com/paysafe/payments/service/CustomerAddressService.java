@@ -14,10 +14,10 @@ public interface CustomerAddressService {
    * <p>Endpoint:
    * <strong>POST /v1/customers/{customerId}/addresses</strong></p>
    *
-   * @param customerId The ID of the customer for whom the address is to be created.
-   * @param address    The {@code Address} object containing address details.
-   * @return An {@code Address} object containing the created address data.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param customerId the ID of the customer for whom the address is to be created
+   * @param address    the {@code Address} object containing address details
+   * @return an {@code Address} object containing the created address data
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   Address createAddress(final String customerId, final Address address) throws PaysafeSdkException;
 
@@ -29,11 +29,11 @@ public interface CustomerAddressService {
    * <p>Endpoint:
    * <strong>POST /v1/customers/{customerId}/addresses</strong></p>
    *
-   * @param customerId     The ID of the customer for whom the address is to be created.
-   * @param address        The {@code Address} object containing address details.
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return An {@code Address} object containing the created address data.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param customerId     the ID of the customer for whom the address is to be created
+   * @param address        the {@code Address} object containing address details
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return an {@code Address} object containing the created address data
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   Address createAddress(final String customerId, final Address address, final RequestOptions requestOptions)
       throws PaysafeSdkException;
@@ -45,10 +45,10 @@ public interface CustomerAddressService {
    * <p>Endpoint:
    * <strong>GET /v1/customers/{customerId}/addresses/{addressId}</strong></p>
    *
-   * @param customerId The unique ID of the customer who owns the address.
-   * @param addressId  The unique ID of the address to retrieve.
-   * @return An {@code Address} object containing the address details for the given customer.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param customerId the unique ID of the customer who owns the address
+   * @param addressId  the unique ID of the address to retrieve
+   * @return an {@code Address} object containing the address details for the given customer
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   Address getAddressById(final String customerId, final String addressId) throws PaysafeSdkException;
 
@@ -59,11 +59,11 @@ public interface CustomerAddressService {
    * <p>Endpoint:
    * <strong>GET /v1/customers/{customerId}/addresses/{addressId}</strong></p>
    *
-   * @param customerId     The unique ID of the customer who owns the address.
-   * @param addressId      The unique ID of the address to retrieve.
-   * @param requestOptions Custom connectTimeout, responseTimeout and/or maxAutomaticRetries for this request.
-   * @return An {@code Address} object containing the address details for the given customer.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param customerId     the unique ID of the customer who owns the address
+   * @param addressId      the unique ID of the address to retrieve
+   * @param requestOptions custom connectTimeout, responseTimeout and/or maxAutomaticRetries for this request
+   * @return an {@code Address} object containing the address details for the given customer
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   Address getAddressById(final String customerId, final String addressId, final RequestOptions requestOptions) throws PaysafeSdkException;
 
@@ -77,11 +77,11 @@ public interface CustomerAddressService {
    * <p>Endpoint:
    * <strong>PUT /v1/customers/{customerId}/addresses/{addressId}</strong></p>
    *
-   * @param customerId The unique ID of the customer who owns the address.
-   * @param addressId  The unique ID of the address to be updated.
-   * @param address    The {@code Address} object containing updated address details.
-   * @return An {@code Address} object containing the updated address data.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param customerId the unique ID of the customer who owns the address
+   * @param addressId  the unique ID of the address to be updated
+   * @param address    the {@code Address} object containing updated address details
+   * @return an {@code Address} object containing the updated address data
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   Address updateAddress(final String customerId, final String addressId, final Address address) throws PaysafeSdkException;
 
@@ -93,12 +93,12 @@ public interface CustomerAddressService {
    * <p>Endpoint:
    * <strong>PUT /v1/customers/{customerId}/addresses/{addressId}</strong></p>
    *
-   * @param customerId     The unique ID of the customer who owns the address.
-   * @param addressId      The unique ID of the address to be updated.
-   * @param address        The {@code Address} object containing updated address details.
-   * @param requestOptions Custom connectTimeout, responseTimeout and/or maxAutomaticRetries for this request.
-   * @return An {@code Address} object containing the updated address data.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param customerId     the unique ID of the customer who owns the address
+   * @param addressId      the unique ID of the address to be updated
+   * @param address        the {@code Address} object containing updated address details
+   * @param requestOptions custom connectTimeout, responseTimeout and/or maxAutomaticRetries for this request
+   * @return an {@code Address} object containing the updated address data
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   Address updateAddress(final String customerId, final String addressId, final Address address, final RequestOptions requestOptions)
       throws PaysafeSdkException;
@@ -110,9 +110,9 @@ public interface CustomerAddressService {
    * <p>Endpoint:
    * <strong>DELETE /v1/customers/{customerId}/addresses/{addressId}</strong></p>
    *
-   * @param customerId The unique identifier of the customer.
-   * @param addressId  The unique identifier of the address to be deleted.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param customerId the unique identifier of the customer
+   * @param addressId  the unique identifier of the address to be deleted
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   void deleteAddress(final String customerId, final String addressId) throws PaysafeSdkException;
 
@@ -124,10 +124,10 @@ public interface CustomerAddressService {
    * <p>Endpoint:
    * <strong>DELETE /v1/customers/{customerId}/addresses/{addressId}</strong></p>
    *
-   * @param customerId     The unique identifier of the customer.
-   * @param addressId      The unique identifier of the address to be deleted.
-   * @param requestOptions Custom connectTimeout, responseTimeout, and/or automaticRetries.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param customerId     the unique identifier of the customer
+   * @param addressId      the unique identifier of the address to be deleted
+   * @param requestOptions custom connectTimeout, responseTimeout, and/or automaticRetries
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   void deleteAddress(final String customerId, final String addressId, final RequestOptions requestOptions) throws PaysafeSdkException;
 }

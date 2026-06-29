@@ -1,53 +1,42 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Details of the billing cycle information for recurring payments.
- * Mandatory if authenticationPurpose = INSTALMENT_TRANSACTION or RECURRING_TRANSACTION.
+ * Details of the billing cycle information for recurring payments. |REQUIRED|CONDITION |-|- |Conditional|Mandatory if authenticationPurpose = INSTALMENT_TRANSACTION or RECURRING_TRANSACTION
  */
 public class BillingCycle {
 
-  @JsonProperty("endDate")
-  private LocalDate endDate;
   @JsonProperty("frequency")
   private Integer frequency;
+  @JsonProperty("endDate")
+  private String endDate;
 
   public BillingCycle() {
     super();
   }
 
-  private BillingCycle(Builder builder) {
-    setEndDate(builder.endDate);
+  private BillingCycle(final Builder builder) {
     setFrequency(builder.frequency);
+    setEndDate(builder.endDate);
   }
 
   public static Builder builder() {
     return new Builder();
   }
 
-  public BillingCycle endDate(LocalDate endDate) {
-    this.endDate = endDate;
-    return this;
-  }
-
-  /**
-   * This is the date after which no further authorizations will be performed. The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
-   *
-   * @return endDate
-   */
-  public LocalDate getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(LocalDate endDate) {
-    this.endDate = endDate;
-  }
 
   public BillingCycle frequency(Integer frequency) {
     this.frequency = frequency;
@@ -55,7 +44,7 @@ public class BillingCycle {
   }
 
   /**
-   * This is the minimum number of days between authorizations.
+   * Frequency of the recurring payment
    *
    * @return frequency
    */
@@ -67,6 +56,25 @@ public class BillingCycle {
     this.frequency = frequency;
   }
 
+
+  public BillingCycle endDate(String endDate) {
+    this.endDate = endDate;
+    return this;
+  }
+
+  /**
+   * Date when the recurring payment will end
+   *
+   * @return endDate
+   */
+  public String getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -76,21 +84,21 @@ public class BillingCycle {
       return false;
     }
     BillingCycle billingCycle = (BillingCycle) o;
-    return Objects.equals(this.endDate, billingCycle.endDate) &&
-        Objects.equals(this.frequency, billingCycle.frequency);
+    return Objects.equals(this.frequency, billingCycle.frequency) &&
+        Objects.equals(this.endDate, billingCycle.endDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(endDate, frequency);
+    return Objects.hash(frequency, endDate);
   }
 
   @Override
   public String toString() {
 
     return "class BillingCycle {\n"
-        + "    endDate: " + toIndentedString(endDate) + "\n"
         + "    frequency: " + toIndentedString(frequency) + "\n"
+        + "    endDate: " + toIndentedString(endDate) + "\n"
         + "}";
   }
 
@@ -106,30 +114,21 @@ public class BillingCycle {
   }
 
   /**
-   * {@code BillingCycle} builder static inner class.
+   * Details of the billing cycle information for recurring payments. |REQUIRED|CONDITION |-|- |Conditional|Mandatory if authenticationPurpose = INSTALMENT_TRANSACTION or RECURRING_TRANSACTION builder static inner class.
    */
   public static final class Builder {
-    private LocalDate endDate;
     private Integer frequency;
+    private String endDate;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code endDate} and returns a reference to this Builder enabling method chaining.
+     * Frequency of the recurring payment
+     * <p>
+     * Sets the frequency and returns a reference to this Builder enabling method chaining.
      *
-     * @param endDate the {@code endDate} to set
-     * @return a reference to this Builder
-     */
-    public Builder endDate(LocalDate endDate) {
-      this.endDate = endDate;
-      return this;
-    }
-
-    /**
-     * Sets the {@code frequency} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param frequency the {@code frequency} to set
+     * @param frequency the frequency to set
      * @return a reference to this Builder
      */
     public Builder frequency(Integer frequency) {
@@ -138,13 +137,25 @@ public class BillingCycle {
     }
 
     /**
-     * Returns a {@code BillingCycle} built from the parameters previously set.
+     * Date when the recurring payment will end
+     * <p>
+     * Sets the endDate and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code BillingCycle} built with parameters of this {@code BillingCycle.Builder}
+     * @param endDate the endDate to set
+     * @return a reference to this Builder
+     */
+    public Builder endDate(String endDate) {
+      this.endDate = endDate;
+      return this;
+    }
+
+    /**
+     * Returns a BillingCycle built from the parameters previously set.
+     *
+     * @return a BillingCycle built with parameters of this BillingCycle.Builder
      */
     public BillingCycle build() {
       return new BillingCycle(this);
     }
   }
 }
-

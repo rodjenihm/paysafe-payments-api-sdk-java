@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.settlement;
 
@@ -7,17 +7,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.travel.airline.AirlineTravelDetails;
 import com.paysafe.payments.model.common.travel.carrental.CarRentalDetails;
 import com.paysafe.payments.model.common.travel.cruise.CruiselineTravelDetails;
 import com.paysafe.payments.model.common.travel.lodging.LodgingDetails;
 import com.paysafe.payments.model.lpm.Splitpay;
 
+
+
 /**
- * SettlementRequest
+ * A Settlement request allows you to settle a previous authorization that was not settled in the original Purchase request (i.e., where settleWithAuth was set to false). <ul>   <li>A regular Settlement, where the initial request was an Authorization that is to be settled.</li>   <li>A Settlement that is split into multiple merchant accounts. This is applicable for those merchants whose accounts are configured to do so.</li>   <li>A Settlement for the authorization with the full airline travel details for the AIRLINE Merchants.</li> </ul>
  */
 public class SettlementRequest {
 
@@ -28,7 +31,7 @@ public class SettlementRequest {
   @JsonProperty("dupCheck")
   private Boolean dupCheck = true;
   @JsonProperty("splitpay")
-  private List<Splitpay> splitpay = null;
+  private List<Splitpay> splitpay;
   @JsonProperty("airlineTravelDetails")
   private AirlineTravelDetails airlineTravelDetails;
   @JsonProperty("cruiselineTravelDetails")
@@ -37,7 +40,6 @@ public class SettlementRequest {
   private LodgingDetails lodgingDetails;
   @JsonProperty("carRentalDetails")
   private CarRentalDetails carRentalDetails;
-
   private Map<String, Object> additionalParameters;
 
   public SettlementRequest() {
@@ -53,12 +55,13 @@ public class SettlementRequest {
     setCruiselineTravelDetails(builder.cruiselineTravelDetails);
     setLodgingDetails(builder.lodgingDetails);
     setCarRentalDetails(builder.carRentalDetails);
-    setAdditionalParameters(builder.additionalParameters);
+    this.additionalParameters = builder.additionalParameters;
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public SettlementRequest merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
@@ -78,14 +81,14 @@ public class SettlementRequest {
     this.merchantRefNum = merchantRefNum;
   }
 
+
   public SettlementRequest amount(Integer amount) {
     this.amount = amount;
     return this;
   }
 
   /**
-   * This is the amount of the request, in minor units.For example, to process US $10.99, this value should be 1099.  <br>
-   * Maximum: 99999999999
+   * This is the amount of the request, in minor units.For example, to process US $10.99, this value should be 1099. Maximum: 99999999999
    *
    * @return amount
    */
@@ -97,15 +100,14 @@ public class SettlementRequest {
     this.amount = amount;
   }
 
+
   public SettlementRequest dupCheck(Boolean dupCheck) {
     this.dupCheck = dupCheck;
     return this;
   }
 
   /**
-   * This validates that this request is not a duplicate.
-   * A request is considered a duplicate if the merchantRefNum has already been used in a previous request within the past 90 days.  <br>
-   * <b>Note:</b> This value defaults to true
+   * This validates that this request is not a duplicate. A request is considered a duplicate if the merchantRefNum has already been used in a previous request within the past 90 days. **Note:** This value defaults to true
    *
    * @return dupCheck
    */
@@ -116,6 +118,7 @@ public class SettlementRequest {
   public void setDupCheck(Boolean dupCheck) {
     this.dupCheck = dupCheck;
   }
+
 
   public SettlementRequest splitpay(List<Splitpay> splitpay) {
     this.splitpay = splitpay;
@@ -151,14 +154,14 @@ public class SettlementRequest {
     this.splitpay = splitpay;
   }
 
+
   public SettlementRequest airlineTravelDetails(AirlineTravelDetails airlineTravelDetails) {
     this.airlineTravelDetails = airlineTravelDetails;
     return this;
   }
 
   /**
-   * Contains information about your airline travel.  <br> <b>Note:</b> This object is only for Airline Merchants.
-   * This field has to be passed only in case of card transactions.
+   * Get airlineTravelDetails
    *
    * @return airlineTravelDetails
    */
@@ -170,14 +173,14 @@ public class SettlementRequest {
     this.airlineTravelDetails = airlineTravelDetails;
   }
 
+
   public SettlementRequest cruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
     this.cruiselineTravelDetails = cruiselineTravelDetails;
     return this;
   }
 
   /**
-   * Contains information about your cruise line travel.   <br> <b>Note:</b> This object is only for Cruise line Merchants.
-   * This field has to be passed only in case of card transactions.
+   * Get cruiselineTravelDetails
    *
    * @return cruiselineTravelDetails
    */
@@ -189,14 +192,14 @@ public class SettlementRequest {
     this.cruiselineTravelDetails = cruiselineTravelDetails;
   }
 
+
   public SettlementRequest lodgingDetails(LodgingDetails lodgingDetails) {
     this.lodgingDetails = lodgingDetails;
     return this;
   }
 
   /**
-   * Contains information about lodging details.   <br> <b>Note:</b> This object is only for Airline Merchants.
-   * This field has to be passed only in case of card transactions.
+   * Get lodgingDetails
    *
    * @return lodgingDetails
    */
@@ -208,14 +211,14 @@ public class SettlementRequest {
     this.lodgingDetails = lodgingDetails;
   }
 
+
   public SettlementRequest carRentalDetails(CarRentalDetails carRentalDetails) {
     this.carRentalDetails = carRentalDetails;
     return this;
   }
 
   /**
-   * Contains information about your car rental.  <br> <b>Note:</b> This object is only for Car rental Merchants.
-   * This field has to be passed only in case of card transactions.
+   * Get carRentalDetails
    *
    * @return carRentalDetails
    */
@@ -230,13 +233,13 @@ public class SettlementRequest {
   /**
    * This map holds additional parameters that can be used for features not available in this client library.
    * During serialization, each key-value pair is treated as if the key were a top-level field in the serialized object,
-   * i.e. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
+   * e.g. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
    *
    * @return additionalParameters
    */
   @JsonAnyGetter
   public Map<String, Object> getAdditionalParameters() {
-    return additionalParameters;
+    return this.additionalParameters;
   }
 
   public void setAdditionalParameters(Map<String, Object> additionalParameters) {
@@ -244,10 +247,10 @@ public class SettlementRequest {
   }
 
   public void addAdditionalParameter(String key, Object value) {
-    if (additionalParameters == null) {
-      additionalParameters = new HashMap<>();
+    if (this.additionalParameters == null) {
+      this.additionalParameters = new HashMap<>();
     }
-    additionalParameters.put(key, value);
+    this.additionalParameters.put(key, value);
   }
 
   @Override
@@ -266,14 +269,12 @@ public class SettlementRequest {
         Objects.equals(this.airlineTravelDetails, settlementRequest.airlineTravelDetails) &&
         Objects.equals(this.cruiselineTravelDetails, settlementRequest.cruiselineTravelDetails) &&
         Objects.equals(this.lodgingDetails, settlementRequest.lodgingDetails) &&
-        Objects.equals(this.carRentalDetails, settlementRequest.carRentalDetails) &&
-        Objects.equals(this.additionalParameters, settlementRequest.additionalParameters);
+        Objects.equals(this.carRentalDetails, settlementRequest.carRentalDetails);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, amount, dupCheck, splitpay, airlineTravelDetails, cruiselineTravelDetails, lodgingDetails, carRentalDetails,
-        additionalParameters);
+    return Objects.hash(merchantRefNum, amount, dupCheck, splitpay, airlineTravelDetails, cruiselineTravelDetails, lodgingDetails, carRentalDetails);
   }
 
   @Override
@@ -288,7 +289,6 @@ public class SettlementRequest {
         + "    cruiselineTravelDetails: " + toIndentedString(cruiselineTravelDetails) + "\n"
         + "    lodgingDetails: " + toIndentedString(lodgingDetails) + "\n"
         + "    carRentalDetails: " + toIndentedString(carRentalDetails) + "\n"
-        + "    additionalParameters: " + toIndentedString(additionalParameters) + "\n"
         + "}";
   }
 
@@ -304,7 +304,7 @@ public class SettlementRequest {
   }
 
   /**
-   * {@code SettlementRequest} builder static inner class.
+   * A Settlement request allows you to settle a previous authorization that was not settled in the original Purchase request (i.e., where settleWithAuth was set to false). <ul>   <li>A regular Settlement, where the initial request was an Authorization that is to be settled.</li>   <li>A Settlement that is split into multiple merchant accounts. This is applicable for those merchants whose accounts are configured to do so.</li>   <li>A Settlement for the authorization with the full airline travel details for the AIRLINE Merchants.</li> </ul> builder static inner class.
    */
   public static final class Builder {
     private String merchantRefNum;
@@ -321,9 +321,11 @@ public class SettlementRequest {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
+     * @param merchantRefNum the merchantRefNum to set
      * @return a reference to this Builder
      */
     public Builder merchantRefNum(String merchantRefNum) {
@@ -332,9 +334,11 @@ public class SettlementRequest {
     }
 
     /**
-     * Sets the {@code amount} and returns a reference to this Builder enabling method chaining.
+     * This is the amount of the request, in minor units.For example, to process US $10.99, this value should be 1099. Maximum: 99999999999
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
      *
-     * @param amount the {@code amount} to set
+     * @param amount the amount to set
      * @return a reference to this Builder
      */
     public Builder amount(Integer amount) {
@@ -343,9 +347,11 @@ public class SettlementRequest {
     }
 
     /**
-     * Sets the {@code dupCheck} and returns a reference to this Builder enabling method chaining.
+     * This validates that this request is not a duplicate. A request is considered a duplicate if the merchantRefNum has already been used in a previous request within the past 90 days. **Note:** This value defaults to true
+     * <p>
+     * Sets the dupCheck and returns a reference to this Builder enabling method chaining.
      *
-     * @param dupCheck the {@code dupCheck} to set
+     * @param dupCheck the dupCheck to set
      * @return a reference to this Builder
      */
     public Builder dupCheck(Boolean dupCheck) {
@@ -354,9 +360,11 @@ public class SettlementRequest {
     }
 
     /**
-     * Sets the {@code splitpay} and returns a reference to this Builder enabling method chaining.
+     * Get splitpay
+     * <p>
+     * Sets the splitpay and returns a reference to this Builder enabling method chaining.
      *
-     * @param splitpay the {@code splitpay} to set
+     * @param splitpay the splitpay to set
      * @return a reference to this Builder
      */
     public Builder splitpay(List<Splitpay> splitpay) {
@@ -365,9 +373,9 @@ public class SettlementRequest {
     }
 
     /**
-     * Sets the {@code airlineTravelDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the airlineTravelDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param airlineTravelDetails the {@code airlineTravelDetails} to set
+     * @param airlineTravelDetails the airlineTravelDetails to set
      * @return a reference to this Builder
      */
     public Builder airlineTravelDetails(AirlineTravelDetails airlineTravelDetails) {
@@ -376,9 +384,9 @@ public class SettlementRequest {
     }
 
     /**
-     * Sets the {@code cruiselineTravelDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the cruiselineTravelDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param cruiselineTravelDetails the {@code cruiselineTravelDetails} to set
+     * @param cruiselineTravelDetails the cruiselineTravelDetails to set
      * @return a reference to this Builder
      */
     public Builder cruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
@@ -387,9 +395,9 @@ public class SettlementRequest {
     }
 
     /**
-     * Sets the {@code lodgingDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the lodgingDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param lodgingDetails the {@code lodgingDetails} to set
+     * @param lodgingDetails the lodgingDetails to set
      * @return a reference to this Builder
      */
     public Builder lodgingDetails(LodgingDetails lodgingDetails) {
@@ -398,39 +406,13 @@ public class SettlementRequest {
     }
 
     /**
-     * Sets the {@code carRentalDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the carRentalDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param carRentalDetails the {@code carRentalDetails} to set
+     * @param carRentalDetails the carRentalDetails to set
      * @return a reference to this Builder
      */
     public Builder carRentalDetails(CarRentalDetails carRentalDetails) {
       this.carRentalDetails = carRentalDetails;
-      return this;
-    }
-
-    /**
-     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAdditionalParameter(String key, Object value) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.put(key, value);
-      return this;
-    }
-
-    /**
-     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAllAdditionalParameters(Map<String, Object> additionalParameters) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.putAll(additionalParameters);
       return this;
     }
 
@@ -446,13 +428,41 @@ public class SettlementRequest {
     }
 
     /**
-     * Returns a {@code SettlementRequest} built from the parameters previously set.
+     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code SettlementRequest} built with parameters of this {@code SettlementRequest.Builder}
+     * @param key the key to insert
+     * @param value the value to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAdditionalParameter(String key, Object value) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.put(key, value);
+      return this;
+    }
+
+    /**
+     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
+     *
+     * @param additionalParameters the key/value pairs to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAllAdditionalParameters(Map<String, Object> additionalParameters) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.putAll(additionalParameters);
+      return this;
+    }
+
+    /**
+     * Returns a SettlementRequest built from the parameters previously set.
+     *
+     * @return a SettlementRequest built with parameters of this SettlementRequest.Builder
      */
     public SettlementRequest build() {
       return new SettlementRequest(this);
     }
   }
 }
-

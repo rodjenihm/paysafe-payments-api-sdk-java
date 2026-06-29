@@ -1,16 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.paymentfacilitator;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * Contains information about Payment facilitator. <b>Note:</b> This object is only for Payment facilitator merchants.
- * <ul>
- *   <li><b>subMerchant</b>: Contains information for Payment facilitator sub-merchant. </li>
- * </ul>
+ * Contains informaion regarding the Payment facilitator
  */
 public class PaymentFacilitator {
 
@@ -21,7 +27,7 @@ public class PaymentFacilitator {
     super();
   }
 
-  private PaymentFacilitator(Builder builder) {
+  private PaymentFacilitator(final Builder builder) {
     setSubMerchant(builder.subMerchant);
   }
 
@@ -29,13 +35,14 @@ public class PaymentFacilitator {
     return new Builder();
   }
 
+
   public PaymentFacilitator subMerchant(SubMerchant subMerchant) {
     this.subMerchant = subMerchant;
     return this;
   }
 
   /**
-   * Contains information for Payment facilitator sub-merchant.  <b>Note:</b> This object is only for Payment facilitator merchants.
+   * Get subMerchant
    *
    * @return subMerchant
    */
@@ -84,7 +91,7 @@ public class PaymentFacilitator {
   }
 
   /**
-   * {@code PaymentFacilitator} builder static inner class.
+   * Contains informaion regarding the Payment facilitator builder static inner class.
    */
   public static final class Builder {
     private SubMerchant subMerchant;
@@ -93,9 +100,9 @@ public class PaymentFacilitator {
     }
 
     /**
-     * Sets the {@code subMerchant} and returns a reference to this Builder enabling method chaining.
+     * Sets the subMerchant and returns a reference to this Builder enabling method chaining.
      *
-     * @param subMerchant the {@code subMerchant} to set
+     * @param subMerchant the subMerchant to set
      * @return a reference to this Builder
      */
     public Builder subMerchant(SubMerchant subMerchant) {
@@ -104,9 +111,9 @@ public class PaymentFacilitator {
     }
 
     /**
-     * Returns a {@code PaymentFacilitator} built from the parameters previously set.
+     * Returns a PaymentFacilitator built from the parameters previously set.
      *
-     * @return a {@code PaymentFacilitator} built with parameters of this {@code PaymentFacilitator.Builder}
+     * @return a PaymentFacilitator built with parameters of this PaymentFacilitator.Builder
      */
     public PaymentFacilitator build() {
       return new PaymentFacilitator(this);

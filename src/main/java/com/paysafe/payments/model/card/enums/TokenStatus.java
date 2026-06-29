@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.enums;
 
@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * This is the status of the token.
  */
 public enum TokenStatus {
+
   ACTIVE("ACTIVE"),
 
   EXPIRED("EXPIRED"),

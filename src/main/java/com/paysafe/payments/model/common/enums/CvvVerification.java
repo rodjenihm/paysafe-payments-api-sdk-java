@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.enums;
 
@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This is the response to the cvv submitted with the external authorization.
+ * CVV verification result.
  */
 public enum CvvVerification {
+
   MATCH("MATCH"),
 
   NO_MATCH("NO_MATCH"),

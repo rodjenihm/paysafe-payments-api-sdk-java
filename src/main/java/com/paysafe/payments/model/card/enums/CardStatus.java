@@ -1,14 +1,16 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.paysafe.payments.model.customer.Customer;
 
 /**
- * Optional.  Present only if the card is stored for the Customer.
+ * Optional. Present only if the card is stored for the Customer.
  */
 public enum CardStatus {
+
   ACTIVE("ACTIVE"),
 
   SUSPENDED("SUSPENDED");

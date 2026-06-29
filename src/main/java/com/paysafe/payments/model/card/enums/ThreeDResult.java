@@ -1,21 +1,16 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.paysafe.payments.model.card.threeds.Authentication;
 
 /**
- * This indicates the outcome of the Authentication.
- * <ul>
- * <li> Y – The cardholder successfully authenticated with their card issuer.  </li>
- * <li> A – The cardholder authentication was attempted.  </li>
- * <li> N – The cardholder failed to successfully authenticate with their card issuer.  </li>
- * <li> U – Authentication with the card issuer was unavailable.  </li>
- * <li> E – An error occurred during authentication. </li>
- * </ul>
+ * Indicates the outcome of the Authentication.
  */
 public enum ThreeDResult {
+
   Y("Y"),
 
   A("A"),

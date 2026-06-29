@@ -1,19 +1,27 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.originalcredit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.card.MerchantDescriptor;
 import com.paysafe.payments.model.common.enums.CurrencyCode;
 import com.paysafe.payments.model.common.paymentfacilitator.PaymentFacilitator;
+import com.paysafe.payments.model.originalcredit.enums.TransactionIntentOriginalCredit;
+import com.paysafe.payments.model.payment.Payment;
+import com.paysafe.payments.model.settlement.Settlement;
+
+
 
 /**
- * OriginalCreditRequest
+ * Original Credits allow merchants with specific merchant category codes (MCCs) to issue winnings as credits to cardholders, without requiring a previous Payment/Settlement.
  */
 public class OriginalCreditRequest {
 
@@ -33,7 +41,8 @@ public class OriginalCreditRequest {
   private MerchantDescriptor merchantDescriptor;
   @JsonProperty("paymentFacilitator")
   private PaymentFacilitator paymentFacilitator;
-
+  @JsonProperty("transactionIntent")
+  private TransactionIntentOriginalCredit transactionIntent;
   private Map<String, Object> additionalParameters;
 
   public OriginalCreditRequest() {
@@ -49,12 +58,14 @@ public class OriginalCreditRequest {
     setDescription(builder.description);
     setMerchantDescriptor(builder.merchantDescriptor);
     setPaymentFacilitator(builder.paymentFacilitator);
-    setAdditionalParameters(builder.additionalParameters);
+    setTransactionIntent(builder.transactionIntent);
+    this.additionalParameters = builder.additionalParameters;
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public OriginalCreditRequest merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
@@ -74,16 +85,14 @@ public class OriginalCreditRequest {
     this.merchantRefNum = merchantRefNum;
   }
 
+
   public OriginalCreditRequest amount(Integer amount) {
     this.amount = amount;
     return this;
   }
 
   /**
-   * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099.
-   * <b>Note:</b> The amount specified in the Original Credit
-   * request must match the amount specified in the Payment Handle request from which the paymentHandleToken is taken.  <br>
-   * Maximum: 99999999999
+   * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099. **Note:** The amount specified in the Original Credit request must match the amount specified in the Payment Handle request from which the paymentHandleToken is taken. Maximum: 99999999999
    *
    * @return amount
    */
@@ -95,16 +104,14 @@ public class OriginalCreditRequest {
     this.amount = amount;
   }
 
+
   public OriginalCreditRequest currencyCode(CurrencyCode currencyCode) {
     this.currencyCode = currencyCode;
     return this;
   }
 
   /**
-   * This is the currency of the merchant account, e.g., USD or CAD, returned in the request response.
-   * See (<a href="https://developer.paysafe.com/en/support/reference-information/codes/#currency-codes">Currency Codes.</a>) <br>
-   * <b>Note:</b> The currencyCode specified in the Credit request must match the currencyCode specified in the Payment Handle
-   * request from which the paymentHandleToken is taken.
+   * Get currencyCode
    *
    * @return currencyCode
    */
@@ -115,6 +122,7 @@ public class OriginalCreditRequest {
   public void setCurrencyCode(CurrencyCode currencyCode) {
     this.currencyCode = currencyCode;
   }
+
 
   public OriginalCreditRequest paymentHandleToken(String paymentHandleToken) {
     this.paymentHandleToken = paymentHandleToken;
@@ -134,6 +142,7 @@ public class OriginalCreditRequest {
     this.paymentHandleToken = paymentHandleToken;
   }
 
+
   public OriginalCreditRequest customerIp(String customerIp) {
     this.customerIp = customerIp;
     return this;
@@ -151,6 +160,7 @@ public class OriginalCreditRequest {
   public void setCustomerIp(String customerIp) {
     this.customerIp = customerIp;
   }
+
 
   public OriginalCreditRequest description(String description) {
     this.description = description;
@@ -170,13 +180,14 @@ public class OriginalCreditRequest {
     this.description = description;
   }
 
+
   public OriginalCreditRequest merchantDescriptor(MerchantDescriptor merchantDescriptor) {
     this.merchantDescriptor = merchantDescriptor;
     return this;
   }
 
   /**
-   * For Card payment method only. This is the merchant descriptor that will be displayed on the customer's card or bank statement.
+   * Get merchantDescriptor
    *
    * @return merchantDescriptor
    */
@@ -188,13 +199,14 @@ public class OriginalCreditRequest {
     this.merchantDescriptor = merchantDescriptor;
   }
 
+
   public OriginalCreditRequest paymentFacilitator(PaymentFacilitator paymentFacilitator) {
     this.paymentFacilitator = paymentFacilitator;
     return this;
   }
 
   /**
-   * Contains information about Payment facilitator.  <b>Note:</b> This object is only for Payment facilitator merchants.
+   * Get paymentFacilitator
    *
    * @return paymentFacilitator
    */
@@ -206,16 +218,35 @@ public class OriginalCreditRequest {
     this.paymentFacilitator = paymentFacilitator;
   }
 
+
+  public OriginalCreditRequest transactionIntent(TransactionIntentOriginalCredit transactionIntent) {
+    this.transactionIntent = transactionIntent;
+    return this;
+  }
+
+  /**
+   * Get transactionIntent
+   *
+   * @return transactionIntent
+   */
+  public TransactionIntentOriginalCredit getTransactionIntent() {
+    return transactionIntent;
+  }
+
+  public void setTransactionIntent(TransactionIntentOriginalCredit transactionIntent) {
+    this.transactionIntent = transactionIntent;
+  }
+
   /**
    * This map holds additional parameters that can be used for features not available in this client library.
    * During serialization, each key-value pair is treated as if the key were a top-level field in the serialized object,
-   * i.e. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
+   * e.g. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
    *
    * @return additionalParameters
    */
   @JsonAnyGetter
   public Map<String, Object> getAdditionalParameters() {
-    return additionalParameters;
+    return this.additionalParameters;
   }
 
   public void setAdditionalParameters(Map<String, Object> additionalParameters) {
@@ -223,10 +254,10 @@ public class OriginalCreditRequest {
   }
 
   public void addAdditionalParameter(String key, Object value) {
-    if (additionalParameters == null) {
-      additionalParameters = new HashMap<>();
+    if (this.additionalParameters == null) {
+      this.additionalParameters = new HashMap<>();
     }
-    additionalParameters.put(key, value);
+    this.additionalParameters.put(key, value);
   }
 
   @Override
@@ -245,13 +276,13 @@ public class OriginalCreditRequest {
         Objects.equals(this.customerIp, originalCreditRequest.customerIp) &&
         Objects.equals(this.description, originalCreditRequest.description) &&
         Objects.equals(this.merchantDescriptor, originalCreditRequest.merchantDescriptor) &&
-        Objects.equals(this.paymentFacilitator, originalCreditRequest.paymentFacilitator);
+        Objects.equals(this.paymentFacilitator, originalCreditRequest.paymentFacilitator) &&
+        Objects.equals(this.transactionIntent, originalCreditRequest.transactionIntent);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, amount, currencyCode, paymentHandleToken, customerIp, description, merchantDescriptor, paymentFacilitator,
-        additionalParameters);
+    return Objects.hash(merchantRefNum, amount, currencyCode, paymentHandleToken, customerIp, description, merchantDescriptor, paymentFacilitator, transactionIntent);
   }
 
   @Override
@@ -266,7 +297,7 @@ public class OriginalCreditRequest {
         + "    description: " + toIndentedString(description) + "\n"
         + "    merchantDescriptor: " + toIndentedString(merchantDescriptor) + "\n"
         + "    paymentFacilitator: " + toIndentedString(paymentFacilitator) + "\n"
-        + "    additionalParameters: " + toIndentedString(additionalParameters) + "\n"
+        + "    transactionIntent: " + toIndentedString(transactionIntent) + "\n"
         + "}";
   }
 
@@ -282,7 +313,7 @@ public class OriginalCreditRequest {
   }
 
   /**
-   * {@code OriginalCreditRequest} builder static inner class.
+   * Original Credits allow merchants with specific merchant category codes (MCCs) to issue winnings as credits to cardholders, without requiring a previous Payment/Settlement. builder static inner class.
    */
   public static final class Builder {
     private String merchantRefNum;
@@ -293,15 +324,18 @@ public class OriginalCreditRequest {
     private String description;
     private MerchantDescriptor merchantDescriptor;
     private PaymentFacilitator paymentFacilitator;
+    private TransactionIntentOriginalCredit transactionIntent;
     private Map<String, Object> additionalParameters;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
+     * @param merchantRefNum the merchantRefNum to set
      * @return a reference to this Builder
      */
     public Builder merchantRefNum(String merchantRefNum) {
@@ -310,9 +344,11 @@ public class OriginalCreditRequest {
     }
 
     /**
-     * Sets the {@code amount} and returns a reference to this Builder enabling method chaining.
+     * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099. **Note:** The amount specified in the Original Credit request must match the amount specified in the Payment Handle request from which the paymentHandleToken is taken. Maximum: 99999999999
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
      *
-     * @param amount the {@code amount} to set
+     * @param amount the amount to set
      * @return a reference to this Builder
      */
     public Builder amount(Integer amount) {
@@ -321,9 +357,9 @@ public class OriginalCreditRequest {
     }
 
     /**
-     * Sets the {@code currencyCode} and returns a reference to this Builder enabling method chaining.
+     * Sets the currencyCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param currencyCode the {@code currencyCode} to set
+     * @param currencyCode the currencyCode to set
      * @return a reference to this Builder
      */
     public Builder currencyCode(CurrencyCode currencyCode) {
@@ -332,20 +368,24 @@ public class OriginalCreditRequest {
     }
 
     /**
-     * Sets the {@code paymentHandleToken} and returns a reference to this Builder enabling method chaining.
+     * This is the payment token generated by Paysafe that will be used by merchants for Original Credit requests.
+     * <p>
+     * Sets the paymentHandleToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code paymentHandleToken} to set
+     * @param paymentHandleToken the paymentHandleToken to set
      * @return a reference to this Builder
      */
-    public Builder paymentHandleToken(final String val) {
-      paymentHandleToken = val;
+    public Builder paymentHandleToken(String paymentHandleToken) {
+      this.paymentHandleToken = paymentHandleToken;
       return this;
     }
 
     /**
-     * Sets the {@code customerIp} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's IP address.
+     * <p>
+     * Sets the customerIp and returns a reference to this Builder enabling method chaining.
      *
-     * @param customerIp the {@code customerIp} to set
+     * @param customerIp the customerIp to set
      * @return a reference to this Builder
      */
     public Builder customerIp(String customerIp) {
@@ -354,9 +394,11 @@ public class OriginalCreditRequest {
     }
 
     /**
-     * Sets the {@code description} and returns a reference to this Builder enabling method chaining.
+     * This is a description of the transaction, provided by the merchant.
+     * <p>
+     * Sets the description and returns a reference to this Builder enabling method chaining.
      *
-     * @param description the {@code description} to set
+     * @param description the description to set
      * @return a reference to this Builder
      */
     public Builder description(String description) {
@@ -365,9 +407,9 @@ public class OriginalCreditRequest {
     }
 
     /**
-     * Sets the {@code merchantDescriptor} and returns a reference to this Builder enabling method chaining.
+     * Sets the merchantDescriptor and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantDescriptor the {@code merchantDescriptor} to set
+     * @param merchantDescriptor the merchantDescriptor to set
      * @return a reference to this Builder
      */
     public Builder merchantDescriptor(MerchantDescriptor merchantDescriptor) {
@@ -376,9 +418,9 @@ public class OriginalCreditRequest {
     }
 
     /**
-     * Sets the {@code paymentFacilitator} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentFacilitator and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentFacilitator the {@code paymentFacilitator} to set
+     * @param paymentFacilitator the paymentFacilitator to set
      * @return a reference to this Builder
      */
     public Builder paymentFacilitator(PaymentFacilitator paymentFacilitator) {
@@ -387,28 +429,13 @@ public class OriginalCreditRequest {
     }
 
     /**
-     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
+     * Sets the transactionIntent and returns a reference to this Builder enabling method chaining.
      *
+     * @param transactionIntent the transactionIntent to set
      * @return a reference to this Builder
      */
-    public Builder putAdditionalParameter(String key, Object value) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.put(key, value);
-      return this;
-    }
-
-    /**
-     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAllAdditionalParameters(Map<String, Object> additionalParameters) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.putAll(additionalParameters);
+    public Builder transactionIntent(TransactionIntentOriginalCredit transactionIntent) {
+      this.transactionIntent = transactionIntent;
       return this;
     }
 
@@ -424,13 +451,41 @@ public class OriginalCreditRequest {
     }
 
     /**
-     * Returns a {@code OriginalCreditRequest} built from the parameters previously set.
+     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code OriginalCreditRequest} built with parameters of this {@code OriginalCreditRequest.Builder}
+     * @param key the key to insert
+     * @param value the value to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAdditionalParameter(String key, Object value) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.put(key, value);
+      return this;
+    }
+
+    /**
+     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
+     *
+     * @param additionalParameters the key/value pairs to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAllAdditionalParameters(Map<String, Object> additionalParameters) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.putAll(additionalParameters);
+      return this;
+    }
+
+    /**
+     * Returns a OriginalCreditRequest built from the parameters previously set.
+     *
+     * @return a OriginalCreditRequest built with parameters of this OriginalCreditRequest.Builder
      */
     public OriginalCreditRequest build() {
       return new OriginalCreditRequest(this);
     }
   }
 }
-

@@ -1,26 +1,26 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.cancel;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.common.Mandate;
 import com.paysafe.payments.model.common.enums.TransactionRequestStatus;
+import com.paysafe.payments.model.payment.Payment;
+import com.paysafe.payments.model.refund.Refund;
+import com.paysafe.payments.model.settlement.Settlement;
+
+
 
 /**
- * This class represents the response of the following operations:
- * <ul>
- * <li>Cancel Payment</li>
- * <li>Cancel Settlement</li>
- * <li>Cancel Refund</li>
- * <li>Cancel Standalone Credit</li>
- * <li>Cancel Original Credit</li>
- * <li>Cancel Mandate</li>
- * </ul>
- *
- * <p>
- * Allowed value for status: <code>CANCELLED</code>
- * </p>
+ * This class represents the response of the following operations: - Cancel Payment - Cancel Settlement - Cancel Refund - Cancel Standalone Credit - Cancel Original Credit - Cancel Mandate  Allowed value for status: CANCELLED
  */
 public class CancelResponse {
 
@@ -35,7 +35,7 @@ public class CancelResponse {
     super();
   }
 
-  private CancelResponse(Builder builder) {
+  private CancelResponse(final Builder builder) {
     setStatus(builder.status);
     setId(builder.id);
     setTxnTime(builder.txnTime);
@@ -45,13 +45,14 @@ public class CancelResponse {
     return new Builder();
   }
 
+
   public CancelResponse status(TransactionRequestStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the cancel request. Possible values: CANCELLED.
+   * Get status
    *
    * @return status
    */
@@ -62,6 +63,7 @@ public class CancelResponse {
   public void setStatus(TransactionRequestStatus status) {
     this.status = status;
   }
+
 
   public CancelResponse id(String id) {
     this.id = id;
@@ -80,6 +82,7 @@ public class CancelResponse {
   public void setId(String id) {
     this.id = id;
   }
+
 
   public CancelResponse txnTime(String txnTime) {
     this.txnTime = txnTime;
@@ -140,7 +143,7 @@ public class CancelResponse {
   }
 
   /**
-   * {@code CancelResponse} builder static inner class.
+   * This class represents the response of the following operations: - Cancel Payment - Cancel Settlement - Cancel Refund - Cancel Standalone Credit - Cancel Original Credit - Cancel Mandate  Allowed value for status: CANCELLED builder static inner class.
    */
   public static final class Builder {
     private TransactionRequestStatus status;
@@ -151,9 +154,9 @@ public class CancelResponse {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
     public Builder status(TransactionRequestStatus status) {
@@ -162,9 +165,11 @@ public class CancelResponse {
     }
 
     /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
+     * This is the ID returned in the response. This ID can be used for future associated requests, for example, to look up the Payment.
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -173,9 +178,11 @@ public class CancelResponse {
     }
 
     /**
-     * Sets the {@code txnTime} and returns a reference to this Builder enabling method chaining.
+     * This is the date and time the transaction was processed.
+     * <p>
+     * Sets the txnTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param txnTime the {@code txnTime} to set
+     * @param txnTime the txnTime to set
      * @return a reference to this Builder
      */
     public Builder txnTime(String txnTime) {
@@ -184,13 +191,12 @@ public class CancelResponse {
     }
 
     /**
-     * Returns a {@code CancelResponse} built from the parameters previously set.
+     * Returns a CancelResponse built from the parameters previously set.
      *
-     * @return a {@code CancelResponse} built with parameters of this {@code CancelResponse.Builder}
+     * @return a CancelResponse built with parameters of this CancelResponse.Builder
      */
     public CancelResponse build() {
       return new CancelResponse(this);
     }
   }
 }
-

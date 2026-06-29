@@ -1,39 +1,42 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.payment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.BaseApiResponse;
 import com.paysafe.payments.model.card.AcquirerData;
-import com.paysafe.payments.model.card.CardWithOptionalNetworkTokenOrApplePay;
 import com.paysafe.payments.model.card.MerchantDescriptor;
+import com.paysafe.payments.model.card.TokenizedCardDetails;
 import com.paysafe.payments.model.card.enums.ProcessingRails;
+import com.paysafe.payments.model.card.enums.TransactionIntent;
 import com.paysafe.payments.model.card.threeds.Authentication;
-import com.paysafe.payments.model.card.threeds.BrowserDetails;
 import com.paysafe.payments.model.card.threeds.ThreeDs;
 import com.paysafe.payments.model.common.BillingDetails;
-import com.paysafe.payments.model.common.DeviceDetails;
 import com.paysafe.payments.model.common.GatewayResponse;
-import com.paysafe.payments.model.common.Link;
 import com.paysafe.payments.model.common.Mandate;
-import com.paysafe.payments.model.common.PaymentDetails;
-import com.paysafe.payments.model.common.ReturnLink;
 import com.paysafe.payments.model.common.enums.CurrencyCode;
-import com.paysafe.payments.model.common.error.Error;
 import com.paysafe.payments.model.common.paymentfacilitator.PaymentFacilitator;
 import com.paysafe.payments.model.common.profile.Profile;
 import com.paysafe.payments.model.common.travel.airline.AirlineTravelDetails;
 import com.paysafe.payments.model.common.travel.carrental.CarRentalDetails;
 import com.paysafe.payments.model.common.travel.cruise.CruiselineTravelDetails;
 import com.paysafe.payments.model.common.travel.lodging.LodgingDetails;
+import com.paysafe.payments.model.customer.Customer;
 import com.paysafe.payments.model.lpm.Ach;
 import com.paysafe.payments.model.lpm.Bacs;
 import com.paysafe.payments.model.lpm.Eft;
+import com.paysafe.payments.model.lpm.Eps;
+import com.paysafe.payments.model.lpm.Interac;
 import com.paysafe.payments.model.lpm.Mazooma;
+import com.paysafe.payments.model.lpm.MyBank;
 import com.paysafe.payments.model.lpm.Neteller;
 import com.paysafe.payments.model.lpm.PayByBank;
 import com.paysafe.payments.model.lpm.Paypal;
@@ -43,59 +46,25 @@ import com.paysafe.payments.model.lpm.RapidTransfer;
 import com.paysafe.payments.model.lpm.SafetyPayCash;
 import com.paysafe.payments.model.lpm.Sepa;
 import com.paysafe.payments.model.lpm.Sightline;
-import com.paysafe.payments.model.lpm.Skrill;
 import com.paysafe.payments.model.lpm.Skrill1Tap;
+import com.paysafe.payments.model.lpm.Skrill;
 import com.paysafe.payments.model.lpm.Venmo;
 import com.paysafe.payments.model.lpm.Vippreferred;
-import com.paysafe.payments.model.payment.enums.PaymentRequestStatus;
+import com.paysafe.payments.model.payment.enums.PaymentStatus;
+import com.paysafe.payments.model.paymenthandle.enums.PaymentType;
 import com.paysafe.payments.model.settlement.Settlement;
-import com.paysafe.payments.model.standalonecredit.Interac;
+import com.paysafe.payments.model.standalonecredit.enums.SourceOfFunds;
+import com.paysafe.payments.serialization.SettlementListOrObjectDeserializer;
+
+
 
 /**
- * Represents the response of a payment transaction
- *
- * <p>The {@code Payment} class captures essential data returned after processing a payment,
- * including transaction details, customer and billing information, and gateway responses.</p>
- *
- * <p>Key fields:</p>
- * <ul>
- *   <li><strong>id:</strong> The unique identifier for the payment transaction.</li>
- *   <li><strong>availableToSettle:</strong> The amount available to settle from the payment.</li>
- *   <li><strong>childAccountNum:</strong> The child account number if the transaction is processed via a master account.</li>
- *   <li><strong>txnTime:</strong> The date and time of the transaction (e.g., "2023-12-20T15:00:00Z").</li>
- *   <li><strong>paymentType:</strong> The type of payment used (e.g., CREDIT_CARD, PAYPAL, etc.).</li>
- *   <li><strong>status:</strong> The current status of the payment transaction (e.g., "COMPLETED", "FAILED").</li>
- *   <li><strong>riskReasonCode:</strong> A list of risk-related reason codes.</li>
- *   <li><strong>settlements:</strong> A list of settlement objects associated with the payment.</li>
- *   <li><strong>error:</strong> Error details, if any, associated with the transaction.</li>
- *   <li><strong>statusReason:</strong> A description of the reason for the current status.</li>
- *   <li><strong>authenticationDetails:</strong> Details related to payment authentication, such as 3D Secure.</li>
- *   <li><strong>gatewayReconciliationId:</strong> The reconciliation ID returned by the gateway.</li>
- *   <li><strong>updatedTime:</strong> The date and time the payment response was last updated.</li>
- *   <li><strong>statusTime:</strong> The date and time the current status was assigned.</li>
- *   <li><strong>availableToRefund:</strong> The amount available for refund, expressed in minor units.</li>
- *   <li><strong>processingRails:</strong> The processing rails used for the transaction (e.g., Visa, Mastercard).</li>
- *   <li><strong>links:</strong> A list of links for further actions or details related to the transaction.</li>
- *   <li><strong>liveMode:</strong> Indicates whether the transaction was processed in live mode (true) or test mode (false).</li>
- *   <li><strong>billingDetails:</strong> Billing details associated with the payment.</li>
- *   <li><strong>customerProfile:</strong> Information about the customer's profile.</li>
- *   <li><strong>merchantRefNum:</strong> The merchant's reference number for the transaction.</li>
- *   <li><strong>amount:</strong> The total amount of the payment transaction, expressed in minor units.</li>
- *   <li><strong>dupCheck:</strong> Indicates whether duplicate transaction checking was applied.</li>
- *   <li><strong>settleWithAuth:</strong> Indicates whether the payment was settled with authorization.</li>
- *   <li><strong>paymentHandleToken:</strong> The token representing a payment handle for the transaction.</li>
- *   <li><strong>customerIp:</strong> The IP address of the customer making the payment.</li>
- *   <li><strong>currencyCode:</strong> The currency used for the transaction, in ISO 4217 format.</li>
- *   <li><strong>card:</strong> Card details used in the transaction, if applicable.</li>
- *   <li><strong>threeDs:</strong> 3D Secure details for authentication, if applicable.</li>
- *   <li><strong>paymentHandleTokenFrom:</strong> The token from which the payment handle was generated.</li>
- *   <li><strong>transactionIntent:</strong> The intent of the transaction (e.g., AUTHORIZATION, SALE).</li>
- *   <li><strong>gatewayResponse:</strong> The response returned by the payment gateway.</li>
- * </ul>
+ * Represents the response of a payment transaction.
  */
-@JsonIgnoreProperties(value = { "cardSchemeTransactionId" })
-public class Payment {
+public class Payment extends BaseApiResponse {
 
+  @JsonProperty("id")
+  private String id;
   @JsonProperty("merchantRefNum")
   private String merchantRefNum;
   @JsonProperty("amount")
@@ -111,7 +80,7 @@ public class Payment {
   @JsonProperty("currencyCode")
   private CurrencyCode currencyCode;
   @JsonProperty("card")
-  private CardWithOptionalNetworkTokenOrApplePay card;
+  private TokenizedCardDetails card;
   @JsonProperty("threeDs")
   private ThreeDs threeDs;
   @JsonProperty("authentication")
@@ -121,9 +90,11 @@ public class Payment {
   @JsonProperty("paymentHandleTokenFrom")
   private String paymentHandleTokenFrom;
   @JsonProperty("transactionIntent")
-  private String transactionIntent;
+  private TransactionIntent transactionIntent;
   @JsonProperty("gatewayResponse")
   private GatewayResponse gatewayResponse;
+  @JsonProperty("sourceOfFunds")
+  private SourceOfFunds sourceOfFunds;
   @JsonProperty("skrill")
   private Skrill skrill;
   @JsonProperty("neteller")
@@ -134,8 +105,6 @@ public class Payment {
   private Paysafecard paysafecard;
   @JsonProperty("payPal")
   private Paypal payPal;
-  @JsonProperty("returnLinks")
-  private List<ReturnLink> returnLinks;
   @JsonProperty("venmo")
   private Venmo venmo;
   @JsonProperty("vippreferred")
@@ -148,10 +117,6 @@ public class Payment {
   private PayByBank payByBank;
   @JsonProperty("interacETransfer")
   private Interac interacETransfer;
-  @JsonProperty("browserDetails")
-  private BrowserDetails browserDetails = null;
-  @JsonProperty("deviceDetails")
-  private DeviceDetails deviceDetails;
   @JsonProperty("rapidTransfer")
   private RapidTransfer rapidTransfer;
   @JsonProperty("skrill1Tap")
@@ -162,20 +127,16 @@ public class Payment {
   private Eft eft;
   @JsonProperty("bacs")
   private Bacs bacs;
-  @JsonProperty("mandates")
-  private List<Mandate> mandates = null;
   @JsonProperty("sepa")
   private Sepa sepa;
   @JsonProperty("safetyPayCash")
   private SafetyPayCash safetyPayCash;
-  @JsonProperty("paymentExpiryInMinutes")
-  private Integer paymentExpiryInMinutes;
-  @JsonProperty("paymentDetails")
-  private PaymentDetails paymentDetails;
-  @JsonProperty("paymentExpiryMinutes")
-  private Integer paymentExpiryMinutes;
-  @JsonProperty("id")
-  private String id;
+  @JsonProperty("mybank")
+  private MyBank mybank;
+  @JsonProperty("eps")
+  private Eps eps;
+  @JsonProperty("mandates")
+  private List<Mandate> mandates;
   @JsonProperty("availableToSettle")
   private Integer availableToSettle;
   @JsonProperty("childAccountNum")
@@ -183,17 +144,16 @@ public class Payment {
   @JsonProperty("txnTime")
   private String txnTime;
   @JsonProperty("paymentType")
-  private String paymentType;
+  private PaymentType paymentType;
   @JsonProperty("status")
-  private PaymentRequestStatus status;
-  @JsonProperty("riskReasonCode")
-  private List<Integer> riskReasonCode = null;
-  @JsonProperty("settlements")
-  private List<Settlement> settlements;
-  @JsonProperty("error")
-  private Error error;
+  private PaymentStatus status;
   @JsonProperty("statusReason")
   private String statusReason;
+  @JsonProperty("riskReasonCode")
+  private List<Integer> riskReasonCode;
+  @JsonProperty("settlements")
+  @JsonDeserialize(using = SettlementListOrObjectDeserializer.class)
+  private List<Settlement> settlements;
   @JsonProperty("gatewayReconciliationId")
   private String gatewayReconciliationId;
   @JsonProperty("updatedTime")
@@ -208,8 +168,8 @@ public class Payment {
   private Boolean liveMode;
   @JsonProperty("billingDetails")
   private BillingDetails billingDetails;
-  @JsonProperty("customerProfile")
-  private Profile customerProfile;
+  @JsonProperty("profile")
+  private Profile profile;
   @JsonProperty("acquirerData")
   private AcquirerData acquirerData;
   @JsonProperty("paymentFacilitator")
@@ -233,7 +193,8 @@ public class Payment {
     super();
   }
 
-  private Payment(Builder builder) {
+  private Payment(final Builder builder) {
+    setId(builder.id);
     setMerchantRefNum(builder.merchantRefNum);
     setAmount(builder.amount);
     setDupCheck(builder.dupCheck);
@@ -248,41 +209,36 @@ public class Payment {
     setPaymentHandleTokenFrom(builder.paymentHandleTokenFrom);
     setTransactionIntent(builder.transactionIntent);
     setGatewayResponse(builder.gatewayResponse);
+    setSourceOfFunds(builder.sourceOfFunds);
     setSkrill(builder.skrill);
     setNeteller(builder.neteller);
     setPaysafecash(builder.paysafecash);
     setPaysafecard(builder.paysafecard);
     setPayPal(builder.payPal);
-    setReturnLinks(builder.returnLinks);
     setVenmo(builder.venmo);
     setVippreferred(builder.vippreferred);
     setMazooma(builder.mazooma);
     setSightline(builder.sightline);
     setPayByBank(builder.payByBank);
     setInteracETransfer(builder.interacETransfer);
-    setBrowserDetails(builder.browserDetails);
-    setDeviceDetails(builder.deviceDetails);
     setRapidTransfer(builder.rapidTransfer);
     setSkrill1Tap(builder.skrill1Tap);
     setAch(builder.ach);
     setEft(builder.eft);
     setBacs(builder.bacs);
-    setMandates(builder.mandates);
     setSepa(builder.sepa);
     setSafetyPayCash(builder.safetyPayCash);
-    setPaymentExpiryInMinutes(builder.paymentExpiryInMinutes);
-    setPaymentDetails(builder.paymentDetails);
-    setPaymentExpiryMinutes(builder.paymentExpiryMinutes);
-    setId(builder.id);
+    setMybank(builder.mybank);
+    setEps(builder.eps);
+    setMandates(builder.mandates);
     setAvailableToSettle(builder.availableToSettle);
     setChildAccountNum(builder.childAccountNum);
     setTxnTime(builder.txnTime);
     setPaymentType(builder.paymentType);
     setStatus(builder.status);
+    setStatusReason(builder.statusReason);
     setRiskReasonCode(builder.riskReasonCode);
     setSettlements(builder.settlements);
-    setError(builder.error);
-    setStatusReason(builder.statusReason);
     setGatewayReconciliationId(builder.gatewayReconciliationId);
     setUpdatedTime(builder.updatedTime);
     setStatusTime(builder.statusTime);
@@ -290,7 +246,7 @@ public class Payment {
     setProcessingRails(builder.processingRails);
     setLiveMode(builder.liveMode);
     setBillingDetails(builder.billingDetails);
-    setCustomerProfile(builder.customerProfile);
+    setProfile(builder.profile);
     setAcquirerData(builder.acquirerData);
     setPaymentFacilitator(builder.paymentFacilitator);
     setAirlineTravelDetails(builder.airlineTravelDetails);
@@ -306,14 +262,33 @@ public class Payment {
     return new Builder();
   }
 
+
+  public Payment id(String id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * The unique identifier for the payment transaction, can be used to retrieve the payment details using the Get Payment API.
+   *
+   * @return id
+   */
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+
   public Payment merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
     return this;
   }
 
   /**
-   * This is the merchant reference number created by the merchant and submitted as part of the request. <br>
-   * It must be unique for each request if dupCheck parameter is sent as "true".
+   * The merchant reference number created by the merchant and submitted as part of the request
    *
    * @return merchantRefNum
    */
@@ -325,16 +300,14 @@ public class Payment {
     this.merchantRefNum = merchantRefNum;
   }
 
+
   public Payment amount(Integer amount) {
     this.amount = amount;
     return this;
   }
 
   /**
-   * This is the amount of the request, in minor units. For example, to process US $10.99, this value  should be 1099.
-   * <b>Note:</b> The amount specified in the Payment request must match the amount specified in the Payment Handle request
-   * from which the paymentHandleToken is taken. <br>
-   * Maximum: 99999999999
+   * The amount of the request, in minor units (e.g., $10.99 = 1099)
    *
    * @return amount
    */
@@ -346,13 +319,14 @@ public class Payment {
     this.amount = amount;
   }
 
+
   public Payment dupCheck(Boolean dupCheck) {
     this.dupCheck = dupCheck;
     return this;
   }
 
   /**
-   * Get dupCheck
+   * This validates that this request is not a duplicate. A duplicate request is when the merchantRefNum has already been used in a previous request within the past 90 days.
    *
    * @return dupCheck
    */
@@ -364,18 +338,14 @@ public class Payment {
     this.dupCheck = dupCheck;
   }
 
+
   public Payment settleWithAuth(Boolean settleWithAuth) {
     this.settleWithAuth = settleWithAuth;
     return this;
   }
 
   /**
-   * This indicates whether the request is an  Authorization only (no Settlement), or a Purchase (Authorization and Settlement).
-   * <ul>
-   * <li>false – The request is not settled   </li>
-   * <li>true – The request is settled   </li>
-   *</ul>
-   * <b>Note:</b> Defaults to false for cards and true for APMs.
+   * This indicates whether the request is an Authorization only (no Settlement), or a Purchase (Authorization and Settlement). <ul> <li>false - The request is not settled </li> <li>true - The request is settled </li> </ul> <b>Note:</b> Defaults to false for cards and true for APMs.
    *
    * @return settleWithAuth
    */
@@ -387,13 +357,14 @@ public class Payment {
     this.settleWithAuth = settleWithAuth;
   }
 
+
   public Payment paymentHandleToken(String paymentHandleToken) {
     this.paymentHandleToken = paymentHandleToken;
     return this;
   }
 
   /**
-   * This is the payment token generated by Paysafe that will be used for the Payment request. For Payment, Payment handle must be in PAYABLE state
+   * This is the payment token generated by Paysafe that will be used for the Payment request. For Payment, Payment handle must be in PAYABLE state.
    *
    * @return paymentHandleToken
    */
@@ -405,13 +376,14 @@ public class Payment {
     this.paymentHandleToken = paymentHandleToken;
   }
 
+
   public Payment customerIp(String customerIp) {
     this.customerIp = customerIp;
     return this;
   }
 
   /**
-   * This is the customer's IP address.
+   * The IP address of the customer making the payment
    *
    * @return customerIp
    */
@@ -423,18 +395,16 @@ public class Payment {
     this.customerIp = customerIp;
   }
 
+
   public Payment currencyCode(CurrencyCode currencyCode) {
     this.currencyCode = currencyCode;
     return this;
   }
 
   /**
-   * This is the currency of the merchant account, e.g., USD or CAD, returned in the request response.
-   * <b>Note:</b> The currencyCode specified in the Payment request must match the currencyCode specified in the Payment Handle request from which
-   * the paymentHandleToken is taken.
+   * Get currencyCode
    *
    * @return currencyCode
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#currency-codes>Currency codes reference documentation</a>
    */
   public CurrencyCode getCurrencyCode() {
     return currencyCode;
@@ -444,7 +414,8 @@ public class Payment {
     this.currencyCode = currencyCode;
   }
 
-  public Payment card(CardWithOptionalNetworkTokenOrApplePay card) {
+
+  public Payment card(TokenizedCardDetails card) {
     this.card = card;
     return this;
   }
@@ -454,13 +425,14 @@ public class Payment {
    *
    * @return card
    */
-  public CardWithOptionalNetworkTokenOrApplePay getCard() {
+  public TokenizedCardDetails getCard() {
     return card;
   }
 
-  public void setCard(CardWithOptionalNetworkTokenOrApplePay card) {
+  public void setCard(TokenizedCardDetails card) {
     this.card = card;
   }
+
 
   public Payment threeDs(ThreeDs threeDs) {
     this.threeDs = threeDs;
@@ -468,10 +440,7 @@ public class Payment {
   }
 
   /**
-   * This is the threeDs object. You need to send this object when you want to process CARD transaction with 3DS.
-   * Required if account is enabled for 3DS.  <br>
-   * Not required if account is non-3DS or if you are using your own 3DS service provider. Please refer authentication
-   * object if you are using your own 3DS service provider.
+   * Get threeDs
    *
    * @return threeDs
    */
@@ -483,13 +452,14 @@ public class Payment {
     this.threeDs = threeDs;
   }
 
+
   public Payment authentication(Authentication authentication) {
     this.authentication = authentication;
     return this;
   }
 
   /**
-   * 3D Secure authentication details.
+   * Get authentication
    *
    * @return authentication
    */
@@ -501,10 +471,14 @@ public class Payment {
     this.authentication = authentication;
   }
 
+
+  public Payment preAuth(Boolean preAuth) {
+    this.preAuth = preAuth;
+    return this;
+  }
+
   /**
-   * This indicates whether the Authorization request should be sent as a Pre-Authorization.
-   * <b>Note:</b> You should use the preAuth element in cases where you are not sure that you can fully settle the Authorization within 4 days.
-   * Contact your account manager for more information.
+   * Flag indicating whether this is a pre-authorization transaction
    *
    * @return preAuth
    */
@@ -516,18 +490,14 @@ public class Payment {
     this.preAuth = preAuth;
   }
 
+
   public Payment paymentHandleTokenFrom(String paymentHandleTokenFrom) {
     this.paymentHandleTokenFrom = paymentHandleTokenFrom;
     return this;
   }
 
   /**
-   * The response returns the original value from the request. This is used in Saved card flow. You will pass this parameter when you want to create
-   * single use payment handle using the Saved-card (card-on-file) present in Paysafe customer vault.  <br>
-   * This is an existing Customer Payment Handle, from which the payment instrument details and profile details are retrieved.  <br>
-   * If this parameter is included then you can omit the billingDetails object.  <br>
-   * If you send a new billingDetails then same will be considered for the transaction, however no change will be made in the billingDetails present
-   * against the Saved-card in customer vault.
+   * This is used in Saved card flow. You will pass this parameter when you want to create single use payment handle using the Saved-card (card-on-file) present in Paysafe customer vault. <br> This is an existing multi-use [Customer Payment Handle](/operations/create-payment-handle-for-customer), from which the payment instrument details and profile details are retrieved. <br> If this parameter is included then you can omit the billingDetails object. If you send a new billingDetails along with \"paymentHandleTokenFrom\" then new billingDetails will be considered for the transaction, however no change will be made in the billingDetails present against the Saved-card in customer vault.
    *
    * @return paymentHandleTokenFrom
    */
@@ -539,29 +509,25 @@ public class Payment {
     this.paymentHandleTokenFrom = paymentHandleTokenFrom;
   }
 
-  public Payment transactionIntent(String transactionIntent) {
+
+  public Payment transactionIntent(TransactionIntent transactionIntent) {
     this.transactionIntent = transactionIntent;
     return this;
   }
 
   /**
-   * The transactionIntent property is used to identify the intent of the authorization requests.
-   * The value of the transactionIntent shows if the transaction is crypto or quasi-cash related one.  <br>
-   * This field is mandatory for Visa card - cross-border fundingTransactions where the recipient is from any of the
-   * following countries: India, Bangladesh, Argentina, and Egypt. <br>
-   * It is also required for specific use cases. Check
-   * <a href="https://developer.paysafe.com/en/payments-api/#/schemas/transactionIntent">on Transaction Intent reference page</a>
-   * for more information.
+   * Get transactionIntent
    *
    * @return transactionIntent
    */
-  public String getTransactionIntent() {
+  public TransactionIntent getTransactionIntent() {
     return transactionIntent;
   }
 
-  public void setTransactionIntent(String transactionIntent) {
+  public void setTransactionIntent(TransactionIntent transactionIntent) {
     this.transactionIntent = transactionIntent;
   }
+
 
   public Payment gatewayResponse(GatewayResponse gatewayResponse) {
     this.gatewayResponse = gatewayResponse;
@@ -569,7 +535,7 @@ public class Payment {
   }
 
   /**
-   * This contains parameters returned by Skrill gateway
+   * Get gatewayResponse
    *
    * @return gatewayResponse
    */
@@ -581,13 +547,33 @@ public class Payment {
     this.gatewayResponse = gatewayResponse;
   }
 
+
+  public Payment sourceOfFunds(SourceOfFunds sourceOfFunds) {
+    this.sourceOfFunds = sourceOfFunds;
+    return this;
+  }
+
+  /**
+   * Get sourceOfFunds
+   *
+   * @return sourceOfFunds
+   */
+  public SourceOfFunds getSourceOfFunds() {
+    return sourceOfFunds;
+  }
+
+  public void setSourceOfFunds(SourceOfFunds sourceOfFunds) {
+    this.sourceOfFunds = sourceOfFunds;
+  }
+
+
   public Payment skrill(Skrill skrill) {
     this.skrill = skrill;
     return this;
   }
 
   /**
-   * These are the details of the customer used for the transaction.
+   * Get skrill
    *
    * @return skrill
    */
@@ -599,13 +585,14 @@ public class Payment {
     this.skrill = skrill;
   }
 
+
   public Payment neteller(Neteller neteller) {
     this.neteller = neteller;
     return this;
   }
 
   /**
-   * Neteller details to be used for the request
+   * Get neteller
    *
    * @return neteller
    */
@@ -617,13 +604,14 @@ public class Payment {
     this.neteller = neteller;
   }
 
+
   public Payment paysafecash(Paysafecash paysafecash) {
     this.paysafecash = paysafecash;
     return this;
   }
 
   /**
-   * These are the details of the paysafecash account used for the transaction.
+   * Get paysafecash
    *
    * @return paysafecash
    */
@@ -635,13 +623,14 @@ public class Payment {
     this.paysafecash = paysafecash;
   }
 
+
   public Payment paysafecard(Paysafecard paysafecard) {
     this.paysafecard = paysafecard;
     return this;
   }
 
   /**
-   * These are the details of the paysafecard used for the transaction.
+   * Get paysafecard
    *
    * @return paysafecard
    */
@@ -653,13 +642,14 @@ public class Payment {
     this.paysafecard = paysafecard;
   }
 
+
   public Payment payPal(Paypal payPal) {
     this.payPal = payPal;
     return this;
   }
 
   /**
-   * These are the details of the PayPal account used for the transaction.
+   * Get payPal
    *
    * @return payPal
    */
@@ -671,24 +661,6 @@ public class Payment {
     this.payPal = payPal;
   }
 
-  public Payment returnLinks(List<ReturnLink> returnLink) {
-    this.returnLinks = returnLink;
-    return this;
-  }
-
-  /**
-   * The URL endpoints to redirect the customer to after a redirection to an alternative payment or 3D Secure site.
-   * You can customize the return URL based on the transaction status.
-   *
-   * @return returnLink
-   */
-  public List<ReturnLink> getReturnLink() {
-    return returnLinks;
-  }
-
-  public void setReturnLinks(List<ReturnLink> returnLinks) {
-    this.returnLinks = returnLinks;
-  }
 
   public Payment venmo(Venmo venmo) {
     this.venmo = venmo;
@@ -708,13 +680,14 @@ public class Payment {
     this.venmo = venmo;
   }
 
+
   public Payment vippreferred(Vippreferred vippreferred) {
     this.vippreferred = vippreferred;
     return this;
   }
 
   /**
-   * These are the details of the vip preferred account used for the transaction.
+   * Get vippreferred
    *
    * @return vippreferred
    */
@@ -726,13 +699,14 @@ public class Payment {
     this.vippreferred = vippreferred;
   }
 
+
   public Payment mazooma(Mazooma mazooma) {
     this.mazooma = mazooma;
     return this;
   }
 
   /**
-   * Mazooma details to be used for the transaction
+   * Get mazooma
    *
    * @return mazooma
    */
@@ -744,13 +718,14 @@ public class Payment {
     this.mazooma = mazooma;
   }
 
+
   public Payment sightline(Sightline sightline) {
     this.sightline = sightline;
     return this;
   }
 
   /**
-   * These are the details of the Play+ (Sightline) used for the transaction.
+   * Get sightline
    *
    * @return sightline
    */
@@ -762,13 +737,14 @@ public class Payment {
     this.sightline = sightline;
   }
 
+
   public Payment payByBank(PayByBank payByBank) {
     this.payByBank = payByBank;
     return this;
   }
 
   /**
-   * This object should be used only for pay by bank transactions.
+   * Get payByBank
    *
    * @return payByBank
    */
@@ -780,13 +756,14 @@ public class Payment {
     this.payByBank = payByBank;
   }
 
+
   public Payment interacETransfer(Interac interacETransfer) {
     this.interacETransfer = interacETransfer;
     return this;
   }
 
   /**
-   * Details of the interac E-Transfer used for the transaction.
+   * Get interacETransfer
    *
    * @return interacETransfer
    */
@@ -798,43 +775,6 @@ public class Payment {
     this.interacETransfer = interacETransfer;
   }
 
-  public Payment browserDetails(BrowserDetails browserDetails) {
-    this.browserDetails = browserDetails;
-    return this;
-  }
-
-  /**
-   * Get browserDetails
-   *
-   * @return browserDetails
-   */
-  public BrowserDetails getBrowserDetails() {
-    return browserDetails;
-  }
-
-  public void setBrowserDetails(BrowserDetails browserDetails) {
-    this.browserDetails = browserDetails;
-  }
-
-  public Payment deviceDetails(DeviceDetails deviceDetails) {
-    this.deviceDetails = deviceDetails;
-    return this;
-  }
-
-  /**
-   * For Interac e-Transfer withdrawal only. <br>  This is part of Interac e-Transfer withdrawal payment handle request.
-   * It is used for risk assessment by Interac.  <br>
-   * This parameter is mandatory if browserDetails object is not passed as a part of Interac e-Transfer withdrawal payment handle request.
-   *
-   * @return deviceDetails
-   */
-  public DeviceDetails getDeviceDetails() {
-    return deviceDetails;
-  }
-
-  public void setDeviceDetails(DeviceDetails deviceDetails) {
-    this.deviceDetails = deviceDetails;
-  }
 
   public Payment rapidTransfer(RapidTransfer rapidTransfer) {
     this.rapidTransfer = rapidTransfer;
@@ -842,7 +782,7 @@ public class Payment {
   }
 
   /**
-   * These are the details of the rapid transfer used for the transaction.
+   * Get rapidTransfer
    *
    * @return rapidTransfer
    */
@@ -854,13 +794,14 @@ public class Payment {
     this.rapidTransfer = rapidTransfer;
   }
 
+
   public Payment skrill1Tap(Skrill1Tap skrill1Tap) {
     this.skrill1Tap = skrill1Tap;
     return this;
   }
 
   /**
-   * These are the details of the skrill 1-Tap account used for the transaction.
+   * Get skrill1Tap
    *
    * @return skrill1Tap
    */
@@ -872,13 +813,14 @@ public class Payment {
     this.skrill1Tap = skrill1Tap;
   }
 
+
   public Payment ach(Ach ach) {
     this.ach = ach;
     return this;
   }
 
   /**
-   * Details of the ach account to be used for the transaction.
+   * Get ach
    *
    * @return ach
    */
@@ -890,13 +832,14 @@ public class Payment {
     this.ach = ach;
   }
 
+
   public Payment eft(Eft eft) {
     this.eft = eft;
     return this;
   }
 
   /**
-   * Details of the EFT account to be used for the transaction
+   * Get eft
    *
    * @return eft
    */
@@ -908,13 +851,14 @@ public class Payment {
     this.eft = eft;
   }
 
+
   public Payment bacs(Bacs bacs) {
     this.bacs = bacs;
     return this;
   }
 
   /**
-   * Details of the bacs account to be used for the transaction.
+   * Get bacs
    *
    * @return bacs
    */
@@ -925,6 +869,83 @@ public class Payment {
   public void setBacs(Bacs bacs) {
     this.bacs = bacs;
   }
+
+
+  public Payment sepa(Sepa sepa) {
+    this.sepa = sepa;
+    return this;
+  }
+
+  /**
+   * Get sepa
+   *
+   * @return sepa
+   */
+  public Sepa getSepa() {
+    return sepa;
+  }
+
+  public void setSepa(Sepa sepa) {
+    this.sepa = sepa;
+  }
+
+
+  public Payment safetyPayCash(SafetyPayCash safetyPayCash) {
+    this.safetyPayCash = safetyPayCash;
+    return this;
+  }
+
+  /**
+   * Get safetyPayCash
+   *
+   * @return safetyPayCash
+   */
+  public SafetyPayCash getSafetyPayCash() {
+    return safetyPayCash;
+  }
+
+  public void setSafetyPayCash(SafetyPayCash safetyPayCash) {
+    this.safetyPayCash = safetyPayCash;
+  }
+
+
+  public Payment mybank(MyBank mybank) {
+    this.mybank = mybank;
+    return this;
+  }
+
+  /**
+   * Get mybank
+   *
+   * @return mybank
+   */
+  public MyBank getMybank() {
+    return mybank;
+  }
+
+  public void setMybank(MyBank mybank) {
+    this.mybank = mybank;
+  }
+
+
+  public Payment eps(Eps eps) {
+    this.eps = eps;
+    return this;
+  }
+
+  /**
+   * Get eps
+   *
+   * @return eps
+   */
+  public Eps getEps() {
+    return eps;
+  }
+
+  public void setEps(Eps eps) {
+    this.eps = eps;
+  }
+
 
   public Payment mandates(List<Mandate> mandates) {
     this.mandates = mandates;
@@ -948,7 +969,7 @@ public class Payment {
   }
 
   /**
-   * Get mandates
+   * List of mandates associated with the payment
    *
    * @return mandates
    */
@@ -960,111 +981,6 @@ public class Payment {
     this.mandates = mandates;
   }
 
-  public Payment sepa(Sepa sepa) {
-    this.sepa = sepa;
-    return this;
-  }
-
-  /**
-   * These are the details of the sepa account used for the transaction.
-   *
-   * @return sepa
-   */
-  public Sepa getSepa() {
-    return sepa;
-  }
-
-  public void setSepa(Sepa sepa) {
-    this.sepa = sepa;
-  }
-
-  public Payment safetyPayCash(SafetyPayCash safetyPayCash) {
-    this.safetyPayCash = safetyPayCash;
-    return this;
-  }
-
-  /**
-   * @return safetyPayCash
-   */
-  public SafetyPayCash getSafetyPayCash() {
-    return safetyPayCash;
-  }
-
-  public void setSafetyPayCash(SafetyPayCash safetyPayCash) {
-    this.safetyPayCash = safetyPayCash;
-  }
-
-  public Payment paymentExpiryInMinutes(Integer paymentExpiryInMinutes) {
-    this.paymentExpiryInMinutes = paymentExpiryInMinutes;
-    return this;
-  }
-
-  /**
-   * It is the transaction expiry in minutes at Safetypay.
-   *
-   * @return paymentExpiryInMinutes
-   */
-  public Integer getPaymentExpiryInMinutes() {
-    return paymentExpiryInMinutes;
-  }
-
-  public void setPaymentExpiryInMinutes(Integer paymentExpiryInMinutes) {
-    this.paymentExpiryInMinutes = paymentExpiryInMinutes;
-  }
-
-  public Payment paymentDetails(PaymentDetails paymentDetails) {
-    this.paymentDetails = paymentDetails;
-    return this;
-  }
-
-  /**
-   * Get paymentDetails
-   *
-   * @return paymentDetails
-   */
-  public PaymentDetails getPaymentDetails() {
-    return paymentDetails;
-  }
-
-  public void setPaymentDetails(PaymentDetails paymentDetails) {
-    this.paymentDetails = paymentDetails;
-  }
-
-  public Payment paymentExpiryMinutes(Integer paymentExpiryMinutes) {
-    this.paymentExpiryMinutes = paymentExpiryMinutes;
-    return this;
-  }
-
-  /**
-   * It is the transaction expiry in minutes at Safetypay.
-   *
-   * @return paymentExpiryMinutes
-   */
-  public Integer getPaymentExpiryMinutes() {
-    return paymentExpiryMinutes;
-  }
-
-  public void setPaymentExpiryMinutes(Integer paymentExpiryMinutes) {
-    this.paymentExpiryMinutes = paymentExpiryMinutes;
-  }
-
-  public Payment id(String id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * This is the ID returned in the response. This ID  can be used for future associated requests.
-   *
-   * @return id
-   */
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
 
   public Payment availableToSettle(Integer availableToSettle) {
     this.availableToSettle = availableToSettle;
@@ -1072,7 +988,7 @@ public class Payment {
   }
 
   /**
-   * This is the amount of the Authorization remaining  to settle, in minor units.
+   * Remaining authorization amount available to settle
    *
    * @return availableToSettle
    */
@@ -1084,13 +1000,14 @@ public class Payment {
     this.availableToSettle = availableToSettle;
   }
 
+
   public Payment childAccountNum(String childAccountNum) {
     this.childAccountNum = childAccountNum;
     return this;
   }
 
   /**
-   * This is the child merchant account number. It is  returned only if the transaction was processed via a master account.
+   * The child account number if the transaction is processed via a master account
    *
    * @return childAccountNum
    */
@@ -1102,13 +1019,14 @@ public class Payment {
     this.childAccountNum = childAccountNum;
   }
 
+
   public Payment txnTime(String txnTime) {
     this.txnTime = txnTime;
     return this;
   }
 
   /**
-   * This is the date and time the request was  processed. For example: 2022-12-16T17:45:28Z
+   * The date and time when the payment was processed
    *
    * @return txnTime
    */
@@ -1120,41 +1038,63 @@ public class Payment {
     this.txnTime = txnTime;
   }
 
-  public Payment paymentType(String paymentType) {
+
+  public Payment paymentType(PaymentType paymentType) {
     this.paymentType = paymentType;
     return this;
   }
 
   /**
-   * This is the payment type associated with the Payment Handle used for this request.
+   * Get paymentType
    *
    * @return paymentType
    */
-  public String getPaymentType() {
+  public PaymentType getPaymentType() {
     return paymentType;
   }
 
-  public void setPaymentType(String paymentType) {
+  public void setPaymentType(PaymentType paymentType) {
     this.paymentType = paymentType;
   }
 
-  public Payment status(PaymentRequestStatus status) {
+
+  public Payment status(PaymentStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the transaction request.
+   * Get status
    *
    * @return status
    */
-  public PaymentRequestStatus getStatus() {
+  public PaymentStatus getStatus() {
     return status;
   }
 
-  public void setStatus(PaymentRequestStatus status) {
+  public void setStatus(PaymentStatus status) {
     this.status = status;
   }
+
+
+  public Payment statusReason(String statusReason) {
+    this.statusReason = statusReason;
+    return this;
+  }
+
+  /**
+   * A description of the reason for the current status. This is present in the case where status is ERROR, FAILURE, or HELD.
+   *
+   * @return statusReason
+   */
+  public String getStatusReason() {
+    return statusReason;
+  }
+
+  public void setStatusReason(String statusReason) {
+    this.statusReason = statusReason;
+  }
+
 
   public Payment riskReasonCode(List<Integer> riskReasonCode) {
     this.riskReasonCode = riskReasonCode;
@@ -1178,8 +1118,7 @@ public class Payment {
   }
 
   /**
-   * For CARD. An array of integers is returned, displaying the  detailed Risk reason codes if your transaction was declined.
-   * It is returned only if your account is configured accordingly.
+   * List of risk-related reason codes
    *
    * @return riskReasonCode
    */
@@ -1191,13 +1130,30 @@ public class Payment {
     this.riskReasonCode = riskReasonCode;
   }
 
+
   public Payment settlements(List<Settlement> settlements) {
     this.settlements = settlements;
     return this;
   }
 
+  public Payment addSettlementsItem(Settlement settlementsItem) {
+    if (this.settlements == null) {
+      this.settlements = new ArrayList<>();
+    }
+    this.settlements.add(settlementsItem);
+    return this;
+  }
+
+  public Payment removeSettlementsItem(Settlement settlementsItem) {
+    if (settlementsItem != null && this.settlements != null) {
+      this.settlements.remove(settlementsItem);
+    }
+
+    return this;
+  }
+
   /**
-   * Get settlements
+   * List of settlement objects associated with the payment
    *
    * @return settlements
    */
@@ -1209,41 +1165,6 @@ public class Payment {
     this.settlements = settlements;
   }
 
-  public Payment error(Error error) {
-    this.error = error;
-    return this;
-  }
-
-  /**
-   * Details of the error.
-   *
-   * @return error
-   */
-  public Error getError() {
-    return error;
-  }
-
-  public void setError(Error error) {
-    this.error = error;
-  }
-
-  public Payment statusReason(String statusReason) {
-    this.statusReason = statusReason;
-    return this;
-  }
-
-  /**
-   * This is reason for the status. This is present in the case where status is ERROR, FAILURE, or HELD.
-   *
-   * @return statusReason
-   */
-  public String getStatusReason() {
-    return statusReason;
-  }
-
-  public void setStatusReason(String statusReason) {
-    this.statusReason = statusReason;
-  }
 
   public Payment gatewayReconciliationId(String gatewayReconciliationId) {
     this.gatewayReconciliationId = gatewayReconciliationId;
@@ -1251,7 +1172,7 @@ public class Payment {
   }
 
   /**
-   * Not for CARD. Transaction identifier that can be used to reconcile this transaction with the provider gateway.
+   * The reconciliation ID returned by the gateway
    *
    * @return gatewayReconciliationId
    */
@@ -1263,13 +1184,14 @@ public class Payment {
     this.gatewayReconciliationId = gatewayReconciliationId;
   }
 
+
   public Payment updatedTime(String updatedTime) {
     this.updatedTime = updatedTime;
     return this;
   }
 
   /**
-   * ISO 8601 format (UTC) This is the date and time the resource was last updated, e.g., 2014-01-26T10:32:28Z
+   * The date and time the payment payment was last updated
    *
    * @return updatedTime
    */
@@ -1281,13 +1203,14 @@ public class Payment {
     this.updatedTime = updatedTime;
   }
 
+
   public Payment statusTime(String statusTime) {
     this.statusTime = statusTime;
     return this;
   }
 
   /**
-   * ISO 8601 format (UTC) This is the date and time the resource status was last updated, e.g., 2014-01-26T10:32:28Z
+   * The date and time of the payment last status change
    *
    * @return statusTime
    */
@@ -1299,14 +1222,14 @@ public class Payment {
     this.statusTime = statusTime;
   }
 
+
   public Payment availableToRefund(Integer availableToRefund) {
     this.availableToRefund = availableToRefund;
     return this;
   }
 
   /**
-   * This is the amount of this Settlement that is available to Refund, in minor units. For example, US $10.99 would be 1099.  <br>
-   * Maximum: 99999999999
+   * The amount available to refund from the payment
    *
    * @return availableToRefund
    */
@@ -1318,14 +1241,14 @@ public class Payment {
     this.availableToRefund = availableToRefund;
   }
 
+
   public Payment processingRails(ProcessingRails processingRails) {
     this.processingRails = processingRails;
     return this;
   }
 
   /**
-   * For CARD.Defines the processing rails options used for this transaction, indicating whether it is processed via pinless or regular card scheme network.
-   * Possible values: PINLESS, CARD_SCHEME_ROUTED
+   * Get processingRails
    *
    * @return processingRails
    */
@@ -1337,9 +1260,6 @@ public class Payment {
     this.processingRails = processingRails;
   }
 
-  public Payment links(Link link) {
-    return this;
-  }
 
   public Payment liveMode(Boolean liveMode) {
     this.liveMode = liveMode;
@@ -1347,7 +1267,7 @@ public class Payment {
   }
 
   /**
-   * This flag indicates the environment.  - true - production - false - Non-Production
+   * Indicates whether the payment was processed in live mode
    *
    * @return liveMode
    */
@@ -1359,16 +1279,14 @@ public class Payment {
     this.liveMode = liveMode;
   }
 
+
   public Payment billingDetails(BillingDetails billingDetails) {
     this.billingDetails = billingDetails;
     return this;
   }
 
   /**
-   * Customer's billing details. Required if AVS (Address verification) is enabled. <br>
-   * If included in the request, this will serve as the billing address for transaction processing.  <br>
-   * Any billing details returned in Apple Pay Token by Apple Pay will be ignored.  <br>
-   * 3DS Flow: It is recommended to send billingDetails to improve acceptance rate.
+   * Get billingDetails
    *
    * @return billingDetails
    */
@@ -1380,24 +1298,36 @@ public class Payment {
     this.billingDetails = billingDetails;
   }
 
-  public Payment customerProfile(Profile customerProfile) {
-    this.customerProfile = customerProfile;
+
+  public Payment profile(Profile profile) {
+    this.profile = profile;
     return this;
   }
 
   /**
-   * This is customer's profile details.  <br>**Same as request**.
+   * Get profile
    *
-   * @return customerProfile
+   * @return profile
    */
-  public Profile getCustomerProfile() {
-    return customerProfile;
+  public Profile getProfile() {
+    return profile;
   }
 
-  public void setCustomerProfile(Profile customerProfile) {
-    this.customerProfile = customerProfile;
+  public void setProfile(Profile profile) {
+    this.profile = profile;
   }
 
+
+  public Payment acquirerData(AcquirerData acquirerData) {
+    this.acquirerData = acquirerData;
+    return this;
+  }
+
+  /**
+   * Get acquirerData
+   *
+   * @return acquirerData
+   */
   public AcquirerData getAcquirerData() {
     return acquirerData;
   }
@@ -1406,6 +1336,17 @@ public class Payment {
     this.acquirerData = acquirerData;
   }
 
+
+  public Payment paymentFacilitator(PaymentFacilitator paymentFacilitator) {
+    this.paymentFacilitator = paymentFacilitator;
+    return this;
+  }
+
+  /**
+   * Get paymentFacilitator
+   *
+   * @return paymentFacilitator
+   */
   public PaymentFacilitator getPaymentFacilitator() {
     return paymentFacilitator;
   }
@@ -1414,6 +1355,17 @@ public class Payment {
     this.paymentFacilitator = paymentFacilitator;
   }
 
+
+  public Payment airlineTravelDetails(AirlineTravelDetails airlineTravelDetails) {
+    this.airlineTravelDetails = airlineTravelDetails;
+    return this;
+  }
+
+  /**
+   * Get airlineTravelDetails
+   *
+   * @return airlineTravelDetails
+   */
   public AirlineTravelDetails getAirlineTravelDetails() {
     return airlineTravelDetails;
   }
@@ -1422,8 +1374,71 @@ public class Payment {
     this.airlineTravelDetails = airlineTravelDetails;
   }
 
+
+  public Payment lodgingDetails(LodgingDetails lodgingDetails) {
+    this.lodgingDetails = lodgingDetails;
+    return this;
+  }
+
   /**
-   * This is the merchant descriptor that will be displayed on the customer's card or bank statement.
+   * Get lodgingDetails
+   *
+   * @return lodgingDetails
+   */
+  public LodgingDetails getLodgingDetails() {
+    return lodgingDetails;
+  }
+
+  public void setLodgingDetails(LodgingDetails lodgingDetails) {
+    this.lodgingDetails = lodgingDetails;
+  }
+
+
+  public Payment carRentalDetails(CarRentalDetails carRentalDetails) {
+    this.carRentalDetails = carRentalDetails;
+    return this;
+  }
+
+  /**
+   * Get carRentalDetails
+   *
+   * @return carRentalDetails
+   */
+  public CarRentalDetails getCarRentalDetails() {
+    return carRentalDetails;
+  }
+
+  public void setCarRentalDetails(CarRentalDetails carRentalDetails) {
+    this.carRentalDetails = carRentalDetails;
+  }
+
+
+  public Payment cruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
+    this.cruiselineTravelDetails = cruiselineTravelDetails;
+    return this;
+  }
+
+  /**
+   * Get cruiselineTravelDetails
+   *
+   * @return cruiselineTravelDetails
+   */
+  public CruiselineTravelDetails getCruiselineTravelDetails() {
+    return cruiselineTravelDetails;
+  }
+
+  public void setCruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
+    this.cruiselineTravelDetails = cruiselineTravelDetails;
+  }
+
+
+  public Payment merchantDescriptor(MerchantDescriptor merchantDescriptor) {
+    this.merchantDescriptor = merchantDescriptor;
+    return this;
+  }
+
+  /**
+   * Get merchantDescriptor
    *
    * @return merchantDescriptor
    */
@@ -1435,6 +1450,33 @@ public class Payment {
     this.merchantDescriptor = merchantDescriptor;
   }
 
+
+  public Payment keywords(List<String> keywords) {
+    this.keywords = keywords;
+    return this;
+  }
+
+  public Payment addKeywordsItem(String keywordsItem) {
+    if (this.keywords == null) {
+      this.keywords = new ArrayList<>();
+    }
+    this.keywords.add(keywordsItem);
+    return this;
+  }
+
+  public Payment removeKeywordsItem(String keywordsItem) {
+    if (keywordsItem != null && this.keywords != null) {
+      this.keywords.remove(keywordsItem);
+    }
+
+    return this;
+  }
+
+  /**
+   * List of keywords associated with the payment
+   *
+   * @return keywords
+   */
   public List<String> getKeywords() {
     return keywords;
   }
@@ -1443,8 +1485,14 @@ public class Payment {
     this.keywords = keywords;
   }
 
+
+  public Payment description(String description) {
+    this.description = description;
+    return this;
+  }
+
   /**
-   * Same as in PaymentRequest.
+   * Description of the payment transaction
    *
    * @return description
    */
@@ -1456,30 +1504,6 @@ public class Payment {
     this.description = description;
   }
 
-  public LodgingDetails getLodgingDetails() {
-    return lodgingDetails;
-  }
-
-  public void setLodgingDetails(LodgingDetails lodgingDetails) {
-    this.lodgingDetails = lodgingDetails;
-  }
-
-  public CarRentalDetails getCarRentalDetails() {
-    return carRentalDetails;
-  }
-
-  public void setCarRentalDetails(CarRentalDetails carRentalDetails) {
-    this.carRentalDetails = carRentalDetails;
-  }
-
-  public CruiselineTravelDetails getCruiselineTravelDetails() {
-    return cruiselineTravelDetails;
-  }
-
-  public void setCruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
-    this.cruiselineTravelDetails = cruiselineTravelDetails;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -1489,7 +1513,8 @@ public class Payment {
       return false;
     }
     Payment payment = (Payment) o;
-    return Objects.equals(this.merchantRefNum, payment.merchantRefNum) &&
+    return Objects.equals(this.id, payment.id) &&
+        Objects.equals(this.merchantRefNum, payment.merchantRefNum) &&
         Objects.equals(this.amount, payment.amount) &&
         Objects.equals(this.dupCheck, payment.dupCheck) &&
         Objects.equals(this.settleWithAuth, payment.settleWithAuth) &&
@@ -1499,44 +1524,40 @@ public class Payment {
         Objects.equals(this.card, payment.card) &&
         Objects.equals(this.threeDs, payment.threeDs) &&
         Objects.equals(this.authentication, payment.authentication) &&
+        Objects.equals(this.preAuth, payment.preAuth) &&
         Objects.equals(this.paymentHandleTokenFrom, payment.paymentHandleTokenFrom) &&
         Objects.equals(this.transactionIntent, payment.transactionIntent) &&
         Objects.equals(this.gatewayResponse, payment.gatewayResponse) &&
+        Objects.equals(this.sourceOfFunds, payment.sourceOfFunds) &&
         Objects.equals(this.skrill, payment.skrill) &&
         Objects.equals(this.neteller, payment.neteller) &&
         Objects.equals(this.paysafecash, payment.paysafecash) &&
         Objects.equals(this.paysafecard, payment.paysafecard) &&
         Objects.equals(this.payPal, payment.payPal) &&
-        Objects.equals(this.returnLinks, payment.returnLinks) &&
         Objects.equals(this.venmo, payment.venmo) &&
         Objects.equals(this.vippreferred, payment.vippreferred) &&
         Objects.equals(this.mazooma, payment.mazooma) &&
         Objects.equals(this.sightline, payment.sightline) &&
         Objects.equals(this.payByBank, payment.payByBank) &&
         Objects.equals(this.interacETransfer, payment.interacETransfer) &&
-        Objects.equals(this.browserDetails, payment.browserDetails) &&
-        Objects.equals(this.deviceDetails, payment.deviceDetails) &&
         Objects.equals(this.rapidTransfer, payment.rapidTransfer) &&
         Objects.equals(this.skrill1Tap, payment.skrill1Tap) &&
         Objects.equals(this.ach, payment.ach) &&
         Objects.equals(this.eft, payment.eft) &&
         Objects.equals(this.bacs, payment.bacs) &&
-        Objects.equals(this.mandates, payment.mandates) &&
         Objects.equals(this.sepa, payment.sepa) &&
         Objects.equals(this.safetyPayCash, payment.safetyPayCash) &&
-        Objects.equals(this.paymentExpiryInMinutes, payment.paymentExpiryInMinutes) &&
-        Objects.equals(this.paymentDetails, payment.paymentDetails) &&
-        Objects.equals(this.paymentExpiryMinutes, payment.paymentExpiryMinutes) &&
-        Objects.equals(this.id, payment.id) &&
+        Objects.equals(this.mybank, payment.mybank) &&
+        Objects.equals(this.eps, payment.eps) &&
+        Objects.equals(this.mandates, payment.mandates) &&
         Objects.equals(this.availableToSettle, payment.availableToSettle) &&
         Objects.equals(this.childAccountNum, payment.childAccountNum) &&
         Objects.equals(this.txnTime, payment.txnTime) &&
         Objects.equals(this.paymentType, payment.paymentType) &&
         Objects.equals(this.status, payment.status) &&
+        Objects.equals(this.statusReason, payment.statusReason) &&
         Objects.equals(this.riskReasonCode, payment.riskReasonCode) &&
         Objects.equals(this.settlements, payment.settlements) &&
-        Objects.equals(this.error, payment.error) &&
-        Objects.equals(this.statusReason, payment.statusReason) &&
         Objects.equals(this.gatewayReconciliationId, payment.gatewayReconciliationId) &&
         Objects.equals(this.updatedTime, payment.updatedTime) &&
         Objects.equals(this.statusTime, payment.statusTime) &&
@@ -1544,33 +1565,28 @@ public class Payment {
         Objects.equals(this.processingRails, payment.processingRails) &&
         Objects.equals(this.liveMode, payment.liveMode) &&
         Objects.equals(this.billingDetails, payment.billingDetails) &&
-        Objects.equals(this.customerProfile, payment.customerProfile) &&
+        Objects.equals(this.profile, payment.profile) &&
         Objects.equals(this.acquirerData, payment.acquirerData) &&
         Objects.equals(this.paymentFacilitator, payment.paymentFacilitator) &&
         Objects.equals(this.airlineTravelDetails, payment.airlineTravelDetails) &&
         Objects.equals(this.lodgingDetails, payment.lodgingDetails) &&
         Objects.equals(this.carRentalDetails, payment.carRentalDetails) &&
-        Objects.equals(this.merchantDescriptor, payment.merchantDescriptor) &&
-        Objects.equals(this.description, payment.description) &&
-        Objects.equals(this.preAuth, payment.preAuth) &&
         Objects.equals(this.cruiselineTravelDetails, payment.cruiselineTravelDetails) &&
-        Objects.equals(this.keywords, payment.keywords);
+        Objects.equals(this.merchantDescriptor, payment.merchantDescriptor) &&
+        Objects.equals(this.keywords, payment.keywords) &&
+        Objects.equals(this.description, payment.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, amount, dupCheck, settleWithAuth, paymentHandleToken, customerIp, currencyCode, card, threeDs, authentication,
-        paymentHandleTokenFrom, transactionIntent, gatewayResponse, skrill, neteller, paysafecash, paysafecard, payPal, returnLinks, venmo, vippreferred,
-        mazooma, sightline, payByBank, interacETransfer, browserDetails, deviceDetails, rapidTransfer, skrill1Tap, ach, eft, bacs, mandates, sepa,
-        safetyPayCash, paymentExpiryInMinutes, paymentDetails, paymentExpiryMinutes, id, availableToSettle, childAccountNum, txnTime, paymentType,
-        status, riskReasonCode, settlements, error, statusReason, gatewayReconciliationId, updatedTime, statusTime, availableToRefund, processingRails,
-        liveMode, billingDetails, customerProfile, merchantDescriptor, keywords, description, preAuth, cruiselineTravelDetails);
+    return Objects.hash(id, merchantRefNum, amount, dupCheck, settleWithAuth, paymentHandleToken, customerIp, currencyCode, card, threeDs, authentication, preAuth, paymentHandleTokenFrom, transactionIntent, gatewayResponse, sourceOfFunds, skrill, neteller, paysafecash, paysafecard, payPal, venmo, vippreferred, mazooma, sightline, payByBank, interacETransfer, rapidTransfer, skrill1Tap, ach, eft, bacs, sepa, safetyPayCash, mybank, eps, mandates, availableToSettle, childAccountNum, txnTime, paymentType, status, statusReason, riskReasonCode, settlements, gatewayReconciliationId, updatedTime, statusTime, availableToRefund, processingRails, liveMode, billingDetails, profile, acquirerData, paymentFacilitator, airlineTravelDetails, lodgingDetails, carRentalDetails, cruiselineTravelDetails, merchantDescriptor, keywords, description);
   }
 
   @Override
   public String toString() {
 
     return "class Payment {\n"
+        + "    id: " + toIndentedString(id) + "\n"
         + "    merchantRefNum: " + toIndentedString(merchantRefNum) + "\n"
         + "    amount: " + toIndentedString(amount) + "\n"
         + "    dupCheck: " + toIndentedString(dupCheck) + "\n"
@@ -1581,44 +1597,40 @@ public class Payment {
         + "    card: " + toIndentedString(card) + "\n"
         + "    threeDs: " + toIndentedString(threeDs) + "\n"
         + "    authentication: " + toIndentedString(authentication) + "\n"
+        + "    preAuth: " + toIndentedString(preAuth) + "\n"
         + "    paymentHandleTokenFrom: " + toIndentedString(paymentHandleTokenFrom) + "\n"
         + "    transactionIntent: " + toIndentedString(transactionIntent) + "\n"
         + "    gatewayResponse: " + toIndentedString(gatewayResponse) + "\n"
+        + "    sourceOfFunds: " + toIndentedString(sourceOfFunds) + "\n"
         + "    skrill: " + toIndentedString(skrill) + "\n"
         + "    neteller: " + toIndentedString(neteller) + "\n"
         + "    paysafecash: " + toIndentedString(paysafecash) + "\n"
         + "    paysafecard: " + toIndentedString(paysafecard) + "\n"
         + "    payPal: " + toIndentedString(payPal) + "\n"
-        + "    returnLinks: " + toIndentedString(returnLinks) + "\n"
         + "    venmo: " + toIndentedString(venmo) + "\n"
         + "    vippreferred: " + toIndentedString(vippreferred) + "\n"
         + "    mazooma: " + toIndentedString(mazooma) + "\n"
         + "    sightline: " + toIndentedString(sightline) + "\n"
         + "    payByBank: " + toIndentedString(payByBank) + "\n"
         + "    interacETransfer: " + toIndentedString(interacETransfer) + "\n"
-        + "    browserDetails: " + toIndentedString(browserDetails) + "\n"
-        + "    deviceDetails: " + toIndentedString(deviceDetails) + "\n"
         + "    rapidTransfer: " + toIndentedString(rapidTransfer) + "\n"
         + "    skrill1Tap: " + toIndentedString(skrill1Tap) + "\n"
         + "    ach: " + toIndentedString(ach) + "\n"
         + "    eft: " + toIndentedString(eft) + "\n"
         + "    bacs: " + toIndentedString(bacs) + "\n"
-        + "    mandates: " + toIndentedString(mandates) + "\n"
         + "    sepa: " + toIndentedString(sepa) + "\n"
         + "    safetyPayCash: " + toIndentedString(safetyPayCash) + "\n"
-        + "    paymentExpiryInMinutes: " + toIndentedString(paymentExpiryInMinutes) + "\n"
-        + "    paymentDetails: " + toIndentedString(paymentDetails) + "\n"
-        + "    paymentExpiryMinutes: " + toIndentedString(paymentExpiryMinutes) + "\n"
-        + "    id: " + toIndentedString(id) + "\n"
+        + "    mybank: " + toIndentedString(mybank) + "\n"
+        + "    eps: " + toIndentedString(eps) + "\n"
+        + "    mandates: " + toIndentedString(mandates) + "\n"
         + "    availableToSettle: " + toIndentedString(availableToSettle) + "\n"
         + "    childAccountNum: " + toIndentedString(childAccountNum) + "\n"
         + "    txnTime: " + toIndentedString(txnTime) + "\n"
         + "    paymentType: " + toIndentedString(paymentType) + "\n"
         + "    status: " + toIndentedString(status) + "\n"
+        + "    statusReason: " + toIndentedString(statusReason) + "\n"
         + "    riskReasonCode: " + toIndentedString(riskReasonCode) + "\n"
         + "    settlements: " + toIndentedString(settlements) + "\n"
-        + "    error: " + toIndentedString(error) + "\n"
-        + "    statusReason: " + toIndentedString(statusReason) + "\n"
         + "    gatewayReconciliationId: " + toIndentedString(gatewayReconciliationId) + "\n"
         + "    updatedTime: " + toIndentedString(updatedTime) + "\n"
         + "    statusTime: " + toIndentedString(statusTime) + "\n"
@@ -1626,16 +1638,15 @@ public class Payment {
         + "    processingRails: " + toIndentedString(processingRails) + "\n"
         + "    liveMode: " + toIndentedString(liveMode) + "\n"
         + "    billingDetails: " + toIndentedString(billingDetails) + "\n"
-        + "    customerProfile: " + toIndentedString(customerProfile) + "\n"
+        + "    profile: " + toIndentedString(profile) + "\n"
         + "    acquirerData: " + toIndentedString(acquirerData) + "\n"
         + "    paymentFacilitator: " + toIndentedString(paymentFacilitator) + "\n"
         + "    airlineTravelDetails: " + toIndentedString(airlineTravelDetails) + "\n"
         + "    lodgingDetails: " + toIndentedString(lodgingDetails) + "\n"
         + "    carRentalDetails: " + toIndentedString(carRentalDetails) + "\n"
+        + "    cruiselineTravelDetails: " + toIndentedString(cruiselineTravelDetails) + "\n"
         + "    merchantDescriptor: " + toIndentedString(merchantDescriptor) + "\n"
         + "    keywords: " + toIndentedString(keywords) + "\n"
-        + "    preAuth: " + toIndentedString(preAuth) + "\n"
-        + "    cruiselineTravelDetails: " + toIndentedString(cruiselineTravelDetails) + "\n"
         + "    description: " + toIndentedString(description) + "\n"
         + "}";
   }
@@ -1652,9 +1663,10 @@ public class Payment {
   }
 
   /**
-   * {@code Payment} builder static inner class.
+   * Represents the response of a payment transaction. builder static inner class.
    */
   public static final class Builder {
+    private String id;
     private String merchantRefNum;
     private Integer amount;
     private Boolean dupCheck;
@@ -1662,48 +1674,43 @@ public class Payment {
     private String paymentHandleToken;
     private String customerIp;
     private CurrencyCode currencyCode;
-    private CardWithOptionalNetworkTokenOrApplePay card;
+    private TokenizedCardDetails card;
     private ThreeDs threeDs;
     private Authentication authentication;
     private Boolean preAuth;
     private String paymentHandleTokenFrom;
-    private String transactionIntent;
+    private TransactionIntent transactionIntent;
     private GatewayResponse gatewayResponse;
+    private SourceOfFunds sourceOfFunds;
     private Skrill skrill;
     private Neteller neteller;
     private Paysafecash paysafecash;
     private Paysafecard paysafecard;
     private Paypal payPal;
-    private List<ReturnLink> returnLinks;
     private Venmo venmo;
     private Vippreferred vippreferred;
     private Mazooma mazooma;
     private Sightline sightline;
     private PayByBank payByBank;
     private Interac interacETransfer;
-    private BrowserDetails browserDetails;
-    private DeviceDetails deviceDetails;
     private RapidTransfer rapidTransfer;
     private Skrill1Tap skrill1Tap;
     private Ach ach;
     private Eft eft;
     private Bacs bacs;
-    private List<Mandate> mandates;
     private Sepa sepa;
     private SafetyPayCash safetyPayCash;
-    private Integer paymentExpiryInMinutes;
-    private PaymentDetails paymentDetails;
-    private Integer paymentExpiryMinutes;
-    private String id;
+    private MyBank mybank;
+    private Eps eps;
+    private List<Mandate> mandates;
     private Integer availableToSettle;
     private String childAccountNum;
     private String txnTime;
-    private String paymentType;
-    private PaymentRequestStatus status;
+    private PaymentType paymentType;
+    private PaymentStatus status;
+    private String statusReason;
     private List<Integer> riskReasonCode;
     private List<Settlement> settlements;
-    private Error error;
-    private String statusReason;
     private String gatewayReconciliationId;
     private String updatedTime;
     private String statusTime;
@@ -1711,7 +1718,7 @@ public class Payment {
     private ProcessingRails processingRails;
     private Boolean liveMode;
     private BillingDetails billingDetails;
-    private Profile customerProfile;
+    private Profile profile;
     private AcquirerData acquirerData;
     private PaymentFacilitator paymentFacilitator;
     private AirlineTravelDetails airlineTravelDetails;
@@ -1726,438 +1733,11 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * The unique identifier for the payment transaction, can be used to retrieve the payment details using the Get Payment API.
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
-     * @return a reference to this Builder
-     */
-    public Builder merchantRefNum(String merchantRefNum) {
-      this.merchantRefNum = merchantRefNum;
-      return this;
-    }
-
-    /**
-     * Sets the {@code amount} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param amount the {@code amount} to set
-     * @return a reference to this Builder
-     */
-    public Builder amount(Integer amount) {
-      this.amount = amount;
-      return this;
-    }
-
-    /**
-     * Sets the {@code dupCheck} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param dupCheck the {@code dupCheck} to set
-     * @return a reference to this Builder
-     */
-    public Builder dupCheck(Boolean dupCheck) {
-      this.dupCheck = dupCheck;
-      return this;
-    }
-
-    /**
-     * Sets the {@code settleWithAuth} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param settleWithAuth the {@code settleWithAuth} to set
-     * @return a reference to this Builder
-     */
-    public Builder settleWithAuth(Boolean settleWithAuth) {
-      this.settleWithAuth = settleWithAuth;
-      return this;
-    }
-
-    /**
-     * Sets the {@code paymentHandleToken} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param paymentHandleToken the {@code paymentHandleToken} to set
-     * @return a reference to this Builder
-     */
-    public Builder paymentHandleToken(String paymentHandleToken) {
-      this.paymentHandleToken = paymentHandleToken;
-      return this;
-    }
-
-    /**
-     * Sets the {@code customerIp} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param customerIp the {@code customerIp} to set
-     * @return a reference to this Builder
-     */
-    public Builder customerIp(String customerIp) {
-      this.customerIp = customerIp;
-      return this;
-    }
-
-    /**
-     * Sets the {@code currencyCode} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param currencyCode the {@code currencyCode} to set
-     * @return a reference to this Builder
-     */
-    public Builder currencyCode(CurrencyCode currencyCode) {
-      this.currencyCode = currencyCode;
-      return this;
-    }
-
-    /**
-     * Sets the {@code card} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param card the {@code card} to set
-     * @return a reference to this Builder
-     */
-    public Builder card(CardWithOptionalNetworkTokenOrApplePay card) {
-      this.card = card;
-      return this;
-    }
-
-    /**
-     * Sets the {@code threeDs} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param threeDs the {@code threeDs} to set
-     * @return a reference to this Builder
-     */
-    public Builder threeDs(ThreeDs threeDs) {
-      this.threeDs = threeDs;
-      return this;
-    }
-
-    /**
-     * Sets the {@code authentication} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param authentication the {@code authentication} to set
-     * @return a reference to this Builder
-     */
-    public Builder authentication(Authentication authentication) {
-      this.authentication = authentication;
-      return this;
-    }
-
-    /**
-     * Sets the {@code preAuth} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param preAuth the {@code preAuth} to set
-     * @return a reference to this Builder
-     */
-    public Builder preAuth(Boolean preAuth) {
-      this.preAuth = preAuth;
-      return this;
-    }
-
-    /**
-     * Sets the {@code paymentHandleTokenFrom} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param paymentHandleTokenFrom the {@code paymentHandleTokenFrom} to set
-     * @return a reference to this Builder
-     */
-    public Builder paymentHandleTokenFrom(String paymentHandleTokenFrom) {
-      this.paymentHandleTokenFrom = paymentHandleTokenFrom;
-      return this;
-    }
-
-    /**
-     * Sets the {@code transactionIntent} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param transactionIntent the {@code transactionIntent} to set
-     * @return a reference to this Builder
-     */
-    public Builder transactionIntent(String transactionIntent) {
-      this.transactionIntent = transactionIntent;
-      return this;
-    }
-
-    /**
-     * Sets the {@code gatewayResponse} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param gatewayResponse the {@code gatewayResponse} to set
-     * @return a reference to this Builder
-     */
-    public Builder gatewayResponse(GatewayResponse gatewayResponse) {
-      this.gatewayResponse = gatewayResponse;
-      return this;
-    }
-
-    /**
-     * Sets the {@code skrill} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param skrill the {@code skrill} to set
-     * @return a reference to this Builder
-     */
-    public Builder skrill(Skrill skrill) {
-      this.skrill = skrill;
-      return this;
-    }
-
-    /**
-     * Sets the {@code neteller} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param neteller the {@code neteller} to set
-     * @return a reference to this Builder
-     */
-    public Builder neteller(Neteller neteller) {
-      this.neteller = neteller;
-      return this;
-    }
-
-    /**
-     * Sets the {@code paysafecash} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param paysafecash the {@code paysafecash} to set
-     * @return a reference to this Builder
-     */
-    public Builder paysafecash(Paysafecash paysafecash) {
-      this.paysafecash = paysafecash;
-      return this;
-    }
-
-    /**
-     * Sets the {@code paysafecard} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param paysafecard the {@code paysafecard} to set
-     * @return a reference to this Builder
-     */
-    public Builder paysafecard(Paysafecard paysafecard) {
-      this.paysafecard = paysafecard;
-      return this;
-    }
-
-    /**
-     * Sets the {@code payPal} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param payPal the {@code payPal} to set
-     * @return a reference to this Builder
-     */
-    public Builder payPal(Paypal payPal) {
-      this.payPal = payPal;
-      return this;
-    }
-
-    /**
-     * Sets the {@code returnLinks} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param returnLinks the {@code returnLinks} to set
-     * @return a reference to this Builder
-     */
-    public Builder returnLinks(List<ReturnLink> returnLinks) {
-      this.returnLinks = returnLinks;
-      return this;
-    }
-
-    /**
-     * Sets the {@code venmo} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param venmo the {@code venmo} to set
-     * @return a reference to this Builder
-     */
-    public Builder venmo(Venmo venmo) {
-      this.venmo = venmo;
-      return this;
-    }
-
-    /**
-     * Sets the {@code vippreferred} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param vippreferred the {@code vippreferred} to set
-     * @return a reference to this Builder
-     */
-    public Builder vippreferred(Vippreferred vippreferred) {
-      this.vippreferred = vippreferred;
-      return this;
-    }
-
-    /**
-     * Sets the {@code mazooma} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param mazooma the {@code mazooma} to set
-     * @return a reference to this Builder
-     */
-    public Builder mazooma(Mazooma mazooma) {
-      this.mazooma = mazooma;
-      return this;
-    }
-
-    /**
-     * Sets the {@code sightline} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param sightline the {@code sightline} to set
-     * @return a reference to this Builder
-     */
-    public Builder sightline(Sightline sightline) {
-      this.sightline = sightline;
-      return this;
-    }
-
-    /**
-     * Sets the {@code payByBank} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param payByBank the {@code payByBank} to set
-     * @return a reference to this Builder
-     */
-    public Builder payByBank(PayByBank payByBank) {
-      this.payByBank = payByBank;
-      return this;
-    }
-
-    /**
-     * Sets the {@code interacETransfer} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param interacETransfer the {@code interacETransfer} to set
-     * @return a reference to this Builder
-     */
-    public Builder interacETransfer(Interac interacETransfer) {
-      this.interacETransfer = interacETransfer;
-      return this;
-    }
-
-    /**
-     * Sets the {@code browserDetails} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param browserDetails the {@code browserDetails} to set
-     * @return a reference to this Builder
-     */
-    public Builder browserDetails(BrowserDetails browserDetails) {
-      this.browserDetails = browserDetails;
-      return this;
-    }
-
-    /**
-     * Sets the {@code deviceDetails} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param deviceDetails the {@code deviceDetails} to set
-     * @return a reference to this Builder
-     */
-    public Builder deviceDetails(DeviceDetails deviceDetails) {
-      this.deviceDetails = deviceDetails;
-      return this;
-    }
-
-    /**
-     * Sets the {@code rapidTransfer} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param rapidTransfer the {@code rapidTransfer} to set
-     * @return a reference to this Builder
-     */
-    public Builder rapidTransfer(RapidTransfer rapidTransfer) {
-      this.rapidTransfer = rapidTransfer;
-      return this;
-    }
-
-    /**
-     * Sets the {@code skrill1Tap} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param skrill1Tap the {@code skrill1Tap} to set
-     * @return a reference to this Builder
-     */
-    public Builder skrill1Tap(Skrill1Tap skrill1Tap) {
-      this.skrill1Tap = skrill1Tap;
-      return this;
-    }
-
-    /**
-     * Sets the {@code ach} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param ach the {@code ach} to set
-     * @return a reference to this Builder
-     */
-    public Builder ach(Ach ach) {
-      this.ach = ach;
-      return this;
-    }
-
-    /**
-     * Sets the {@code eft} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param eft the {@code eft} to set
-     * @return a reference to this Builder
-     */
-    public Builder eft(Eft eft) {
-      this.eft = eft;
-      return this;
-    }
-
-    /**
-     * Sets the {@code bacs} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param bacs the {@code bacs} to set
-     * @return a reference to this Builder
-     */
-    public Builder bacs(Bacs bacs) {
-      this.bacs = bacs;
-      return this;
-    }
-
-    /**
-     * Sets the {@code mandates} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param mandates the {@code mandates} to set
-     * @return a reference to this Builder
-     */
-    public Builder mandates(List<Mandate> mandates) {
-      this.mandates = mandates;
-      return this;
-    }
-
-    /**
-     * Sets the {@code sepa} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param sepa the {@code sepa} to set
-     * @return a reference to this Builder
-     */
-    public Builder sepa(Sepa sepa) {
-      this.sepa = sepa;
-      return this;
-    }
-
-    /**
-     * Sets the {@code safetyPayCash} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param safetyPayCash the {@code safetyPayCash} to set
-     * @return a reference to this Builder
-     */
-    public Builder safetyPayCash(SafetyPayCash safetyPayCash) {
-      this.safetyPayCash = safetyPayCash;
-      return this;
-    }
-
-    /**
-     * Sets the {@code paymentExpiryInMinutes} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param paymentExpiryInMinutes the {@code paymentExpiryInMinutes} to set
-     * @return a reference to this Builder
-     */
-    public Builder paymentExpiryInMinutes(Integer paymentExpiryInMinutes) {
-      this.paymentExpiryInMinutes = paymentExpiryInMinutes;
-      return this;
-    }
-
-    /**
-     * Sets the {@code paymentDetails} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param paymentDetails the {@code paymentDetails} to set
-     * @return a reference to this Builder
-     */
-    public Builder paymentDetails(PaymentDetails paymentDetails) {
-      this.paymentDetails = paymentDetails;
-      return this;
-    }
-
-    /**
-     * Sets the {@code paymentExpiryMinutes} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param paymentExpiryMinutes the {@code paymentExpiryMinutes} to set
-     * @return a reference to this Builder
-     */
-    public Builder paymentExpiryMinutes(Integer paymentExpiryMinutes) {
-      this.paymentExpiryMinutes = paymentExpiryMinutes;
-      return this;
-    }
-
-    /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -2166,9 +1746,425 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code availableToSettle} and returns a reference to this Builder enabling method chaining.
+     * The merchant reference number created by the merchant and submitted as part of the request
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param availableToSettle the {@code availableToSettle} to set
+     * @param merchantRefNum the merchantRefNum to set
+     * @return a reference to this Builder
+     */
+    public Builder merchantRefNum(String merchantRefNum) {
+      this.merchantRefNum = merchantRefNum;
+      return this;
+    }
+
+    /**
+     * The amount of the request, in minor units (e.g., $10.99 = 1099)
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
+     *
+     * @param amount the amount to set
+     * @return a reference to this Builder
+     */
+    public Builder amount(Integer amount) {
+      this.amount = amount;
+      return this;
+    }
+
+    /**
+     * This validates that this request is not a duplicate. A duplicate request is when the merchantRefNum has already been used in a previous request within the past 90 days.
+     * <p>
+     * Sets the dupCheck and returns a reference to this Builder enabling method chaining.
+     *
+     * @param dupCheck the dupCheck to set
+     * @return a reference to this Builder
+     */
+    public Builder dupCheck(Boolean dupCheck) {
+      this.dupCheck = dupCheck;
+      return this;
+    }
+
+    /**
+     * This indicates whether the request is an Authorization only (no Settlement), or a Purchase (Authorization and Settlement). <ul> <li>false - The request is not settled </li> <li>true - The request is settled </li> </ul> <b>Note:</b> Defaults to false for cards and true for APMs.
+     * <p>
+     * Sets the settleWithAuth and returns a reference to this Builder enabling method chaining.
+     *
+     * @param settleWithAuth the settleWithAuth to set
+     * @return a reference to this Builder
+     */
+    public Builder settleWithAuth(Boolean settleWithAuth) {
+      this.settleWithAuth = settleWithAuth;
+      return this;
+    }
+
+    /**
+     * This is the payment token generated by Paysafe that will be used for the Payment request. For Payment, Payment handle must be in PAYABLE state.
+     * <p>
+     * Sets the paymentHandleToken and returns a reference to this Builder enabling method chaining.
+     *
+     * @param paymentHandleToken the paymentHandleToken to set
+     * @return a reference to this Builder
+     */
+    public Builder paymentHandleToken(String paymentHandleToken) {
+      this.paymentHandleToken = paymentHandleToken;
+      return this;
+    }
+
+    /**
+     * The IP address of the customer making the payment
+     * <p>
+     * Sets the customerIp and returns a reference to this Builder enabling method chaining.
+     *
+     * @param customerIp the customerIp to set
+     * @return a reference to this Builder
+     */
+    public Builder customerIp(String customerIp) {
+      this.customerIp = customerIp;
+      return this;
+    }
+
+    /**
+     * Sets the currencyCode and returns a reference to this Builder enabling method chaining.
+     *
+     * @param currencyCode the currencyCode to set
+     * @return a reference to this Builder
+     */
+    public Builder currencyCode(CurrencyCode currencyCode) {
+      this.currencyCode = currencyCode;
+      return this;
+    }
+
+    /**
+     * Sets the card and returns a reference to this Builder enabling method chaining.
+     *
+     * @param card the card to set
+     * @return a reference to this Builder
+     */
+    public Builder card(TokenizedCardDetails card) {
+      this.card = card;
+      return this;
+    }
+
+    /**
+     * Sets the threeDs and returns a reference to this Builder enabling method chaining.
+     *
+     * @param threeDs the threeDs to set
+     * @return a reference to this Builder
+     */
+    public Builder threeDs(ThreeDs threeDs) {
+      this.threeDs = threeDs;
+      return this;
+    }
+
+    /**
+     * Sets the authentication and returns a reference to this Builder enabling method chaining.
+     *
+     * @param authentication the authentication to set
+     * @return a reference to this Builder
+     */
+    public Builder authentication(Authentication authentication) {
+      this.authentication = authentication;
+      return this;
+    }
+
+    /**
+     * Flag indicating whether this is a pre-authorization transaction
+     * <p>
+     * Sets the preAuth and returns a reference to this Builder enabling method chaining.
+     *
+     * @param preAuth the preAuth to set
+     * @return a reference to this Builder
+     */
+    public Builder preAuth(Boolean preAuth) {
+      this.preAuth = preAuth;
+      return this;
+    }
+
+    /**
+     * This is used in Saved card flow. You will pass this parameter when you want to create single use payment handle using the Saved-card (card-on-file) present in Paysafe customer vault. <br> This is an existing multi-use [Customer Payment Handle](/operations/create-payment-handle-for-customer), from which the payment instrument details and profile details are retrieved. <br> If this parameter is included then you can omit the billingDetails object. If you send a new billingDetails along with \"paymentHandleTokenFrom\" then new billingDetails will be considered for the transaction, however no change will be made in the billingDetails present against the Saved-card in customer vault.
+     * <p>
+     * Sets the paymentHandleTokenFrom and returns a reference to this Builder enabling method chaining.
+     *
+     * @param paymentHandleTokenFrom the paymentHandleTokenFrom to set
+     * @return a reference to this Builder
+     */
+    public Builder paymentHandleTokenFrom(String paymentHandleTokenFrom) {
+      this.paymentHandleTokenFrom = paymentHandleTokenFrom;
+      return this;
+    }
+
+    /**
+     * Sets the transactionIntent and returns a reference to this Builder enabling method chaining.
+     *
+     * @param transactionIntent the transactionIntent to set
+     * @return a reference to this Builder
+     */
+    public Builder transactionIntent(TransactionIntent transactionIntent) {
+      this.transactionIntent = transactionIntent;
+      return this;
+    }
+
+    /**
+     * Sets the gatewayResponse and returns a reference to this Builder enabling method chaining.
+     *
+     * @param gatewayResponse the gatewayResponse to set
+     * @return a reference to this Builder
+     */
+    public Builder gatewayResponse(GatewayResponse gatewayResponse) {
+      this.gatewayResponse = gatewayResponse;
+      return this;
+    }
+
+    /**
+     * Sets the sourceOfFunds and returns a reference to this Builder enabling method chaining.
+     *
+     * @param sourceOfFunds the sourceOfFunds to set
+     * @return a reference to this Builder
+     */
+    public Builder sourceOfFunds(SourceOfFunds sourceOfFunds) {
+      this.sourceOfFunds = sourceOfFunds;
+      return this;
+    }
+
+    /**
+     * Sets the skrill and returns a reference to this Builder enabling method chaining.
+     *
+     * @param skrill the skrill to set
+     * @return a reference to this Builder
+     */
+    public Builder skrill(Skrill skrill) {
+      this.skrill = skrill;
+      return this;
+    }
+
+    /**
+     * Sets the neteller and returns a reference to this Builder enabling method chaining.
+     *
+     * @param neteller the neteller to set
+     * @return a reference to this Builder
+     */
+    public Builder neteller(Neteller neteller) {
+      this.neteller = neteller;
+      return this;
+    }
+
+    /**
+     * Sets the paysafecash and returns a reference to this Builder enabling method chaining.
+     *
+     * @param paysafecash the paysafecash to set
+     * @return a reference to this Builder
+     */
+    public Builder paysafecash(Paysafecash paysafecash) {
+      this.paysafecash = paysafecash;
+      return this;
+    }
+
+    /**
+     * Sets the paysafecard and returns a reference to this Builder enabling method chaining.
+     *
+     * @param paysafecard the paysafecard to set
+     * @return a reference to this Builder
+     */
+    public Builder paysafecard(Paysafecard paysafecard) {
+      this.paysafecard = paysafecard;
+      return this;
+    }
+
+    /**
+     * Sets the payPal and returns a reference to this Builder enabling method chaining.
+     *
+     * @param payPal the payPal to set
+     * @return a reference to this Builder
+     */
+    public Builder payPal(Paypal payPal) {
+      this.payPal = payPal;
+      return this;
+    }
+
+    /**
+     * Sets the venmo and returns a reference to this Builder enabling method chaining.
+     *
+     * @param venmo the venmo to set
+     * @return a reference to this Builder
+     */
+    public Builder venmo(Venmo venmo) {
+      this.venmo = venmo;
+      return this;
+    }
+
+    /**
+     * Sets the vippreferred and returns a reference to this Builder enabling method chaining.
+     *
+     * @param vippreferred the vippreferred to set
+     * @return a reference to this Builder
+     */
+    public Builder vippreferred(Vippreferred vippreferred) {
+      this.vippreferred = vippreferred;
+      return this;
+    }
+
+    /**
+     * Sets the mazooma and returns a reference to this Builder enabling method chaining.
+     *
+     * @param mazooma the mazooma to set
+     * @return a reference to this Builder
+     */
+    public Builder mazooma(Mazooma mazooma) {
+      this.mazooma = mazooma;
+      return this;
+    }
+
+    /**
+     * Sets the sightline and returns a reference to this Builder enabling method chaining.
+     *
+     * @param sightline the sightline to set
+     * @return a reference to this Builder
+     */
+    public Builder sightline(Sightline sightline) {
+      this.sightline = sightline;
+      return this;
+    }
+
+    /**
+     * Sets the payByBank and returns a reference to this Builder enabling method chaining.
+     *
+     * @param payByBank the payByBank to set
+     * @return a reference to this Builder
+     */
+    public Builder payByBank(PayByBank payByBank) {
+      this.payByBank = payByBank;
+      return this;
+    }
+
+    /**
+     * Sets the interacETransfer and returns a reference to this Builder enabling method chaining.
+     *
+     * @param interacETransfer the interacETransfer to set
+     * @return a reference to this Builder
+     */
+    public Builder interacETransfer(Interac interacETransfer) {
+      this.interacETransfer = interacETransfer;
+      return this;
+    }
+
+    /**
+     * Sets the rapidTransfer and returns a reference to this Builder enabling method chaining.
+     *
+     * @param rapidTransfer the rapidTransfer to set
+     * @return a reference to this Builder
+     */
+    public Builder rapidTransfer(RapidTransfer rapidTransfer) {
+      this.rapidTransfer = rapidTransfer;
+      return this;
+    }
+
+    /**
+     * Sets the skrill1Tap and returns a reference to this Builder enabling method chaining.
+     *
+     * @param skrill1Tap the skrill1Tap to set
+     * @return a reference to this Builder
+     */
+    public Builder skrill1Tap(Skrill1Tap skrill1Tap) {
+      this.skrill1Tap = skrill1Tap;
+      return this;
+    }
+
+    /**
+     * Sets the ach and returns a reference to this Builder enabling method chaining.
+     *
+     * @param ach the ach to set
+     * @return a reference to this Builder
+     */
+    public Builder ach(Ach ach) {
+      this.ach = ach;
+      return this;
+    }
+
+    /**
+     * Sets the eft and returns a reference to this Builder enabling method chaining.
+     *
+     * @param eft the eft to set
+     * @return a reference to this Builder
+     */
+    public Builder eft(Eft eft) {
+      this.eft = eft;
+      return this;
+    }
+
+    /**
+     * Sets the bacs and returns a reference to this Builder enabling method chaining.
+     *
+     * @param bacs the bacs to set
+     * @return a reference to this Builder
+     */
+    public Builder bacs(Bacs bacs) {
+      this.bacs = bacs;
+      return this;
+    }
+
+    /**
+     * Sets the sepa and returns a reference to this Builder enabling method chaining.
+     *
+     * @param sepa the sepa to set
+     * @return a reference to this Builder
+     */
+    public Builder sepa(Sepa sepa) {
+      this.sepa = sepa;
+      return this;
+    }
+
+    /**
+     * Sets the safetyPayCash and returns a reference to this Builder enabling method chaining.
+     *
+     * @param safetyPayCash the safetyPayCash to set
+     * @return a reference to this Builder
+     */
+    public Builder safetyPayCash(SafetyPayCash safetyPayCash) {
+      this.safetyPayCash = safetyPayCash;
+      return this;
+    }
+
+    /**
+     * Sets the mybank and returns a reference to this Builder enabling method chaining.
+     *
+     * @param mybank the mybank to set
+     * @return a reference to this Builder
+     */
+    public Builder mybank(MyBank mybank) {
+      this.mybank = mybank;
+      return this;
+    }
+
+    /**
+     * Sets the eps and returns a reference to this Builder enabling method chaining.
+     *
+     * @param eps the eps to set
+     * @return a reference to this Builder
+     */
+    public Builder eps(Eps eps) {
+      this.eps = eps;
+      return this;
+    }
+
+    /**
+     * List of mandates associated with the payment
+     * <p>
+     * Sets the mandates and returns a reference to this Builder enabling method chaining.
+     *
+     * @param mandates the mandates to set
+     * @return a reference to this Builder
+     */
+    public Builder mandates(List<Mandate> mandates) {
+      this.mandates = mandates;
+      return this;
+    }
+
+    /**
+     * Remaining authorization amount available to settle
+     * <p>
+     * Sets the availableToSettle and returns a reference to this Builder enabling method chaining.
+     *
+     * @param availableToSettle the availableToSettle to set
      * @return a reference to this Builder
      */
     public Builder availableToSettle(Integer availableToSettle) {
@@ -2177,9 +2173,11 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code childAccountNum} and returns a reference to this Builder enabling method chaining.
+     * The child account number if the transaction is processed via a master account
+     * <p>
+     * Sets the childAccountNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param childAccountNum the {@code childAccountNum} to set
+     * @param childAccountNum the childAccountNum to set
      * @return a reference to this Builder
      */
     public Builder childAccountNum(String childAccountNum) {
@@ -2188,9 +2186,11 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code txnTime} and returns a reference to this Builder enabling method chaining.
+     * The date and time when the payment was processed
+     * <p>
+     * Sets the txnTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param txnTime the {@code txnTime} to set
+     * @param txnTime the txnTime to set
      * @return a reference to this Builder
      */
     public Builder txnTime(String txnTime) {
@@ -2199,64 +2199,33 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code paymentType} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentType and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentType the {@code paymentType} to set
+     * @param paymentType the paymentType to set
      * @return a reference to this Builder
      */
-    public Builder paymentType(String paymentType) {
+    public Builder paymentType(PaymentType paymentType) {
       this.paymentType = paymentType;
       return this;
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
-    public Builder status(PaymentRequestStatus status) {
+    public Builder status(PaymentStatus status) {
       this.status = status;
       return this;
     }
 
     /**
-     * Sets the {@code riskReasonCode} and returns a reference to this Builder enabling method chaining.
+     * A description of the reason for the current status. This is present in the case where status is ERROR, FAILURE, or HELD.
+     * <p>
+     * Sets the statusReason and returns a reference to this Builder enabling method chaining.
      *
-     * @param riskReasonCode the {@code riskReasonCode} to set
-     * @return a reference to this Builder
-     */
-    public Builder riskReasonCode(List<Integer> riskReasonCode) {
-      this.riskReasonCode = riskReasonCode;
-      return this;
-    }
-
-    /**
-     * Sets the {@code settlements} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param settlements the {@code settlements} to set
-     * @return a reference to this Builder
-     */
-    public Builder settlements(List<Settlement> settlements) {
-      this.settlements = settlements;
-      return this;
-    }
-
-    /**
-     * Sets the {@code error} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param error the {@code error} to set
-     * @return a reference to this Builder
-     */
-    public Builder error(Error error) {
-      this.error = error;
-      return this;
-    }
-
-    /**
-     * Sets the {@code statusReason} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param statusReason the {@code statusReason} to set
+     * @param statusReason the statusReason to set
      * @return a reference to this Builder
      */
     public Builder statusReason(String statusReason) {
@@ -2265,9 +2234,37 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code gatewayReconciliationId} and returns a reference to this Builder enabling method chaining.
+     * List of risk-related reason codes
+     * <p>
+     * Sets the riskReasonCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param gatewayReconciliationId the {@code gatewayReconciliationId} to set
+     * @param riskReasonCode the riskReasonCode to set
+     * @return a reference to this Builder
+     */
+    public Builder riskReasonCode(List<Integer> riskReasonCode) {
+      this.riskReasonCode = riskReasonCode;
+      return this;
+    }
+
+    /**
+     * List of settlement objects associated with the payment
+     * <p>
+     * Sets the settlements and returns a reference to this Builder enabling method chaining.
+     *
+     * @param settlements the settlements to set
+     * @return a reference to this Builder
+     */
+    public Builder settlements(List<Settlement> settlements) {
+      this.settlements = settlements;
+      return this;
+    }
+
+    /**
+     * The reconciliation ID returned by the gateway
+     * <p>
+     * Sets the gatewayReconciliationId and returns a reference to this Builder enabling method chaining.
+     *
+     * @param gatewayReconciliationId the gatewayReconciliationId to set
      * @return a reference to this Builder
      */
     public Builder gatewayReconciliationId(String gatewayReconciliationId) {
@@ -2276,9 +2273,11 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code updatedTime} and returns a reference to this Builder enabling method chaining.
+     * The date and time the payment payment was last updated
+     * <p>
+     * Sets the updatedTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param updatedTime the {@code updatedTime} to set
+     * @param updatedTime the updatedTime to set
      * @return a reference to this Builder
      */
     public Builder updatedTime(String updatedTime) {
@@ -2287,9 +2286,11 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code statusTime} and returns a reference to this Builder enabling method chaining.
+     * The date and time of the payment last status change
+     * <p>
+     * Sets the statusTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param statusTime the {@code statusTime} to set
+     * @param statusTime the statusTime to set
      * @return a reference to this Builder
      */
     public Builder statusTime(String statusTime) {
@@ -2298,9 +2299,11 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code availableToRefund} and returns a reference to this Builder enabling method chaining.
+     * The amount available to refund from the payment
+     * <p>
+     * Sets the availableToRefund and returns a reference to this Builder enabling method chaining.
      *
-     * @param availableToRefund the {@code availableToRefund} to set
+     * @param availableToRefund the availableToRefund to set
      * @return a reference to this Builder
      */
     public Builder availableToRefund(Integer availableToRefund) {
@@ -2309,9 +2312,9 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code processingRails} and returns a reference to this Builder enabling method chaining.
+     * Sets the processingRails and returns a reference to this Builder enabling method chaining.
      *
-     * @param processingRails the {@code processingRails} to set
+     * @param processingRails the processingRails to set
      * @return a reference to this Builder
      */
     public Builder processingRails(ProcessingRails processingRails) {
@@ -2320,9 +2323,11 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code liveMode} and returns a reference to this Builder enabling method chaining.
+     * Indicates whether the payment was processed in live mode
+     * <p>
+     * Sets the liveMode and returns a reference to this Builder enabling method chaining.
      *
-     * @param liveMode the {@code liveMode} to set
+     * @param liveMode the liveMode to set
      * @return a reference to this Builder
      */
     public Builder liveMode(Boolean liveMode) {
@@ -2331,9 +2336,9 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code billingDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the billingDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param billingDetails the {@code billingDetails} to set
+     * @param billingDetails the billingDetails to set
      * @return a reference to this Builder
      */
     public Builder billingDetails(BillingDetails billingDetails) {
@@ -2342,20 +2347,20 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code customerProfile} and returns a reference to this Builder enabling method chaining.
+     * Sets the profile and returns a reference to this Builder enabling method chaining.
      *
-     * @param customerProfile the {@code customerProfile} to set
+     * @param profile the profile to set
      * @return a reference to this Builder
      */
-    public Builder customerProfile(Profile customerProfile) {
-      this.customerProfile = customerProfile;
+    public Builder profile(Profile profile) {
+      this.profile = profile;
       return this;
     }
 
     /**
-     * Sets the {@code acquirerData} and returns a reference to this Builder enabling method chaining.
+     * Sets the acquirerData and returns a reference to this Builder enabling method chaining.
      *
-     * @param acquirerData the {@code acquirerData} to set
+     * @param acquirerData the acquirerData to set
      * @return a reference to this Builder
      */
     public Builder acquirerData(AcquirerData acquirerData) {
@@ -2364,9 +2369,9 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code paymentFacilitator} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentFacilitator and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentFacilitator the {@code paymentFacilitator} to set
+     * @param paymentFacilitator the paymentFacilitator to set
      * @return a reference to this Builder
      */
     public Builder paymentFacilitator(PaymentFacilitator paymentFacilitator) {
@@ -2375,9 +2380,9 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code airlineTravelDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the airlineTravelDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param airlineTravelDetails the {@code airlineTravelDetails} to set
+     * @param airlineTravelDetails the airlineTravelDetails to set
      * @return a reference to this Builder
      */
     public Builder airlineTravelDetails(AirlineTravelDetails airlineTravelDetails) {
@@ -2386,9 +2391,9 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code lodgingDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the lodgingDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param lodgingDetails the {@code lodgingDetails} to set
+     * @param lodgingDetails the lodgingDetails to set
      * @return a reference to this Builder
      */
     public Builder lodgingDetails(LodgingDetails lodgingDetails) {
@@ -2397,9 +2402,9 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code carRentalDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the carRentalDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param carRentalDetails the {@code carRentalDetails} to set
+     * @param carRentalDetails the carRentalDetails to set
      * @return a reference to this Builder
      */
     public Builder carRentalDetails(CarRentalDetails carRentalDetails) {
@@ -2408,9 +2413,9 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code cruiselineTravelDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the cruiselineTravelDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param cruiselineTravelDetails the {@code cruiselineTravelDetails} to set
+     * @param cruiselineTravelDetails the cruiselineTravelDetails to set
      * @return a reference to this Builder
      */
     public Builder cruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
@@ -2419,9 +2424,9 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code merchantDescriptor} and returns a reference to this Builder enabling method chaining.
+     * Sets the merchantDescriptor and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantDescriptor the {@code merchantDescriptor} to set
+     * @param merchantDescriptor the merchantDescriptor to set
      * @return a reference to this Builder
      */
     public Builder merchantDescriptor(MerchantDescriptor merchantDescriptor) {
@@ -2430,9 +2435,11 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code keywords} and returns a reference to this Builder enabling method chaining.
+     * List of keywords associated with the payment
+     * <p>
+     * Sets the keywords and returns a reference to this Builder enabling method chaining.
      *
-     * @param keywords the {@code keywords} to set
+     * @param keywords the keywords to set
      * @return a reference to this Builder
      */
     public Builder keywords(List<String> keywords) {
@@ -2441,9 +2448,11 @@ public class Payment {
     }
 
     /**
-     * Sets the {@code description} and returns a reference to this Builder enabling method chaining.
+     * Description of the payment transaction
+     * <p>
+     * Sets the description and returns a reference to this Builder enabling method chaining.
      *
-     * @param description the {@code description} to set
+     * @param description the description to set
      * @return a reference to this Builder
      */
     public Builder description(String description) {
@@ -2452,9 +2461,9 @@ public class Payment {
     }
 
     /**
-     * Returns a {@code Payment} built from the parameters previously set.
+     * Returns a Payment built from the parameters previously set.
      *
-     * @return a {@code Payment} built with parameters of this {@code Payment.Builder}
+     * @return a Payment built with parameters of this Payment.Builder
      */
     public Payment build() {
       return new Payment(this);

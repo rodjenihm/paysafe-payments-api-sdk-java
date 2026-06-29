@@ -1,29 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.threeds;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.enums.CurrencyCode;
 
+
+
 /**
- * Purchased gift card details
- * <ul>
- *   <li>
- *     <b>amount:</b> This is the amount of the gift card, in minor units.  <br>
- *     Example: 1234
- *   </li>
- *   <li>
- *     <b>count:</b> This is the total count of individual prepaid or gift cards or codes purchased.  <br>
- *     Example: 2
- *   </li>
- *   <li>
- *     <b>currency:</b> This is the currency of the gift card. See
- *     <a href="https://developer.paysafe.com/en/support/reference-information/codes/#currency-codes">Currency Codes</a> <br>
- *     Example: USD
- *   </li>
- * </ul>
+ * Details about purchased gift cards
  */
 public class PurchasedGiftCardDetails {
 
@@ -38,7 +31,7 @@ public class PurchasedGiftCardDetails {
     super();
   }
 
-  private PurchasedGiftCardDetails(Builder builder) {
+  private PurchasedGiftCardDetails(final Builder builder) {
     setAmount(builder.amount);
     setCount(builder.count);
     setCurrency(builder.currency);
@@ -48,14 +41,14 @@ public class PurchasedGiftCardDetails {
     return new Builder();
   }
 
+
   public PurchasedGiftCardDetails amount(Integer amount) {
     this.amount = amount;
     return this;
   }
 
   /**
-   * This is the amount of the gift card, in minor units.  <br>
-   * Maximum: 99999999999
+   * Amount of the gift card in minor units\\
    *
    * @return amount
    */
@@ -67,14 +60,14 @@ public class PurchasedGiftCardDetails {
     this.amount = amount;
   }
 
+
   public PurchasedGiftCardDetails count(Integer count) {
     this.count = count;
     return this;
   }
 
   /**
-   * This is the total count of individual prepaid or gift cards or codes purchased.  <br>
-   * Maximum: 99
+   * Number of gift cards purchased
    *
    * @return count
    */
@@ -86,16 +79,16 @@ public class PurchasedGiftCardDetails {
     this.count = count;
   }
 
+
   public PurchasedGiftCardDetails currency(CurrencyCode currency) {
     this.currency = currency;
     return this;
   }
 
   /**
-   * This is the currency of the gift card, e.g., USD or CAD.
+   * Get currency
    *
    * @return currency
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#currency-codes>Currency codes reference documentation</a>
    */
   public CurrencyCode getCurrency() {
     return currency;
@@ -146,7 +139,7 @@ public class PurchasedGiftCardDetails {
   }
 
   /**
-   * {@code PurchasedGiftCardDetails} builder static inner class.
+   * Details about purchased gift cards builder static inner class.
    */
   public static final class Builder {
     private Integer amount;
@@ -157,9 +150,11 @@ public class PurchasedGiftCardDetails {
     }
 
     /**
-     * Sets the {@code amount} and returns a reference to this Builder enabling method chaining.
+     * Amount of the gift card in minor units\\
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
      *
-     * @param amount the {@code amount} to set
+     * @param amount the amount to set
      * @return a reference to this Builder
      */
     public Builder amount(Integer amount) {
@@ -168,9 +163,11 @@ public class PurchasedGiftCardDetails {
     }
 
     /**
-     * Sets the {@code count} and returns a reference to this Builder enabling method chaining.
+     * Number of gift cards purchased
+     * <p>
+     * Sets the count and returns a reference to this Builder enabling method chaining.
      *
-     * @param count the {@code count} to set
+     * @param count the count to set
      * @return a reference to this Builder
      */
     public Builder count(Integer count) {
@@ -179,9 +176,9 @@ public class PurchasedGiftCardDetails {
     }
 
     /**
-     * Sets the {@code currency} and returns a reference to this Builder enabling method chaining.
+     * Sets the currency and returns a reference to this Builder enabling method chaining.
      *
-     * @param currency the {@code currency} to set
+     * @param currency the currency to set
      * @return a reference to this Builder
      */
     public Builder currency(CurrencyCode currency) {
@@ -190,13 +187,12 @@ public class PurchasedGiftCardDetails {
     }
 
     /**
-     * Returns a {@code PurchasedGiftCardDetails} built from the parameters previously set.
+     * Returns a PurchasedGiftCardDetails built from the parameters previously set.
      *
-     * @return a {@code PurchasedGiftCardDetails} built with parameters of this {@code PurchasedGiftCardDetails.Builder}
+     * @return a PurchasedGiftCardDetails built with parameters of this PurchasedGiftCardDetails.Builder
      */
     public PurchasedGiftCardDetails build() {
       return new PurchasedGiftCardDetails(this);
     }
   }
 }
-

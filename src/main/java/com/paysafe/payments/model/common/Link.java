@@ -1,29 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.paymenthandle.enums.ReturnLinkRel;
+
+
 
 /**
  * URL link to redirect customer during transaction flow.
- * <ul>
- *   <li>
- *     <b>href:</b> The url to be used for further actions.  <br>
- *     Example: http://api.paysafe.com/card/redirect/372b5ee7-6360-4403-b444-164f8f1d2709
- *   </li>
- *   <li>
- *     <b>method:</b> The corresponding HTTP request method to be invoked on url.  <br>
- *     Example: GET
- *   </li>
- *   <li>
- *     <b>rel:</b> This is the link type that allows different endpoints to be targeted depending on the end state of the transaction.  <br>
- *     <i>Allowed values: redirect_payment, redirect_registration, on_completed, default, on_failed, on_cancelled</i>
- *   </li>
- *   <li>
- * </ul>
  */
 public class Link {
 
@@ -38,7 +31,7 @@ public class Link {
     super();
   }
 
-  private Link(Builder builder) {
+  private Link(final Builder builder) {
     setRel(builder.rel);
     setHref(builder.href);
     setMethod(builder.method);
@@ -48,21 +41,15 @@ public class Link {
     return new Builder();
   }
 
+
   public Link rel(ReturnLinkRel rel) {
     this.rel = rel;
     return this;
   }
 
   /**
-   * This is the link type that allows different endpoints to be targeted depending on the end state of the transaction.
-   * <ul>
-   * <li>redirect_registration - Merchant needs to redirect consumer to this url to complete registration. </li>
-   * <li>redirect_payment - Merchant needs to redirect consumer to this url to complete authentication. </li>
-   * <li>on_completed - Paysafe will return to this merchant url post successful payment. </li>
-   * <li>on_failed - Paysafe will return to this merchant url post if payment is failed. </li>
-   * <li>on_cancelled - Paysafe will return to this merchant url post if payment is cancelled. </li>
-   * <li>default - The default return URL that will be used if specific status return URL is not defined. </li>
-   *</ul>
+   * Get rel
+   *
    * @return rel
    */
   public ReturnLinkRel getRel() {
@@ -73,13 +60,14 @@ public class Link {
     this.rel = rel;
   }
 
+
   public Link href(String href) {
     this.href = href;
     return this;
   }
 
   /**
-   * The url to be used for further actions.
+   * The url to be used for further actions
    *
    * @return href
    */
@@ -91,13 +79,14 @@ public class Link {
     this.href = href;
   }
 
+
   public Link method(String method) {
     this.method = method;
     return this;
   }
 
   /**
-   * The corresponding HTTP request method to be invoked on url.
+   * The corresponding HTTP request method to be invoked on url
    *
    * @return method
    */
@@ -150,7 +139,7 @@ public class Link {
   }
 
   /**
-   * {@code Links} builder static inner class.
+   * URL link to redirect customer during transaction flow. builder static inner class.
    */
   public static final class Builder {
     private ReturnLinkRel rel;
@@ -161,9 +150,9 @@ public class Link {
     }
 
     /**
-     * Sets the {@code rel} and returns a reference to this Builder enabling method chaining.
+     * Sets the rel and returns a reference to this Builder enabling method chaining.
      *
-     * @param rel the {@code rel} to set
+     * @param rel the rel to set
      * @return a reference to this Builder
      */
     public Builder rel(ReturnLinkRel rel) {
@@ -172,9 +161,11 @@ public class Link {
     }
 
     /**
-     * Sets the {@code href} and returns a reference to this Builder enabling method chaining.
+     * The url to be used for further actions
+     * <p>
+     * Sets the href and returns a reference to this Builder enabling method chaining.
      *
-     * @param href the {@code href} to set
+     * @param href the href to set
      * @return a reference to this Builder
      */
     public Builder href(String href) {
@@ -183,9 +174,11 @@ public class Link {
     }
 
     /**
-     * Sets the {@code method} and returns a reference to this Builder enabling method chaining.
+     * The corresponding HTTP request method to be invoked on url
+     * <p>
+     * Sets the method and returns a reference to this Builder enabling method chaining.
      *
-     * @param method the {@code method} to set
+     * @param method the method to set
      * @return a reference to this Builder
      */
     public Builder method(String method) {
@@ -194,9 +187,9 @@ public class Link {
     }
 
     /**
-     * Returns a {@code Links} built from the parameters previously set.
+     * Returns a Link built from the parameters previously set.
      *
-     * @return a {@code Links} built with parameters of this {@code Links.Builder}
+     * @return a Link built with parameters of this Link.Builder
      */
     public Link build() {
       return new Link(this);

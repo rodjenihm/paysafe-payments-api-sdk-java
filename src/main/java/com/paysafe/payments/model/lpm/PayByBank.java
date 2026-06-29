@@ -1,10 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.lpm.enums.PayByBankScheme;
+
+
 
 /**
  * This object should be used only for pay by bank transactions.
@@ -15,6 +24,8 @@ public class PayByBank {
   private String consumerId;
   @JsonProperty("registrationId")
   private String registrationId;
+  @JsonProperty("scheme")
+  private PayByBankScheme scheme;
   @JsonProperty("ach")
   private PayByBankAch ach;
 
@@ -22,9 +33,10 @@ public class PayByBank {
     super();
   }
 
-  private PayByBank(Builder builder) {
+  private PayByBank(final Builder builder) {
     setConsumerId(builder.consumerId);
     setRegistrationId(builder.registrationId);
+    setScheme(builder.scheme);
     setAch(builder.ach);
   }
 
@@ -32,13 +44,14 @@ public class PayByBank {
     return new Builder();
   }
 
+
   public PayByBank consumerId(String consumerId) {
     this.consumerId = consumerId;
     return this;
   }
 
   /**
-   * This is your identifier for your consumer and must be unique per consumer.
+   * This is your identifier for your consumer and must be unique per consumer
    *
    * @return consumerId
    */
@@ -50,13 +63,14 @@ public class PayByBank {
     this.consumerId = consumerId;
   }
 
+
   public PayByBank registrationId(String registrationId) {
     this.registrationId = registrationId;
     return this;
   }
 
   /**
-   * Paysafe’s unique identifier for your consumer.
+   * Paysafe's unique identifier for your consumer
    *
    * @return registrationId
    */
@@ -68,14 +82,33 @@ public class PayByBank {
     this.registrationId = registrationId;
   }
 
+
+  public PayByBank scheme(PayByBankScheme scheme) {
+    this.scheme = scheme;
+    return this;
+  }
+
+  /**
+   * Get scheme
+   *
+   * @return scheme
+   */
+  public PayByBankScheme getScheme() {
+    return scheme;
+  }
+
+  public void setScheme(PayByBankScheme scheme) {
+    this.scheme = scheme;
+  }
+
+
   public PayByBank ach(PayByBankAch ach) {
     this.ach = ach;
     return this;
   }
 
   /**
-   * This is an array containing a list of bank accounts that the consumer has linked in order to make Pay by Bank payments, along with additional
-   * information about those accounts.
+   * Get ach
    *
    * @return ach
    */
@@ -98,12 +131,13 @@ public class PayByBank {
     PayByBank payByBank = (PayByBank) o;
     return Objects.equals(this.consumerId, payByBank.consumerId) &&
         Objects.equals(this.registrationId, payByBank.registrationId) &&
+        Objects.equals(this.scheme, payByBank.scheme) &&
         Objects.equals(this.ach, payByBank.ach);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(consumerId, registrationId, ach);
+    return Objects.hash(consumerId, registrationId, scheme, ach);
   }
 
   @Override
@@ -112,6 +146,7 @@ public class PayByBank {
     return "class PayByBank {\n"
         + "    consumerId: " + toIndentedString(consumerId) + "\n"
         + "    registrationId: " + toIndentedString(registrationId) + "\n"
+        + "    scheme: " + toIndentedString(scheme) + "\n"
         + "    ach: " + toIndentedString(ach) + "\n"
         + "}";
   }
@@ -128,20 +163,23 @@ public class PayByBank {
   }
 
   /**
-   * {@code PayByBank} builder static inner class.
+   * This object should be used only for pay by bank transactions. builder static inner class.
    */
   public static final class Builder {
     private String consumerId;
     private String registrationId;
+    private PayByBankScheme scheme;
     private PayByBankAch ach;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code consumerId} and returns a reference to this Builder enabling method chaining.
+     * This is your identifier for your consumer and must be unique per consumer
+     * <p>
+     * Sets the consumerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param consumerId the {@code consumerId} to set
+     * @param consumerId the consumerId to set
      * @return a reference to this Builder
      */
     public Builder consumerId(String consumerId) {
@@ -150,9 +188,11 @@ public class PayByBank {
     }
 
     /**
-     * Sets the {@code registrationId} and returns a reference to this Builder enabling method chaining.
+     * Paysafe's unique identifier for your consumer
+     * <p>
+     * Sets the registrationId and returns a reference to this Builder enabling method chaining.
      *
-     * @param registrationId the {@code registrationId} to set
+     * @param registrationId the registrationId to set
      * @return a reference to this Builder
      */
     public Builder registrationId(String registrationId) {
@@ -161,9 +201,20 @@ public class PayByBank {
     }
 
     /**
-     * Sets the {@code ach} and returns a reference to this Builder enabling method chaining.
+     * Sets the scheme and returns a reference to this Builder enabling method chaining.
      *
-     * @param ach the {@code ach} to set
+     * @param scheme the scheme to set
+     * @return a reference to this Builder
+     */
+    public Builder scheme(PayByBankScheme scheme) {
+      this.scheme = scheme;
+      return this;
+    }
+
+    /**
+     * Sets the ach and returns a reference to this Builder enabling method chaining.
+     *
+     * @param ach the ach to set
      * @return a reference to this Builder
      */
     public Builder ach(PayByBankAch ach) {
@@ -172,13 +223,12 @@ public class PayByBank {
     }
 
     /**
-     * Returns a {@code PayByBank} built from the parameters previously set.
+     * Returns a PayByBank built from the parameters previously set.
      *
-     * @return a {@code PayByBank} built with parameters of this {@code PayByBank.Builder}
+     * @return a PayByBank built with parameters of this PayByBank.Builder
      */
     public PayByBank build() {
       return new PayByBank(this);
     }
   }
 }
-

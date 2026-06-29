@@ -1,18 +1,16 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.paymenthandle.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.paysafe.payments.model.payment.Payment;
 
 /**
- * This specifies how the Payment Handle will be used for Payments. Possible values are:
- * <ul>
- * <li>SINGLE_USE – The Payment Handle can be used for one transaction only and expires if not used.</li>
- * <li>MULTI_USE – The Payment Handle can be used multiple times.</li>
- * </ul>
+ * This specifies how the Payment Handle will be used for Payments. Possible values are: - SINGLE_USE - The Payment Handle can be used for one transaction only and expires if not used. - MULTI_USE - The Payment Handle can be used multiple times.
  */
 public enum PaymentHandleUsage {
+
   SINGLE_USE("SINGLE_USE"),
 
   MULTI_USE("MULTI_USE");

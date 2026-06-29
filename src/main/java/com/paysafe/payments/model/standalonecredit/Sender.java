@@ -1,15 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.standalonecredit;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * The Sender is deemed to be the person or party who has the contractual relationship with the end customer.
- * <b>Note: </b> In case of Visa Direct with use cases Account to Account, Wallet transfer or Funds Transfer,
- * the sender name should be the same as the recipient name.
+ * The Sender is deemed to be the person or party who has the contractual relationship with the end customer. **Note:** In case of Visa Direct with use cases Account to Account, Wallet transfer or Funds Transfer, the sender name should be the same as the recipient name.
  */
 public class Sender {
 
@@ -26,7 +32,7 @@ public class Sender {
     super();
   }
 
-  private Sender(Builder builder) {
+  private Sender(final Builder builder) {
     setFirstName(builder.firstName);
     setLastName(builder.lastName);
     setAccountNumber(builder.accountNumber);
@@ -36,6 +42,7 @@ public class Sender {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public Sender firstName(String firstName) {
     this.firstName = firstName;
@@ -55,6 +62,7 @@ public class Sender {
     this.firstName = firstName;
   }
 
+
   public Sender lastName(String lastName) {
     this.lastName = lastName;
     return this;
@@ -73,13 +81,14 @@ public class Sender {
     this.lastName = lastName;
   }
 
+
   public Sender accountNumber(String accountNumber) {
     this.accountNumber = accountNumber;
     return this;
   }
 
   /**
-   * This is the sender''s account number, e.g., a loan agreement number or customer ID.
+   * This is the sender's account number, e.g., a loan agreement number or customer ID.
    *
    * @return accountNumber
    */
@@ -91,13 +100,14 @@ public class Sender {
     this.accountNumber = accountNumber;
   }
 
+
   public Sender address(SenderAddress address) {
     this.address = address;
     return this;
   }
 
   /**
-   * This is the sender's address.
+   * Get address
    *
    * @return address
    */
@@ -152,7 +162,7 @@ public class Sender {
   }
 
   /**
-   * {@code Sender} builder static inner class.
+   * The Sender is deemed to be the person or party who has the contractual relationship with the end customer. **Note:** In case of Visa Direct with use cases Account to Account, Wallet transfer or Funds Transfer, the sender name should be the same as the recipient name. builder static inner class.
    */
   public static final class Builder {
     private String firstName;
@@ -164,9 +174,11 @@ public class Sender {
     }
 
     /**
-     * Sets the {@code firstName} and returns a reference to this Builder enabling method chaining.
+     * Sender's first name.
+     * <p>
+     * Sets the firstName and returns a reference to this Builder enabling method chaining.
      *
-     * @param firstName the {@code firstName} to set
+     * @param firstName the firstName to set
      * @return a reference to this Builder
      */
     public Builder firstName(String firstName) {
@@ -175,9 +187,11 @@ public class Sender {
     }
 
     /**
-     * Sets the {@code lastName} and returns a reference to this Builder enabling method chaining.
+     * Sender's last name.
+     * <p>
+     * Sets the lastName and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastName the {@code lastName} to set
+     * @param lastName the lastName to set
      * @return a reference to this Builder
      */
     public Builder lastName(String lastName) {
@@ -186,9 +200,11 @@ public class Sender {
     }
 
     /**
-     * Sets the {@code accountNumber} and returns a reference to this Builder enabling method chaining.
+     * This is the sender's account number, e.g., a loan agreement number or customer ID.
+     * <p>
+     * Sets the accountNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountNumber the {@code accountNumber} to set
+     * @param accountNumber the accountNumber to set
      * @return a reference to this Builder
      */
     public Builder accountNumber(String accountNumber) {
@@ -197,9 +213,9 @@ public class Sender {
     }
 
     /**
-     * Sets the {@code address} and returns a reference to this Builder enabling method chaining.
+     * Sets the address and returns a reference to this Builder enabling method chaining.
      *
-     * @param address the {@code address} to set
+     * @param address the address to set
      * @return a reference to this Builder
      */
     public Builder address(SenderAddress address) {
@@ -208,13 +224,12 @@ public class Sender {
     }
 
     /**
-     * Returns a {@code Sender} built from the parameters previously set.
+     * Returns a Sender built from the parameters previously set.
      *
-     * @return a {@code Sender} built with parameters of this {@code Sender.Builder}
+     * @return a Sender built with parameters of this Sender.Builder
      */
     public Sender build() {
       return new Sender(this);
     }
   }
 }
-

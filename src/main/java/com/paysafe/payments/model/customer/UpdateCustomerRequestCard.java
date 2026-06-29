@@ -1,13 +1,23 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.customer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.card.Card;
 import com.paysafe.payments.model.card.CardExpiry;
+import com.paysafe.payments.model.card.enums.CardCategory;
 import com.paysafe.payments.model.card.enums.CardStatus;
 import com.paysafe.payments.model.card.enums.CardType;
+
+
 
 /**
  * Card details to be used for the transaction
@@ -17,7 +27,7 @@ public class UpdateCustomerRequestCard {
   @JsonProperty("cardNum")
   private String cardNum;
   @JsonProperty("cardCategory")
-  private String cardCategory;
+  private CardCategory cardCategory;
   @JsonProperty("cardId")
   private String cardId;
   @JsonProperty("cardExpiry")
@@ -59,6 +69,45 @@ public class UpdateCustomerRequestCard {
     return new Builder();
   }
 
+
+  public UpdateCustomerRequestCard cardNum(String cardNum) {
+    this.cardNum = cardNum;
+    return this;
+  }
+
+  /**
+   * This is the card number
+   *
+   * @return cardNum
+   */
+  public String getCardNum() {
+    return cardNum;
+  }
+
+  public void setCardNum(String cardNum) {
+    this.cardNum = cardNum;
+  }
+
+
+  public UpdateCustomerRequestCard cardCategory(CardCategory cardCategory) {
+    this.cardCategory = cardCategory;
+    return this;
+  }
+
+  /**
+   * Get cardCategory
+   *
+   * @return cardCategory
+   */
+  public CardCategory getCardCategory() {
+    return cardCategory;
+  }
+
+  public void setCardCategory(CardCategory cardCategory) {
+    this.cardCategory = cardCategory;
+  }
+
+
   public UpdateCustomerRequestCard cardId(String cardId) {
     this.cardId = cardId;
     return this;
@@ -77,21 +126,28 @@ public class UpdateCustomerRequestCard {
     this.cardId = cardId;
   }
 
-  /**
-   * This is the card number.
-   *
-   * @return cardId
-   */
-  public String getCardNum() {
-    return cardNum;
-  }
-
-  public void setCardNum(String cardNum) {
-    this.cardNum = cardNum;
-  }
 
   public UpdateCustomerRequestCard cardExpiry(CardExpiry cardExpiry) {
     this.cardExpiry = cardExpiry;
+    return this;
+  }
+
+  /**
+   * Get cardExpiry
+   *
+   * @return cardExpiry
+   */
+  public CardExpiry getCardExpiry() {
+    return cardExpiry;
+  }
+
+  public void setCardExpiry(CardExpiry cardExpiry) {
+    this.cardExpiry = cardExpiry;
+  }
+
+
+  public UpdateCustomerRequestCard cvv(String cvv) {
+    this.cvv = cvv;
     return this;
   }
 
@@ -108,18 +164,6 @@ public class UpdateCustomerRequestCard {
     this.cvv = cvv;
   }
 
-  /**
-   * This is the card's expiry date.
-   *
-   * @return cardExpiry
-   */
-  public CardExpiry getCardExpiry() {
-    return cardExpiry;
-  }
-
-  public void setCardExpiry(CardExpiry cardExpiry) {
-    this.cardExpiry = cardExpiry;
-  }
 
   public UpdateCustomerRequestCard holderName(String holderName) {
     this.holderName = holderName;
@@ -127,8 +171,7 @@ public class UpdateCustomerRequestCard {
   }
 
   /**
-   * This is the name of the card holder. <b>Note:</b> Holder name must contain only Latin characters (English Alphabet), Space, Apostrophe('), Dot(.)
-   * or Hyphen(-). <br> Unicode normalization is done.
+   * This is the name of the card holder. **Note:** Holder name must contain only Latin characters (English Alphabet), Space, Apostrophe('), Dot(.) or Hyphen(-). Unicode normalization is done.
    *
    * @return holderName
    */
@@ -140,13 +183,15 @@ public class UpdateCustomerRequestCard {
     this.holderName = holderName;
   }
 
+
   public UpdateCustomerRequestCard cardType(CardType cardType) {
     this.cardType = cardType;
     return this;
   }
 
   /**
-   * This is type of card used for the request.
+   * Get cardType
+   *
    * @return cardType
    */
   public CardType getCardType() {
@@ -157,13 +202,14 @@ public class UpdateCustomerRequestCard {
     this.cardType = cardType;
   }
 
+
   public UpdateCustomerRequestCard lastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
     return this;
   }
 
   /**
-   * These are the last four digits of the card used for the request.
+   * These are the last four digits of the card used for the request
    *
    * @return lastDigits
    */
@@ -174,6 +220,7 @@ public class UpdateCustomerRequestCard {
   public void setLastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
   }
+
 
   public UpdateCustomerRequestCard cardBin(String cardBin) {
     this.cardBin = cardBin;
@@ -193,13 +240,14 @@ public class UpdateCustomerRequestCard {
     this.cardBin = cardBin;
   }
 
+
   public UpdateCustomerRequestCard issuingCountry(String issuingCountry) {
     this.issuingCountry = issuingCountry;
     return this;
   }
 
   /**
-   * This is the card issuing country.
+   * This is the card issuing country
    *
    * @return issuingCountry
    */
@@ -211,13 +259,14 @@ public class UpdateCustomerRequestCard {
     this.issuingCountry = issuingCountry;
   }
 
+
   public UpdateCustomerRequestCard status(CardStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * Optional.  Present only if the card is part of a Customer.
+   * Get status
    *
    * @return status
    */
@@ -229,19 +278,6 @@ public class UpdateCustomerRequestCard {
     this.status = status;
   }
 
-  /**
-   * DEBIT or CREDIT.
-   *
-   * @return cardCategory
-   */
-  public String getCardCategory() {
-    return cardCategory;
-  }
-
-  public void setCardCategory(final String cardCategory) {
-    this.cardCategory = cardCategory;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -251,37 +287,37 @@ public class UpdateCustomerRequestCard {
       return false;
     }
     UpdateCustomerRequestCard updateCustomerRequestCard = (UpdateCustomerRequestCard) o;
-    return Objects.equals(this.cardId, updateCustomerRequestCard.cardId) &&
-        Objects.equals(this.cardNum, updateCustomerRequestCard.cardNum) &&
+    return Objects.equals(this.cardNum, updateCustomerRequestCard.cardNum) &&
+        Objects.equals(this.cardCategory, updateCustomerRequestCard.cardCategory) &&
+        Objects.equals(this.cardId, updateCustomerRequestCard.cardId) &&
         Objects.equals(this.cardExpiry, updateCustomerRequestCard.cardExpiry) &&
         Objects.equals(this.cvv, updateCustomerRequestCard.cvv) &&
         Objects.equals(this.holderName, updateCustomerRequestCard.holderName) &&
         Objects.equals(this.cardType, updateCustomerRequestCard.cardType) &&
         Objects.equals(this.lastDigits, updateCustomerRequestCard.lastDigits) &&
         Objects.equals(this.cardBin, updateCustomerRequestCard.cardBin) &&
-        Objects.equals(this.cardCategory, updateCustomerRequestCard.cardCategory) &&
         Objects.equals(this.issuingCountry, updateCustomerRequestCard.issuingCountry) &&
         Objects.equals(this.status, updateCustomerRequestCard.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(cardId, cardNum, cardExpiry, cvv, holderName, cardType, lastDigits, cardBin, cardCategory, issuingCountry, status);
+    return Objects.hash(cardNum, cardCategory, cardId, cardExpiry, cvv, holderName, cardType, lastDigits, cardBin, issuingCountry, status);
   }
 
   @Override
   public String toString() {
 
     return "class UpdateCustomerRequestCard {\n"
-        + "    cardId: " + toIndentedString(cardId) + "\n"
         + "    cardNum: " + toIndentedString(cardNum) + "\n"
+        + "    cardCategory: " + toIndentedString(cardCategory) + "\n"
+        + "    cardId: " + toIndentedString(cardId) + "\n"
         + "    cardExpiry: " + toIndentedString(cardExpiry) + "\n"
         + "    cvv: " + toIndentedString(cvv) + "\n"
         + "    holderName: " + toIndentedString(holderName) + "\n"
         + "    cardType: " + toIndentedString(cardType) + "\n"
         + "    lastDigits: " + toIndentedString(lastDigits) + "\n"
         + "    cardBin: " + toIndentedString(cardBin) + "\n"
-        + "    cardCategory: " + toIndentedString(cardCategory) + "\n"
         + "    issuingCountry: " + toIndentedString(issuingCountry) + "\n"
         + "    status: " + toIndentedString(status) + "\n"
         + "}";
@@ -299,9 +335,11 @@ public class UpdateCustomerRequestCard {
   }
 
   /**
-   * {@code UpdateCustomerRequestCard} builder static inner class.
+   * Card details to be used for the transaction builder static inner class.
    */
   public static final class Builder {
+    private String cardNum;
+    private CardCategory cardCategory;
     private String cardId;
     private CardExpiry cardExpiry;
     private String cvv;
@@ -309,18 +347,42 @@ public class UpdateCustomerRequestCard {
     private CardType cardType;
     private String lastDigits;
     private String cardBin;
-    private String cardCategory;
     private String issuingCountry;
     private CardStatus status;
-    private String cardNum;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code cardId} and returns a reference to this Builder enabling method chaining.
+     * This is the card number
+     * <p>
+     * Sets the cardNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param cardId the {@code cardId} to set
+     * @param cardNum the cardNum to set
+     * @return a reference to this Builder
+     */
+    public Builder cardNum(String cardNum) {
+      this.cardNum = cardNum;
+      return this;
+    }
+
+    /**
+     * Sets the cardCategory and returns a reference to this Builder enabling method chaining.
+     *
+     * @param cardCategory the cardCategory to set
+     * @return a reference to this Builder
+     */
+    public Builder cardCategory(CardCategory cardCategory) {
+      this.cardCategory = cardCategory;
+      return this;
+    }
+
+    /**
+     * This is the card id returned in the response during save card flow.
+     * <p>
+     * Sets the cardId and returns a reference to this Builder enabling method chaining.
+     *
+     * @param cardId the cardId to set
      * @return a reference to this Builder
      */
     public Builder cardId(String cardId) {
@@ -329,9 +391,9 @@ public class UpdateCustomerRequestCard {
     }
 
     /**
-     * Sets the {@code cardExpiry} and returns a reference to this Builder enabling method chaining.
+     * Sets the cardExpiry and returns a reference to this Builder enabling method chaining.
      *
-     * @param cardExpiry the {@code cardExpiry} to set
+     * @param cardExpiry the cardExpiry to set
      * @return a reference to this Builder
      */
     public Builder cardExpiry(CardExpiry cardExpiry) {
@@ -340,20 +402,24 @@ public class UpdateCustomerRequestCard {
     }
 
     /**
-     * Sets the {@code cvv} and returns a reference to this Builder enabling method chaining.
+     * This is the 3- or 4-digit security code that appears on the card following the card number.
+     * <p>
+     * Sets the cvv and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code cvv} to set
+     * @param cvv the cvv to set
      * @return a reference to this Builder
      */
-    public Builder cvv(final String val) {
-      cvv = val;
+    public Builder cvv(String cvv) {
+      this.cvv = cvv;
       return this;
     }
 
     /**
-     * Sets the {@code holderName} and returns a reference to this Builder enabling method chaining.
+     * This is the name of the card holder. **Note:** Holder name must contain only Latin characters (English Alphabet), Space, Apostrophe('), Dot(.) or Hyphen(-). Unicode normalization is done.
+     * <p>
+     * Sets the holderName and returns a reference to this Builder enabling method chaining.
      *
-     * @param holderName the {@code holderName} to set
+     * @param holderName the holderName to set
      * @return a reference to this Builder
      */
     public Builder holderName(String holderName) {
@@ -362,9 +428,9 @@ public class UpdateCustomerRequestCard {
     }
 
     /**
-     * Sets the {@code cardType} and returns a reference to this Builder enabling method chaining.
+     * Sets the cardType and returns a reference to this Builder enabling method chaining.
      *
-     * @param cardType the {@code cardType} to set
+     * @param cardType the cardType to set
      * @return a reference to this Builder
      */
     public Builder cardType(CardType cardType) {
@@ -373,20 +439,11 @@ public class UpdateCustomerRequestCard {
     }
 
     /**
-     * Sets the {@code cardType} and returns a reference to this Builder enabling method chaining.
+     * These are the last four digits of the card used for the request
+     * <p>
+     * Sets the lastDigits and returns a reference to this Builder enabling method chaining.
      *
-     * @param cardCategory the {@code cardCategory} to set
-     * @return a reference to this Builder
-     */
-    public Builder cardCategory(String cardCategory) {
-      this.cardCategory = cardCategory;
-      return this;
-    }
-
-    /**
-     * Sets the {@code lastDigits} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param lastDigits the {@code lastDigits} to set
+     * @param lastDigits the lastDigits to set
      * @return a reference to this Builder
      */
     public Builder lastDigits(String lastDigits) {
@@ -395,9 +452,11 @@ public class UpdateCustomerRequestCard {
     }
 
     /**
-     * Sets the {@code cardBin} and returns a reference to this Builder enabling method chaining.
+     * These are the first 6 digits of the card Bank Identification Number (BIN), for example: the first 6 digits of the card number.
+     * <p>
+     * Sets the cardBin and returns a reference to this Builder enabling method chaining.
      *
-     * @param cardBin the {@code cardBin} to set
+     * @param cardBin the cardBin to set
      * @return a reference to this Builder
      */
     public Builder cardBin(String cardBin) {
@@ -406,9 +465,11 @@ public class UpdateCustomerRequestCard {
     }
 
     /**
-     * Sets the {@code issuingCountry} and returns a reference to this Builder enabling method chaining.
+     * This is the card issuing country
+     * <p>
+     * Sets the issuingCountry and returns a reference to this Builder enabling method chaining.
      *
-     * @param issuingCountry the {@code issuingCountry} to set
+     * @param issuingCountry the issuingCountry to set
      * @return a reference to this Builder
      */
     public Builder issuingCountry(String issuingCountry) {
@@ -417,9 +478,9 @@ public class UpdateCustomerRequestCard {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
     public Builder status(CardStatus status) {
@@ -428,24 +489,12 @@ public class UpdateCustomerRequestCard {
     }
 
     /**
-     * Returns a {@code UpdateCustomerRequestCard} built from the parameters previously set.
+     * Returns a UpdateCustomerRequestCard built from the parameters previously set.
      *
-     * @return a {@code UpdateCustomerRequestCard} built with parameters of this {@code UpdateCustomerRequestCard.Builder}
+     * @return a UpdateCustomerRequestCard built with parameters of this UpdateCustomerRequestCard.Builder
      */
     public UpdateCustomerRequestCard build() {
       return new UpdateCustomerRequestCard(this);
     }
-
-    /**
-     * Sets the {@code cardNum} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param val the {@code cardNum} to set
-     * @return a reference to this Builder
-     */
-    public Builder cardNum(final String val) {
-      cardNum = val;
-      return this;
-    }
   }
 }
-

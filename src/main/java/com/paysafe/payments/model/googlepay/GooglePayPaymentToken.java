@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.googlepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * GooglePayPaymentToken
+ * Google Pay payment token
  */
 public class GooglePayPaymentToken {
 
@@ -22,14 +30,16 @@ public class GooglePayPaymentToken {
     super();
   }
 
-  private GooglePayPaymentToken(Builder builder) {
+  private GooglePayPaymentToken(final Builder builder) {
     setApiVersion(builder.apiVersion);
     setApiVersionMinor(builder.apiVersionMinor);
+    setPaymentMethodData(builder.paymentMethodData);
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public GooglePayPaymentToken apiVersion(Integer apiVersion) {
     this.apiVersion = apiVersion;
@@ -37,7 +47,7 @@ public class GooglePayPaymentToken {
   }
 
   /**
-   * Major API version. The value is 2 for this specification.
+   * Major API version. The value is 2 for this specification
    *
    * @return apiVersion
    */
@@ -49,13 +59,14 @@ public class GooglePayPaymentToken {
     this.apiVersion = apiVersion;
   }
 
+
   public GooglePayPaymentToken apiVersionMinor(Integer apiVersionMinor) {
     this.apiVersionMinor = apiVersionMinor;
     return this;
   }
 
   /**
-   * Minor API version. The value is 0 for this specification.
+   * Minor API version. The value is 0 for this specification
    *
    * @return apiVersionMinor
    */
@@ -67,13 +78,14 @@ public class GooglePayPaymentToken {
     this.apiVersionMinor = apiVersionMinor;
   }
 
+
   public GooglePayPaymentToken paymentMethodData(GooglePayPaymentMethodData paymentMethodData) {
     this.paymentMethodData = paymentMethodData;
     return this;
   }
 
   /**
-   * Payment method parameter of Google Pay Token.
+   * Get paymentMethodData
    *
    * @return paymentMethodData
    */
@@ -126,19 +138,22 @@ public class GooglePayPaymentToken {
   }
 
   /**
-   * {@code GooglePayPaymentToken} builder static inner class.
+   * Google Pay payment token builder static inner class.
    */
   public static final class Builder {
     private Integer apiVersion;
     private Integer apiVersionMinor;
+    private GooglePayPaymentMethodData paymentMethodData;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code apiVersion} and returns a reference to this Builder enabling method chaining.
+     * Major API version. The value is 2 for this specification
+     * <p>
+     * Sets the apiVersion and returns a reference to this Builder enabling method chaining.
      *
-     * @param apiVersion the {@code apiVersion} to set
+     * @param apiVersion the apiVersion to set
      * @return a reference to this Builder
      */
     public Builder apiVersion(Integer apiVersion) {
@@ -147,9 +162,11 @@ public class GooglePayPaymentToken {
     }
 
     /**
-     * Sets the {@code apiVersionMinor} and returns a reference to this Builder enabling method chaining.
+     * Minor API version. The value is 0 for this specification
+     * <p>
+     * Sets the apiVersionMinor and returns a reference to this Builder enabling method chaining.
      *
-     * @param apiVersionMinor the {@code apiVersionMinor} to set
+     * @param apiVersionMinor the apiVersionMinor to set
      * @return a reference to this Builder
      */
     public Builder apiVersionMinor(Integer apiVersionMinor) {
@@ -158,13 +175,23 @@ public class GooglePayPaymentToken {
     }
 
     /**
-     * Returns a {@code GooglePayPaymentToken} built from the parameters previously set.
+     * Sets the paymentMethodData and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code GooglePayPaymentToken} built with parameters of this {@code GooglePayPaymentToken.Builder}
+     * @param paymentMethodData the paymentMethodData to set
+     * @return a reference to this Builder
+     */
+    public Builder paymentMethodData(GooglePayPaymentMethodData paymentMethodData) {
+      this.paymentMethodData = paymentMethodData;
+      return this;
+    }
+
+    /**
+     * Returns a GooglePayPaymentToken built from the parameters previously set.
+     *
+     * @return a GooglePayPaymentToken built with parameters of this GooglePayPaymentToken.Builder
      */
     public GooglePayPaymentToken build() {
       return new GooglePayPaymentToken(this);
     }
   }
 }
-

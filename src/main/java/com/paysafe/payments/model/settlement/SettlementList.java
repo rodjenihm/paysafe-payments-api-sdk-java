@@ -1,13 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.settlement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.Meta;
+
+
 
 /**
  * SettlementList
@@ -15,7 +21,7 @@ import com.paysafe.payments.model.common.Meta;
 public class SettlementList {
 
   @JsonProperty("settlements")
-  private List<Settlement> settlements = null;
+  private List<Settlement> settlements;
   @JsonProperty("meta")
   private Meta meta;
 
@@ -23,7 +29,7 @@ public class SettlementList {
     super();
   }
 
-  private SettlementList(Builder builder) {
+  private SettlementList(final Builder builder) {
     setSettlements(builder.settlements);
     setMeta(builder.meta);
   }
@@ -31,6 +37,7 @@ public class SettlementList {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public SettlementList settlements(List<Settlement> settlements) {
     this.settlements = settlements;
@@ -54,7 +61,7 @@ public class SettlementList {
   }
 
   /**
-   * An array of Settlements.
+   * Get settlements
    *
    * @return settlements
    */
@@ -66,13 +73,14 @@ public class SettlementList {
     this.settlements = settlements;
   }
 
+
   public SettlementList meta(Meta meta) {
     this.meta = meta;
     return this;
   }
 
   /**
-   * Contains meta info for the pagination APIs
+   * Get meta
    *
    * @return meta
    */
@@ -123,7 +131,7 @@ public class SettlementList {
   }
 
   /**
-   * {@code SettlementList} builder static inner class.
+   * SettlementList builder static inner class.
    */
   public static final class Builder {
     private List<Settlement> settlements;
@@ -133,9 +141,9 @@ public class SettlementList {
     }
 
     /**
-     * Sets the {@code settlements} and returns a reference to this Builder enabling method chaining.
+     * Sets the settlements and returns a reference to this Builder enabling method chaining.
      *
-     * @param settlements the {@code settlements} to set
+     * @param settlements the settlements to set
      * @return a reference to this Builder
      */
     public Builder settlements(List<Settlement> settlements) {
@@ -144,9 +152,9 @@ public class SettlementList {
     }
 
     /**
-     * Sets the {@code meta} and returns a reference to this Builder enabling method chaining.
+     * Sets the meta and returns a reference to this Builder enabling method chaining.
      *
-     * @param meta the {@code meta} to set
+     * @param meta the meta to set
      * @return a reference to this Builder
      */
     public Builder meta(Meta meta) {
@@ -155,13 +163,12 @@ public class SettlementList {
     }
 
     /**
-     * Returns a {@code SettlementList} built from the parameters previously set.
+     * Returns a SettlementList built from the parameters previously set.
      *
-     * @return a {@code SettlementList} built with parameters of this {@code SettlementList.Builder}
+     * @return a SettlementList built with parameters of this SettlementList.Builder
      */
     public SettlementList build() {
       return new SettlementList(this);
     }
   }
 }
-

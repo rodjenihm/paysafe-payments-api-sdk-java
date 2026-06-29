@@ -1,20 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
  * Discretionary Data consists of three user-defined data fields containing additional information about your card acquirer.
- * Contact your account manager for more information.
- * <p>Field Details:</p>
- * <ul>
- *   <li><strong>field1:</strong> A user-defined string with a maximum length of 35 characters. Example: "CustomField1".</li>
- *   <li><strong>field2:</strong> A user-defined string with a maximum length of 20 characters. Example: "CustomField2".</li>
- *   <li><strong>field3:</strong> A user-defined string with a maximum length of 20 characters. Example: "CustomField3".</li>
- * </ul>
  */
 public class DiscretionaryData {
 
@@ -29,7 +30,7 @@ public class DiscretionaryData {
     super();
   }
 
-  private DiscretionaryData(Builder builder) {
+  private DiscretionaryData(final Builder builder) {
     setField1(builder.field1);
     setField2(builder.field2);
     setField3(builder.field3);
@@ -39,13 +40,14 @@ public class DiscretionaryData {
     return new Builder();
   }
 
+
   public DiscretionaryData field1(String field1) {
     this.field1 = field1;
     return this;
   }
 
   /**
-   * Get field1
+   * Field 1 of the discretionary data
    *
    * @return field1
    */
@@ -57,13 +59,14 @@ public class DiscretionaryData {
     this.field1 = field1;
   }
 
+
   public DiscretionaryData field2(String field2) {
     this.field2 = field2;
     return this;
   }
 
   /**
-   * Get field2
+   * Field 2 of the discretionary data
    *
    * @return field2
    */
@@ -75,13 +78,14 @@ public class DiscretionaryData {
     this.field2 = field2;
   }
 
+
   public DiscretionaryData field3(String field3) {
     this.field3 = field3;
     return this;
   }
 
   /**
-   * Get field3
+   * Field 3 of the discretionary data
    *
    * @return field3
    */
@@ -134,7 +138,7 @@ public class DiscretionaryData {
   }
 
   /**
-   * {@code DiscretionaryData} builder static inner class.
+   * Discretionary Data consists of three user-defined data fields containing additional information about your card acquirer. builder static inner class.
    */
   public static final class Builder {
     private String field1;
@@ -145,9 +149,11 @@ public class DiscretionaryData {
     }
 
     /**
-     * Sets the {@code field1} and returns a reference to this Builder enabling method chaining.
+     * Field 1 of the discretionary data
+     * <p>
+     * Sets the field1 and returns a reference to this Builder enabling method chaining.
      *
-     * @param field1 the {@code field1} to set
+     * @param field1 the field1 to set
      * @return a reference to this Builder
      */
     public Builder field1(String field1) {
@@ -156,9 +162,11 @@ public class DiscretionaryData {
     }
 
     /**
-     * Sets the {@code field2} and returns a reference to this Builder enabling method chaining.
+     * Field 2 of the discretionary data
+     * <p>
+     * Sets the field2 and returns a reference to this Builder enabling method chaining.
      *
-     * @param field2 the {@code field2} to set
+     * @param field2 the field2 to set
      * @return a reference to this Builder
      */
     public Builder field2(String field2) {
@@ -167,9 +175,11 @@ public class DiscretionaryData {
     }
 
     /**
-     * Sets the {@code field3} and returns a reference to this Builder enabling method chaining.
+     * Field 3 of the discretionary data
+     * <p>
+     * Sets the field3 and returns a reference to this Builder enabling method chaining.
      *
-     * @param field3 the {@code field3} to set
+     * @param field3 the field3 to set
      * @return a reference to this Builder
      */
     public Builder field3(String field3) {
@@ -178,13 +188,12 @@ public class DiscretionaryData {
     }
 
     /**
-     * Returns a {@code DiscretionaryData} built from the parameters previously set.
+     * Returns a DiscretionaryData built from the parameters previously set.
      *
-     * @return a {@code DiscretionaryData} built with parameters of this {@code DiscretionaryData.Builder}
+     * @return a DiscretionaryData built with parameters of this DiscretionaryData.Builder
      */
     public DiscretionaryData build() {
       return new DiscretionaryData(this);
     }
   }
 }
-

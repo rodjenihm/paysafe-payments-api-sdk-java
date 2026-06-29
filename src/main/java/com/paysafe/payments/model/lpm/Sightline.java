@@ -1,10 +1,18 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
  * These are the details of the Play+ (Sightline) used for the transaction.
@@ -24,7 +32,7 @@ public class Sightline {
     super();
   }
 
-  private Sightline(Builder builder) {
+  private Sightline(final Builder builder) {
     setConsumerId(builder.consumerId);
     setSsn(builder.ssn);
     setLast4ssn(builder.last4ssn);
@@ -35,13 +43,14 @@ public class Sightline {
     return new Builder();
   }
 
+
   public Sightline consumerId(String consumerId) {
     this.consumerId = consumerId;
     return this;
   }
 
   /**
-   * This is the Loyalty Membership Number unique to the customer to be enrolled with Play+ (Sightline). This is to be provided by the merchant.  _Mandatory_
+   * This is the Loyalty Membership Number unique to the customer to be enrolled with Play+ (Sightline). This is to be provided by the merchant. **Mandatory**
    *
    * @return consumerId
    */
@@ -53,13 +62,14 @@ public class Sightline {
     this.consumerId = consumerId;
   }
 
+
   public Sightline ssn(String ssn) {
     this.ssn = ssn;
     return this;
   }
 
   /**
-   * This the customer's Social Security Number.
+   * This the customer's Social Security Number
    *
    * @return ssn
    */
@@ -71,13 +81,14 @@ public class Sightline {
     this.ssn = ssn;
   }
 
+
   public Sightline last4ssn(String last4ssn) {
     this.last4ssn = last4ssn;
     return this;
   }
 
   /**
-   * This the customer’s last 4 digits of Social Security Number.
+   * This the customer's last 4 digits of Social Security Number
    *
    * @return last4ssn
    */
@@ -89,13 +100,14 @@ public class Sightline {
     this.last4ssn = last4ssn;
   }
 
+
   public Sightline lastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
     return this;
   }
 
   /**
-   * This the customer’s last 4 digits of Social Security Number.
+   * This the customer's last 4 digits of Social Security Number
    *
    * @return lastDigits
    */
@@ -150,7 +162,7 @@ public class Sightline {
   }
 
   /**
-   * {@code Sightline} builder static inner class.
+   * These are the details of the Play+ (Sightline) used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String consumerId;
@@ -162,9 +174,11 @@ public class Sightline {
     }
 
     /**
-     * Sets the {@code consumerId} and returns a reference to this Builder enabling method chaining.
+     * This is the Loyalty Membership Number unique to the customer to be enrolled with Play+ (Sightline). This is to be provided by the merchant. **Mandatory**
+     * <p>
+     * Sets the consumerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param consumerId the {@code consumerId} to set
+     * @param consumerId the consumerId to set
      * @return a reference to this Builder
      */
     public Builder consumerId(String consumerId) {
@@ -173,9 +187,11 @@ public class Sightline {
     }
 
     /**
-     * Sets the {@code ssn} and returns a reference to this Builder enabling method chaining.
+     * This the customer's Social Security Number
+     * <p>
+     * Sets the ssn and returns a reference to this Builder enabling method chaining.
      *
-     * @param ssn the {@code ssn} to set
+     * @param ssn the ssn to set
      * @return a reference to this Builder
      */
     public Builder ssn(String ssn) {
@@ -184,9 +200,11 @@ public class Sightline {
     }
 
     /**
-     * Sets the {@code last4ssn} and returns a reference to this Builder enabling method chaining.
+     * This the customer's last 4 digits of Social Security Number
+     * <p>
+     * Sets the last4ssn and returns a reference to this Builder enabling method chaining.
      *
-     * @param last4ssn the {@code last4ssn} to set
+     * @param last4ssn the last4ssn to set
      * @return a reference to this Builder
      */
     public Builder last4ssn(String last4ssn) {
@@ -195,9 +213,11 @@ public class Sightline {
     }
 
     /**
-     * Sets the {@code lastDigits} and returns a reference to this Builder enabling method chaining.
+     * This the customer's last 4 digits of Social Security Number
+     * <p>
+     * Sets the lastDigits and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastDigits the {@code lastDigits} to set
+     * @param lastDigits the lastDigits to set
      * @return a reference to this Builder
      */
     public Builder lastDigits(String lastDigits) {
@@ -206,13 +226,12 @@ public class Sightline {
     }
 
     /**
-     * Returns a {@code Sightline} built from the parameters previously set.
+     * Returns a Sightline built from the parameters previously set.
      *
-     * @return a {@code Sightline} built with parameters of this {@code Sightline.Builder}
+     * @return a Sightline built with parameters of this Sightline.Builder
      */
     public Sightline build() {
       return new Sightline(this);
     }
   }
 }
-

@@ -1,46 +1,27 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.threeds;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.card.enums.AuthenticationStatus;
-import com.paysafe.payments.model.card.enums.ExemptionIndicator;
-import com.paysafe.payments.model.card.enums.SignatureString;
 import com.paysafe.payments.model.card.enums.ThreeDEnrollment;
 import com.paysafe.payments.model.card.enums.ThreeDResult;
+import com.paysafe.payments.model.card.enums.ThreeDSignatureStatus;
+import com.paysafe.payments.model.card.enums.ThreeDsExemptionIndicator;
+import com.paysafe.payments.model.verification.Verification;
+
+
 
 /**
- * Represents the authentication details for a 3D Secure transaction.e
- *
- * <p>Key fields:</p>
- * <ul>
- *   <li><strong>id:</strong> A unique identifier for the authentication transaction. Example: "123456789".</li>
- *   <li><strong>eci:</strong> The ECI (Electronic Commerce Indicator) value indicating the level of security.
- *       Example: 5 (indicating 3D Secure authentication was performed).</li>
- *   <li><strong>cavv:</strong> The Cardholder Authentication Verification Value, used to confirm the authentication.
- *       Example: "A1B2C3D4E5F67890123456789ABCDEF".</li>
- *   <li><strong>xid:</strong> The unique transaction identifier used in 3D Secure, typically provided by the
- *       directory server. Example: "XID12345ABCDE".</li>
- *   <li><strong>status:</strong> The overall status of the 3D Secure authentication process, such as "COMPLETED" or "FAILED".
- *       Example: "COMPLETED".</li>
- *   <li><strong>merchantRefNum:</strong> The reference number used by the merchant to track the transaction.
- *       Example: "TXN123456789".</li>
- *   <li><strong>threeDEnrollment:</strong> The enrollment status of the cardholder in 3D Secure, such as "AVAILABLE",
- *       "NOT_ENROLLED", or "UNAVAILABLE". Example: "AVAILABLE".</li>
- *   <li><strong>directoryServerTransactionId:</strong> The transaction identifier provided by the 3D Secure directory server.
- *       Example: "DS12345678".</li>
- *   <li><strong>threeDSecureVersion:</strong> The version of 3D Secure used in the transaction (e.g., "2.0"). Example: "2.0".</li>
- *   <li><strong>threeDResult:</strong> The result of the 3D Secure authentication, indicating success or failure.
- *       Example: "Y" (authenticated), "N" (not authenticated).</li>
- *   <li><strong>signatureStatus:</strong> The status of the 3D Secure signature verification. Values include "Y" (signature verified)
- *       or "N" (signature failed). Example: "Y".</li>
- *   <li><strong>exemptionIndicator:</strong> Indicates whether the transaction is exempt from 3D Secure authentication,
- *       based on specific criteria. Example: "N" (no exemption).</li>
- *   <li><strong>error:</strong> An object representing any error encountered during the authentication process.
- *       Example: a specific error code such as "500" indicating server error.</li>
- * </ul>
+ * Authentication details for a payment.
  */
 public class Authentication {
 
@@ -65,11 +46,9 @@ public class Authentication {
   @JsonProperty("threeDResult")
   private ThreeDResult threeDResult;
   @JsonProperty("signatureStatus")
-  private SignatureString signatureStatus;
+  private ThreeDSignatureStatus signatureStatus;
   @JsonProperty("exemptionIndicator")
-  private ExemptionIndicator exemptionIndicator;
-  @JsonProperty("error")
-  private Error error;
+  private ThreeDsExemptionIndicator exemptionIndicator;
 
   public Authentication() {
     super();
@@ -88,12 +67,12 @@ public class Authentication {
     setThreeDResult(builder.threeDResult);
     setSignatureStatus(builder.signatureStatus);
     setExemptionIndicator(builder.exemptionIndicator);
-    setError(builder.error);
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public Authentication id(String id) {
     this.id = id;
@@ -113,28 +92,15 @@ public class Authentication {
     this.id = id;
   }
 
+
   public Authentication eci(Integer eci) {
     this.eci = eci;
     return this;
   }
 
   /**
-   * This is the Electronic Commerce Indicator code, which gets returned by the card issuer indicating whether the
-   * cardholder was successfully authenticated. Note that in some cases the eci value includes a leading zero, e.g., 01 or 02.
-   * <p>
-   * Visa:
-   * <ul>
-   * <li> 5 - Identifies a successfully authenticated transaction. </li>
-   * <li> 6 - Identifies an attempts authenticated transaction. </li>
-   * <li> 7 - Identifies a non-authenticated transaction. </li>
-   * </ul>
-   * <br>
-   * Mastercard:
-   * <ul>
-   * <li> 2 - Identifies a successfully authenticated transaction. </li>
-   * <li> 1 - Identifies an attempts authenticated transaction. </li>
-   * <li> 0 - Identifies a non-authenticated transaction. </li>
-   * </ul>
+   * This is the Electronic Commerce Indicator code, which gets returned by the card issuer indicating whether the cardholder was successfully authenticated. Note that in some cases the eci value includes a leading zero, e.g., 01 or 02. **Visa**   - 5 - Identifies a successfully authenticated transaction.   - 6 - Identifies an attempts authenticated transaction.   - 7 - Identifies a non-authenticated transaction. **Mastercard**   - 2 - Identifies a successfully authenticated transaction.   - 1 - Identifies an attempts authenticated transaction.   - 0 - Identifies a non-authenticated transaction.
+   *
    * @return eci
    */
   public Integer getEci() {
@@ -144,6 +110,7 @@ public class Authentication {
   public void setEci(Integer eci) {
     this.eci = eci;
   }
+
 
   public Authentication cavv(String cavv) {
     this.cavv = cavv;
@@ -163,6 +130,7 @@ public class Authentication {
     this.cavv = cavv;
   }
 
+
   public Authentication xid(String xid) {
     this.xid = xid;
     return this;
@@ -181,13 +149,15 @@ public class Authentication {
     this.xid = xid;
   }
 
+
   public Authentication status(AuthenticationStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the Enrollment Lookup request.
+   * Get status
+   *
    * @return status
    */
   public AuthenticationStatus getStatus() {
@@ -197,6 +167,7 @@ public class Authentication {
   public void setStatus(AuthenticationStatus status) {
     this.status = status;
   }
+
 
   public Authentication merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
@@ -216,13 +187,14 @@ public class Authentication {
     this.merchantRefNum = merchantRefNum;
   }
 
+
   public Authentication threeDEnrollment(ThreeDEnrollment threeDEnrollment) {
     this.threeDEnrollment = threeDEnrollment;
     return this;
   }
 
   /**
-   * This indicates whether the cardholder is enrolled in 3D Secure.
+   * Get threeDEnrollment
    *
    * @return threeDEnrollment
    */
@@ -234,14 +206,14 @@ public class Authentication {
     this.threeDEnrollment = threeDEnrollment;
   }
 
+
   public Authentication directoryServerTransactionId(String directoryServerTransactionId) {
     this.directoryServerTransactionId = directoryServerTransactionId;
     return this;
   }
 
   /**
-   * This is the unique directory server transaction ID required for Mastercard.
-   * <b>Note:</b> This is field is required when the card brand is Mastercard. This exists only for 3D Secure 2.
+   * This is the unique directory server transaction ID required for Mastercard. <br>  **Note:** This is field is required when the card brand is Mastercard. This exists only for 3D Secure 2.
    *
    * @return directoryServerTransactionId
    */
@@ -252,6 +224,7 @@ public class Authentication {
   public void setDirectoryServerTransactionId(String directoryServerTransactionId) {
     this.directoryServerTransactionId = directoryServerTransactionId;
   }
+
 
   public Authentication threeDSecureVersion(String threeDSecureVersion) {
     this.threeDSecureVersion = threeDSecureVersion;
@@ -271,13 +244,14 @@ public class Authentication {
     this.threeDSecureVersion = threeDSecureVersion;
   }
 
+
   public Authentication threeDResult(ThreeDResult threeDResult) {
     this.threeDResult = threeDResult;
     return this;
   }
 
   /**
-   * This indicates the outcome of the Authentication.
+   * Get threeDResult
    *
    * @return threeDResult
    */
@@ -289,58 +263,42 @@ public class Authentication {
     this.threeDResult = threeDResult;
   }
 
-  public Authentication signatureStatus(SignatureString signatureStatus) {
+
+  public Authentication signatureStatus(ThreeDSignatureStatus signatureStatus) {
     this.signatureStatus = signatureStatus;
     return this;
   }
 
   /**
-   * This is the 3D Secure signature verification result value.
+   * Get signatureStatus
+   *
    * @return signatureStatus
    */
-  public SignatureString getSignatureStatus() {
+  public ThreeDSignatureStatus getSignatureStatus() {
     return signatureStatus;
   }
 
-  public void setSignatureStatus(SignatureString signatureStatus) {
+  public void setSignatureStatus(ThreeDSignatureStatus signatureStatus) {
     this.signatureStatus = signatureStatus;
   }
 
-  public Authentication exemptionIndicator(ExemptionIndicator exemptionIndicator) {
+
+  public Authentication exemptionIndicator(ThreeDsExemptionIndicator exemptionIndicator) {
     this.exemptionIndicator = exemptionIndicator;
     return this;
   }
 
   /**
-   * This exemption gives the Merchant the option to bypass the Strong Customer Authentication or 3DS.  <br>
-   * <b>Note:</b> This exists only for 3D Secure 2.
+   * Get exemptionIndicator
    *
    * @return exemptionIndicator
    */
-  public ExemptionIndicator getExemptionIndicator() {
+  public ThreeDsExemptionIndicator getExemptionIndicator() {
     return exemptionIndicator;
   }
 
-  public void setExemptionIndicator(ExemptionIndicator exemptionIndicator) {
+  public void setExemptionIndicator(ThreeDsExemptionIndicator exemptionIndicator) {
     this.exemptionIndicator = exemptionIndicator;
-  }
-
-  public Authentication error(Error error) {
-    this.error = error;
-    return this;
-  }
-
-  /**
-   * Details of the error.
-   *
-   * @return error
-   */
-  public Error getError() {
-    return error;
-  }
-
-  public void setError(Error error) {
-    this.error = error;
   }
 
   @Override
@@ -363,14 +321,12 @@ public class Authentication {
         Objects.equals(this.threeDSecureVersion, authentication.threeDSecureVersion) &&
         Objects.equals(this.threeDResult, authentication.threeDResult) &&
         Objects.equals(this.signatureStatus, authentication.signatureStatus) &&
-        Objects.equals(this.exemptionIndicator, authentication.exemptionIndicator) &&
-        Objects.equals(this.error, authentication.error);
+        Objects.equals(this.exemptionIndicator, authentication.exemptionIndicator);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, eci, cavv, xid, status, merchantRefNum, threeDEnrollment, directoryServerTransactionId,
-        threeDSecureVersion, threeDResult, signatureStatus, exemptionIndicator, error);
+    return Objects.hash(id, eci, cavv, xid, status, merchantRefNum, threeDEnrollment, directoryServerTransactionId, threeDSecureVersion, threeDResult, signatureStatus, exemptionIndicator);
   }
 
   @Override
@@ -389,7 +345,6 @@ public class Authentication {
         + "    threeDResult: " + toIndentedString(threeDResult) + "\n"
         + "    signatureStatus: " + toIndentedString(signatureStatus) + "\n"
         + "    exemptionIndicator: " + toIndentedString(exemptionIndicator) + "\n"
-        + "    error: " + toIndentedString(error) + "\n"
         + "}";
   }
 
@@ -405,7 +360,7 @@ public class Authentication {
   }
 
   /**
-   * {@code Authentication} builder static inner class.
+   * Authentication details for a payment. builder static inner class.
    */
   public static final class Builder {
     private String id;
@@ -418,17 +373,18 @@ public class Authentication {
     private String directoryServerTransactionId;
     private String threeDSecureVersion;
     private ThreeDResult threeDResult;
-    private SignatureString signatureStatus;
-    private ExemptionIndicator exemptionIndicator;
-    private Error error;
+    private ThreeDSignatureStatus signatureStatus;
+    private ThreeDsExemptionIndicator exemptionIndicator;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
+     * This is the ID of authentication, returned in the response.
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -437,9 +393,11 @@ public class Authentication {
     }
 
     /**
-     * Sets the {@code eci} and returns a reference to this Builder enabling method chaining.
+     * This is the Electronic Commerce Indicator code, which gets returned by the card issuer indicating whether the cardholder was successfully authenticated. Note that in some cases the eci value includes a leading zero, e.g., 01 or 02. **Visa**   - 5 - Identifies a successfully authenticated transaction.   - 6 - Identifies an attempts authenticated transaction.   - 7 - Identifies a non-authenticated transaction. **Mastercard**   - 2 - Identifies a successfully authenticated transaction.   - 1 - Identifies an attempts authenticated transaction.   - 0 - Identifies a non-authenticated transaction.
+     * <p>
+     * Sets the eci and returns a reference to this Builder enabling method chaining.
      *
-     * @param eci the {@code eci} to set
+     * @param eci the eci to set
      * @return a reference to this Builder
      */
     public Builder eci(Integer eci) {
@@ -448,9 +406,11 @@ public class Authentication {
     }
 
     /**
-     * Sets the {@code cavv} and returns a reference to this Builder enabling method chaining.
+     * This is the Cardholder Authentication Verification Value, which gets returned by the card issuer, indicating that the transaction has been authenticated.
+     * <p>
+     * Sets the cavv and returns a reference to this Builder enabling method chaining.
      *
-     * @param cavv the {@code cavv} to set
+     * @param cavv the cavv to set
      * @return a reference to this Builder
      */
     public Builder cavv(String cavv) {
@@ -459,9 +419,11 @@ public class Authentication {
     }
 
     /**
-     * Sets the {@code xid} and returns a reference to this Builder enabling method chaining.
+     * This is the transaction identifier returned by the card issuer.
+     * <p>
+     * Sets the xid and returns a reference to this Builder enabling method chaining.
      *
-     * @param xid the {@code xid} to set
+     * @param xid the xid to set
      * @return a reference to this Builder
      */
     public Builder xid(String xid) {
@@ -470,9 +432,9 @@ public class Authentication {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
     public Builder status(AuthenticationStatus status) {
@@ -481,9 +443,11 @@ public class Authentication {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant reference number created by  the merchant and submitted as part of the request. It must be unique for each request.
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
+     * @param merchantRefNum the merchantRefNum to set
      * @return a reference to this Builder
      */
     public Builder merchantRefNum(String merchantRefNum) {
@@ -492,9 +456,9 @@ public class Authentication {
     }
 
     /**
-     * Sets the {@code threeDEnrollment} and returns a reference to this Builder enabling method chaining.
+     * Sets the threeDEnrollment and returns a reference to this Builder enabling method chaining.
      *
-     * @param threeDEnrollment the {@code threeDEnrollment} to set
+     * @param threeDEnrollment the threeDEnrollment to set
      * @return a reference to this Builder
      */
     public Builder threeDEnrollment(ThreeDEnrollment threeDEnrollment) {
@@ -503,9 +467,11 @@ public class Authentication {
     }
 
     /**
-     * Sets the {@code directoryServerTransactionId} and returns a reference to this Builder enabling method chaining.
+     * This is the unique directory server transaction ID required for Mastercard. <br>  **Note:** This is field is required when the card brand is Mastercard. This exists only for 3D Secure 2.
+     * <p>
+     * Sets the directoryServerTransactionId and returns a reference to this Builder enabling method chaining.
      *
-     * @param directoryServerTransactionId the {@code directoryServerTransactionId} to set
+     * @param directoryServerTransactionId the directoryServerTransactionId to set
      * @return a reference to this Builder
      */
     public Builder directoryServerTransactionId(String directoryServerTransactionId) {
@@ -514,9 +480,11 @@ public class Authentication {
     }
 
     /**
-     * Sets the {@code threeDSecureVersion} and returns a reference to this Builder enabling method chaining.
+     * This is the 3D secure protocol version.
+     * <p>
+     * Sets the threeDSecureVersion and returns a reference to this Builder enabling method chaining.
      *
-     * @param threeDSecureVersion the {@code threeDSecureVersion} to set
+     * @param threeDSecureVersion the threeDSecureVersion to set
      * @return a reference to this Builder
      */
     public Builder threeDSecureVersion(String threeDSecureVersion) {
@@ -525,9 +493,9 @@ public class Authentication {
     }
 
     /**
-     * Sets the {@code threeDResult} and returns a reference to this Builder enabling method chaining.
+     * Sets the threeDResult and returns a reference to this Builder enabling method chaining.
      *
-     * @param threeDResult the {@code threeDResult} to set
+     * @param threeDResult the threeDResult to set
      * @return a reference to this Builder
      */
     public Builder threeDResult(ThreeDResult threeDResult) {
@@ -536,46 +504,34 @@ public class Authentication {
     }
 
     /**
-     * Sets the {@code signatureStatus} and returns a reference to this Builder enabling method chaining.
+     * Sets the signatureStatus and returns a reference to this Builder enabling method chaining.
      *
-     * @param signatureStatus the {@code signatureStatus} to set
+     * @param signatureStatus the signatureStatus to set
      * @return a reference to this Builder
      */
-    public Builder signatureStatus(SignatureString signatureStatus) {
+    public Builder signatureStatus(ThreeDSignatureStatus signatureStatus) {
       this.signatureStatus = signatureStatus;
       return this;
     }
 
     /**
-     * Sets the {@code exemptionIndicator} and returns a reference to this Builder enabling method chaining.
+     * Sets the exemptionIndicator and returns a reference to this Builder enabling method chaining.
      *
-     * @param exemptionIndicator the {@code exemptionIndicator} to set
+     * @param exemptionIndicator the exemptionIndicator to set
      * @return a reference to this Builder
      */
-    public Builder exemptionIndicator(ExemptionIndicator exemptionIndicator) {
+    public Builder exemptionIndicator(ThreeDsExemptionIndicator exemptionIndicator) {
       this.exemptionIndicator = exemptionIndicator;
       return this;
     }
 
     /**
-     * Sets the {@code error} and returns a reference to this Builder enabling method chaining.
+     * Returns a Authentication built from the parameters previously set.
      *
-     * @param error the {@code error} to set
-     * @return a reference to this Builder
-     */
-    public Builder error(Error error) {
-      this.error = error;
-      return this;
-    }
-
-    /**
-     * Returns a {@code Authentication} built from the parameters previously set.
-     *
-     * @return a {@code Authentication} built with parameters of this {@code Authentication.Builder}
+     * @return a Authentication built with parameters of this Authentication.Builder
      */
     public Authentication build() {
       return new Authentication(this);
     }
   }
 }
-

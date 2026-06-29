@@ -1,27 +1,32 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.paymentmethod;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * This class represents response returned from PaysafeAPI endpoint 'Look Up Payment Methods'.
+ * The response returned by /v1/paymentmethods endpoint.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class LookUpPaymentMethodsResponse {
 
   @JsonProperty("paymentMethods")
-  private List<PaymentMethod> paymentMethods = null;
+  private List<PaymentMethod> paymentMethods;
 
   public LookUpPaymentMethodsResponse() {
     super();
   }
 
-  private LookUpPaymentMethodsResponse(Builder builder) {
+  private LookUpPaymentMethodsResponse(final Builder builder) {
     setPaymentMethods(builder.paymentMethods);
   }
 
@@ -29,8 +34,25 @@ public class LookUpPaymentMethodsResponse {
     return new Builder();
   }
 
+
   public LookUpPaymentMethodsResponse paymentMethods(List<PaymentMethod> paymentMethods) {
     this.paymentMethods = paymentMethods;
+    return this;
+  }
+
+  public LookUpPaymentMethodsResponse addPaymentMethodsItem(PaymentMethod paymentMethodsItem) {
+    if (this.paymentMethods == null) {
+      this.paymentMethods = new ArrayList<>();
+    }
+    this.paymentMethods.add(paymentMethodsItem);
+    return this;
+  }
+
+  public LookUpPaymentMethodsResponse removePaymentMethodsItem(PaymentMethod paymentMethodsItem) {
+    if (paymentMethodsItem != null && this.paymentMethods != null) {
+      this.paymentMethods.remove(paymentMethodsItem);
+    }
+
     return this;
   }
 
@@ -66,6 +88,7 @@ public class LookUpPaymentMethodsResponse {
 
   @Override
   public String toString() {
+
     return "class LookUpPaymentMethodsResponse {\n"
         + "    paymentMethods: " + toIndentedString(paymentMethods) + "\n"
         + "}";
@@ -83,7 +106,7 @@ public class LookUpPaymentMethodsResponse {
   }
 
   /**
-   * {@code LookUpPaymentMethodsResponse} builder static inner class.
+   * The response returned by /v1/paymentmethods endpoint. builder static inner class.
    */
   public static final class Builder {
     private List<PaymentMethod> paymentMethods;
@@ -92,9 +115,9 @@ public class LookUpPaymentMethodsResponse {
     }
 
     /**
-     * Sets the {@code paymentMethods} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentMethods and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentMethods the {@code paymentMethods} to set
+     * @param paymentMethods the paymentMethods to set
      * @return a reference to this Builder
      */
     public Builder paymentMethods(List<PaymentMethod> paymentMethods) {
@@ -103,9 +126,9 @@ public class LookUpPaymentMethodsResponse {
     }
 
     /**
-     * Returns a {@code LookUpPaymentMethodsResponse} built from the parameters previously set.
+     * Returns a LookUpPaymentMethodsResponse built from the parameters previously set.
      *
-     * @return a {@code LookUpPaymentMethodsResponse} built with parameters of this {@code LookUpPaymentMethodsResponse.Builder}
+     * @return a LookUpPaymentMethodsResponse built with parameters of this LookUpPaymentMethodsResponse.Builder
      */
     public LookUpPaymentMethodsResponse build() {
       return new LookUpPaymentMethodsResponse(this);

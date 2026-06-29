@@ -1,14 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.airline;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.travel.airline.enums.Gender;
 
+
+
 /**
- * Passenger
+ * Passenger information.
  */
 public class Passenger {
 
@@ -29,7 +37,7 @@ public class Passenger {
     super();
   }
 
-  private Passenger(Builder builder) {
+  private Passenger(final Builder builder) {
     setTicketNumber(builder.ticketNumber);
     setFirstName(builder.firstName);
     setLastName(builder.lastName);
@@ -42,13 +50,14 @@ public class Passenger {
     return new Builder();
   }
 
+
   public Passenger ticketNumber(String ticketNumber) {
     this.ticketNumber = ticketNumber;
     return this;
   }
 
   /**
-   * Identifies the ticket for this passenger only.
+   * Identifies the ticket for this passenger only
    *
    * @return ticketNumber
    */
@@ -60,13 +69,14 @@ public class Passenger {
     this.ticketNumber = ticketNumber;
   }
 
+
   public Passenger firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
 
   /**
-   * Passenger's first name.
+   * Passenger's first name
    *
    * @return firstName
    */
@@ -78,13 +88,14 @@ public class Passenger {
     this.firstName = firstName;
   }
 
+
   public Passenger lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
 
   /**
-   * Passenger's last name.
+   * Passenger's last name
    *
    * @return lastName
    */
@@ -96,13 +107,14 @@ public class Passenger {
     this.lastName = lastName;
   }
 
+
   public Passenger phoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
     return this;
   }
 
   /**
-   * Passenger's phone number.
+   * Passenger's phone number
    *
    * @return phoneNumber
    */
@@ -114,13 +126,14 @@ public class Passenger {
     this.phoneNumber = phoneNumber;
   }
 
+
   public Passenger passengerCode(String passengerCode) {
     this.passengerCode = passengerCode;
     return this;
   }
 
   /**
-   * Code that identifies a type of passenger. For example 'INF' which indicates a child traveling on parent's lap.
+   * Code that identifies a type of passenger. For example 'INF' which indicates a child traveling on parent's lap
    *
    * @return passengerCode
    */
@@ -132,13 +145,14 @@ public class Passenger {
     this.passengerCode = passengerCode;
   }
 
+
   public Passenger gender(Gender gender) {
     this.gender = gender;
     return this;
   }
 
   /**
-   * Passenger gender. Options: [M – Male, F – Female, O – Other, N – Not Specified]
+   * Get gender
    *
    * @return gender
    */
@@ -197,7 +211,7 @@ public class Passenger {
   }
 
   /**
-   * {@code Passenger} builder static inner class.
+   * Passenger information. builder static inner class.
    */
   public static final class Builder {
     private String ticketNumber;
@@ -211,9 +225,11 @@ public class Passenger {
     }
 
     /**
-     * Sets the {@code ticketNumber} and returns a reference to this Builder enabling method chaining.
+     * Identifies the ticket for this passenger only
+     * <p>
+     * Sets the ticketNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param ticketNumber the {@code ticketNumber} to set
+     * @param ticketNumber the ticketNumber to set
      * @return a reference to this Builder
      */
     public Builder ticketNumber(String ticketNumber) {
@@ -222,9 +238,11 @@ public class Passenger {
     }
 
     /**
-     * Sets the {@code firstName} and returns a reference to this Builder enabling method chaining.
+     * Passenger's first name
+     * <p>
+     * Sets the firstName and returns a reference to this Builder enabling method chaining.
      *
-     * @param firstName the {@code firstName} to set
+     * @param firstName the firstName to set
      * @return a reference to this Builder
      */
     public Builder firstName(String firstName) {
@@ -233,9 +251,11 @@ public class Passenger {
     }
 
     /**
-     * Sets the {@code lastName} and returns a reference to this Builder enabling method chaining.
+     * Passenger's last name
+     * <p>
+     * Sets the lastName and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastName the {@code lastName} to set
+     * @param lastName the lastName to set
      * @return a reference to this Builder
      */
     public Builder lastName(String lastName) {
@@ -244,9 +264,11 @@ public class Passenger {
     }
 
     /**
-     * Sets the {@code phoneNumber} and returns a reference to this Builder enabling method chaining.
+     * Passenger's phone number
+     * <p>
+     * Sets the phoneNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param phoneNumber the {@code phoneNumber} to set
+     * @param phoneNumber the phoneNumber to set
      * @return a reference to this Builder
      */
     public Builder phoneNumber(String phoneNumber) {
@@ -255,9 +277,11 @@ public class Passenger {
     }
 
     /**
-     * Sets the {@code passengerCode} and returns a reference to this Builder enabling method chaining.
+     * Code that identifies a type of passenger. For example 'INF' which indicates a child traveling on parent's lap
+     * <p>
+     * Sets the passengerCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param passengerCode the {@code passengerCode} to set
+     * @param passengerCode the passengerCode to set
      * @return a reference to this Builder
      */
     public Builder passengerCode(String passengerCode) {
@@ -266,9 +290,9 @@ public class Passenger {
     }
 
     /**
-     * Sets the {@code gender} and returns a reference to this Builder enabling method chaining.
+     * Sets the gender and returns a reference to this Builder enabling method chaining.
      *
-     * @param gender the {@code gender} to set
+     * @param gender the gender to set
      * @return a reference to this Builder
      */
     public Builder gender(Gender gender) {
@@ -277,13 +301,12 @@ public class Passenger {
     }
 
     /**
-     * Returns a {@code Passenger} built from the parameters previously set.
+     * Returns a Passenger built from the parameters previously set.
      *
-     * @return a {@code Passenger} built with parameters of this {@code Passenger.Builder}
+     * @return a Passenger built with parameters of this Passenger.Builder
      */
     public Passenger build() {
       return new Passenger(this);
     }
   }
 }
-

@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.enums;
 
@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This indicates whether the cardholder is placing an order for available merchandise or merchandise with a future availability or release date.
+ * Indicates whether merchandise is available or has a future availability date.
  */
 public enum PreOrderPurchaseIndicator {
+
   MERCHANDISE_AVAILABLE("MERCHANDISE_AVAILABLE"),
 
   FUTURE_AVAILABILITY("FUTURE_AVAILABILITY");

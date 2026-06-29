@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.customer;
 
@@ -7,20 +7,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.card.CardBillingDetailsRequest;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.common.BillingDetails;
 import com.paysafe.payments.model.common.Mandate;
 import com.paysafe.payments.model.common.enums.CurrencyCode;
 import com.paysafe.payments.model.lpm.Ach;
 import com.paysafe.payments.model.lpm.Bacs;
 import com.paysafe.payments.model.lpm.Eft;
 import com.paysafe.payments.model.lpm.Sepa;
+import com.paysafe.payments.model.payment.Payment;
 import com.paysafe.payments.model.paymenthandle.enums.PaymentType;
 
+
+
 /**
- * CustomerPaymentHandleRequest
+ * Payload required for creating Payment Handle for a customer.
  */
 public class CustomerPaymentHandleRequest {
 
@@ -29,7 +33,7 @@ public class CustomerPaymentHandleRequest {
   @JsonProperty("customerIp")
   private String customerIp;
   @JsonProperty("billingDetails")
-  private CardBillingDetailsRequest billingDetails;
+  private BillingDetails billingDetails;
   @JsonProperty("billingDetailsId")
   private String billingDetailsId;
   @JsonProperty("card")
@@ -43,18 +47,17 @@ public class CustomerPaymentHandleRequest {
   @JsonProperty("eft")
   private Eft eft;
   @JsonProperty("dupCheck")
-  private Boolean dupCheck;
+  private Boolean dupCheck = true;
   @JsonProperty("ach")
   private Ach ach;
   @JsonProperty("bacs")
   private Bacs bacs;
   @JsonProperty("mandates")
-  private List<Mandate> mandates = null;
+  private List<Mandate> mandates;
   @JsonProperty("sepa")
   private Sepa sepa;
   @JsonProperty("paymentType")
   private PaymentType paymentType;
-
   private Map<String, Object> additionalParameters;
 
   public CustomerPaymentHandleRequest() {
@@ -77,12 +80,13 @@ public class CustomerPaymentHandleRequest {
     setMandates(builder.mandates);
     setSepa(builder.sepa);
     setPaymentType(builder.paymentType);
-    setAdditionalParameters(builder.additionalParameters);
+    this.additionalParameters = builder.additionalParameters;
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public CustomerPaymentHandleRequest merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
@@ -102,19 +106,6 @@ public class CustomerPaymentHandleRequest {
     this.merchantRefNum = merchantRefNum;
   }
 
-  /**
-   * This is the currency of the merchant account.
-   *
-   * @return currencyCode
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#currency-codes>Currency codes reference documentation</a>
-   */
-  public CurrencyCode getCurrencyCode() {
-    return currencyCode;
-  }
-
-  public void setCurrencyCode(CurrencyCode currencyCode) {
-    this.currencyCode = currencyCode;
-  }
 
   public CustomerPaymentHandleRequest customerIp(String customerIp) {
     this.customerIp = customerIp;
@@ -122,7 +113,7 @@ public class CustomerPaymentHandleRequest {
   }
 
   /**
-   * This is the customer's IP address.
+   * This is the customer's IP address
    *
    * @return customerIp
    */
@@ -134,23 +125,25 @@ public class CustomerPaymentHandleRequest {
     this.customerIp = customerIp;
   }
 
-  public CustomerPaymentHandleRequest billingDetails(CardBillingDetailsRequest billingDetails) {
+
+  public CustomerPaymentHandleRequest billingDetails(BillingDetails billingDetails) {
     this.billingDetails = billingDetails;
     return this;
   }
 
   /**
-   * Customer's billing details
+   * Get billingDetails
    *
    * @return billingDetails
    */
-  public CardBillingDetailsRequest getBillingDetails() {
+  public BillingDetails getBillingDetails() {
     return billingDetails;
   }
 
-  public void setBillingDetails(CardBillingDetailsRequest billingDetails) {
+  public void setBillingDetails(BillingDetails billingDetails) {
     this.billingDetails = billingDetails;
   }
+
 
   public CustomerPaymentHandleRequest billingDetailsId(String billingDetailsId) {
     this.billingDetailsId = billingDetailsId;
@@ -158,7 +151,7 @@ public class CustomerPaymentHandleRequest {
   }
 
   /**
-   * This is the ID returned in the response to the [address creation request](/operations/create-address).
+   * This is the ID returned in the response to the address creation request.
    *
    * @return billingDetailsId
    */
@@ -170,13 +163,14 @@ public class CustomerPaymentHandleRequest {
     this.billingDetailsId = billingDetailsId;
   }
 
+
   public CustomerPaymentHandleRequest card(UpdateCustomerRequestCard card) {
     this.card = card;
     return this;
   }
 
   /**
-   * Card details to be used for the transaction
+   * Get card
    *
    * @return card
    */
@@ -188,14 +182,52 @@ public class CustomerPaymentHandleRequest {
     this.card = card;
   }
 
+
+  public CustomerPaymentHandleRequest amount(Integer amount) {
+    this.amount = amount;
+    return this;
+  }
+
+  /**
+   * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099. **Note:** The amount specified in the Payment request must match the amount specified in the Payment Handle request from which the paymentHandleToken is taken.
+   *
+   * @return amount
+   */
+  public Integer getAmount() {
+    return amount;
+  }
+
+  public void setAmount(Integer amount) {
+    this.amount = amount;
+  }
+
+
+  public CustomerPaymentHandleRequest currencyCode(CurrencyCode currencyCode) {
+    this.currencyCode = currencyCode;
+    return this;
+  }
+
+  /**
+   * Get currencyCode
+   *
+   * @return currencyCode
+   */
+  public CurrencyCode getCurrencyCode() {
+    return currencyCode;
+  }
+
+  public void setCurrencyCode(CurrencyCode currencyCode) {
+    this.currencyCode = currencyCode;
+  }
+
+
   public CustomerPaymentHandleRequest paymentHandleTokenFrom(String paymentHandleTokenFrom) {
     this.paymentHandleTokenFrom = paymentHandleTokenFrom;
     return this;
   }
 
   /**
-   * This is an existing Customer Payment Handle, from which the payment instrument and profile details are retrieved.
-   * If this parameter is included you can omit the billingDetails object.
+   * This is an existing Customer Payment Handle, from which the payment instrument and profile details are retrieved. If this parameter is included you can omit the billingDetails object.
    *
    * @return paymentHandleTokenFrom
    */
@@ -207,21 +239,6 @@ public class CustomerPaymentHandleRequest {
     this.paymentHandleTokenFrom = paymentHandleTokenFrom;
   }
 
-  /**
-   * This is the amount of the request, in minor units. For example, to process US $10.99, this value  should be 1099.
-   * <b>Note:</b> The amount specified in the Payment request must match the amount specified in the Payment Handle request
-   * from which the paymentHandleToken is taken.
-   *
-   * @return amount
-   * maximum: 99999999999
-   */
-  public Integer getAmount() {
-    return amount;
-  }
-
-  public void setAmount(Integer amount) {
-    this.amount = amount;
-  }
 
   public CustomerPaymentHandleRequest eft(Eft eft) {
     this.eft = eft;
@@ -229,7 +246,7 @@ public class CustomerPaymentHandleRequest {
   }
 
   /**
-   * Details of the EFT account to be used for the transaction
+   * Get eft
    *
    * @return eft
    */
@@ -241,13 +258,14 @@ public class CustomerPaymentHandleRequest {
     this.eft = eft;
   }
 
+
   public CustomerPaymentHandleRequest dupCheck(Boolean dupCheck) {
     this.dupCheck = dupCheck;
     return this;
   }
 
   /**
-   * Get dupCheck
+   * Duplicate check flag
    *
    * @return dupCheck
    */
@@ -259,13 +277,14 @@ public class CustomerPaymentHandleRequest {
     this.dupCheck = dupCheck;
   }
 
+
   public CustomerPaymentHandleRequest ach(Ach ach) {
     this.ach = ach;
     return this;
   }
 
   /**
-   * Details of the ach account to be used for the transaction.
+   * Get ach
    *
    * @return ach
    */
@@ -277,13 +296,14 @@ public class CustomerPaymentHandleRequest {
     this.ach = ach;
   }
 
+
   public CustomerPaymentHandleRequest bacs(Bacs bacs) {
     this.bacs = bacs;
     return this;
   }
 
   /**
-   * Details of the bacs account to be used for the transaction.
+   * Get bacs
    *
    * @return bacs
    */
@@ -294,6 +314,7 @@ public class CustomerPaymentHandleRequest {
   public void setBacs(Bacs bacs) {
     this.bacs = bacs;
   }
+
 
   public CustomerPaymentHandleRequest mandates(List<Mandate> mandates) {
     this.mandates = mandates;
@@ -329,13 +350,14 @@ public class CustomerPaymentHandleRequest {
     this.mandates = mandates;
   }
 
+
   public CustomerPaymentHandleRequest sepa(Sepa sepa) {
     this.sepa = sepa;
     return this;
   }
 
   /**
-   * These are the details of the sepa account used for the transaction.
+   * Get sepa
    *
    * @return sepa
    */
@@ -347,8 +369,14 @@ public class CustomerPaymentHandleRequest {
     this.sepa = sepa;
   }
 
+
+  public CustomerPaymentHandleRequest paymentType(PaymentType paymentType) {
+    this.paymentType = paymentType;
+    return this;
+  }
+
   /**
-   * This is the payment type.
+   * Get paymentType
    *
    * @return paymentType
    */
@@ -356,20 +384,20 @@ public class CustomerPaymentHandleRequest {
     return paymentType;
   }
 
-  public void setPaymentType(final PaymentType paymentType) {
+  public void setPaymentType(PaymentType paymentType) {
     this.paymentType = paymentType;
   }
 
   /**
    * This map holds additional parameters that can be used for features not available in this client library.
    * During serialization, each key-value pair is treated as if the key were a top-level field in the serialized object,
-   * i.e. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
+   * e.g. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
    *
    * @return additionalParameters
    */
   @JsonAnyGetter
   public Map<String, Object> getAdditionalParameters() {
-    return additionalParameters;
+    return this.additionalParameters;
   }
 
   public void setAdditionalParameters(Map<String, Object> additionalParameters) {
@@ -377,10 +405,10 @@ public class CustomerPaymentHandleRequest {
   }
 
   public void addAdditionalParameter(String key, Object value) {
-    if (additionalParameters == null) {
-      additionalParameters = new HashMap<>();
+    if (this.additionalParameters == null) {
+      this.additionalParameters = new HashMap<>();
     }
-    additionalParameters.put(key, value);
+    this.additionalParameters.put(key, value);
   }
 
   @Override
@@ -394,11 +422,11 @@ public class CustomerPaymentHandleRequest {
     CustomerPaymentHandleRequest customerPaymentHandleRequest = (CustomerPaymentHandleRequest) o;
     return Objects.equals(this.merchantRefNum, customerPaymentHandleRequest.merchantRefNum) &&
         Objects.equals(this.customerIp, customerPaymentHandleRequest.customerIp) &&
-        Objects.equals(this.amount, customerPaymentHandleRequest.amount) &&
-        Objects.equals(this.currencyCode, customerPaymentHandleRequest.currencyCode) &&
         Objects.equals(this.billingDetails, customerPaymentHandleRequest.billingDetails) &&
         Objects.equals(this.billingDetailsId, customerPaymentHandleRequest.billingDetailsId) &&
         Objects.equals(this.card, customerPaymentHandleRequest.card) &&
+        Objects.equals(this.amount, customerPaymentHandleRequest.amount) &&
+        Objects.equals(this.currencyCode, customerPaymentHandleRequest.currencyCode) &&
         Objects.equals(this.paymentHandleTokenFrom, customerPaymentHandleRequest.paymentHandleTokenFrom) &&
         Objects.equals(this.eft, customerPaymentHandleRequest.eft) &&
         Objects.equals(this.dupCheck, customerPaymentHandleRequest.dupCheck) &&
@@ -411,8 +439,7 @@ public class CustomerPaymentHandleRequest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, amount, currencyCode, customerIp, billingDetails, billingDetailsId, card, paymentHandleTokenFrom,
-        eft, dupCheck, ach, bacs, mandates, sepa, paymentType, additionalParameters);
+    return Objects.hash(merchantRefNum, customerIp, billingDetails, billingDetailsId, card, amount, currencyCode, paymentHandleTokenFrom, eft, dupCheck, ach, bacs, mandates, sepa, paymentType);
   }
 
   @Override
@@ -420,12 +447,12 @@ public class CustomerPaymentHandleRequest {
 
     return "class CustomerPaymentHandleRequest {\n"
         + "    merchantRefNum: " + toIndentedString(merchantRefNum) + "\n"
-        + "    amount: " + toIndentedString(amount) + "\n"
-        + "    currencyCode: " + toIndentedString(currencyCode) + "\n"
         + "    customerIp: " + toIndentedString(customerIp) + "\n"
         + "    billingDetails: " + toIndentedString(billingDetails) + "\n"
         + "    billingDetailsId: " + toIndentedString(billingDetailsId) + "\n"
         + "    card: " + toIndentedString(card) + "\n"
+        + "    amount: " + toIndentedString(amount) + "\n"
+        + "    currencyCode: " + toIndentedString(currencyCode) + "\n"
         + "    paymentHandleTokenFrom: " + toIndentedString(paymentHandleTokenFrom) + "\n"
         + "    eft: " + toIndentedString(eft) + "\n"
         + "    dupCheck: " + toIndentedString(dupCheck) + "\n"
@@ -434,7 +461,6 @@ public class CustomerPaymentHandleRequest {
         + "    mandates: " + toIndentedString(mandates) + "\n"
         + "    sepa: " + toIndentedString(sepa) + "\n"
         + "    paymentType: " + toIndentedString(paymentType) + "\n"
-        + "    additionalParameters: " + toIndentedString(additionalParameters) + "\n"
         + "}";
   }
 
@@ -450,12 +476,12 @@ public class CustomerPaymentHandleRequest {
   }
 
   /**
-   * {@code CustomerPaymentHandleRequest} builder static inner class.
+   * Payload required for creating Payment Handle for a customer. builder static inner class.
    */
   public static final class Builder {
     private String merchantRefNum;
     private String customerIp;
-    private CardBillingDetailsRequest billingDetails;
+    private BillingDetails billingDetails;
     private String billingDetailsId;
     private UpdateCustomerRequestCard card;
     private Integer amount;
@@ -474,9 +500,11 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
+     * @param merchantRefNum the merchantRefNum to set
      * @return a reference to this Builder
      */
     public Builder merchantRefNum(String merchantRefNum) {
@@ -485,9 +513,11 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code customerIp} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's IP address
+     * <p>
+     * Sets the customerIp and returns a reference to this Builder enabling method chaining.
      *
-     * @param customerIp the {@code customerIp} to set
+     * @param customerIp the customerIp to set
      * @return a reference to this Builder
      */
     public Builder customerIp(String customerIp) {
@@ -496,20 +526,22 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code billingDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the billingDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param billingDetails the {@code billingDetails} to set
+     * @param billingDetails the billingDetails to set
      * @return a reference to this Builder
      */
-    public Builder billingDetails(CardBillingDetailsRequest billingDetails) {
+    public Builder billingDetails(BillingDetails billingDetails) {
       this.billingDetails = billingDetails;
       return this;
     }
 
     /**
-     * Sets the {@code billingDetailsId} and returns a reference to this Builder enabling method chaining.
+     * This is the ID returned in the response to the address creation request.
+     * <p>
+     * Sets the billingDetailsId and returns a reference to this Builder enabling method chaining.
      *
-     * @param billingDetailsId the {@code billingDetailsId} to set
+     * @param billingDetailsId the billingDetailsId to set
      * @return a reference to this Builder
      */
     public Builder billingDetailsId(String billingDetailsId) {
@@ -518,9 +550,9 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code card} and returns a reference to this Builder enabling method chaining.
+     * Sets the card and returns a reference to this Builder enabling method chaining.
      *
-     * @param card the {@code card} to set
+     * @param card the card to set
      * @return a reference to this Builder
      */
     public Builder card(UpdateCustomerRequestCard card) {
@@ -529,31 +561,35 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code amount} and returns a reference to this Builder enabling method chaining.
+     * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099. **Note:** The amount specified in the Payment request must match the amount specified in the Payment Handle request from which the paymentHandleToken is taken.
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code amount} to set
+     * @param amount the amount to set
      * @return a reference to this Builder
      */
-    public Builder amount(final Integer val) {
-      amount = val;
+    public Builder amount(Integer amount) {
+      this.amount = amount;
       return this;
     }
 
     /**
-     * Sets the {@code currencyCode} and returns a reference to this Builder enabling method chaining.
+     * Sets the currencyCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code currencyCode} to set
+     * @param currencyCode the currencyCode to set
      * @return a reference to this Builder
      */
-    public Builder currencyCode(final CurrencyCode val) {
-      currencyCode = val;
+    public Builder currencyCode(CurrencyCode currencyCode) {
+      this.currencyCode = currencyCode;
       return this;
     }
 
     /**
-     * Sets the {@code paymentHandleTokenFrom} and returns a reference to this Builder enabling method chaining.
+     * This is an existing Customer Payment Handle, from which the payment instrument and profile details are retrieved. If this parameter is included you can omit the billingDetails object.
+     * <p>
+     * Sets the paymentHandleTokenFrom and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentHandleTokenFrom the {@code paymentHandleTokenFrom} to set
+     * @param paymentHandleTokenFrom the paymentHandleTokenFrom to set
      * @return a reference to this Builder
      */
     public Builder paymentHandleTokenFrom(String paymentHandleTokenFrom) {
@@ -562,9 +598,9 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code eft} and returns a reference to this Builder enabling method chaining.
+     * Sets the eft and returns a reference to this Builder enabling method chaining.
      *
-     * @param eft the {@code eft} to set
+     * @param eft the eft to set
      * @return a reference to this Builder
      */
     public Builder eft(Eft eft) {
@@ -573,9 +609,11 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code dupCheck} and returns a reference to this Builder enabling method chaining.
+     * Duplicate check flag
+     * <p>
+     * Sets the dupCheck and returns a reference to this Builder enabling method chaining.
      *
-     * @param dupCheck the {@code dupCheck} to set
+     * @param dupCheck the dupCheck to set
      * @return a reference to this Builder
      */
     public Builder dupCheck(Boolean dupCheck) {
@@ -584,9 +622,9 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code ach} and returns a reference to this Builder enabling method chaining.
+     * Sets the ach and returns a reference to this Builder enabling method chaining.
      *
-     * @param ach the {@code ach} to set
+     * @param ach the ach to set
      * @return a reference to this Builder
      */
     public Builder ach(Ach ach) {
@@ -595,9 +633,9 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code bacs} and returns a reference to this Builder enabling method chaining.
+     * Sets the bacs and returns a reference to this Builder enabling method chaining.
      *
-     * @param bacs the {@code bacs} to set
+     * @param bacs the bacs to set
      * @return a reference to this Builder
      */
     public Builder bacs(Bacs bacs) {
@@ -606,9 +644,9 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code mandates} and returns a reference to this Builder enabling method chaining.
+     * Sets the mandates and returns a reference to this Builder enabling method chaining.
      *
-     * @param mandates the {@code mandates} to set
+     * @param mandates the mandates to set
      * @return a reference to this Builder
      */
     public Builder mandates(List<Mandate> mandates) {
@@ -617,9 +655,9 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code sepa} and returns a reference to this Builder enabling method chaining.
+     * Sets the sepa and returns a reference to this Builder enabling method chaining.
      *
-     * @param sepa the {@code sepa} to set
+     * @param sepa the sepa to set
      * @return a reference to this Builder
      */
     public Builder sepa(Sepa sepa) {
@@ -628,39 +666,13 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Sets the {@code paymentType} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentType and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code paymentType} to set
+     * @param paymentType the paymentType to set
      * @return a reference to this Builder
      */
-    public Builder paymentType(final PaymentType val) {
-      paymentType = val;
-      return this;
-    }
-
-    /**
-     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAdditionalParameter(String key, Object value) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.put(key, value);
-      return this;
-    }
-
-    /**
-     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAllAdditionalParameters(Map<String, Object> additionalParameters) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.putAll(additionalParameters);
+    public Builder paymentType(PaymentType paymentType) {
+      this.paymentType = paymentType;
       return this;
     }
 
@@ -676,13 +688,41 @@ public class CustomerPaymentHandleRequest {
     }
 
     /**
-     * Returns a {@code CustomerPaymentHandleRequest} built from the parameters previously set.
+     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code CustomerPaymentHandleRequest} built with parameters of this {@code CustomerPaymentHandleRequest.Builder}
+     * @param key the key to insert
+     * @param value the value to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAdditionalParameter(String key, Object value) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.put(key, value);
+      return this;
+    }
+
+    /**
+     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
+     *
+     * @param additionalParameters the key/value pairs to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAllAdditionalParameters(Map<String, Object> additionalParameters) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.putAll(additionalParameters);
+      return this;
+    }
+
+    /**
+     * Returns a CustomerPaymentHandleRequest built from the parameters previously set.
+     *
+     * @return a CustomerPaymentHandleRequest built with parameters of this CustomerPaymentHandleRequest.Builder
      */
     public CustomerPaymentHandleRequest build() {
       return new CustomerPaymentHandleRequest(this);
     }
   }
 }
-

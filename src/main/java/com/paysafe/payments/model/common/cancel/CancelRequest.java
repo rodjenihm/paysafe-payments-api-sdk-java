@@ -1,27 +1,26 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.cancel;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.common.Mandate;
 import com.paysafe.payments.model.common.enums.TransactionRequestStatus;
+import com.paysafe.payments.model.payment.Payment;
+import com.paysafe.payments.model.refund.Refund;
+import com.paysafe.payments.model.settlement.Settlement;
+
+
 
 /**
- * This class contains the internal details required for processing a cancel request.
- * This object represents the request body for following operations:
- * <ul>
- * <li>Cancel Payment</li>
- * <li>Cancel Settlement</li>
- * <li>Cancel Refund</li>
- * <li>Cancel Standalone Credit</li>
- * <li>Cancel Original Credit</li>
- * <li>Cancel Mandate</li>
- * </ul>
- *
- * <p>
- * Allowed value for status: <code>CANCELLED</code>
- * </p>
+ * This class contains the internal details required for processing a cancel request. This object represents the request body for following operations: - Cancel Payment - Cancel Settlement - Cancel Refund - Cancel Standalone Credit - Cancel Original Credit - Cancel Mandate  Allowed value for status: CANCELLED
  */
 public class CancelRequest {
 
@@ -32,7 +31,7 @@ public class CancelRequest {
     super();
   }
 
-  private CancelRequest(Builder builder) {
+  private CancelRequest(final Builder builder) {
     setStatus(builder.status);
   }
 
@@ -40,13 +39,14 @@ public class CancelRequest {
     return new Builder();
   }
 
+
   public CancelRequest status(TransactionRequestStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the cancel request. Possible values: CANCELLED.
+   * Get status
    *
    * @return status
    */
@@ -95,7 +95,7 @@ public class CancelRequest {
   }
 
   /**
-   * {@code CancelRequest} builder static inner class.
+   * This class contains the internal details required for processing a cancel request. This object represents the request body for following operations: - Cancel Payment - Cancel Settlement - Cancel Refund - Cancel Standalone Credit - Cancel Original Credit - Cancel Mandate  Allowed value for status: CANCELLED builder static inner class.
    */
   public static final class Builder {
     private TransactionRequestStatus status;
@@ -104,9 +104,9 @@ public class CancelRequest {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
     public Builder status(TransactionRequestStatus status) {
@@ -115,13 +115,12 @@ public class CancelRequest {
     }
 
     /**
-     * Returns a {@code CancelRequest} built from the parameters previously set.
+     * Returns a CancelRequest built from the parameters previously set.
      *
-     * @return a {@code CancelRequest} built with parameters of this {@code CancelRequest.Builder}
+     * @return a CancelRequest built with parameters of this CancelRequest.Builder
      */
     public CancelRequest build() {
       return new CancelRequest(this);
     }
   }
 }
-

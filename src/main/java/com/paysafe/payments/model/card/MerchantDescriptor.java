@@ -1,25 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * For CARD payment method only.
- * This is the merchant descriptor that will be displayed on the customer's card or bank statement.
- * <ul>
- *   <li>
- *     <b>dynamicDescriptor:</b> This is a merchant descriptor that will be displayed on a customer’s card statement.  <br>
- *     Example: OnlineStore
- *   </li>
- *   <li>
- *     <b>phone:</b> This is the merchant’s phone number, which is appended to the merchant descriptor on a customer’s card statement.  <br>
- *     <b>Note:</b> This field is used only in case of payment.  <br>
- *     Example: 12345678
- *   </li>
- * </ul>
+ * Merchant details for the transaction.
  */
 public class MerchantDescriptor {
 
@@ -32,7 +28,7 @@ public class MerchantDescriptor {
     super();
   }
 
-  private MerchantDescriptor(Builder builder) {
+  private MerchantDescriptor(final Builder builder) {
     setDynamicDescriptor(builder.dynamicDescriptor);
     setPhone(builder.phone);
   }
@@ -40,6 +36,7 @@ public class MerchantDescriptor {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public MerchantDescriptor dynamicDescriptor(String dynamicDescriptor) {
     this.dynamicDescriptor = dynamicDescriptor;
@@ -59,14 +56,14 @@ public class MerchantDescriptor {
     this.dynamicDescriptor = dynamicDescriptor;
   }
 
+
   public MerchantDescriptor phone(String phone) {
     this.phone = phone;
     return this;
   }
 
   /**
-   * This is the merchant’s phone number, which is appended to the merchant descriptor on a customer’s card statement.
-   * <b>Note:</b> This field is used only in case of payment.
+   * This is the merchant's phone number, which is appended to the merchant descriptor on a customer's card statement. **Note:** This field is used only in case of payment.
    *
    * @return phone
    */
@@ -117,7 +114,7 @@ public class MerchantDescriptor {
   }
 
   /**
-   * {@code MerchantDescriptor} builder static inner class.
+   * Merchant details for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String dynamicDescriptor;
@@ -127,9 +124,11 @@ public class MerchantDescriptor {
     }
 
     /**
-     * Sets the {@code dynamicDescriptor} and returns a reference to this Builder enabling method chaining.
+     * This is a merchant descriptor that will be displayed on a customer’s card statement.
+     * <p>
+     * Sets the dynamicDescriptor and returns a reference to this Builder enabling method chaining.
      *
-     * @param dynamicDescriptor the {@code dynamicDescriptor} to set
+     * @param dynamicDescriptor the dynamicDescriptor to set
      * @return a reference to this Builder
      */
     public Builder dynamicDescriptor(String dynamicDescriptor) {
@@ -138,9 +137,11 @@ public class MerchantDescriptor {
     }
 
     /**
-     * Sets the {@code phone} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant's phone number, which is appended to the merchant descriptor on a customer's card statement. **Note:** This field is used only in case of payment.
+     * <p>
+     * Sets the phone and returns a reference to this Builder enabling method chaining.
      *
-     * @param phone the {@code phone} to set
+     * @param phone the phone to set
      * @return a reference to this Builder
      */
     public Builder phone(String phone) {
@@ -149,13 +150,12 @@ public class MerchantDescriptor {
     }
 
     /**
-     * Returns a {@code MerchantDescriptor} built from the parameters previously set.
+     * Returns a MerchantDescriptor built from the parameters previously set.
      *
-     * @return a {@code MerchantDescriptor} built with parameters of this {@code MerchantDescriptor.Builder}
+     * @return a MerchantDescriptor built with parameters of this MerchantDescriptor.Builder
      */
     public MerchantDescriptor build() {
       return new MerchantDescriptor(this);
     }
   }
 }
-

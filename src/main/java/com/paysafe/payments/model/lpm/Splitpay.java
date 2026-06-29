@@ -1,14 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * This object should be used only for Splitpay transactions only, an array containing the linked accounts and the amount shared with each.
- * You must include either amount or percent. However, you cannot include both values.
+ * This object should be used only for Splitpay transactions. It is an array containing the linked accounts and the amount shared with each. You must include either amount or percent. However, you cannot include both values.
  */
 public class Splitpay {
 
@@ -23,7 +30,7 @@ public class Splitpay {
     super();
   }
 
-  private Splitpay(Builder builder) {
+  private Splitpay(final Builder builder) {
     setLinkedAccount(builder.linkedAccount);
     setAmount(builder.amount);
     setPercent(builder.percent);
@@ -32,6 +39,7 @@ public class Splitpay {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public Splitpay linkedAccount(String linkedAccount) {
     this.linkedAccount = linkedAccount;
@@ -51,6 +59,7 @@ public class Splitpay {
     this.linkedAccount = linkedAccount;
   }
 
+
   public Splitpay amount(Integer amount) {
     this.amount = amount;
     return this;
@@ -68,6 +77,7 @@ public class Splitpay {
   public void setAmount(Integer amount) {
     this.amount = amount;
   }
+
 
   public Splitpay percent(Integer percent) {
     this.percent = percent;
@@ -128,7 +138,7 @@ public class Splitpay {
   }
 
   /**
-   * {@code Splitpay} builder static inner class.
+   * This object should be used only for Splitpay transactions. It is an array containing the linked accounts and the amount shared with each. You must include either amount or percent. However, you cannot include both values. builder static inner class.
    */
   public static final class Builder {
     private String linkedAccount;
@@ -139,9 +149,11 @@ public class Splitpay {
     }
 
     /**
-     * Sets the {@code linkedAccount} and returns a reference to this Builder enabling method chaining.
+     * This is the ID of the linked account. This account must already be linked to the merchant account.
+     * <p>
+     * Sets the linkedAccount and returns a reference to this Builder enabling method chaining.
      *
-     * @param linkedAccount the {@code linkedAccount} to set
+     * @param linkedAccount the linkedAccount to set
      * @return a reference to this Builder
      */
     public Builder linkedAccount(String linkedAccount) {
@@ -150,9 +162,11 @@ public class Splitpay {
     }
 
     /**
-     * Sets the {@code amount} and returns a reference to this Builder enabling method chaining.
+     * This is the amount to transfer to the linked account in minor currency units. The total amount to all linked accounts cannot exceed the transaction total.
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
      *
-     * @param amount the {@code amount} to set
+     * @param amount the amount to set
      * @return a reference to this Builder
      */
     public Builder amount(Integer amount) {
@@ -161,9 +175,11 @@ public class Splitpay {
     }
 
     /**
-     * Sets the {@code percent} and returns a reference to this Builder enabling method chaining.
+     * This is the percentage of the total transaction amount to transfer to that account. The total percentage to all linked accounts cannot exceed 100%.
+     * <p>
+     * Sets the percent and returns a reference to this Builder enabling method chaining.
      *
-     * @param percent the {@code percent} to set
+     * @param percent the percent to set
      * @return a reference to this Builder
      */
     public Builder percent(Integer percent) {
@@ -172,13 +188,12 @@ public class Splitpay {
     }
 
     /**
-     * Returns a {@code Splitpay} built from the parameters previously set.
+     * Returns a Splitpay built from the parameters previously set.
      *
-     * @return a {@code Splitpay} built with parameters of this {@code Splitpay.Builder}
+     * @return a Splitpay built with parameters of this Splitpay.Builder
      */
     public Splitpay build() {
       return new Splitpay(this);
     }
   }
 }
-

@@ -1,18 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.applepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * <b>Note:</b> If you want to pass encrypted Apple Pay token in paymentHandle API request then you must generate Payment Processing
- * Certificate through Paysafe Optic Portal. <br>
- * If you want to pass decrypted Apple Pay token in paymentHandle API request then you can skip Certificate generation through Paysafe
- * Optic Portal. <br>
- * In case of encrypted token, include fields version, data, signature and header. <br>
- * In case of decrypted token, include field decryptedData.
+ * If you want to pass encrypted Apple Pay token then you must generate Payment Processing Certificate through Paysafe Optic Portal. If you want to pass decrypted Apple Pay token then you can skip Certificate generation through Paysafe Optic Portal. In case of encrypted token, include fields version, data, signature and header. In case of decrypted token, include field decryptedData.
  */
 public class ApplePayTokenPaymentData {
 
@@ -31,7 +35,7 @@ public class ApplePayTokenPaymentData {
     super();
   }
 
-  private ApplePayTokenPaymentData(Builder builder) {
+  private ApplePayTokenPaymentData(final Builder builder) {
     setVersion(builder.version);
     setData(builder.data);
     setSignature(builder.signature);
@@ -42,6 +46,7 @@ public class ApplePayTokenPaymentData {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public ApplePayTokenPaymentData version(String version) {
     this.version = version;
@@ -61,6 +66,7 @@ public class ApplePayTokenPaymentData {
     this.version = version;
   }
 
+
   public ApplePayTokenPaymentData data(String data) {
     this.data = data;
     return this;
@@ -78,6 +84,7 @@ public class ApplePayTokenPaymentData {
   public void setData(String data) {
     this.data = data;
   }
+
 
   public ApplePayTokenPaymentData signature(String signature) {
     this.signature = signature;
@@ -97,13 +104,14 @@ public class ApplePayTokenPaymentData {
     this.signature = signature;
   }
 
+
   public ApplePayTokenPaymentData header(ApplePayTokenHeader header) {
     this.header = header;
     return this;
   }
 
   /**
-   * Header parameter of Apple Pay Token
+   * Get header
    *
    * @return header
    */
@@ -114,6 +122,7 @@ public class ApplePayTokenPaymentData {
   public void setHeader(ApplePayTokenHeader header) {
     this.header = header;
   }
+
 
   public ApplePayTokenPaymentData decryptedData(ApplePayDecryptedData decryptedData) {
     this.decryptedData = decryptedData;
@@ -178,7 +187,7 @@ public class ApplePayTokenPaymentData {
   }
 
   /**
-   * {@code ApplePayTokenPaymentData} builder static inner class.
+   * If you want to pass encrypted Apple Pay token then you must generate Payment Processing Certificate through Paysafe Optic Portal. If you want to pass decrypted Apple Pay token then you can skip Certificate generation through Paysafe Optic Portal. In case of encrypted token, include fields version, data, signature and header. In case of decrypted token, include field decryptedData. builder static inner class.
    */
   public static final class Builder {
     private String version;
@@ -191,9 +200,11 @@ public class ApplePayTokenPaymentData {
     }
 
     /**
-     * Sets the {@code version} and returns a reference to this Builder enabling method chaining.
+     * Version parameter of Apple Pay Token
+     * <p>
+     * Sets the version and returns a reference to this Builder enabling method chaining.
      *
-     * @param version the {@code version} to set
+     * @param version the version to set
      * @return a reference to this Builder
      */
     public Builder version(String version) {
@@ -202,9 +213,11 @@ public class ApplePayTokenPaymentData {
     }
 
     /**
-     * Sets the {@code data} and returns a reference to this Builder enabling method chaining.
+     * Apple Pay data hash of customer card
+     * <p>
+     * Sets the data and returns a reference to this Builder enabling method chaining.
      *
-     * @param data the {@code data} to set
+     * @param data the data to set
      * @return a reference to this Builder
      */
     public Builder data(String data) {
@@ -213,9 +226,11 @@ public class ApplePayTokenPaymentData {
     }
 
     /**
-     * Sets the {@code signature} and returns a reference to this Builder enabling method chaining.
+     * Apple pay signature data
+     * <p>
+     * Sets the signature and returns a reference to this Builder enabling method chaining.
      *
-     * @param signature the {@code signature} to set
+     * @param signature the signature to set
      * @return a reference to this Builder
      */
     public Builder signature(String signature) {
@@ -224,9 +239,9 @@ public class ApplePayTokenPaymentData {
     }
 
     /**
-     * Sets the {@code header} and returns a reference to this Builder enabling method chaining.
+     * Sets the header and returns a reference to this Builder enabling method chaining.
      *
-     * @param header the {@code header} to set
+     * @param header the header to set
      * @return a reference to this Builder
      */
     public Builder header(ApplePayTokenHeader header) {
@@ -235,9 +250,9 @@ public class ApplePayTokenPaymentData {
     }
 
     /**
-     * Sets the {@code decryptedData} and returns a reference to this Builder enabling method chaining.
+     * Sets the decryptedData and returns a reference to this Builder enabling method chaining.
      *
-     * @param decryptedData the {@code decryptedData} to set
+     * @param decryptedData the decryptedData to set
      * @return a reference to this Builder
      */
     public Builder decryptedData(ApplePayDecryptedData decryptedData) {
@@ -246,13 +261,12 @@ public class ApplePayTokenPaymentData {
     }
 
     /**
-     * Returns a {@code ApplePayTokenPaymentData} built from the parameters previously set.
+     * Returns a ApplePayTokenPaymentData built from the parameters previously set.
      *
-     * @return a {@code ApplePayTokenPaymentData} built with parameters of this {@code ApplePayTokenPaymentData.Builder}
+     * @return a ApplePayTokenPaymentData built with parameters of this ApplePayTokenPaymentData.Builder
      */
     public ApplePayTokenPaymentData build() {
       return new ApplePayTokenPaymentData(this);
     }
   }
 }
-

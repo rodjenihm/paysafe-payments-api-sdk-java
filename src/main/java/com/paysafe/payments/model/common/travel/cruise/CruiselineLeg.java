@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.cruise;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Contains detailed itinerary information for one of the cruise line trip legs  <b>Note:</b> This object is only for Cruise line Merchants.
+ * Contains detailed itinerary information for one of the cruise line trip legs. <br>**Note:** This object is only for Cruise line Merchants.
  */
 public class CruiselineLeg {
 
@@ -26,7 +34,7 @@ public class CruiselineLeg {
     super();
   }
 
-  private CruiselineLeg(Builder builder) {
+  private CruiselineLeg(final Builder builder) {
     setFare(builder.fare);
     setServiceClass(builder.serviceClass);
     setDepartureCity(builder.departureCity);
@@ -38,15 +46,14 @@ public class CruiselineLeg {
     return new Builder();
   }
 
+
   public CruiselineLeg fare(Integer fare) {
     this.fare = fare;
     return this;
   }
 
   /**
-   * Indicates the total fare applied to a specific leg.
-   * Required during settlement request for integration with TSYS processor.  <br>
-   * Maximum: 999999999999
+   * Indicates the total fare applied to a specific leg. Required during settlement request for integration with TSYS processor
    *
    * @return fare
    */
@@ -58,22 +65,14 @@ public class CruiselineLeg {
     this.fare = fare;
   }
 
+
   public CruiselineLeg serviceClass(String serviceClass) {
     this.serviceClass = serviceClass;
     return this;
   }
 
   /**
-   * Indicates service class (first class, business class, etc.).  <br>
-   * Example values (not limited to):
-   * <ul>
-   * <li>F - first class </li>
-   * <li>J - business class </li>
-   * <li>W - premium economy class </li>
-   * <li>Y - economy class </li>
-   * </ul>
-   * <p>
-   * Required during settlement request for integration with TSYS processor.
+   * Indicates service class (first class, business class, etc.). Example values (not limited to) F - first class, J - business class, W - premium economy class, Y - economy class. Required during settlement request for integration with TSYS processor
    *
    * @return serviceClass
    */
@@ -85,15 +84,14 @@ public class CruiselineLeg {
     this.serviceClass = serviceClass;
   }
 
+
   public CruiselineLeg departureCity(String departureCity) {
     this.departureCity = departureCity;
     return this;
   }
 
   /**
-   * Departure City where the trip originates. Possible values are listed
-   * <a href="https://unece.org/trade/cefact/unlocode-code-list-country-and-territory">here</a>.
-   * Required during settlement request for integration with TSYS processor.
+   * Departure City where the trip originates.  [UN/LOCODE](https://unece.org/trade/cefact/unlocode-code-list-country-and-territory) expected.  * Required during settlement request for integration with TSYS processor
    *
    * @return departureCity
    */
@@ -105,16 +103,14 @@ public class CruiselineLeg {
     this.departureCity = departureCity;
   }
 
+
   public CruiselineLeg destinationCity(String destinationCity) {
     this.destinationCity = destinationCity;
     return this;
   }
 
   /**
-   * Destination City where the trip ends. Possible values are listed
-   * <a href="https://unece.org/trade/cefact/unlocode-code-list-country-and-territory">here</a>.
-   * Required during authorization request with AMEX for integration with TSYS processor.  <br>
-   * Required during settlement request with Visa or Mastercard for integration with TSYS processor.
+   * Destination City where the trip ends.  [UN/LOCODE](https://unece.org/trade/cefact/unlocode-code-list-country-and-territory) expected.  * Required during authorization request with AMEX for integration with TSYS processor * Required during settlement request with Visa or Mastercard for integration with TSYS processor
    *
    * @return destinationCity
    */
@@ -126,13 +122,14 @@ public class CruiselineLeg {
     this.destinationCity = destinationCity;
   }
 
+
   public CruiselineLeg departureDate(String departureDate) {
     this.departureDate = departureDate;
     return this;
   }
 
   /**
-   * Date of passenger’s departure for this leg. Date format = YYYY-MM-DD, ISO 8601 expected. For example, 2014-01-26
+   * Date of passenger's departure for this leg. Date format YYYY-MM-DD, ISO 8601 expected. For example, 2014-01-26
    *
    * @return departureDate
    */
@@ -189,7 +186,7 @@ public class CruiselineLeg {
   }
 
   /**
-   * {@code CruiselineLeg} builder static inner class.
+   * Contains detailed itinerary information for one of the cruise line trip legs. <br>**Note:** This object is only for Cruise line Merchants. builder static inner class.
    */
   public static final class Builder {
     private Integer fare;
@@ -202,9 +199,11 @@ public class CruiselineLeg {
     }
 
     /**
-     * Sets the {@code fare} and returns a reference to this Builder enabling method chaining.
+     * Indicates the total fare applied to a specific leg. Required during settlement request for integration with TSYS processor
+     * <p>
+     * Sets the fare and returns a reference to this Builder enabling method chaining.
      *
-     * @param fare the {@code fare} to set
+     * @param fare the fare to set
      * @return a reference to this Builder
      */
     public Builder fare(Integer fare) {
@@ -213,9 +212,11 @@ public class CruiselineLeg {
     }
 
     /**
-     * Sets the {@code serviceClass} and returns a reference to this Builder enabling method chaining.
+     * Indicates service class (first class, business class, etc.). Example values (not limited to) F - first class, J - business class, W - premium economy class, Y - economy class. Required during settlement request for integration with TSYS processor
+     * <p>
+     * Sets the serviceClass and returns a reference to this Builder enabling method chaining.
      *
-     * @param serviceClass the {@code serviceClass} to set
+     * @param serviceClass the serviceClass to set
      * @return a reference to this Builder
      */
     public Builder serviceClass(String serviceClass) {
@@ -224,9 +225,11 @@ public class CruiselineLeg {
     }
 
     /**
-     * Sets the {@code departureCity} and returns a reference to this Builder enabling method chaining.
+     * Departure City where the trip originates.  [UN/LOCODE](https://unece.org/trade/cefact/unlocode-code-list-country-and-territory) expected.  * Required during settlement request for integration with TSYS processor
+     * <p>
+     * Sets the departureCity and returns a reference to this Builder enabling method chaining.
      *
-     * @param departureCity the {@code departureCity} to set
+     * @param departureCity the departureCity to set
      * @return a reference to this Builder
      */
     public Builder departureCity(String departureCity) {
@@ -235,9 +238,11 @@ public class CruiselineLeg {
     }
 
     /**
-     * Sets the {@code destinationCity} and returns a reference to this Builder enabling method chaining.
+     * Destination City where the trip ends.  [UN/LOCODE](https://unece.org/trade/cefact/unlocode-code-list-country-and-territory) expected.  * Required during authorization request with AMEX for integration with TSYS processor * Required during settlement request with Visa or Mastercard for integration with TSYS processor
+     * <p>
+     * Sets the destinationCity and returns a reference to this Builder enabling method chaining.
      *
-     * @param destinationCity the {@code destinationCity} to set
+     * @param destinationCity the destinationCity to set
      * @return a reference to this Builder
      */
     public Builder destinationCity(String destinationCity) {
@@ -246,9 +251,11 @@ public class CruiselineLeg {
     }
 
     /**
-     * Sets the {@code departureDate} and returns a reference to this Builder enabling method chaining.
+     * Date of passenger's departure for this leg. Date format YYYY-MM-DD, ISO 8601 expected. For example, 2014-01-26
+     * <p>
+     * Sets the departureDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param departureDate the {@code departureDate} to set
+     * @param departureDate the departureDate to set
      * @return a reference to this Builder
      */
     public Builder departureDate(String departureDate) {
@@ -257,13 +264,12 @@ public class CruiselineLeg {
     }
 
     /**
-     * Returns a {@code CruiselineLeg} built from the parameters previously set.
+     * Returns a CruiselineLeg built from the parameters previously set.
      *
-     * @return a {@code CruiselineLeg} built with parameters of this {@code CruiselineLeg.Builder}
+     * @return a CruiselineLeg built with parameters of this CruiselineLeg.Builder
      */
     public CruiselineLeg build() {
       return new CruiselineLeg(this);
     }
   }
 }
-

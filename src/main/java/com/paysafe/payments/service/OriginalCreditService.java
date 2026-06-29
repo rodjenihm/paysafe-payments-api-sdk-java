@@ -21,9 +21,9 @@ public interface OriginalCreditService {
    * <p>Endpoint:
    * <strong>POST /v1/originalcredits</strong></p>
    *
-   * @param originalCreditRequest The request body containing all necessary details for processing the original credit.
-   * @return An {@code OriginalCredit} object containing the response details from Paysafe.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param originalCreditRequest the request body containing all necessary details for processing the original credit
+   * @return an {@code OriginalCredit} object containing the response details from Paysafe
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   OriginalCredit processOriginalCredit(final OriginalCreditRequest originalCreditRequest) throws PaysafeSdkException;
 
@@ -37,10 +37,10 @@ public interface OriginalCreditService {
    * <p>Endpoint:
    * <strong>POST /v1/originalcredits</strong></p>
    *
-   * @param originalCreditRequest The request body containing all necessary details for processing the original credit.
-   * @param requestOptions        Custom request options for controlling the request behavior.
-   * @return An {@code OriginalCredit} object containing the response details from Paysafe.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param originalCreditRequest the request body containing all necessary details for processing the original credit
+   * @param requestOptions        custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return an {@code OriginalCredit} object containing the response details from Paysafe
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   OriginalCredit processOriginalCredit(final OriginalCreditRequest originalCreditRequest, final RequestOptions requestOptions) throws PaysafeSdkException;
 
@@ -53,9 +53,9 @@ public interface OriginalCreditService {
    * <p>Endpoint:
    * <strong>GET /v1/originalcredits/{originalCreditId}</strong></p>
    *
-   * @param originalCreditId The unique identifier of the original credit transaction to be retrieved.
-   * @return An {@code OriginalCredit} object containing the response details from Paysafe.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param originalCreditId the unique identifier of the original credit transaction to be retrieved
+   * @return an {@code OriginalCredit} object containing the response details from Paysafe
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   OriginalCredit getOriginalCreditById(final String originalCreditId) throws PaysafeSdkException;
 
@@ -67,10 +67,10 @@ public interface OriginalCreditService {
    * <p>Endpoint:
    * <strong>GET /v1/originalcredits/{originalCreditId}</strong></p>
    *
-   * @param originalCreditId The unique identifier of the original credit transaction to be retrieved.
-   * @param requestOptions   Custom request options for controlling the request behavior.
-   * @return An {@code OriginalCredit} object containing the response details from Paysafe.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param originalCreditId the unique identifier of the original credit transaction to be retrieved
+   * @param requestOptions   custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return an {@code OriginalCredit} object containing the response details from Paysafe
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   OriginalCredit getOriginalCreditById(final String originalCreditId, final RequestOptions requestOptions) throws PaysafeSdkException;
 
@@ -81,13 +81,13 @@ public interface OriginalCreditService {
    * <p>Endpoint:
    * <strong>GET /v1/originalcredits?</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the original credit request.
-   * @param endDate        The end date in UTC. If null is provided, the current date will be used.
-   * @param limit          The total number of records to return. If null is provided, the default value (10) will be used.
-   * @param offset         The starting position, where 0 is the first record. If null is provided, the default value (0) will be used.
-   * @param startDate      The start date in UTC. If null is provided, the default value (30 days before the end date) will be used.
-   * @return an {@code OriginalCreditList} object containing a list of original credit transactions and pagination metadata.
-   * @throws PaysafeSdkException if an error occurs during the request.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the original credit request
+   * @param endDate        the end date in UTC; if null is provided, the current date will be used
+   * @param limit          the total number of records to return; if null is provided, the default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, the default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, the default value (30 days before the end date) will be used
+   * @return an {@code OriginalCreditList} object containing a list of original credit transactions and pagination metadata
+   * @throws PaysafeSdkException if an error occurs during the request
    */
   OriginalCreditList getOriginalCreditUsingMerchantReferenceNumber(final String merchantRefNum,
       final String endDate, final Integer limit, final Integer offset, final String startDate) throws PaysafeSdkException;
@@ -100,14 +100,14 @@ public interface OriginalCreditService {
    * <p>Endpoint:
    * <strong>GET /v1/originalcredits?</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the original credit request.
-   * @param endDate        The end date in UTC. If null is provided, the current date will be used.
-   * @param limit          The total number of records to return. If null is provided, the default value (10) will be used.
-   * @param offset         The starting position, where 0 is the first record. If null is provided, the default value (0) will be used.
-   * @param startDate      The start date in UTC. If null is provided, the default value (30 days before the end date) will be used.
-   * @param requestOptions Custom connectTimeout, responseTimeout, and/or maxAutomaticRetries for this request.
-   * @return an {@code OriginalCreditList} object containing a list of original credit transactions and pagination metadata.
-   * @throws PaysafeSdkException if an error occurs during the request.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the original credit request
+   * @param endDate        the end date in UTC; if null is provided, the current date will be used
+   * @param limit          the total number of records to return; if null is provided, the default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, the default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, the default value (30 days before the end date) will be used
+   * @param requestOptions custom connectTimeout, responseTimeout, and/or maxAutomaticRetries for this request
+   * @return an {@code OriginalCreditList} object containing a list of original credit transactions and pagination metadata
+   * @throws PaysafeSdkException if an error occurs during the request
    */
   OriginalCreditList getOriginalCreditUsingMerchantReferenceNumber(final String merchantRefNum,
       final String endDate, final Integer limit, final Integer offset, final String startDate,
@@ -119,10 +119,10 @@ public interface OriginalCreditService {
    * <p>Endpoint:
    * <strong>PUT /v1/originalcredits/{originalCreditId}</strong></p>
    *
-   * @param originalCreditId The ID of the Original Credit to cancel.
-   * @param cancelRequest    The request body for canceling an Original Credit.
-   * @return A {@code CancelResponse} object containing the updated Original Credit details.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param originalCreditId the ID of the Original Credit to cancel
+   * @param cancelRequest    the request body for canceling an Original Credit
+   * @return a {@code CancelResponse} object containing the updated Original Credit details
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   CancelResponse cancelOriginalCredit(final String originalCreditId, final CancelRequest cancelRequest) throws PaysafeSdkException;
 
@@ -133,11 +133,11 @@ public interface OriginalCreditService {
    * <p>Endpoint:
    * <strong>PUT /v1/originalcredits/{originalCreditId}</strong></p>
    *
-   * @param originalCreditId The ID of the Original Credit to cancel.
-   * @param cancelRequest    The request body for canceling an Original Credit.
-   * @param requestOptions   Custom request options for timeout, retries, etc.
-   * @return A {@code CancelResponse} object containing the updated Original Credit details.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param originalCreditId the ID of the Original Credit to cancel
+   * @param cancelRequest    the request body for canceling an Original Credit
+   * @param requestOptions   custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return a {@code CancelResponse} object containing the updated Original Credit details
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   CancelResponse cancelOriginalCredit(final String originalCreditId, final CancelRequest cancelRequest, final RequestOptions requestOptions)
       throws PaysafeSdkException;

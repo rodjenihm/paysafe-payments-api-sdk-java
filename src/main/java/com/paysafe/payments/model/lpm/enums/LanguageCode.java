@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm.enums;
 
@@ -6,11 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * The 2-character preferred language code for the consumer (e.g., AU, AT, BE, BR, CA, CH, CN, DE, ES, GB, FR, IT, NL, PL, PT, RU, or US.)  <br>
- * A five-character code is also valid for following languages (e.g: da_DK, he_IL, id_ID, ja_JP, no_NO, pt_BR, ru_RU, sv_SE, th_TH,
- * zh_CN, zh_HK, and zh_TW).
+ * The 2-character preferred language code for the consumer (e.g., AU, AT, BE, BR, CA, CH, CN, DE, ES, GB, FR, IT, NL, PL, PT, RU, or US) A five-character code is also valid for following languages (e.g: da_DK, he_IL, id_ID, ja_JP, no_NO, pt_BR, ru_RU, sv_SE, th_TH, zh_CN, zh_HK, and zh_TW)
  */
 public enum LanguageCode {
+
   AT("AT"),
 
   AU("AU"),
@@ -26,6 +25,8 @@ public enum LanguageCode {
   CN("CN"),
 
   DE("DE"),
+
+  EN("EN"),
 
   ES("ES"),
 

@@ -33,6 +33,16 @@ public class PaysafeApiResponse {
     return responseBody;
   }
 
+  /**
+   * Returns the raw JSON response body string.
+   * Convenience alias for {@link #getResponseBody()}.
+   *
+   * @return raw JSON response body
+   */
+  public String responseBody() {
+    return responseBody;
+  }
+
   public void setResponseBody(String responseBody) {
     this.responseBody = responseBody;
   }

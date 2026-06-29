@@ -2,8 +2,6 @@
 
 package com.paysafe.payments.service.impl;
 
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
-
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
 import com.paysafe.payments.api.RequestOptions;
@@ -40,7 +38,7 @@ public class MonitorServiceImpl implements MonitorService {
   @Override
   public MonitorResponse verifyThatServiceIsAccessible(final RequestOptions requestOptions) throws PaysafeSdkException {
     PaysafeApiResponse response = paysafeApiClient.executeGet(MONITOR_ENDPOINT, requestOptions);
-    return processResponse(response, MonitorResponse.class);
+    return paysafeApiClient.processResponse(response, MonitorResponse.class);
   }
 }
 

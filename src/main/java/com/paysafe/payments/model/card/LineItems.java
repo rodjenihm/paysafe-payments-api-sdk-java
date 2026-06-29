@@ -1,26 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * This is more detailed information about the items that are being purchased for Level2Level3 merchants.
- * This class is typically used for creating detailed receipts or invoices that include itemized purchases, taxes and total costs.
- *
- * <p>Key Fields:</p>
- * <ul>
- *   <li><strong>description:</strong> A text description of the item being purchased.</li>
- *   <li><strong>productCode:</strong> A merchant-defined code describing the item.</li>
- *   <li><strong>quantity:</strong> The number of units of the item being purchased.</li>
- *   <li><strong>unitAmount:</strong> The unit price of the item, in minor units .</li>
- *   <li><strong>taxRate:</strong> The tax rate applied to the item.</li>
- *   <li><strong>taxAmount:</strong> The calculated tax amount for the item, in minor units.</li>
- *   <li><strong>totalAmount:</strong> The total cost of the line item, typically calculated as
- *       <code>unitAmount × quantity</code>, in minor units.</li>
- * </ul>
+ * This is more detailed information about the items that are being purchased for Level2Level3 merchants. This class is typically used for creating detailed receipts or invoices that include itemized purchases, taxes and total costs.
  */
 public class LineItems {
 
@@ -43,7 +38,7 @@ public class LineItems {
     super();
   }
 
-  private LineItems(Builder builder) {
+  private LineItems(final Builder builder) {
     setDescription(builder.description);
     setProductCode(builder.productCode);
     setQuantity(builder.quantity);
@@ -57,13 +52,14 @@ public class LineItems {
     return new Builder();
   }
 
+
   public LineItems description(String description) {
     this.description = description;
     return this;
   }
 
   /**
-   * This is a description of the item(s) being purchased.
+   * This is a description of the item(s) being purchased
    *
    * @return description
    */
@@ -75,13 +71,14 @@ public class LineItems {
     this.description = description;
   }
 
+
   public LineItems productCode(String productCode) {
     this.productCode = productCode;
     return this;
   }
 
   /**
-   * This is a merchant-defined description code of the item being purchased.
+   * This is the merchant-defined description code of the item being purchased.
    *
    * @return productCode
    */
@@ -93,14 +90,14 @@ public class LineItems {
     this.productCode = productCode;
   }
 
+
   public LineItems quantity(Integer quantity) {
     this.quantity = quantity;
     return this;
   }
 
   /**
-   * This is the quantity of the item.  <b>Note:</b> Max 4 decimals is allowed.  <br>
-   * Maximum: 99999999999
+   * This is the quantity of the item. Note - Max 4 decimals is allowed
    *
    * @return quantity
    */
@@ -112,14 +109,14 @@ public class LineItems {
     this.quantity = quantity;
   }
 
+
   public LineItems unitAmount(Integer unitAmount) {
     this.unitAmount = unitAmount;
     return this;
   }
 
   /**
-   * This is the unit price of the item being purchased, in minor units. The currency will be based on the account setting.  <br>
-   * Maximum: 99999999999
+   * This is the unit price of the item being purchased, in minor units. The currency will be based on the account setting
    *
    * @return unitAmount
    */
@@ -131,15 +128,14 @@ public class LineItems {
     this.unitAmount = unitAmount;
   }
 
+
   public LineItems taxRate(Integer taxRate) {
     this.taxRate = taxRate;
     return this;
   }
 
   /**
-   * This is the tax rate used to calculate the tax  amount. For example, if the tax rate is 10.5%, this value should be 10.5.  <br>
-   * <b>Note:</b> Max 2 decimals allowed.  <br>
-   * Maximum: 100
+   * This is the tax rate used to calculate the tax amount. For example, if the tax rate is 10.5%, this value should be 10.5. Note - Max 2 decimals allowed
    *
    * @return taxRate
    */
@@ -151,16 +147,14 @@ public class LineItems {
     this.taxRate = taxRate;
   }
 
+
   public LineItems taxAmount(Integer taxAmount) {
     this.taxAmount = taxAmount;
     return this;
   }
 
   /**
-   * This is the amount of any value-added taxes that  can be associated with the purchased item, in  minor units.
-   * The currency will be based on the account setting.  <br>
-   * <b>Note:</b> Our system will not validate the accuracy of this value. The merchant's application must  calculate this value correctly.  <br>
-   * Maximum: 99999999999
+   * This is the amount of any value-added taxes that can be associated with the purchased item, in minor units. The currency will be based on the account setting. Note - Our system will not validate the accuracy of this value. The merchant's application must calculate this value correctly
    *
    * @return taxAmount
    */
@@ -172,16 +166,14 @@ public class LineItems {
     this.taxAmount = taxAmount;
   }
 
+
   public LineItems totalAmount(Integer totalAmount) {
     this.totalAmount = totalAmount;
     return this;
   }
 
   /**
-   * This is the total amount of the line item, typically calculated as price multiplied by quantity, in minor units.
-   * The currency is based on the account setting.  <br>
-   * <b>Note:</b> Our system will not validate the accuracy of this value. The merchant's application must calculate this value correctly.  <br>
-   * Maximum: 99999999999
+   * This is the total amount of the line item, typically calculated as price multiplied by quantity, in minor units. The currency is based on the account setting. Note - Our system will not validate the accuracy of this value. The merchant's application must calculate this value correctly
    *
    * @return totalAmount
    */
@@ -242,7 +234,7 @@ public class LineItems {
   }
 
   /**
-   * {@code LineItems} builder static inner class.
+   * This is more detailed information about the items that are being purchased for Level2Level3 merchants. This class is typically used for creating detailed receipts or invoices that include itemized purchases, taxes and total costs. builder static inner class.
    */
   public static final class Builder {
     private String description;
@@ -257,9 +249,11 @@ public class LineItems {
     }
 
     /**
-     * Sets the {@code description} and returns a reference to this Builder enabling method chaining.
+     * This is a description of the item(s) being purchased
+     * <p>
+     * Sets the description and returns a reference to this Builder enabling method chaining.
      *
-     * @param description the {@code description} to set
+     * @param description the description to set
      * @return a reference to this Builder
      */
     public Builder description(String description) {
@@ -268,9 +262,11 @@ public class LineItems {
     }
 
     /**
-     * Sets the {@code productCode} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant-defined description code of the item being purchased.
+     * <p>
+     * Sets the productCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param productCode the {@code productCode} to set
+     * @param productCode the productCode to set
      * @return a reference to this Builder
      */
     public Builder productCode(String productCode) {
@@ -279,9 +275,11 @@ public class LineItems {
     }
 
     /**
-     * Sets the {@code quantity} and returns a reference to this Builder enabling method chaining.
+     * This is the quantity of the item. Note - Max 4 decimals is allowed
+     * <p>
+     * Sets the quantity and returns a reference to this Builder enabling method chaining.
      *
-     * @param quantity the {@code quantity} to set
+     * @param quantity the quantity to set
      * @return a reference to this Builder
      */
     public Builder quantity(Integer quantity) {
@@ -290,9 +288,11 @@ public class LineItems {
     }
 
     /**
-     * Sets the {@code unitAmount} and returns a reference to this Builder enabling method chaining.
+     * This is the unit price of the item being purchased, in minor units. The currency will be based on the account setting
+     * <p>
+     * Sets the unitAmount and returns a reference to this Builder enabling method chaining.
      *
-     * @param unitAmount the {@code unitAmount} to set
+     * @param unitAmount the unitAmount to set
      * @return a reference to this Builder
      */
     public Builder unitAmount(Integer unitAmount) {
@@ -301,9 +301,11 @@ public class LineItems {
     }
 
     /**
-     * Sets the {@code taxRate} and returns a reference to this Builder enabling method chaining.
+     * This is the tax rate used to calculate the tax amount. For example, if the tax rate is 10.5%, this value should be 10.5. Note - Max 2 decimals allowed
+     * <p>
+     * Sets the taxRate and returns a reference to this Builder enabling method chaining.
      *
-     * @param taxRate the {@code taxRate} to set
+     * @param taxRate the taxRate to set
      * @return a reference to this Builder
      */
     public Builder taxRate(Integer taxRate) {
@@ -312,9 +314,11 @@ public class LineItems {
     }
 
     /**
-     * Sets the {@code taxAmount} and returns a reference to this Builder enabling method chaining.
+     * This is the amount of any value-added taxes that can be associated with the purchased item, in minor units. The currency will be based on the account setting. Note - Our system will not validate the accuracy of this value. The merchant's application must calculate this value correctly
+     * <p>
+     * Sets the taxAmount and returns a reference to this Builder enabling method chaining.
      *
-     * @param taxAmount the {@code taxAmount} to set
+     * @param taxAmount the taxAmount to set
      * @return a reference to this Builder
      */
     public Builder taxAmount(Integer taxAmount) {
@@ -323,9 +327,11 @@ public class LineItems {
     }
 
     /**
-     * Sets the {@code totalAmount} and returns a reference to this Builder enabling method chaining.
+     * This is the total amount of the line item, typically calculated as price multiplied by quantity, in minor units. The currency is based on the account setting. Note - Our system will not validate the accuracy of this value. The merchant's application must calculate this value correctly
+     * <p>
+     * Sets the totalAmount and returns a reference to this Builder enabling method chaining.
      *
-     * @param totalAmount the {@code totalAmount} to set
+     * @param totalAmount the totalAmount to set
      * @return a reference to this Builder
      */
     public Builder totalAmount(Integer totalAmount) {
@@ -334,13 +340,12 @@ public class LineItems {
     }
 
     /**
-     * Returns a {@code LineItems} built from the parameters previously set.
+     * Returns a LineItems built from the parameters previously set.
      *
-     * @return a {@code LineItems} built with parameters of this {@code LineItems.Builder}
+     * @return a LineItems built with parameters of this LineItems.Builder
      */
     public LineItems build() {
       return new LineItems(this);
     }
   }
 }
-

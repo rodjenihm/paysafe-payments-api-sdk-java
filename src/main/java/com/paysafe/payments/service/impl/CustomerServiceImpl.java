@@ -4,7 +4,6 @@ package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.buildQueryParameters;
 import static com.paysafe.payments.api.PaysafeApiClient.processDeleteResponse;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import java.util.Optional;
 import java.util.Set;
@@ -44,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
    */
   @Override public Customer createCustomer(final CustomerRequest customerRequest, final RequestOptions requestOptions) throws PaysafeSdkException {
     PaysafeApiResponse response = paysafeApiClient.executePost(CUSTOMERS_ENDPOINT, customerRequest, requestOptions);
-    return processResponse(response, Customer.class);
+    return paysafeApiClient.processResponse(response, Customer.class);
   }
 
   /**
@@ -66,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
         null, null, null, null, null, null, fieldsParamValue));
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
 
-    return processResponse(response, Customer.class);
+    return paysafeApiClient.processResponse(response, Customer.class);
   }
 
   /**
@@ -88,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
         null, null, null, null, null, merchantCustomerId, fieldsParamValue));
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
 
-    return processResponse(response, Customer.class);
+    return paysafeApiClient.processResponse(response, Customer.class);
   }
 
   /**
@@ -109,7 +108,7 @@ public class CustomerServiceImpl implements CustomerService {
     final String path = String.format("%s/%s", CUSTOMERS_ENDPOINT, customerId);
     PaysafeApiResponse response = paysafeApiClient.executePut(path, customerRequest, requestOptions);
 
-    return processResponse(response, Customer.class);
+    return paysafeApiClient.processResponse(response, Customer.class);
   }
 
   /**

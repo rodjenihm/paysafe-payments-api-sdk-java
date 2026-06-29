@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm.enums;
 
@@ -6,15 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * The shipping preference. The possible values are:
- * <ul>
- * <li> NO_SHIPPING - Redacts the shipping address from the PayPal pages. Recommended for digital goods. </li>
- * <li> GET_FROM_FILE - Uses the customer-selected shipping address on PayPal pages. </li>
- * <li> SET_PROVIDED_ADDRESS. If available, uses the merchant-provided shipping address, which the customer cannot change on the PayPal pages. </li>
- * </ul>
- * If the merchant does not provide an address, the customer can enter the address on PayPal pages.
+ * The shipping preference. The possible values are: - NO_SHIPPING - Redacts the shipping address from the PayPal pages. Recommended for digital goods. - GET_FROM_FILE - Uses the customer-selected shipping address on PayPal pages. - SET_PROVIDED_ADDRESS - If available, uses the merchant-provided shipping address, which the customer cannot change on the PayPal pages. If the merchant does not provide an address, the customer can enter the address on PayPal pages.
  */
 public enum PaypalShippingReference {
+
   GET_FROM_FILE("GET_FROM_FILE"),
 
   NO_SHIPPING("NO_SHIPPING"),

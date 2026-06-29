@@ -1,10 +1,18 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.airline;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
  * A grouping of up to ten airline travel passengers.
@@ -53,6 +61,7 @@ public class Passengers {
     return new Builder();
   }
 
+
   public Passengers passenger1(Passenger passenger1) {
     this.passenger1 = passenger1;
     return this;
@@ -70,6 +79,7 @@ public class Passengers {
   public void setPassenger1(Passenger passenger1) {
     this.passenger1 = passenger1;
   }
+
 
   public Passengers passenger2(Passenger passenger2) {
     this.passenger2 = passenger2;
@@ -89,6 +99,7 @@ public class Passengers {
     this.passenger2 = passenger2;
   }
 
+
   public Passengers passenger3(Passenger passenger3) {
     this.passenger3 = passenger3;
     return this;
@@ -106,6 +117,7 @@ public class Passengers {
   public void setPassenger3(Passenger passenger3) {
     this.passenger3 = passenger3;
   }
+
 
   public Passengers passenger4(Passenger passenger4) {
     this.passenger4 = passenger4;
@@ -125,6 +137,7 @@ public class Passengers {
     this.passenger4 = passenger4;
   }
 
+
   public Passengers passenger5(Passenger passenger5) {
     this.passenger5 = passenger5;
     return this;
@@ -142,6 +155,7 @@ public class Passengers {
   public void setPassenger5(Passenger passenger5) {
     this.passenger5 = passenger5;
   }
+
 
   public Passengers passenger6(Passenger passenger6) {
     this.passenger6 = passenger6;
@@ -161,6 +175,12 @@ public class Passengers {
     this.passenger6 = passenger6;
   }
 
+
+  public Passengers passenger7(Passenger passenger7) {
+    this.passenger7 = passenger7;
+    return this;
+  }
+
   /**
    * Get passenger7
    *
@@ -170,8 +190,14 @@ public class Passengers {
     return passenger7;
   }
 
-  public void setPassenger7(final Passenger passenger7) {
+  public void setPassenger7(Passenger passenger7) {
     this.passenger7 = passenger7;
+  }
+
+
+  public Passengers passenger8(Passenger passenger8) {
+    this.passenger8 = passenger8;
+    return this;
   }
 
   /**
@@ -183,8 +209,14 @@ public class Passengers {
     return passenger8;
   }
 
-  public void setPassenger8(final Passenger passenger8) {
+  public void setPassenger8(Passenger passenger8) {
     this.passenger8 = passenger8;
+  }
+
+
+  public Passengers passenger9(Passenger passenger9) {
+    this.passenger9 = passenger9;
+    return this;
   }
 
   /**
@@ -196,8 +228,14 @@ public class Passengers {
     return passenger9;
   }
 
-  public void setPassenger9(final Passenger passenger9) {
+  public void setPassenger9(Passenger passenger9) {
     this.passenger9 = passenger9;
+  }
+
+
+  public Passengers passenger10(Passenger passenger10) {
+    this.passenger10 = passenger10;
+    return this;
   }
 
   /**
@@ -209,7 +247,7 @@ public class Passengers {
     return passenger10;
   }
 
-  public void setPassenger10(final Passenger passenger10) {
+  public void setPassenger10(Passenger passenger10) {
     this.passenger10 = passenger10;
   }
 
@@ -268,7 +306,7 @@ public class Passengers {
   }
 
   /**
-   * {@code Passengers} builder static inner class.
+   * A grouping of up to ten airline travel passengers. builder static inner class.
    */
   public static final class Builder {
     private Passenger passenger1;
@@ -286,9 +324,9 @@ public class Passengers {
     }
 
     /**
-     * Sets the {@code passenger1} and returns a reference to this Builder enabling method chaining.
+     * Sets the passenger1 and returns a reference to this Builder enabling method chaining.
      *
-     * @param passenger1 the {@code passenger1} to set
+     * @param passenger1 the passenger1 to set
      * @return a reference to this Builder
      */
     public Builder passenger1(Passenger passenger1) {
@@ -297,9 +335,9 @@ public class Passengers {
     }
 
     /**
-     * Sets the {@code passenger2} and returns a reference to this Builder enabling method chaining.
+     * Sets the passenger2 and returns a reference to this Builder enabling method chaining.
      *
-     * @param passenger2 the {@code passenger2} to set
+     * @param passenger2 the passenger2 to set
      * @return a reference to this Builder
      */
     public Builder passenger2(Passenger passenger2) {
@@ -308,9 +346,9 @@ public class Passengers {
     }
 
     /**
-     * Sets the {@code passenger3} and returns a reference to this Builder enabling method chaining.
+     * Sets the passenger3 and returns a reference to this Builder enabling method chaining.
      *
-     * @param passenger3 the {@code passenger3} to set
+     * @param passenger3 the passenger3 to set
      * @return a reference to this Builder
      */
     public Builder passenger3(Passenger passenger3) {
@@ -319,9 +357,9 @@ public class Passengers {
     }
 
     /**
-     * Sets the {@code passenger4} and returns a reference to this Builder enabling method chaining.
+     * Sets the passenger4 and returns a reference to this Builder enabling method chaining.
      *
-     * @param passenger4 the {@code passenger4} to set
+     * @param passenger4 the passenger4 to set
      * @return a reference to this Builder
      */
     public Builder passenger4(Passenger passenger4) {
@@ -330,9 +368,9 @@ public class Passengers {
     }
 
     /**
-     * Sets the {@code passenger5} and returns a reference to this Builder enabling method chaining.
+     * Sets the passenger5 and returns a reference to this Builder enabling method chaining.
      *
-     * @param passenger5 the {@code passenger5} to set
+     * @param passenger5 the passenger5 to set
      * @return a reference to this Builder
      */
     public Builder passenger5(Passenger passenger5) {
@@ -341,9 +379,9 @@ public class Passengers {
     }
 
     /**
-     * Sets the {@code passenger6} and returns a reference to this Builder enabling method chaining.
+     * Sets the passenger6 and returns a reference to this Builder enabling method chaining.
      *
-     * @param passenger6 the {@code passenger6} to set
+     * @param passenger6 the passenger6 to set
      * @return a reference to this Builder
      */
     public Builder passenger6(Passenger passenger6) {
@@ -352,57 +390,56 @@ public class Passengers {
     }
 
     /**
-     * Sets the {@code passenger7} and returns a reference to this Builder enabling method chaining.
+     * Sets the passenger7 and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code passenger7} to set
+     * @param passenger7 the passenger7 to set
      * @return a reference to this Builder
      */
-    public Builder passenger7(final Passenger val) {
-      passenger7 = val;
+    public Builder passenger7(Passenger passenger7) {
+      this.passenger7 = passenger7;
       return this;
     }
 
     /**
-     * Sets the {@code passenger8} and returns a reference to this Builder enabling method chaining.
+     * Sets the passenger8 and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code passenger8} to set
+     * @param passenger8 the passenger8 to set
      * @return a reference to this Builder
      */
-    public Builder passenger8(final Passenger val) {
-      passenger8 = val;
+    public Builder passenger8(Passenger passenger8) {
+      this.passenger8 = passenger8;
       return this;
     }
 
     /**
-     * Sets the {@code passenger9} and returns a reference to this Builder enabling method chaining.
+     * Sets the passenger9 and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code passenger9} to set
+     * @param passenger9 the passenger9 to set
      * @return a reference to this Builder
      */
-    public Builder passenger9(final Passenger val) {
-      passenger9 = val;
+    public Builder passenger9(Passenger passenger9) {
+      this.passenger9 = passenger9;
       return this;
     }
 
     /**
-     * Sets the {@code passenger10} and returns a reference to this Builder enabling method chaining.
+     * Sets the passenger10 and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code passenger10} to set
+     * @param passenger10 the passenger10 to set
      * @return a reference to this Builder
      */
-    public Builder passenger10(final Passenger val) {
-      passenger10 = val;
+    public Builder passenger10(Passenger passenger10) {
+      this.passenger10 = passenger10;
       return this;
     }
 
     /**
-     * Returns a {@code Passengers} built from the parameters previously set.
+     * Returns a Passengers built from the parameters previously set.
      *
-     * @return a {@code Passengers} built with parameters of this {@code Passengers.Builder}
+     * @return a Passengers built with parameters of this Passengers.Builder
      */
     public Passengers build() {
       return new Passengers(this);
     }
   }
 }
-

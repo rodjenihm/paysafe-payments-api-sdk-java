@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.airline.enums;
 
@@ -6,15 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Indicates service class (first class, business class, etc.). Example values (not limited to):
- * <ul>
- * <li> F - first class </li>
- * <li> J - business class </li>
- * <li> W - premium economy class </li>
- * <li> Y - economy class </li>
- * </ul>
+ * Indicates service class (first class, business class, etc.). Example values (not limited to): - F - first class - J - business class - W - premium economy class - Y - economy class
  */
 public enum ServiceClass {
+
   F("F"),
 
   J("J"),

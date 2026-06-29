@@ -1,10 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.standalonecredit;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.lpm.Interac;
+
+
 
 /**
  * StandaloneCreditUpdateRequest
@@ -20,7 +29,7 @@ public class StandaloneCreditUpdateRequest {
     super();
   }
 
-  private StandaloneCreditUpdateRequest(Builder builder) {
+  private StandaloneCreditUpdateRequest(final Builder builder) {
     setMerchantRefNum(builder.merchantRefNum);
     setInteracEtransfer(builder.interacEtransfer);
   }
@@ -28,6 +37,7 @@ public class StandaloneCreditUpdateRequest {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public StandaloneCreditUpdateRequest merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
@@ -47,13 +57,14 @@ public class StandaloneCreditUpdateRequest {
     this.merchantRefNum = merchantRefNum;
   }
 
+
   public StandaloneCreditUpdateRequest interacEtransfer(Interac interacEtransfer) {
     this.interacEtransfer = interacEtransfer;
     return this;
   }
 
   /**
-   * Details of the interac E-Transfer used for the transaction.
+   * Get interacEtransfer
    *
    * @return interacEtransfer
    */
@@ -104,7 +115,7 @@ public class StandaloneCreditUpdateRequest {
   }
 
   /**
-   * {@code StandaloneCreditUpdateRequest} builder static inner class.
+   * StandaloneCreditUpdateRequest builder static inner class.
    */
   public static final class Builder {
     private String merchantRefNum;
@@ -114,9 +125,11 @@ public class StandaloneCreditUpdateRequest {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant reference number created by the merchant and submitted as part of the request.
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
+     * @param merchantRefNum the merchantRefNum to set
      * @return a reference to this Builder
      */
     public Builder merchantRefNum(String merchantRefNum) {
@@ -125,9 +138,9 @@ public class StandaloneCreditUpdateRequest {
     }
 
     /**
-     * Sets the {@code interacEtransfer} and returns a reference to this Builder enabling method chaining.
+     * Sets the interacEtransfer and returns a reference to this Builder enabling method chaining.
      *
-     * @param interacEtransfer the {@code interacEtransfer} to set
+     * @param interacEtransfer the interacEtransfer to set
      * @return a reference to this Builder
      */
     public Builder interacEtransfer(Interac interacEtransfer) {
@@ -136,13 +149,12 @@ public class StandaloneCreditUpdateRequest {
     }
 
     /**
-     * Returns a {@code StandaloneCreditUpdateRequest} built from the parameters previously set.
+     * Returns a StandaloneCreditUpdateRequest built from the parameters previously set.
      *
-     * @return a {@code StandaloneCreditUpdateRequest} built with parameters of this {@code StandaloneCreditUpdateRequest.Builder}
+     * @return a StandaloneCreditUpdateRequest built with parameters of this StandaloneCreditUpdateRequest.Builder
      */
     public StandaloneCreditUpdateRequest build() {
       return new StandaloneCreditUpdateRequest(this);
     }
   }
 }
-

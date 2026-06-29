@@ -95,10 +95,10 @@ public interface CustomerPaymentHandleService {
    * <p>Endpoint:
    * <strong>GET /v1/customers/{customerId}/paymenthandles/{paymentHandleId}</strong></p>
    *
-   * @param customerId      The unique identifier of the customer for whom the payment handle was created.
-   *                        This ID is returned in the response when a customer is created.
-   * @param paymentHandleId The unique identifier of the payment handle created for the customer.
-   *                        This ID is returned in the response to the "Create Payment Handle for a Customer" request.
+   * @param customerId      the unique identifier of the customer for whom the payment handle was created;
+   *                        this ID is returned in the response when a customer is created
+   * @param paymentHandleId the unique identifier of the payment handle created for the customer;
+   *                        this ID is returned in the response to the "Create Payment Handle for a Customer" request
    * @return CustomerPaymentHandleDetails if the retrieval is successful
    * @throws PaysafeSdkException if an error occurs during the API call
    */
@@ -120,11 +120,11 @@ public interface CustomerPaymentHandleService {
    * <strong>GET /v1/customers/{customerId}/paymenthandles/{paymentHandleId}</strong></p>
    * <p>
    *
-   * @param customerId      The unique identifier of the customer for whom the payment handle was created.
-   *                        This ID is returned in the response when a customer is created.
-   * @param paymentHandleId The unique identifier of the payment handle created for the customer.
-   *                        This ID is returned in the response to the "Create Payment Handle for a Customer" request.
-   * @param requestOptions  Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param customerId      the unique identifier of the customer for whom the payment handle was created;
+   *                        this ID is returned in the response when a customer is created
+   * @param paymentHandleId the unique identifier of the payment handle created for the customer;
+   *                        this ID is returned in the response to the "Create Payment Handle for a Customer" request
+   * @param requestOptions  custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return CustomerPaymentHandleDetails if the retrieval is successful
    * @throws PaysafeSdkException if an error occurs during the API call
    */

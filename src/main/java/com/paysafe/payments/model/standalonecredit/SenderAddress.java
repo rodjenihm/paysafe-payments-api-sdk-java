@@ -1,10 +1,18 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.standalonecredit;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
  * This is the sender's address.
@@ -26,7 +34,7 @@ public class SenderAddress {
     super();
   }
 
-  private SenderAddress(Builder builder) {
+  private SenderAddress(final Builder builder) {
     setStreet(builder.street);
     setCity(builder.city);
     setState(builder.state);
@@ -37,6 +45,7 @@ public class SenderAddress {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public SenderAddress street(String street) {
     this.street = street;
@@ -56,6 +65,7 @@ public class SenderAddress {
     this.street = street;
   }
 
+
   public SenderAddress city(String city) {
     this.city = city;
     return this;
@@ -73,6 +83,7 @@ public class SenderAddress {
   public void setCity(String city) {
     this.city = city;
   }
+
 
   public SenderAddress state(String state) {
     this.state = state;
@@ -92,6 +103,7 @@ public class SenderAddress {
     this.state = state;
   }
 
+
   public SenderAddress country(String country) {
     this.country = country;
     return this;
@@ -109,6 +121,7 @@ public class SenderAddress {
   public void setCountry(String country) {
     this.country = country;
   }
+
 
   public SenderAddress zip(String zip) {
     this.zip = zip;
@@ -173,7 +186,7 @@ public class SenderAddress {
   }
 
   /**
-   * {@code SenderAddress} builder static inner class.
+   * This is the sender's address. builder static inner class.
    */
   public static final class Builder {
     private String street;
@@ -186,9 +199,11 @@ public class SenderAddress {
     }
 
     /**
-     * Sets the {@code street} and returns a reference to this Builder enabling method chaining.
+     * Sender's street address.
+     * <p>
+     * Sets the street and returns a reference to this Builder enabling method chaining.
      *
-     * @param street the {@code street} to set
+     * @param street the street to set
      * @return a reference to this Builder
      */
     public Builder street(String street) {
@@ -197,9 +212,11 @@ public class SenderAddress {
     }
 
     /**
-     * Sets the {@code city} and returns a reference to this Builder enabling method chaining.
+     * Sender's city.
+     * <p>
+     * Sets the city and returns a reference to this Builder enabling method chaining.
      *
-     * @param city the {@code city} to set
+     * @param city the city to set
      * @return a reference to this Builder
      */
     public Builder city(String city) {
@@ -208,9 +225,11 @@ public class SenderAddress {
     }
 
     /**
-     * Sets the {@code state} and returns a reference to this Builder enabling method chaining.
+     * Sender's state.
+     * <p>
+     * Sets the state and returns a reference to this Builder enabling method chaining.
      *
-     * @param state the {@code state} to set
+     * @param state the state to set
      * @return a reference to this Builder
      */
     public Builder state(String state) {
@@ -219,9 +238,11 @@ public class SenderAddress {
     }
 
     /**
-     * Sets the {@code country} and returns a reference to this Builder enabling method chaining.
+     * Sender's country.
+     * <p>
+     * Sets the country and returns a reference to this Builder enabling method chaining.
      *
-     * @param country the {@code country} to set
+     * @param country the country to set
      * @return a reference to this Builder
      */
     public Builder country(String country) {
@@ -230,9 +251,11 @@ public class SenderAddress {
     }
 
     /**
-     * Sets the {@code zip} and returns a reference to this Builder enabling method chaining.
+     * Sender's postal code.
+     * <p>
+     * Sets the zip and returns a reference to this Builder enabling method chaining.
      *
-     * @param zip the {@code zip} to set
+     * @param zip the zip to set
      * @return a reference to this Builder
      */
     public Builder zip(String zip) {
@@ -241,13 +264,12 @@ public class SenderAddress {
     }
 
     /**
-     * Returns a {@code SenderAddress} built from the parameters previously set.
+     * Returns a SenderAddress built from the parameters previously set.
      *
-     * @return a {@code SenderAddress} built with parameters of this {@code SenderAddress.Builder}
+     * @return a SenderAddress built with parameters of this SenderAddress.Builder
      */
     public SenderAddress build() {
       return new SenderAddress(this);
     }
   }
 }
-

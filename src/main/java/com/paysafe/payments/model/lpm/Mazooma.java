@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Mazooma details to be used for the transaction
+ * Mazooma details to be used for the transaction.
  */
 public class Mazooma {
 
@@ -20,7 +28,7 @@ public class Mazooma {
     super();
   }
 
-  private Mazooma(Builder builder) {
+  private Mazooma(final Builder builder) {
     setConsumerId(builder.consumerId);
     setAch(builder.ach);
   }
@@ -29,13 +37,14 @@ public class Mazooma {
     return new Builder();
   }
 
+
   public Mazooma consumerId(String consumerId) {
     this.consumerId = consumerId;
     return this;
   }
 
   /**
-   * This is a field identifying the customer.
+   * This is a field identifying the customer
    *
    * @return consumerId
    */
@@ -46,6 +55,7 @@ public class Mazooma {
   public void setConsumerId(String consumerId) {
     this.consumerId = consumerId;
   }
+
 
   public Mazooma ach(MazoomaAch ach) {
     this.ach = ach;
@@ -104,7 +114,7 @@ public class Mazooma {
   }
 
   /**
-   * {@code Mazooma} builder static inner class.
+   * Mazooma details to be used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String consumerId;
@@ -114,9 +124,11 @@ public class Mazooma {
     }
 
     /**
-     * Sets the {@code consumerId} and returns a reference to this Builder enabling method chaining.
+     * This is a field identifying the customer
+     * <p>
+     * Sets the consumerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param consumerId the {@code consumerId} to set
+     * @param consumerId the consumerId to set
      * @return a reference to this Builder
      */
     public Builder consumerId(String consumerId) {
@@ -125,9 +137,9 @@ public class Mazooma {
     }
 
     /**
-     * Sets the {@code ach} and returns a reference to this Builder enabling method chaining.
+     * Sets the ach and returns a reference to this Builder enabling method chaining.
      *
-     * @param ach the {@code ach} to set
+     * @param ach the ach to set
      * @return a reference to this Builder
      */
     public Builder ach(MazoomaAch ach) {
@@ -136,13 +148,12 @@ public class Mazooma {
     }
 
     /**
-     * Returns a {@code Mazooma} built from the parameters previously set.
+     * Returns a Mazooma built from the parameters previously set.
      *
-     * @return a {@code Mazooma} built with parameters of this {@code Mazooma.Builder}
+     * @return a Mazooma built with parameters of this Mazooma.Builder
      */
     public Mazooma build() {
       return new Mazooma(this);
     }
   }
 }
-

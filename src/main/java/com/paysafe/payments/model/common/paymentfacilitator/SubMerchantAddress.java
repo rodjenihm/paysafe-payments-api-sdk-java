@@ -1,14 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.paymentfacilitator;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * Contains information for Payment facilitator sub-merchant address.  <br>
- * <b>Note:</b> This object is only for Payment facilitator merchants.
+ * Contains information for Payment facilitator sub-merchant address.
  */
 public class SubMerchantAddress {
 
@@ -27,7 +35,7 @@ public class SubMerchantAddress {
     super();
   }
 
-  private SubMerchantAddress(Builder builder) {
+  private SubMerchantAddress(final Builder builder) {
     setStreet(builder.street);
     setCity(builder.city);
     setState(builder.state);
@@ -39,13 +47,14 @@ public class SubMerchantAddress {
     return new Builder();
   }
 
+
   public SubMerchantAddress street(String street) {
     this.street = street;
     return this;
   }
 
   /**
-   * This field must contain the street address of the actual merchant.
+   * Field contains the street address of the actual merchant
    *
    * @return street
    */
@@ -57,13 +66,14 @@ public class SubMerchantAddress {
     this.street = street;
   }
 
+
   public SubMerchantAddress city(String city) {
     this.city = city;
     return this;
   }
 
   /**
-   * This field must contain the city of the actual merchant.
+   * Field contains the city of the actual merchant
    *
    * @return city
    */
@@ -75,16 +85,14 @@ public class SubMerchantAddress {
     this.city = city;
   }
 
+
   public SubMerchantAddress state(String state) {
     this.state = state;
     return this;
   }
 
   /**
-   * See <a href="https://developer.paysafe.com/en/support/reference-information/codes/#province-codes">Province Codes</a>
-   * or <a href="https://developer.paysafe.com/en/support/reference-information/codes/#state-codes">State Codes</a> for Canada or the United States.
-   * For other countries, see <a href="https://en.wikipedia.org/wiki/ISO_3166-2">ISO 3166-2.</a> <br>
-   * For transactions with American Express cards, the state/province/region is mandatory.
+   * See [Province Codes](https://developer.paysafe.com/en/support/reference-information/codes/#province-codes) or [State Codes](https://developer.paysafe.com/en/support/reference-information/codes/#state-codes) for Canada or the United States. For other countries, see [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2). For transactions with American Express cards, the state/province/region is mandatory.
    *
    * @return state
    */
@@ -96,16 +104,16 @@ public class SubMerchantAddress {
     this.state = state;
   }
 
+
   public SubMerchantAddress country(String country) {
     this.country = country;
     return this;
   }
 
   /**
-   * This is the country where the address is located.
+   * This is the country where the address is located. See [Country Codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes).
    *
    * @return country
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#country-codes>Country codes</a>   *
    */
   public String getCountry() {
     return country;
@@ -115,13 +123,14 @@ public class SubMerchantAddress {
     this.country = country;
   }
 
+
   public SubMerchantAddress zip(String zip) {
     this.zip = zip;
     return this;
   }
 
   /**
-   * This field must contain the postal code of the actual merchant.
+   * Field containing the postal code of the actual merchant
    *
    * @return zip
    */
@@ -141,12 +150,12 @@ public class SubMerchantAddress {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SubMerchantAddress SubMerchantAddress = (SubMerchantAddress) o;
-    return Objects.equals(this.street, SubMerchantAddress.street) &&
-        Objects.equals(this.city, SubMerchantAddress.city) &&
-        Objects.equals(this.state, SubMerchantAddress.state) &&
-        Objects.equals(this.country, SubMerchantAddress.country) &&
-        Objects.equals(this.zip, SubMerchantAddress.zip);
+    SubMerchantAddress subMerchantAddress = (SubMerchantAddress) o;
+    return Objects.equals(this.street, subMerchantAddress.street) &&
+        Objects.equals(this.city, subMerchantAddress.city) &&
+        Objects.equals(this.state, subMerchantAddress.state) &&
+        Objects.equals(this.country, subMerchantAddress.country) &&
+        Objects.equals(this.zip, subMerchantAddress.zip);
   }
 
   @Override
@@ -178,7 +187,7 @@ public class SubMerchantAddress {
   }
 
   /**
-   * {@code SubMerchantAddress} builder static inner class.
+   * Contains information for Payment facilitator sub-merchant address. builder static inner class.
    */
   public static final class Builder {
     private String street;
@@ -191,9 +200,11 @@ public class SubMerchantAddress {
     }
 
     /**
-     * Sets the {@code street} and returns a reference to this Builder enabling method chaining.
+     * Field contains the street address of the actual merchant
+     * <p>
+     * Sets the street and returns a reference to this Builder enabling method chaining.
      *
-     * @param street the {@code street} to set
+     * @param street the street to set
      * @return a reference to this Builder
      */
     public Builder street(String street) {
@@ -202,9 +213,11 @@ public class SubMerchantAddress {
     }
 
     /**
-     * Sets the {@code city} and returns a reference to this Builder enabling method chaining.
+     * Field contains the city of the actual merchant
+     * <p>
+     * Sets the city and returns a reference to this Builder enabling method chaining.
      *
-     * @param city the {@code city} to set
+     * @param city the city to set
      * @return a reference to this Builder
      */
     public Builder city(String city) {
@@ -213,9 +226,11 @@ public class SubMerchantAddress {
     }
 
     /**
-     * Sets the {@code state} and returns a reference to this Builder enabling method chaining.
+     * See [Province Codes](https://developer.paysafe.com/en/support/reference-information/codes/#province-codes) or [State Codes](https://developer.paysafe.com/en/support/reference-information/codes/#state-codes) for Canada or the United States. For other countries, see [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2). For transactions with American Express cards, the state/province/region is mandatory.
+     * <p>
+     * Sets the state and returns a reference to this Builder enabling method chaining.
      *
-     * @param state the {@code state} to set
+     * @param state the state to set
      * @return a reference to this Builder
      */
     public Builder state(String state) {
@@ -224,9 +239,11 @@ public class SubMerchantAddress {
     }
 
     /**
-     * Sets the {@code country} and returns a reference to this Builder enabling method chaining.
+     * This is the country where the address is located. See [Country Codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes).
+     * <p>
+     * Sets the country and returns a reference to this Builder enabling method chaining.
      *
-     * @param country the {@code country} to set
+     * @param country the country to set
      * @return a reference to this Builder
      */
     public Builder country(String country) {
@@ -235,9 +252,11 @@ public class SubMerchantAddress {
     }
 
     /**
-     * Sets the {@code zip} and returns a reference to this Builder enabling method chaining.
+     * Field containing the postal code of the actual merchant
+     * <p>
+     * Sets the zip and returns a reference to this Builder enabling method chaining.
      *
-     * @param zip the {@code zip} to set
+     * @param zip the zip to set
      * @return a reference to this Builder
      */
     public Builder zip(String zip) {
@@ -246,9 +265,9 @@ public class SubMerchantAddress {
     }
 
     /**
-     * Returns a {@code SubMerchantAddress} built from the parameters previously set.
+     * Returns a SubMerchantAddress built from the parameters previously set.
      *
-     * @return a {@code SubMerchantAddress} built with parameters of this {@code SubMerchantAddress.Builder}
+     * @return a SubMerchantAddress built with parameters of this SubMerchantAddress.Builder
      */
     public SubMerchantAddress build() {
       return new SubMerchantAddress(this);

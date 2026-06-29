@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.lodging.enums;
 
@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Enum representing the various types of extra charges that may apply to a lodging reservation.
  */
 public enum ExtraChargesType {
+
   RESTAURANT("RESTAURANT"),
 
   GIFT_SHOP("GIFT_SHOP"),

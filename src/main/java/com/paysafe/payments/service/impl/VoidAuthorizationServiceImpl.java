@@ -3,7 +3,6 @@
 package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.buildQueryParameters;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
@@ -43,7 +42,7 @@ public class VoidAuthorizationServiceImpl implements VoidAuthorizationService {
       throws PaysafeSdkException {
     final String path = String.format(VOID_AUTHORIZATION_ENDPOINT, paymentId);
     PaysafeApiResponse response = paysafeApiClient.executePost(path, voidAuthorizationRequest, requestOptions);
-    return processResponse(response, VoidAuthorization.class);
+    return paysafeApiClient.processResponse(response, VoidAuthorization.class);
   }
 
   /**
@@ -61,7 +60,7 @@ public class VoidAuthorizationServiceImpl implements VoidAuthorizationService {
   public VoidAuthorization getVoidAuthorizationById(final String voidAuthId, final RequestOptions requestOptions) throws PaysafeSdkException {
     final String path = String.format("%s/%s", VOID_AUTHORIZATION_GET_ENDPOINT, voidAuthId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, VoidAuthorization.class);
+    return paysafeApiClient.processResponse(response, VoidAuthorization.class);
   }
 
   /**
@@ -83,6 +82,6 @@ public class VoidAuthorizationServiceImpl implements VoidAuthorizationService {
     final String path = String.format("%s%s", VOID_AUTHORIZATION_GET_ENDPOINT,
         buildQueryParameters(merchantRefNum, endDate, limit, offset, startDate, null, null));
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, VoidAuthorizationsList.class);
+    return paysafeApiClient.processResponse(response, VoidAuthorizationsList.class);
   }
 }

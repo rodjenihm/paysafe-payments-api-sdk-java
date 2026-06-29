@@ -1,14 +1,16 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.payment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.card.AccordD;
 import com.paysafe.payments.model.card.AcquirerData;
 import com.paysafe.payments.model.card.FundingTransaction;
@@ -23,39 +25,12 @@ import com.paysafe.payments.model.common.travel.carrental.CarRentalDetails;
 import com.paysafe.payments.model.common.travel.cruise.CruiselineTravelDetails;
 import com.paysafe.payments.model.common.travel.lodging.LodgingDetails;
 import com.paysafe.payments.model.lpm.Splitpay;
+import com.paysafe.payments.model.settlement.Settlement;
+
+
 
 /**
- * Represents the body of a payment request, containing all the necessary details for processing a transaction.
- *
- * <p>The {@code PaymentReqBody} class includes fields related to the payment amount, merchant information,
- * customer data, transaction details, and specific travel or service-related details.</p>
- *
- * <p>Key fields:</p>
- * <ul>
- *   <li><strong>merchantRefNum:</strong> The merchant's unique reference number for the transaction.</li>
- *   <li><strong>amount:</strong> The amount for the transaction, expressed in minor units.</li>
- *   <li><strong>dupCheck:</strong> This validates that this request is not a duplicate.
- *   A duplicate request is when the merchantRefNum has already been used in a previous request within the past 90 days.</li>
- *   <li><strong>settleWithAuth:</strong> A flag indicating whether the transaction should be settled with authorization.</li>
- *   <li><strong>paymentHandleToken:</strong> The token that represents a payment handle for the transaction.</li>
- *   <li><strong>customerIp:</strong> The IP address of the customer making the payment.</li>
- *   <li><strong>currencyCode:</strong> The currency code used for the transaction.</li>
- *   <li><strong>preAuth:</strong> A flag indicating whether this is a pre-authorization transaction.</li>
- *   <li><strong>description:</strong> A description of the transaction.</li>
- *   <li><strong>level2Level3TransactionDetails:</strong> Additional transaction details for Level 2 and Level 3 processing.</li>
- *   <li><strong>financingDetails:</strong> Details related to financing options for the transaction.</li>
- *   <li><strong>recipient:</strong> Information about the recipient of the payment.</li>
- *   <li><strong>splitPay:</strong> Details about how the payment should be split across multiple recipients.</li>
- *   <li><strong>StoredCredential:</strong> Details of the stored credentials for recurring payments.</li>
- *   <li><strong>airlineTravelDetails:</strong> Details related to airline travel transactions.</li>
- *   <li><strong>fundingTransaction:</strong> Details for a funding transaction in the payment request.</li>
- *   <li><strong>cruiseLineTravelDetails:</strong> Details related to cruise line travel transactions.</li>
- *   <li><strong>lodgingDetails:</strong> Details related to lodging transactions, including hotel stays.</li>
- *   <li><strong>carRentalDetails:</strong> Details related to car rental transactions.</li>
- *   <li><strong>paymentFacilitator:</strong> Information about the payment facilitator handling the transaction.</li>
- *   <li><strong>merchantDescriptor:</strong> Describes the merchant details for the transaction.</li>
- *   <li><strong>acquirerData:</strong> Data from the acquirer associated with the transaction.</li>
- * </ul>
+ * Represents the body of a payment request.
  */
 public class PaymentRequest {
 
@@ -64,7 +39,7 @@ public class PaymentRequest {
   @JsonProperty("amount")
   private Integer amount;
   @JsonProperty("dupCheck")
-  private Boolean dupCheck;
+  private Boolean dupCheck = true;
   @JsonProperty("settleWithAuth")
   private Boolean settleWithAuth;
   @JsonProperty("paymentHandleToken")
@@ -77,6 +52,8 @@ public class PaymentRequest {
   private Boolean preAuth;
   @JsonProperty("description")
   private String description;
+  @JsonProperty("partialAuth")
+  private PartialAuth partialAuth;
   @JsonProperty("level2level3")
   private Level2Level3 level2level3;
   @JsonProperty("accordD")
@@ -105,7 +82,6 @@ public class PaymentRequest {
   private AcquirerData acquirerData;
   @JsonProperty("keywords")
   private List<String> keywords;
-
   private Map<String, Object> additionalParameters;
 
   public PaymentRequest() {
@@ -122,6 +98,7 @@ public class PaymentRequest {
     setCurrencyCode(builder.currencyCode);
     setPreAuth(builder.preAuth);
     setDescription(builder.description);
+    setPartialAuth(builder.partialAuth);
     setLevel2level3(builder.level2level3);
     setAccordD(builder.accordD);
     setRecipient(builder.recipient);
@@ -136,12 +113,13 @@ public class PaymentRequest {
     setMerchantDescriptor(builder.merchantDescriptor);
     setAcquirerData(builder.acquirerData);
     setKeywords(builder.keywords);
-    setAdditionalParameters(builder.additionalParameters);
+    this.additionalParameters = builder.additionalParameters;
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public PaymentRequest merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
@@ -149,8 +127,7 @@ public class PaymentRequest {
   }
 
   /**
-   * This is the merchant reference number created by the merchant and submitted as part of the request. <br>
-   * It must be unique for each request if dupCheck parameter is sent as "true".
+   * The merchant reference number created by the merchant and submitted as part of the request
    *
    * @return merchantRefNum
    */
@@ -162,18 +139,16 @@ public class PaymentRequest {
     this.merchantRefNum = merchantRefNum;
   }
 
+
   public PaymentRequest amount(Integer amount) {
     this.amount = amount;
     return this;
   }
 
   /**
-   * This is the amount of the request, in minor units. For example, to process US $10.99, this value  should be 1099.
-   * <b>Note:</b> The amount specified in the Payment request must match the amount specified in the Payment Handle request from which the
-   * paymentHandleToken is taken.
+   * The amount of the request, in minor units (e.g., $10.99 = 1099)
    *
    * @return amount
-   * maximum: 99999999999
    */
   public Integer getAmount() {
     return amount;
@@ -183,14 +158,14 @@ public class PaymentRequest {
     this.amount = amount;
   }
 
+
   public PaymentRequest dupCheck(Boolean dupCheck) {
     this.dupCheck = dupCheck;
     return this;
   }
 
   /**
-   * This validates that this request is not a duplicate. A duplicate request is when the merchantRefNum has already been used in a previous request
-   * within the past 90 days.
+   * This validates that this request is not a duplicate.
    *
    * @return dupCheck
    */
@@ -202,18 +177,14 @@ public class PaymentRequest {
     this.dupCheck = dupCheck;
   }
 
+
   public PaymentRequest settleWithAuth(Boolean settleWithAuth) {
     this.settleWithAuth = settleWithAuth;
     return this;
   }
 
   /**
-   * This indicates whether the request is an  Authorization only (no Settlement), or a Purchase (Authorization and Settlement).
-   * <ul>
-   * <li>false – The request is not settled </li>
-   * <li>true – The request is settled </li>
-   * </ul>
-   * <b>Note:</b> Defaults to false for cards and true for APMs.
+   * This indicates whether the request is an Authorization only (no Settlement), or a Purchase (Authorization and Settlement).
    *
    * @return settleWithAuth
    */
@@ -225,13 +196,14 @@ public class PaymentRequest {
     this.settleWithAuth = settleWithAuth;
   }
 
+
   public PaymentRequest paymentHandleToken(String paymentHandleToken) {
     this.paymentHandleToken = paymentHandleToken;
     return this;
   }
 
   /**
-   * This is the payment token generated by Paysafe that will be used for the Payment request. For Payment, Payment handle must be in PAYABLE state
+   * This is the payment token generated by Paysafe that will be used for the Payment request.
    *
    * @return paymentHandleToken
    */
@@ -243,13 +215,14 @@ public class PaymentRequest {
     this.paymentHandleToken = paymentHandleToken;
   }
 
+
   public PaymentRequest customerIp(String customerIp) {
     this.customerIp = customerIp;
     return this;
   }
 
   /**
-   * This is the customer's IP address.
+   * The IP address of the customer making the payment
    *
    * @return customerIp
    */
@@ -261,18 +234,16 @@ public class PaymentRequest {
     this.customerIp = customerIp;
   }
 
+
   public PaymentRequest currencyCode(CurrencyCode currencyCode) {
     this.currencyCode = currencyCode;
     return this;
   }
 
   /**
-   * This is the currency of the merchant account, e.g., USD or CAD, returned in the request response.
-   * <b>Note:</b> The currencyCode specified in the Payment request must match the currencyCode specified in the Payment Handle request from
-   * which the paymentHandleToken is taken.
+   * Get currencyCode
    *
    * @return currencyCode
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#currency-codes>Currency codes reference documentation</a>
    */
   public CurrencyCode getCurrencyCode() {
     return currencyCode;
@@ -282,15 +253,14 @@ public class PaymentRequest {
     this.currencyCode = currencyCode;
   }
 
+
   public PaymentRequest preAuth(Boolean preAuth) {
     this.preAuth = preAuth;
     return this;
   }
 
   /**
-   * This indicates whether the Authorization request should be sent as a Pre-Authorization.
-   * <b>Note:</b> You should use the preAuth element in cases where you are not sure that you can fully settle the Authorization within 4 days.
-   * Contact your account manager for more information.
+   * This indicates whether the Authorization request should be sent as a Pre-Authorization. <br> **Note:** You should use the preAuth element in cases where you are not sure that you can fully settle the Authorization within 4 days. Contact your account manager for more information.
    *
    * @return preAuth
    */
@@ -302,13 +272,14 @@ public class PaymentRequest {
     this.preAuth = preAuth;
   }
 
+
   public PaymentRequest description(String description) {
     this.description = description;
     return this;
   }
 
   /**
-   * This is a description of the transaction, provided by the merchant.
+   * Description of the transaction provided by the merchant.
    *
    * @return description
    */
@@ -320,20 +291,33 @@ public class PaymentRequest {
     this.description = description;
   }
 
+
+  public PaymentRequest partialAuth(PartialAuth partialAuth) {
+    this.partialAuth = partialAuth;
+    return this;
+  }
+
+  /**
+   * Get partialAuth
+   *
+   * @return partialAuth
+   */
+  public PartialAuth getPartialAuth() {
+    return partialAuth;
+  }
+
+  public void setPartialAuth(PartialAuth partialAuth) {
+    this.partialAuth = partialAuth;
+  }
+
+
   public PaymentRequest level2level3(Level2Level3 level2level3) {
     this.level2level3 = level2level3;
     return this;
   }
 
   /**
-   * Level 2 and Level 3 (L2/L3) credit card processing refers to certain B2B card transactions for which the merchant might be eligible for
-   * lower credit card interchange rates. The lower rates may be available for merchants who provide more detailed information when processing
-   * card-not-present transactions. In order to be eligible for L2/L3 transactions:
-   * <ul>
-   * <li>Your merchant account must be properly configured by Paysafe. </li>
-   * <li>The BIN of the credit card used for the transaction must be eligible – typically,these are government-issued credit cards. </li>
-   *</ul>
-   * <b>Note:</b> Not all processing gateways support this parameter. Contact your account manager for more information.
+   * Get level2level3
    *
    * @return level2level3
    */
@@ -345,15 +329,14 @@ public class PaymentRequest {
     this.level2level3 = level2level3;
   }
 
+
   public PaymentRequest accordD(AccordD accordD) {
     this.accordD = accordD;
     return this;
   }
 
   /**
-   * These are parameters for financing plans supported for certain merchant configurations. Include this element only when instructed to do so by
-   * your account manager.  <br>
-   * <b>Note:</b> Not all processing gateways support this parameter. Contact your account manager for more information.
+   * Get accordD
    *
    * @return accordD
    */
@@ -365,28 +348,14 @@ public class PaymentRequest {
     this.accordD = accordD;
   }
 
+
   public PaymentRequest recipient(Recipient recipient) {
     this.recipient = recipient;
     return this;
   }
 
   /**
-   * <p>The recipient is deemed to be the person or party who has the contractual relationship with the merchant / financial institution.
-   * This may be different from the cardholder, e.g., in the case of a parent topping up a child's savings account.
-   * Therefore, the fields should not be collected on the same page as cardholder information, but instead be passed in the background from the
-   * merchant's records.</p>
-   *
-   * <b>Note:</b> You can include recipient elements in your <a href="https://developer.paysafe.com/en/cards-api/#/operations/authorization">
-   * Authorization request</a> only if your Merchant Category Code is <b>6012</b> and your registered trading address is in the United Kingdom.
-   * <p>All fields are optional. However, scheme fines may apply if data is consistently not supplied and chargebacks persist.
-   * If you have any questions, contact your account manager. </p>
-   *
-   * <p>If you are using a payment token for an Authorization request and there is already recipient data for the consumer profile associated with the
-   * payment token, then if you include the recipient object in the Authorization, this data will override the recipient data already in the profile.</p>
-   *
-   * <p>If you <a href="https://developer.paysafe.com/en/cards-api/#/operations/get-authorization">look up an Authorization request</a>,
-   * that used the visaAdditionalAuthData parameter (now deprecated), the response will contain the relevant data in both the recipient and the
-   * visaAdditionalAuthData objects.
+   * Get recipient
    *
    * @return recipient
    */
@@ -398,14 +367,14 @@ public class PaymentRequest {
     this.recipient = recipient;
   }
 
+
   public PaymentRequest splitpay(Splitpay splitpay) {
     this.splitpay = splitpay;
     return this;
   }
 
   /**
-   * This object should be used only for Splitpay transactions only, an array containing the linked accounts and the amount shared with each.
-   * You must include either amount or percent. However, you cannot include both values.
+   * Get splitpay
    *
    * @return splitpay
    */
@@ -417,28 +386,15 @@ public class PaymentRequest {
     this.splitpay = splitpay;
   }
 
+
   public PaymentRequest storedCredentialDetails(StoredCredential storedCredentialDetails) {
     this.storedCredentialDetails = storedCredentialDetails;
     return this;
   }
 
   /**
-   * The storedCredential object is used to identify authorization requests that use stored credentials for a consumer,
-   * in order to improve authorization rates and reduce fraud. Stored credentials can be used in two cases:
-   * <ul>
-   * <li> Using a payment token – An authorization request that uses a paymentToken from the Customer Vault API  </li>
-   * <li> Using a card number – An authorization request that uses a credit card number stored by the merchant. </li>
-   * </ul>
-   * <b>Notes: </b>
-   * <ul>
-   * <li> If you use a paymentToken in the authorization request but do not include the storedCredential object, Paysafe will provide
-   * default information taken from Customer Vault data. </li>
-   * <li> You cannot include both the storedCredential object and the recurring parameter in the same authorization request.Paysafe recommends
-   * using the storedCredential object. </li>
-   * <li> The cvv parameter of the [card object] is required when the occurrence parameter is set to INITIAL. However, cvv is not required
-   * when the occurrence parameter is set to SUBSEQUENT. </li>
-   * <li> The storedCredential object cannot be used for Apple Pay or Google Pay transactions. </li>
-   * </ul>
+   * Get storedCredentialDetails
+   *
    * @return storedCredentialDetails
    */
   public StoredCredential getStoredCredentialDetails() {
@@ -449,16 +405,14 @@ public class PaymentRequest {
     this.storedCredentialDetails = storedCredentialDetails;
   }
 
+
   public PaymentRequest airlineTravelDetails(AirlineTravelDetails airlineTravelDetails) {
     this.airlineTravelDetails = airlineTravelDetails;
     return this;
   }
 
   /**
-   * Contains information about your airline travel.  <br>
-   * <b>Notes:</b>  <br>
-   * This object is only for Airline Merchants. <br>
-   * This field has to be passed only in case of card transactiions.*
+   * Get airlineTravelDetails
    *
    * @return airlineTravelDetails
    */
@@ -470,22 +424,14 @@ public class PaymentRequest {
     this.airlineTravelDetails = airlineTravelDetails;
   }
 
+
   public PaymentRequest fundingTransaction(FundingTransaction fundingTransaction) {
     this.fundingTransaction = fundingTransaction;
     return this;
   }
 
   /**
-   * <b>Note:</b> Acquirers and processors do not necessarily support all available MCCs; before integrating, you should contact
-   * <a href="https://developer.paysafe.com/en/support/">Integration Support</a> for details.
-   * <br>
-   * The fundingTransaction object is used to identify authorization requests that are categorized as funding transactions by the merchant
-   * in order to provide additional information for the purpose of a transaction. It can be used by merchants registered with MCC 4722, 4829,
-   * 6012, 6051, 6211, 6540, 7800, 7801, 7802, 7994, 7995 or 9406.
-   * The relevant value will be assigned automatically by the Payments API as per the merchant registration with card schemes and his applicable MCC.
-   * <br>
-   * More information can be found on
-   * <a href="https://developer.paysafe.com/en/payments-api/#/schemas/fundingTransaction">Funding Transaction reference</a> page.
+   * Get fundingTransaction
    *
    * @return fundingTransaction
    */
@@ -497,14 +443,14 @@ public class PaymentRequest {
     this.fundingTransaction = fundingTransaction;
   }
 
+
   public PaymentRequest cruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
     this.cruiselineTravelDetails = cruiselineTravelDetails;
     return this;
   }
 
   /**
-   * Contains information about your cruise line travel.  <br> <b>Note:</b> This object is only for Cruise line Merchants.
-   * This field has to be passed only in case of card transactions.
+   * Get cruiselineTravelDetails
    *
    * @return cruiselineTravelDetails
    */
@@ -516,14 +462,14 @@ public class PaymentRequest {
     this.cruiselineTravelDetails = cruiselineTravelDetails;
   }
 
+
   public PaymentRequest lodgingDetails(LodgingDetails lodgingDetails) {
     this.lodgingDetails = lodgingDetails;
     return this;
   }
 
   /**
-   * Contains information about lodging details.   <br> <b>Note:</b> This object is only for Airline Merchants.
-   * This field has to be passed only in case of card transactions.
+   * Get lodgingDetails
    *
    * @return lodgingDetails
    */
@@ -535,14 +481,14 @@ public class PaymentRequest {
     this.lodgingDetails = lodgingDetails;
   }
 
+
   public PaymentRequest carRentalDetails(CarRentalDetails carRentalDetails) {
     this.carRentalDetails = carRentalDetails;
     return this;
   }
 
   /**
-   * Contains information about your car rental.  <br> <b>Note:</b> This object is only for Car rental Merchants.
-   * This field has to be passed only in case of card transactions.
+   * Get carRentalDetails
    *
    * @return carRentalDetails
    */
@@ -554,13 +500,14 @@ public class PaymentRequest {
     this.carRentalDetails = carRentalDetails;
   }
 
+
   public PaymentRequest paymentFacilitator(PaymentFacilitator paymentFacilitator) {
     this.paymentFacilitator = paymentFacilitator;
     return this;
   }
 
   /**
-   * Contains information about Payment facilitator.  <b>Note:</b> This object is only for Payment facilitator merchants.
+   * Get paymentFacilitator
    *
    * @return paymentFacilitator
    */
@@ -572,13 +519,14 @@ public class PaymentRequest {
     this.paymentFacilitator = paymentFacilitator;
   }
 
+
   public PaymentRequest merchantDescriptor(MerchantDescriptor merchantDescriptor) {
     this.merchantDescriptor = merchantDescriptor;
     return this;
   }
 
   /**
-   * For Card payment method only. This is the merchant descriptor that will be displayed on the customer's card or bank statement.
+   * Get merchantDescriptor
    *
    * @return merchantDescriptor
    */
@@ -590,14 +538,14 @@ public class PaymentRequest {
     this.merchantDescriptor = merchantDescriptor;
   }
 
+
   public PaymentRequest acquirerData(AcquirerData acquirerData) {
     this.acquirerData = acquirerData;
     return this;
   }
 
   /**
-   * Acquirer data is additional information about your card acquirer, applicable only when you are using Worldpay (VAN) as your acquirer for authorizations.
-   * Contact your account manager for more information.
+   * Get acquirerData
    *
    * @return acquirerData
    */
@@ -609,16 +557,51 @@ public class PaymentRequest {
     this.acquirerData = acquirerData;
   }
 
+
+  public PaymentRequest keywords(List<String> keywords) {
+    this.keywords = keywords;
+    return this;
+  }
+
+  public PaymentRequest addKeywordsItem(String keywordsItem) {
+    if (this.keywords == null) {
+      this.keywords = new ArrayList<>();
+    }
+    this.keywords.add(keywordsItem);
+    return this;
+  }
+
+  public PaymentRequest removeKeywordsItem(String keywordsItem) {
+    if (keywordsItem != null && this.keywords != null) {
+      this.keywords.remove(keywordsItem);
+    }
+
+    return this;
+  }
+
+  /**
+   * List of keywords associated with the payment.
+   *
+   * @return keywords
+   */
+  public List<String> getKeywords() {
+    return keywords;
+  }
+
+  public void setKeywords(List<String> keywords) {
+    this.keywords = keywords;
+  }
+
   /**
    * This map holds additional parameters that can be used for features not available in this client library.
    * During serialization, each key-value pair is treated as if the key were a top-level field in the serialized object,
-   * i.e. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
+   * e.g. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
    *
    * @return additionalParameters
    */
   @JsonAnyGetter
   public Map<String, Object> getAdditionalParameters() {
-    return additionalParameters;
+    return this.additionalParameters;
   }
 
   public void setAdditionalParameters(Map<String, Object> additionalParameters) {
@@ -626,10 +609,10 @@ public class PaymentRequest {
   }
 
   public void addAdditionalParameter(String key, Object value) {
-    if (additionalParameters == null) {
-      additionalParameters = new HashMap<>();
+    if (this.additionalParameters == null) {
+      this.additionalParameters = new HashMap<>();
     }
-    additionalParameters.put(key, value);
+    this.additionalParameters.put(key, value);
   }
 
   @Override
@@ -650,6 +633,7 @@ public class PaymentRequest {
         Objects.equals(this.currencyCode, paymentRequest.currencyCode) &&
         Objects.equals(this.preAuth, paymentRequest.preAuth) &&
         Objects.equals(this.description, paymentRequest.description) &&
+        Objects.equals(this.partialAuth, paymentRequest.partialAuth) &&
         Objects.equals(this.level2level3, paymentRequest.level2level3) &&
         Objects.equals(this.accordD, paymentRequest.accordD) &&
         Objects.equals(this.recipient, paymentRequest.recipient) &&
@@ -663,15 +647,12 @@ public class PaymentRequest {
         Objects.equals(this.paymentFacilitator, paymentRequest.paymentFacilitator) &&
         Objects.equals(this.merchantDescriptor, paymentRequest.merchantDescriptor) &&
         Objects.equals(this.acquirerData, paymentRequest.acquirerData) &&
-        Objects.equals(this.keywords, paymentRequest.keywords) &&
-        Objects.equals(this.additionalParameters, paymentRequest.additionalParameters);
+        Objects.equals(this.keywords, paymentRequest.keywords);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, amount, dupCheck, settleWithAuth, paymentHandleToken, customerIp, currencyCode, preAuth, description, level2level3,
-        accordD, recipient, splitpay, storedCredentialDetails, airlineTravelDetails, fundingTransaction, cruiselineTravelDetails, lodgingDetails,
-        carRentalDetails, paymentFacilitator, merchantDescriptor, acquirerData, keywords, additionalParameters);
+    return Objects.hash(merchantRefNum, amount, dupCheck, settleWithAuth, paymentHandleToken, customerIp, currencyCode, preAuth, description, partialAuth, level2level3, accordD, recipient, splitpay, storedCredentialDetails, airlineTravelDetails, fundingTransaction, cruiselineTravelDetails, lodgingDetails, carRentalDetails, paymentFacilitator, merchantDescriptor, acquirerData, keywords);
   }
 
   @Override
@@ -687,6 +668,7 @@ public class PaymentRequest {
         + "    currencyCode: " + toIndentedString(currencyCode) + "\n"
         + "    preAuth: " + toIndentedString(preAuth) + "\n"
         + "    description: " + toIndentedString(description) + "\n"
+        + "    partialAuth: " + toIndentedString(partialAuth) + "\n"
         + "    level2level3: " + toIndentedString(level2level3) + "\n"
         + "    accordD: " + toIndentedString(accordD) + "\n"
         + "    recipient: " + toIndentedString(recipient) + "\n"
@@ -701,7 +683,6 @@ public class PaymentRequest {
         + "    merchantDescriptor: " + toIndentedString(merchantDescriptor) + "\n"
         + "    acquirerData: " + toIndentedString(acquirerData) + "\n"
         + "    keywords: " + toIndentedString(keywords) + "\n"
-        + "    additionalParameters: " + toIndentedString(additionalParameters) + "\n"
         + "}";
   }
 
@@ -716,16 +697,8 @@ public class PaymentRequest {
     return o.toString().replace("\n", "\n    ");
   }
 
-  public List<String> getKeywords() {
-    return keywords;
-  }
-
-  public void setKeywords(List<String> keywords) {
-    this.keywords = keywords;
-  }
-
   /**
-   * {@code PaymentRequest} builder static inner class.
+   * Represents the body of a payment request. builder static inner class.
    */
   public static final class Builder {
     private String merchantRefNum;
@@ -737,6 +710,7 @@ public class PaymentRequest {
     private CurrencyCode currencyCode;
     private Boolean preAuth;
     private String description;
+    private PartialAuth partialAuth;
     private Level2Level3 level2level3;
     private AccordD accordD;
     private Recipient recipient;
@@ -757,9 +731,11 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * The merchant reference number created by the merchant and submitted as part of the request
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
+     * @param merchantRefNum the merchantRefNum to set
      * @return a reference to this Builder
      */
     public Builder merchantRefNum(String merchantRefNum) {
@@ -768,9 +744,11 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code amount} and returns a reference to this Builder enabling method chaining.
+     * The amount of the request, in minor units (e.g., $10.99 = 1099)
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
      *
-     * @param amount the {@code amount} to set
+     * @param amount the amount to set
      * @return a reference to this Builder
      */
     public Builder amount(Integer amount) {
@@ -779,9 +757,11 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code dupCheck} and returns a reference to this Builder enabling method chaining.
+     * This validates that this request is not a duplicate.
+     * <p>
+     * Sets the dupCheck and returns a reference to this Builder enabling method chaining.
      *
-     * @param dupCheck the {@code dupCheck} to set
+     * @param dupCheck the dupCheck to set
      * @return a reference to this Builder
      */
     public Builder dupCheck(Boolean dupCheck) {
@@ -790,9 +770,11 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code settleWithAuth} and returns a reference to this Builder enabling method chaining.
+     * This indicates whether the request is an Authorization only (no Settlement), or a Purchase (Authorization and Settlement).
+     * <p>
+     * Sets the settleWithAuth and returns a reference to this Builder enabling method chaining.
      *
-     * @param settleWithAuth the {@code settleWithAuth} to set
+     * @param settleWithAuth the settleWithAuth to set
      * @return a reference to this Builder
      */
     public Builder settleWithAuth(Boolean settleWithAuth) {
@@ -801,9 +783,11 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code paymentHandleToken} and returns a reference to this Builder enabling method chaining.
+     * This is the payment token generated by Paysafe that will be used for the Payment request.
+     * <p>
+     * Sets the paymentHandleToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentHandleToken the {@code paymentHandleToken} to set
+     * @param paymentHandleToken the paymentHandleToken to set
      * @return a reference to this Builder
      */
     public Builder paymentHandleToken(String paymentHandleToken) {
@@ -812,9 +796,11 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code customerIp} and returns a reference to this Builder enabling method chaining.
+     * The IP address of the customer making the payment
+     * <p>
+     * Sets the customerIp and returns a reference to this Builder enabling method chaining.
      *
-     * @param customerIp the {@code customerIp} to set
+     * @param customerIp the customerIp to set
      * @return a reference to this Builder
      */
     public Builder customerIp(String customerIp) {
@@ -823,9 +809,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code currencyCode} and returns a reference to this Builder enabling method chaining.
+     * Sets the currencyCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param currencyCode the {@code currencyCode} to set
+     * @param currencyCode the currencyCode to set
      * @return a reference to this Builder
      */
     public Builder currencyCode(CurrencyCode currencyCode) {
@@ -834,9 +820,11 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code preAuth} and returns a reference to this Builder enabling method chaining.
+     * This indicates whether the Authorization request should be sent as a Pre-Authorization. <br> **Note:** You should use the preAuth element in cases where you are not sure that you can fully settle the Authorization within 4 days. Contact your account manager for more information.
+     * <p>
+     * Sets the preAuth and returns a reference to this Builder enabling method chaining.
      *
-     * @param preAuth the {@code preAuth} to set
+     * @param preAuth the preAuth to set
      * @return a reference to this Builder
      */
     public Builder preAuth(Boolean preAuth) {
@@ -845,9 +833,11 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code description} and returns a reference to this Builder enabling method chaining.
+     * Description of the transaction provided by the merchant.
+     * <p>
+     * Sets the description and returns a reference to this Builder enabling method chaining.
      *
-     * @param description the {@code description} to set
+     * @param description the description to set
      * @return a reference to this Builder
      */
     public Builder description(String description) {
@@ -856,9 +846,20 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code level2level3} and returns a reference to this Builder enabling method chaining.
+     * Sets the partialAuth and returns a reference to this Builder enabling method chaining.
      *
-     * @param level2level3 the {@code level2level3} to set
+     * @param partialAuth the partialAuth to set
+     * @return a reference to this Builder
+     */
+    public Builder partialAuth(PartialAuth partialAuth) {
+      this.partialAuth = partialAuth;
+      return this;
+    }
+
+    /**
+     * Sets the level2level3 and returns a reference to this Builder enabling method chaining.
+     *
+     * @param level2level3 the level2level3 to set
      * @return a reference to this Builder
      */
     public Builder level2level3(Level2Level3 level2level3) {
@@ -867,9 +868,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code accordD} and returns a reference to this Builder enabling method chaining.
+     * Sets the accordD and returns a reference to this Builder enabling method chaining.
      *
-     * @param accordD the {@code accordD} to set
+     * @param accordD the accordD to set
      * @return a reference to this Builder
      */
     public Builder accordD(AccordD accordD) {
@@ -878,9 +879,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code recipient} and returns a reference to this Builder enabling method chaining.
+     * Sets the recipient and returns a reference to this Builder enabling method chaining.
      *
-     * @param recipient the {@code recipient} to set
+     * @param recipient the recipient to set
      * @return a reference to this Builder
      */
     public Builder recipient(Recipient recipient) {
@@ -889,9 +890,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code splitpay} and returns a reference to this Builder enabling method chaining.
+     * Sets the splitpay and returns a reference to this Builder enabling method chaining.
      *
-     * @param splitpay the {@code splitpay} to set
+     * @param splitpay the splitpay to set
      * @return a reference to this Builder
      */
     public Builder splitpay(Splitpay splitpay) {
@@ -900,9 +901,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code storedCredentialDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the storedCredentialDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param storedCredentialDetails the {@code storedCredentialDetails} to set
+     * @param storedCredentialDetails the storedCredentialDetails to set
      * @return a reference to this Builder
      */
     public Builder storedCredentialDetails(StoredCredential storedCredentialDetails) {
@@ -911,9 +912,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code airlineTravelDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the airlineTravelDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param airlineTravelDetails the {@code airlineTravelDetails} to set
+     * @param airlineTravelDetails the airlineTravelDetails to set
      * @return a reference to this Builder
      */
     public Builder airlineTravelDetails(AirlineTravelDetails airlineTravelDetails) {
@@ -922,9 +923,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code fundingTransaction} and returns a reference to this Builder enabling method chaining.
+     * Sets the fundingTransaction and returns a reference to this Builder enabling method chaining.
      *
-     * @param fundingTransaction the {@code fundingTransaction} to set
+     * @param fundingTransaction the fundingTransaction to set
      * @return a reference to this Builder
      */
     public Builder fundingTransaction(FundingTransaction fundingTransaction) {
@@ -933,9 +934,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code cruiselineTravelDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the cruiselineTravelDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param cruiselineTravelDetails the {@code cruiselineTravelDetails} to set
+     * @param cruiselineTravelDetails the cruiselineTravelDetails to set
      * @return a reference to this Builder
      */
     public Builder cruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
@@ -944,9 +945,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code lodgingDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the lodgingDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param lodgingDetails the {@code lodgingDetails} to set
+     * @param lodgingDetails the lodgingDetails to set
      * @return a reference to this Builder
      */
     public Builder lodgingDetails(LodgingDetails lodgingDetails) {
@@ -955,9 +956,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code carRentalDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the carRentalDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param carRentalDetails the {@code carRentalDetails} to set
+     * @param carRentalDetails the carRentalDetails to set
      * @return a reference to this Builder
      */
     public Builder carRentalDetails(CarRentalDetails carRentalDetails) {
@@ -966,9 +967,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code paymentFacilitator} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentFacilitator and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentFacilitator the {@code paymentFacilitator} to set
+     * @param paymentFacilitator the paymentFacilitator to set
      * @return a reference to this Builder
      */
     public Builder paymentFacilitator(PaymentFacilitator paymentFacilitator) {
@@ -977,9 +978,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code merchantDescriptor} and returns a reference to this Builder enabling method chaining.
+     * Sets the merchantDescriptor and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantDescriptor the {@code merchantDescriptor} to set
+     * @param merchantDescriptor the merchantDescriptor to set
      * @return a reference to this Builder
      */
     public Builder merchantDescriptor(MerchantDescriptor merchantDescriptor) {
@@ -988,9 +989,9 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code acquirerData} and returns a reference to this Builder enabling method chaining.
+     * Sets the acquirerData and returns a reference to this Builder enabling method chaining.
      *
-     * @param acquirerData the {@code acquirerData} to set
+     * @param acquirerData the acquirerData to set
      * @return a reference to this Builder
      */
     public Builder acquirerData(AcquirerData acquirerData) {
@@ -999,39 +1000,15 @@ public class PaymentRequest {
     }
 
     /**
-     * Sets the {@code keywords} and returns a reference to this Builder enabling method chaining.
+     * List of keywords associated with the payment.
+     * <p>
+     * Sets the keywords and returns a reference to this Builder enabling method chaining.
      *
-     * @param keywords the {@code keywords} to set
+     * @param keywords the keywords to set
      * @return a reference to this Builder
      */
     public Builder keywords(List<String> keywords) {
       this.keywords = keywords;
-      return this;
-    }
-
-    /**
-     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAdditionalParameter(String key, Object value) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.put(key, value);
-      return this;
-    }
-
-    /**
-     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAllAdditionalParameters(Map<String, Object> additionalParameters) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.putAll(additionalParameters);
       return this;
     }
 
@@ -1047,13 +1024,41 @@ public class PaymentRequest {
     }
 
     /**
-     * Returns a {@code PaymentRequest} built from the parameters previously set.
+     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code PaymentRequest} built with parameters of this {@code PaymentRequest.Builder}
+     * @param key the key to insert
+     * @param value the value to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAdditionalParameter(String key, Object value) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.put(key, value);
+      return this;
+    }
+
+    /**
+     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
+     *
+     * @param additionalParameters the key/value pairs to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAllAdditionalParameters(Map<String, Object> additionalParameters) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.putAll(additionalParameters);
+      return this;
+    }
+
+    /**
+     * Returns a PaymentRequest built from the parameters previously set.
+     *
+     * @return a PaymentRequest built with parameters of this PaymentRequest.Builder
      */
     public PaymentRequest build() {
       return new PaymentRequest(this);
     }
   }
 }
-

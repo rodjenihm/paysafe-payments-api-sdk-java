@@ -1,13 +1,23 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.googlepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.card.threeds.Authentication;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * GooglePayDecryptedTokenPaymentMethodDetails
+ * Payment method details from decrypted Google Pay token
  */
 public class GooglePayDecryptedTokenPaymentMethodDetails {
 
@@ -28,7 +38,7 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     super();
   }
 
-  private GooglePayDecryptedTokenPaymentMethodDetails(Builder builder) {
+  private GooglePayDecryptedTokenPaymentMethodDetails(final Builder builder) {
     setAuthMethod(builder.authMethod);
     setPan(builder.pan);
     setExpirationMonth(builder.expirationMonth);
@@ -41,13 +51,14 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     return new Builder();
   }
 
+
   public GooglePayDecryptedTokenPaymentMethodDetails authMethod(String authMethod) {
     this.authMethod = authMethod;
     return this;
   }
 
   /**
-   * Get authMethod
+   * Authentication method used
    *
    * @return authMethod
    */
@@ -58,6 +69,7 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
   public void setAuthMethod(String authMethod) {
     this.authMethod = authMethod;
   }
+
 
   public GooglePayDecryptedTokenPaymentMethodDetails pan(String pan) {
     this.pan = pan;
@@ -77,13 +89,14 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     this.pan = pan;
   }
 
+
   public GooglePayDecryptedTokenPaymentMethodDetails expirationMonth(Integer expirationMonth) {
     this.expirationMonth = expirationMonth;
     return this;
   }
 
   /**
-   * Get expirationMonth
+   * Expiration month
    *
    * @return expirationMonth
    */
@@ -95,13 +108,14 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     this.expirationMonth = expirationMonth;
   }
 
+
   public GooglePayDecryptedTokenPaymentMethodDetails expirationYear(Integer expirationYear) {
     this.expirationYear = expirationYear;
     return this;
   }
 
   /**
-   * Get expirationYear
+   * Expiration year
    *
    * @return expirationYear
    */
@@ -113,13 +127,14 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     this.expirationYear = expirationYear;
   }
 
+
   public GooglePayDecryptedTokenPaymentMethodDetails cryptogram(String cryptogram) {
     this.cryptogram = cryptogram;
     return this;
   }
 
   /**
-   * This field is required when authMethod is CRYPTOGRAM_3DS.
+   * This field is required when authMethod is CRYPTOGRAM_3DS
    *
    * @return cryptogram
    */
@@ -131,13 +146,14 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     this.cryptogram = cryptogram;
   }
 
+
   public GooglePayDecryptedTokenPaymentMethodDetails eciIndicator(String eciIndicator) {
     this.eciIndicator = eciIndicator;
     return this;
   }
 
   /**
-   * The ECI indicator.
+   * The ECI indicator
    *
    * @return eciIndicator
    */
@@ -196,7 +212,7 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
   }
 
   /**
-   * {@code GooglePayDecryptedTokenPaymentMethodDetails} builder static inner class.
+   * Payment method details from decrypted Google Pay token builder static inner class.
    */
   public static final class Builder {
     private String authMethod;
@@ -210,9 +226,11 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     }
 
     /**
-     * Sets the {@code authMethod} and returns a reference to this Builder enabling method chaining.
+     * Authentication method used
+     * <p>
+     * Sets the authMethod and returns a reference to this Builder enabling method chaining.
      *
-     * @param authMethod the {@code authMethod} to set
+     * @param authMethod the authMethod to set
      * @return a reference to this Builder
      */
     public Builder authMethod(String authMethod) {
@@ -221,9 +239,11 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     }
 
     /**
-     * Sets the {@code pan} and returns a reference to this Builder enabling method chaining.
+     * The DPAN number
+     * <p>
+     * Sets the pan and returns a reference to this Builder enabling method chaining.
      *
-     * @param pan the {@code pan} to set
+     * @param pan the pan to set
      * @return a reference to this Builder
      */
     public Builder pan(String pan) {
@@ -232,9 +252,11 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     }
 
     /**
-     * Sets the {@code expirationMonth} and returns a reference to this Builder enabling method chaining.
+     * Expiration month
+     * <p>
+     * Sets the expirationMonth and returns a reference to this Builder enabling method chaining.
      *
-     * @param expirationMonth the {@code expirationMonth} to set
+     * @param expirationMonth the expirationMonth to set
      * @return a reference to this Builder
      */
     public Builder expirationMonth(Integer expirationMonth) {
@@ -243,9 +265,11 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     }
 
     /**
-     * Sets the {@code expirationYear} and returns a reference to this Builder enabling method chaining.
+     * Expiration year
+     * <p>
+     * Sets the expirationYear and returns a reference to this Builder enabling method chaining.
      *
-     * @param expirationYear the {@code expirationYear} to set
+     * @param expirationYear the expirationYear to set
      * @return a reference to this Builder
      */
     public Builder expirationYear(Integer expirationYear) {
@@ -254,9 +278,11 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     }
 
     /**
-     * Sets the {@code cryptogram} and returns a reference to this Builder enabling method chaining.
+     * This field is required when authMethod is CRYPTOGRAM_3DS
+     * <p>
+     * Sets the cryptogram and returns a reference to this Builder enabling method chaining.
      *
-     * @param cryptogram the {@code cryptogram} to set
+     * @param cryptogram the cryptogram to set
      * @return a reference to this Builder
      */
     public Builder cryptogram(String cryptogram) {
@@ -265,9 +291,11 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     }
 
     /**
-     * Sets the {@code eciIndicator} and returns a reference to this Builder enabling method chaining.
+     * The ECI indicator
+     * <p>
+     * Sets the eciIndicator and returns a reference to this Builder enabling method chaining.
      *
-     * @param eciIndicator the {@code eciIndicator} to set
+     * @param eciIndicator the eciIndicator to set
      * @return a reference to this Builder
      */
     public Builder eciIndicator(String eciIndicator) {
@@ -276,14 +304,12 @@ public class GooglePayDecryptedTokenPaymentMethodDetails {
     }
 
     /**
-     * Returns a {@code GooglePayDecryptedTokenPaymentMethodDetails} built from the parameters previously set.
+     * Returns a GooglePayDecryptedTokenPaymentMethodDetails built from the parameters previously set.
      *
-     * @return a {@code GooglePayDecryptedTokenPaymentMethodDetails} built with parameters of this {@code
-     * GooglePayDecryptedTokenPaymentMethodDetails.Builder}
+     * @return a GooglePayDecryptedTokenPaymentMethodDetails built with parameters of this GooglePayDecryptedTokenPaymentMethodDetails.Builder
      */
     public GooglePayDecryptedTokenPaymentMethodDetails build() {
       return new GooglePayDecryptedTokenPaymentMethodDetails(this);
     }
   }
 }
-

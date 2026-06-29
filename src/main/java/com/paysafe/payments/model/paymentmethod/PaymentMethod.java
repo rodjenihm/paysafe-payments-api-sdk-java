@@ -1,23 +1,24 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.paymentmethod;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.enums.CurrencyCode;
 import com.paysafe.payments.model.paymenthandle.enums.PaymentType;
 
+
+
 /**
- * Represents a payment method used for processing transactions.
- * <p>
- * This class includes details such as the type of payment method,
- * the currency code associated with the payment, and the account Id
- * linked to the payment method.
- * </p>
+ * Represents a payment method used for processing transactions. <p> This class includes details such as the type of payment method, the currency code associated with the payment, and the account Id linked to the payment method. </p>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class PaymentMethod {
 
   @JsonProperty("paymentMethod")
@@ -31,7 +32,7 @@ public class PaymentMethod {
     super();
   }
 
-  private PaymentMethod(Builder builder) {
+  private PaymentMethod(final Builder builder) {
     setPaymentMethod(builder.paymentMethod);
     setCurrencyCode(builder.currencyCode);
     setAccountId(builder.accountId);
@@ -41,13 +42,14 @@ public class PaymentMethod {
     return new Builder();
   }
 
+
   public PaymentMethod paymentMethod(PaymentType paymentMethod) {
     this.paymentMethod = paymentMethod;
     return this;
   }
 
   /**
-   * This is the payment type associated with this payment method. Possible values are defined in PaymentType enum.
+   * Get paymentMethod
    *
    * @return paymentMethod
    */
@@ -59,14 +61,14 @@ public class PaymentMethod {
     this.paymentMethod = paymentMethod;
   }
 
+
   public PaymentMethod currencyCode(CurrencyCode currencyCode) {
     this.currencyCode = currencyCode;
     return this;
   }
 
   /**
-   * This is the currency of the merchant account, e.g., USD or CAD.
-   * See <a href="https://developer.paysafe.com/en/support/reference-information/codes/#currency-codes">Currency Codes.</a>
+   * Get currencyCode
    *
    * @return currencyCode
    */
@@ -78,13 +80,14 @@ public class PaymentMethod {
     this.currencyCode = currencyCode;
   }
 
+
   public PaymentMethod accountId(String accountId) {
     this.accountId = accountId;
     return this;
   }
 
   /**
-   * Account Id in the paysafe system.
+   * Account Id in the Paysafe system
    *
    * @return accountId
    */
@@ -104,10 +107,10 @@ public class PaymentMethod {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PaymentMethod paymentMethods = (PaymentMethod) o;
-    return Objects.equals(this.paymentMethod, paymentMethods.paymentMethod) &&
-        Objects.equals(this.currencyCode, paymentMethods.currencyCode) &&
-        Objects.equals(this.accountId, paymentMethods.accountId);
+    PaymentMethod paymentMethod = (PaymentMethod) o;
+    return Objects.equals(this.paymentMethod, paymentMethod.paymentMethod) &&
+        Objects.equals(this.currencyCode, paymentMethod.currencyCode) &&
+        Objects.equals(this.accountId, paymentMethod.accountId);
   }
 
   @Override
@@ -137,7 +140,7 @@ public class PaymentMethod {
   }
 
   /**
-   * {@code PaymentMethod} builder static inner class.
+   * Represents a payment method used for processing transactions. <p> This class includes details such as the type of payment method, the currency code associated with the payment, and the account Id linked to the payment method. </p> builder static inner class.
    */
   public static final class Builder {
     private PaymentType paymentMethod;
@@ -148,9 +151,9 @@ public class PaymentMethod {
     }
 
     /**
-     * Sets the {@code paymentMethod} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentMethod and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentMethod the {@code paymentMethod} to set
+     * @param paymentMethod the paymentMethod to set
      * @return a reference to this Builder
      */
     public Builder paymentMethod(PaymentType paymentMethod) {
@@ -159,9 +162,9 @@ public class PaymentMethod {
     }
 
     /**
-     * Sets the {@code currencyCode} and returns a reference to this Builder enabling method chaining.
+     * Sets the currencyCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param currencyCode the {@code currencyCode} to set
+     * @param currencyCode the currencyCode to set
      * @return a reference to this Builder
      */
     public Builder currencyCode(CurrencyCode currencyCode) {
@@ -170,9 +173,11 @@ public class PaymentMethod {
     }
 
     /**
-     * Sets the {@code accountId} and returns a reference to this Builder enabling method chaining.
+     * Account Id in the Paysafe system
+     * <p>
+     * Sets the accountId and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountId the {@code accountId} to set
+     * @param accountId the accountId to set
      * @return a reference to this Builder
      */
     public Builder accountId(String accountId) {
@@ -181,14 +186,12 @@ public class PaymentMethod {
     }
 
     /**
-     * Returns a {@code PaymentMethod} built from the parameters previously set.
+     * Returns a PaymentMethod built from the parameters previously set.
      *
-     * @return a {@code PaymentMethod} built with parameters of this {@code PaymentMethod.Builder}
+     * @return a PaymentMethod built with parameters of this PaymentMethod.Builder
      */
     public PaymentMethod build() {
       return new PaymentMethod(this);
     }
   }
 }
-
-

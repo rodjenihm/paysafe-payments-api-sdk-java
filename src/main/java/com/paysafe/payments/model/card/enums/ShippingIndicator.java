@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.enums;
 
@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This is the shipping method for the transaction.
+ * The shipping method for the transaction.
  */
 public enum ShippingIndicator {
+
   SHIP_TO_BILLING_ADDRESS("SHIP_TO_BILLING_ADDRESS"),
 
   SHIP_TO_VERIFIED_ADDRESS("SHIP_TO_VERIFIED_ADDRESS"),

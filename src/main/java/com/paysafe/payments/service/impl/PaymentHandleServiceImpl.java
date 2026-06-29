@@ -3,7 +3,6 @@
 package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.buildQueryParameters;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
@@ -41,7 +40,7 @@ public class PaymentHandleServiceImpl implements PaymentHandleService {
   @Override
   public PaymentHandle createPaymentHandle(final PaymentHandleRequest paymentHandleRequest, final RequestOptions requestOptions) throws PaysafeSdkException {
     PaysafeApiResponse response = paysafeApiClient.executePost(PAYMENT_HANDLE_ENDPOINT, paymentHandleRequest, requestOptions);
-    return processResponse(response, PaymentHandle.class);
+    return paysafeApiClient.processResponse(response, PaymentHandle.class);
   }
 
   /**
@@ -59,7 +58,7 @@ public class PaymentHandleServiceImpl implements PaymentHandleService {
   public PaymentHandle getPaymentHandleById(final String paymentHandleId, final RequestOptions requestOptions) throws PaysafeSdkException {
     final String path = String.format("%s/%s", PAYMENT_HANDLE_ENDPOINT, paymentHandleId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, PaymentHandle.class);
+    return paysafeApiClient.processResponse(response, PaymentHandle.class);
   }
 
   /**
@@ -85,6 +84,6 @@ public class PaymentHandleServiceImpl implements PaymentHandleService {
         buildQueryParameters(merchantRefNum, endDate, limit, offset, startDate, null, null));
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
 
-    return processResponse(response, PaymentHandleList.class);
+    return paysafeApiClient.processResponse(response, PaymentHandleList.class);
   }
 }

@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.settlement.enums;
 
@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * This is the payment type associated with the settlement used for this request.
  */
 public enum SettlementPaymentType {
+
   CARD("CARD"),
 
   PAYSAFECASH("PAYSAFECASH"),

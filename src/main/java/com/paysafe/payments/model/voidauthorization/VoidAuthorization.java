@@ -1,89 +1,53 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.voidauthorization;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.BaseApiResponse;
 import com.paysafe.payments.model.voidauthorization.enums.VoidAuthorizationStatus;
 
+
+
 /**
- * Represents the details of a Void Authorization
- *
- * <p>A Void Authorization allows you to cancel an authorization request, provided the authorization has not yet been settled.
- * If the authorization has already been settled, voiding is not allowed.</p>
+ * Represents the details of a Void Authorization. A Void Authorization allows you to cancel an authorization request, provided the authorization has not yet been settled. If the authorization has already been settled, voiding is not allowed.
  */
 public class VoidAuthorization extends BaseApiResponse {
 
+  @JsonProperty("id")
+  private String id;
   @JsonProperty("merchantRefNum")
   private String merchantRefNum;
   @JsonProperty("amount")
   private Integer amount;
-  @JsonProperty("id")
-  private String id;
   @JsonProperty("txnTime")
   private String txnTime;
   @JsonProperty("status")
   private VoidAuthorizationStatus status;
 
-  private Map<String, Object> additionalParameters;
-
   public VoidAuthorization() {
     super();
   }
 
-  private VoidAuthorization(Builder builder) {
+  private VoidAuthorization(final Builder builder) {
+    setId(builder.id);
     setMerchantRefNum(builder.merchantRefNum);
     setAmount(builder.amount);
-    setId(builder.id);
     setTxnTime(builder.txnTime);
-    setAdditionalParameters(builder.additionalParameters);
+    setStatus(builder.status);
   }
 
   public static Builder builder() {
     return new Builder();
   }
 
-  public VoidAuthorization merchantRefNum(String merchantRefNum) {
-    this.merchantRefNum = merchantRefNum;
-    return this;
-  }
-
-  /**
-   * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
-   *
-   * @return merchantRefNum
-   */
-  public String getMerchantRefNum() {
-    return merchantRefNum;
-  }
-
-  public void setMerchantRefNum(String merchantRefNum) {
-    this.merchantRefNum = merchantRefNum;
-  }
-
-  public VoidAuthorization amount(Integer amount) {
-    this.amount = amount;
-    return this;
-  }
-
-  /**
-   * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099.  <br>
-   * Maximum: 99999999999
-   *
-   * @return amount
-   */
-  public Integer getAmount() {
-    return amount;
-  }
-
-  public void setAmount(Integer amount) {
-    this.amount = amount;
-  }
 
   public VoidAuthorization id(String id) {
     this.id = id;
@@ -103,6 +67,45 @@ public class VoidAuthorization extends BaseApiResponse {
     this.id = id;
   }
 
+
+  public VoidAuthorization merchantRefNum(String merchantRefNum) {
+    this.merchantRefNum = merchantRefNum;
+    return this;
+  }
+
+  /**
+   * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
+   *
+   * @return merchantRefNum
+   */
+  public String getMerchantRefNum() {
+    return merchantRefNum;
+  }
+
+  public void setMerchantRefNum(String merchantRefNum) {
+    this.merchantRefNum = merchantRefNum;
+  }
+
+
+  public VoidAuthorization amount(Integer amount) {
+    this.amount = amount;
+    return this;
+  }
+
+  /**
+   * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099. Maximum: 99999999999
+   *
+   * @return amount
+   */
+  public Integer getAmount() {
+    return amount;
+  }
+
+  public void setAmount(Integer amount) {
+    this.amount = amount;
+  }
+
+
   public VoidAuthorization txnTime(String txnTime) {
     this.txnTime = txnTime;
     return this;
@@ -121,13 +124,15 @@ public class VoidAuthorization extends BaseApiResponse {
     this.txnTime = txnTime;
   }
 
+
   public VoidAuthorization status(VoidAuthorizationStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the transaction request.
+   * Get status
+   *
    * @return status
    */
   public VoidAuthorizationStatus getStatus() {
@@ -136,29 +141,6 @@ public class VoidAuthorization extends BaseApiResponse {
 
   public void setStatus(VoidAuthorizationStatus status) {
     this.status = status;
-  }
-
-  /**
-   * This map holds additional parameters that can be used for features not available in this client library.
-   * During serialization, each key-value pair is treated as if the key were a top-level field in the serialized object,
-   * i.e. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
-   *
-   * @return additionalParameters
-   */
-  @JsonAnyGetter
-  public Map<String, Object> getAdditionalParameters() {
-    return additionalParameters;
-  }
-
-  public void setAdditionalParameters(Map<String, Object> additionalParameters) {
-    this.additionalParameters = additionalParameters;
-  }
-
-  public void addAdditionalParameter(String key, Object value) {
-    if (additionalParameters == null) {
-      additionalParameters = new HashMap<>();
-    }
-    additionalParameters.put(key, value);
   }
 
   @Override
@@ -170,29 +152,27 @@ public class VoidAuthorization extends BaseApiResponse {
       return false;
     }
     VoidAuthorization voidAuthorization = (VoidAuthorization) o;
-    return Objects.equals(this.merchantRefNum, voidAuthorization.merchantRefNum) &&
+    return Objects.equals(this.id, voidAuthorization.id) &&
+        Objects.equals(this.merchantRefNum, voidAuthorization.merchantRefNum) &&
         Objects.equals(this.amount, voidAuthorization.amount) &&
-        Objects.equals(this.id, voidAuthorization.id) &&
         Objects.equals(this.txnTime, voidAuthorization.txnTime) &&
-        Objects.equals(this.status, voidAuthorization.status) &&
-        Objects.equals(this.additionalParameters, voidAuthorization.additionalParameters);
+        Objects.equals(this.status, voidAuthorization.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, amount, id, txnTime, status, additionalParameters);
+    return Objects.hash(id, merchantRefNum, amount, txnTime, status);
   }
 
   @Override
   public String toString() {
 
     return "class VoidAuthorization {\n"
+        + "    id: " + toIndentedString(id) + "\n"
         + "    merchantRefNum: " + toIndentedString(merchantRefNum) + "\n"
         + "    amount: " + toIndentedString(amount) + "\n"
-        + "    id: " + toIndentedString(id) + "\n"
         + "    txnTime: " + toIndentedString(txnTime) + "\n"
         + "    status: " + toIndentedString(status) + "\n"
-        + "    additionalParameters: " + toIndentedString(additionalParameters) + "\n"
         + "}";
   }
 
@@ -208,44 +188,24 @@ public class VoidAuthorization extends BaseApiResponse {
   }
 
   /**
-   * {@code VoidAuthorization} builder static inner class.
+   * Represents the details of a Void Authorization. A Void Authorization allows you to cancel an authorization request, provided the authorization has not yet been settled. If the authorization has already been settled, voiding is not allowed. builder static inner class.
    */
   public static final class Builder {
+    private String id;
     private String merchantRefNum;
     private Integer amount;
-    private String id;
     private String txnTime;
-    private Map<String, Object> additionalParameters;
+    private VoidAuthorizationStatus status;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * This is the ID returned in the response. This ID can be used for future associated requests.
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
-     * @return a reference to this Builder
-     */
-    public Builder merchantRefNum(String merchantRefNum) {
-      this.merchantRefNum = merchantRefNum;
-      return this;
-    }
-
-    /**
-     * Sets the {@code amount} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param amount the {@code amount} to set
-     * @return a reference to this Builder
-     */
-    public Builder amount(Integer amount) {
-      this.amount = amount;
-      return this;
-    }
-
-    /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -254,9 +214,37 @@ public class VoidAuthorization extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code txnTime} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param txnTime the {@code txnTime} to set
+     * @param merchantRefNum the merchantRefNum to set
+     * @return a reference to this Builder
+     */
+    public Builder merchantRefNum(String merchantRefNum) {
+      this.merchantRefNum = merchantRefNum;
+      return this;
+    }
+
+    /**
+     * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099. Maximum: 99999999999
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
+     *
+     * @param amount the amount to set
+     * @return a reference to this Builder
+     */
+    public Builder amount(Integer amount) {
+      this.amount = amount;
+      return this;
+    }
+
+    /**
+     * This is the date and time the transaction was processed.
+     * <p>
+     * Sets the txnTime and returns a reference to this Builder enabling method chaining.
+     *
+     * @param txnTime the txnTime to set
      * @return a reference to this Builder
      */
     public Builder txnTime(String txnTime) {
@@ -265,24 +253,23 @@ public class VoidAuthorization extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code additionalParameters} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param additionalParameters the {@code additionalParameters} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
-    public Builder additionalParameters(Map<String, Object> additionalParameters) {
-      this.additionalParameters = additionalParameters;
+    public Builder status(VoidAuthorizationStatus status) {
+      this.status = status;
       return this;
     }
 
     /**
-     * Returns a {@code VoidAuthorization} built from the parameters previously set.
+     * Returns a VoidAuthorization built from the parameters previously set.
      *
-     * @return a {@code VoidAuthorization} built with parameters of this {@code VoidAuthorization.Builder}
+     * @return a VoidAuthorization built with parameters of this VoidAuthorization.Builder
      */
     public VoidAuthorization build() {
       return new VoidAuthorization(this);
     }
   }
 }
-

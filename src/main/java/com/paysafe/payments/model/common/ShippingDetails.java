@@ -1,55 +1,29 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.card.enums.ShipMethod;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.common.enums.ShipMethod;
+
+
 
 /**
- * Details about shipping
- * <ul>
- *   <li>
- *     <b>shipMethod:</b> This is the method of shipment.  <br>
- *     <i>Allowed values: N, T, C, O, S</i>
- *   </li>
- *   <li>
- *     <b>street:</b> This is the recipient's street address.  <br>
- *     Example: 20735 Stevens Creek Blvd
- *   </li>
- *   <li>
- *     <b>street2:</b> This is the second line of the street address in the shipping address, if required (e.g., apartment number).  <br>
- *     Example: Montessori
- *   </li>
- *   <li>
- *     <b>city:</b> This is the city in which the recipient resides.  <br>
- *     Example: Cupertino
- *   </li>
- *   <li>
- *     <b>state:</b> This is the state/province/region in which the recipient lives.  <br>
- *     - For Canada see <a href="https://developer.paysafe.com/en/support/reference-information/codes/#province-codes">Province Codes;</a>
- *      <br>
- *     - For the United States see <a href="https://developer.paysafe.com/en/support/reference-information/codes/#state-codes">State Codes;</a>
- *      <br>
- *     - Other countries have no restrictions.  <br>
- *     Example: ON
- *   </li>
- *   <li>
- *     <b>countries:</b> This is the country where the address is located.  <br>
- *     See <a href="https://developer.paysafe.com/en/support/reference-information/codes/#country-codes">Country Codes.</a>  <br>
- *     Example: CA
- *   </li>
- *   <li>
- *     <b>zip:</b> This is the recipient's postal/zip code.  <br>
- *     Example: 95014
- *   </li>
- * </ul>
+ * Shipping details for the transaction
  */
 public class ShippingDetails {
 
   @JsonProperty("shipMethod")
   private ShipMethod shipMethod;
+  @JsonProperty("recipientName")
+  private String recipientName;
   @JsonProperty("street")
   private String street;
   @JsonProperty("street2")
@@ -62,24 +36,29 @@ public class ShippingDetails {
   private String country;
   @JsonProperty("zip")
   private String zip;
+  @JsonProperty("phone")
+  private String phone;
 
   public ShippingDetails() {
     super();
   }
 
-  private ShippingDetails(Builder builder) {
+  private ShippingDetails(final Builder builder) {
     setShipMethod(builder.shipMethod);
+    setRecipientName(builder.recipientName);
     setStreet(builder.street);
     setStreet2(builder.street2);
     setCity(builder.city);
     setState(builder.state);
     setCountry(builder.country);
     setZip(builder.zip);
+    setPhone(builder.phone);
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public ShippingDetails shipMethod(ShipMethod shipMethod) {
     this.shipMethod = shipMethod;
@@ -87,7 +66,7 @@ public class ShippingDetails {
   }
 
   /**
-   * This is the method of shipment. Possible values are:    - N – Next Day/Overnight   - T – Two-Day Service   - C – Lowest Cost   - O – Other   - S – Same Day
+   * Get shipMethod
    *
    * @return shipMethod
    */
@@ -99,13 +78,33 @@ public class ShippingDetails {
     this.shipMethod = shipMethod;
   }
 
+
+  public ShippingDetails recipientName(String recipientName) {
+    this.recipientName = recipientName;
+    return this;
+  }
+
+  /**
+   * Name of the recipient
+   *
+   * @return recipientName
+   */
+  public String getRecipientName() {
+    return recipientName;
+  }
+
+  public void setRecipientName(String recipientName) {
+    this.recipientName = recipientName;
+  }
+
+
   public ShippingDetails street(String street) {
     this.street = street;
     return this;
   }
 
   /**
-   * This is the recipient's street address.
+   * Street address
    *
    * @return street
    */
@@ -117,13 +116,14 @@ public class ShippingDetails {
     this.street = street;
   }
 
+
   public ShippingDetails street2(String street2) {
     this.street2 = street2;
     return this;
   }
 
   /**
-   * This is the second line of the street address in the shipping address, if required (e.g., apartment number).
+   * Additional street address information
    *
    * @return street2
    */
@@ -135,13 +135,14 @@ public class ShippingDetails {
     this.street2 = street2;
   }
 
+
   public ShippingDetails city(String city) {
     this.city = city;
     return this;
   }
 
   /**
-   * This is the city in which the recipient resides.
+   * City
    *
    * @return city
    */
@@ -153,16 +154,14 @@ public class ShippingDetails {
     this.city = city;
   }
 
+
   public ShippingDetails state(String state) {
     this.state = state;
     return this;
   }
 
   /**
-   * This is the state/province/region in which the recipient lives.
-   * For Canada see (<a href="https://developer.paysafe.com/en/support/reference-information/codes/#province-codes">Province Codes.</a>) <br>
-   * For the United States see <a href="https://developer.paysafe.com/en/support/reference-information/codes/#state-codes">State Codes.</a> <br>
-   * Other countries have no restrictions.
+   * State or province
    *
    * @return state
    */
@@ -174,16 +173,16 @@ public class ShippingDetails {
     this.state = state;
   }
 
+
   public ShippingDetails country(String country) {
     this.country = country;
     return this;
   }
 
   /**
-   * This is the country where the address is located.
+   * Two-letter ISO country code
    *
    * @return country
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#country-codes>Country codes</a>
    */
   public String getCountry() {
     return country;
@@ -193,13 +192,14 @@ public class ShippingDetails {
     this.country = country;
   }
 
+
   public ShippingDetails zip(String zip) {
     this.zip = zip;
     return this;
   }
 
   /**
-   * This is the recipient's postal/zip code.
+   * Postal code
    *
    * @return zip
    */
@@ -209,6 +209,25 @@ public class ShippingDetails {
 
   public void setZip(String zip) {
     this.zip = zip;
+  }
+
+
+  public ShippingDetails phone(String phone) {
+    this.phone = phone;
+    return this;
+  }
+
+  /**
+   * Phone number
+   *
+   * @return phone
+   */
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
   }
 
   @Override
@@ -221,17 +240,19 @@ public class ShippingDetails {
     }
     ShippingDetails shippingDetails = (ShippingDetails) o;
     return Objects.equals(this.shipMethod, shippingDetails.shipMethod) &&
+        Objects.equals(this.recipientName, shippingDetails.recipientName) &&
         Objects.equals(this.street, shippingDetails.street) &&
         Objects.equals(this.street2, shippingDetails.street2) &&
         Objects.equals(this.city, shippingDetails.city) &&
         Objects.equals(this.state, shippingDetails.state) &&
         Objects.equals(this.country, shippingDetails.country) &&
-        Objects.equals(this.zip, shippingDetails.zip);
+        Objects.equals(this.zip, shippingDetails.zip) &&
+        Objects.equals(this.phone, shippingDetails.phone);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(shipMethod, street, street2, city, state, country, zip);
+    return Objects.hash(shipMethod, recipientName, street, street2, city, state, country, zip, phone);
   }
 
   @Override
@@ -239,12 +260,14 @@ public class ShippingDetails {
 
     return "class ShippingDetails {\n"
         + "    shipMethod: " + toIndentedString(shipMethod) + "\n"
+        + "    recipientName: " + toIndentedString(recipientName) + "\n"
         + "    street: " + toIndentedString(street) + "\n"
         + "    street2: " + toIndentedString(street2) + "\n"
         + "    city: " + toIndentedString(city) + "\n"
         + "    state: " + toIndentedString(state) + "\n"
         + "    country: " + toIndentedString(country) + "\n"
         + "    zip: " + toIndentedString(zip) + "\n"
+        + "    phone: " + toIndentedString(phone) + "\n"
         + "}";
   }
 
@@ -260,24 +283,26 @@ public class ShippingDetails {
   }
 
   /**
-   * {@code ShippingDetails} builder static inner class.
+   * Shipping details for the transaction builder static inner class.
    */
   public static final class Builder {
     private ShipMethod shipMethod;
+    private String recipientName;
     private String street;
     private String street2;
     private String city;
     private String state;
     private String country;
     private String zip;
+    private String phone;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code shipMethod} and returns a reference to this Builder enabling method chaining.
+     * Sets the shipMethod and returns a reference to this Builder enabling method chaining.
      *
-     * @param shipMethod the {@code shipMethod} to set
+     * @param shipMethod the shipMethod to set
      * @return a reference to this Builder
      */
     public Builder shipMethod(ShipMethod shipMethod) {
@@ -286,9 +311,24 @@ public class ShippingDetails {
     }
 
     /**
-     * Sets the {@code street} and returns a reference to this Builder enabling method chaining.
+     * Name of the recipient
+     * <p>
+     * Sets the recipientName and returns a reference to this Builder enabling method chaining.
      *
-     * @param street the {@code street} to set
+     * @param recipientName the recipientName to set
+     * @return a reference to this Builder
+     */
+    public Builder recipientName(String recipientName) {
+      this.recipientName = recipientName;
+      return this;
+    }
+
+    /**
+     * Street address
+     * <p>
+     * Sets the street and returns a reference to this Builder enabling method chaining.
+     *
+     * @param street the street to set
      * @return a reference to this Builder
      */
     public Builder street(String street) {
@@ -297,9 +337,11 @@ public class ShippingDetails {
     }
 
     /**
-     * Sets the {@code street2} and returns a reference to this Builder enabling method chaining.
+     * Additional street address information
+     * <p>
+     * Sets the street2 and returns a reference to this Builder enabling method chaining.
      *
-     * @param street2 the {@code street2} to set
+     * @param street2 the street2 to set
      * @return a reference to this Builder
      */
     public Builder street2(String street2) {
@@ -308,9 +350,11 @@ public class ShippingDetails {
     }
 
     /**
-     * Sets the {@code city} and returns a reference to this Builder enabling method chaining.
+     * City
+     * <p>
+     * Sets the city and returns a reference to this Builder enabling method chaining.
      *
-     * @param city the {@code city} to set
+     * @param city the city to set
      * @return a reference to this Builder
      */
     public Builder city(String city) {
@@ -319,9 +363,11 @@ public class ShippingDetails {
     }
 
     /**
-     * Sets the {@code state} and returns a reference to this Builder enabling method chaining.
+     * State or province
+     * <p>
+     * Sets the state and returns a reference to this Builder enabling method chaining.
      *
-     * @param state the {@code state} to set
+     * @param state the state to set
      * @return a reference to this Builder
      */
     public Builder state(String state) {
@@ -330,9 +376,11 @@ public class ShippingDetails {
     }
 
     /**
-     * Sets the {@code country} and returns a reference to this Builder enabling method chaining.
+     * Two-letter ISO country code
+     * <p>
+     * Sets the country and returns a reference to this Builder enabling method chaining.
      *
-     * @param country the {@code country} to set
+     * @param country the country to set
      * @return a reference to this Builder
      */
     public Builder country(String country) {
@@ -341,9 +389,11 @@ public class ShippingDetails {
     }
 
     /**
-     * Sets the {@code zip} and returns a reference to this Builder enabling method chaining.
+     * Postal code
+     * <p>
+     * Sets the zip and returns a reference to this Builder enabling method chaining.
      *
-     * @param zip the {@code zip} to set
+     * @param zip the zip to set
      * @return a reference to this Builder
      */
     public Builder zip(String zip) {
@@ -352,13 +402,25 @@ public class ShippingDetails {
     }
 
     /**
-     * Returns a {@code ShippingDetails} built from the parameters previously set.
+     * Phone number
+     * <p>
+     * Sets the phone and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code ShippingDetails} built with parameters of this {@code ShippingDetails.Builder}
+     * @param phone the phone to set
+     * @return a reference to this Builder
+     */
+    public Builder phone(String phone) {
+      this.phone = phone;
+      return this;
+    }
+
+    /**
+     * Returns a ShippingDetails built from the parameters previously set.
+     *
+     * @return a ShippingDetails built with parameters of this ShippingDetails.Builder
      */
     public ShippingDetails build() {
       return new ShippingDetails(this);
     }
   }
 }
-

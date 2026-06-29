@@ -3,7 +3,6 @@
 package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.processDeleteResponse;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
@@ -39,7 +38,7 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
   @Override public Address createAddress(final String customerId, final Address address, final RequestOptions requestOptions) throws PaysafeSdkException {
     final String path = String.format(CUSTOMER_ADDRESS_ENDPOINT, customerId);
     PaysafeApiResponse response = paysafeApiClient.executePost(path, address, requestOptions);
-    return processResponse(response, Address.class);
+    return paysafeApiClient.processResponse(response, Address.class);
   }
 
   /**
@@ -55,7 +54,7 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
   @Override public Address getAddressById(final String customerId, final String addressId, final RequestOptions requestOptions) throws PaysafeSdkException {
     final String path = String.format(CUSTOMER_ADDRESS_ENDPOINT + "/%s", customerId, addressId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, Address.class);
+    return paysafeApiClient.processResponse(response, Address.class);
   }
 
   /**
@@ -73,7 +72,7 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
 
     final String path = String.format(CUSTOMER_ADDRESS_ENDPOINT + "/%s", customerId, addressId);
     PaysafeApiResponse response = paysafeApiClient.executePut(path, address, requestOptions);
-    return processResponse(response, Address.class);
+    return paysafeApiClient.processResponse(response, Address.class);
   }
 
   @Override

@@ -2,14 +2,13 @@
 
 package com.paysafe.payments.service.impl;
 
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
-
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
 import com.paysafe.payments.api.RequestOptions;
 import com.paysafe.payments.errorhandling.exception.PaysafeSdkException;
 import com.paysafe.payments.model.common.enums.CurrencyCode;
 import com.paysafe.payments.model.paymentmethod.LookUpPaymentMethodsResponse;
+
 import com.paysafe.payments.service.PaymentMethodsService;
 
 public class PaymentMethodsServiceImpl implements PaymentMethodsService {
@@ -44,6 +43,6 @@ public class PaymentMethodsServiceImpl implements PaymentMethodsService {
 
     String path = String.format("%s?currencyCode=%s", PAYMENT_METHODS_ENDPOINT, currencyCode);
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, LookUpPaymentMethodsResponse.class);
+    return paysafeApiClient.processResponse(response, LookUpPaymentMethodsResponse.class);
   }
 }

@@ -31,7 +31,7 @@ public interface PaymentMethodsService {
    * <strong>GET /v1/paymentmethods</strong></p>
    *
    * @param currencyCode   the currency code for the merchant account (e.g. USD, CAD)
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return PaymentMethodsResponse containing the list of payment methods
    * @throws PaysafeSdkException if an error occurs with the Payments API
    */

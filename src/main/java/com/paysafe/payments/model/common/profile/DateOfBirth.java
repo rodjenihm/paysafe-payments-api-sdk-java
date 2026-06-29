@@ -1,13 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.profile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.customer.Customer;
+
+
 
 /**
- * This is the recipient&#39;s date of birth.  <b>Note:</b> Required for Pay by Bank.
+ * Customer's date of birth information
  */
 public class DateOfBirth {
 
@@ -22,7 +31,7 @@ public class DateOfBirth {
     super();
   }
 
-  private DateOfBirth(Builder builder) {
+  private DateOfBirth(final Builder builder) {
     setDay(builder.day);
     setMonth(builder.month);
     setYear(builder.year);
@@ -32,14 +41,14 @@ public class DateOfBirth {
     return new Builder();
   }
 
+
   public DateOfBirth day(Integer day) {
     this.day = day;
     return this;
   }
 
   /**
-   * This is the day of birth.  <br>
-   * Maximum: 31
+   * Day of birth
    *
    * @return day
    */
@@ -51,14 +60,14 @@ public class DateOfBirth {
     this.day = day;
   }
 
+
   public DateOfBirth month(Integer month) {
     this.month = month;
     return this;
   }
 
   /**
-   * This is the month of birth.  <br>
-   * Maximum: 12
+   * Month of birth
    *
    * @return month
    */
@@ -70,14 +79,14 @@ public class DateOfBirth {
     this.month = month;
   }
 
+
   public DateOfBirth year(Integer year) {
     this.year = year;
     return this;
   }
 
   /**
-   * This is the year of birth.  <br>
-   * Minimum: 1900
+   * Year of birth
    *
    * @return year
    */
@@ -130,7 +139,7 @@ public class DateOfBirth {
   }
 
   /**
-   * {@code DateOfBirth} builder static inner class.
+   * Customer's date of birth information builder static inner class.
    */
   public static final class Builder {
     private Integer day;
@@ -141,9 +150,11 @@ public class DateOfBirth {
     }
 
     /**
-     * Sets the {@code day} and returns a reference to this Builder enabling method chaining.
+     * Day of birth
+     * <p>
+     * Sets the day and returns a reference to this Builder enabling method chaining.
      *
-     * @param day the {@code day} to set
+     * @param day the day to set
      * @return a reference to this Builder
      */
     public Builder day(Integer day) {
@@ -152,9 +163,11 @@ public class DateOfBirth {
     }
 
     /**
-     * Sets the {@code month} and returns a reference to this Builder enabling method chaining.
+     * Month of birth
+     * <p>
+     * Sets the month and returns a reference to this Builder enabling method chaining.
      *
-     * @param month the {@code month} to set
+     * @param month the month to set
      * @return a reference to this Builder
      */
     public Builder month(Integer month) {
@@ -163,9 +176,11 @@ public class DateOfBirth {
     }
 
     /**
-     * Sets the {@code year} and returns a reference to this Builder enabling method chaining.
+     * Year of birth
+     * <p>
+     * Sets the year and returns a reference to this Builder enabling method chaining.
      *
-     * @param year the {@code year} to set
+     * @param year the year to set
      * @return a reference to this Builder
      */
     public Builder year(Integer year) {
@@ -174,13 +189,12 @@ public class DateOfBirth {
     }
 
     /**
-     * Returns a {@code DateOfBirth} built from the parameters previously set.
+     * Returns a DateOfBirth built from the parameters previously set.
      *
-     * @return a {@code DateOfBirth} built with parameters of this {@code DateOfBirth.Builder}
+     * @return a DateOfBirth built with parameters of this DateOfBirth.Builder
      */
     public DateOfBirth build() {
       return new DateOfBirth(this);
     }
   }
 }
-

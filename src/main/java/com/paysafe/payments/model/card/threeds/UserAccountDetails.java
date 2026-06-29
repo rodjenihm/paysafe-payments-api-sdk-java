@@ -1,79 +1,24 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.threeds;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.card.enums.AccountChangedRange;
-import com.paysafe.payments.model.card.enums.PasswordChangedRange;
 import com.paysafe.payments.model.card.enums.AccountCreatedRange;
+import com.paysafe.payments.model.card.enums.PasswordChangedRange;
+
+
 
 /**
- * These are the user account details from the merchant website.
- *
- * <ul>
- *   <li>
- *     <b>addCardAttemptsForLastDay:</b> This is the number of Add Card attempts in the last 24 hours.
- *   </li>
- *   <li>
- *     <b>changedDate:</b> This is the date that the cardholder’s account with the 3DS Requestor was last changed.
- *     The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
- *   </li>
- *   <li>
- *     <b>changedRange:</b> This is the length of time between the most recent change to the cardholder’s account information
- *     and the API call of the current transaction.  <br>
- *     <i>Allowed values: DURING_TRANSACTION, LESS_THAN_THIRTY_DAYS, THIRTY_TO_SIXTY_DAYS, MORE_THAN_SIXTY_DAYS</i>
- *   </li>
- *   <li>
- *     <b>createdDate:</b> This is the date when the cardholder opened the account with the 3DS Requestor.
- *     The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
- *   </li>
- *   <li>
- *     <b>createdRange:</b> This is the length of time between the cardholder opening the account with the 3DS Requestor
- *     and the API call of the current transaction.  <br>
- *     <i>Allowed values: NO_ACCOUNT, DURING_TRANSACTION, LESS_THAN_THIRTY_DAYS, THIRTY_TO_SIXTY_DAYS, MORE_THAN_SIXTY_DAYS</i>
- *   </li>
- *   <li>
- *     <b>passwordChangedDate:</b> This is the date when the cardholder’s account was reset or the password was changed.
- *     The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
- *   </li>
- *   <li>
- *     <b>passwordChangedRange:</b> This is the length of time between the most recent password change or cardholder account reset
- *     and the API call of the current transaction.  <br>
- *     <i>Allowed values: NO_CHANGE, DURING_TRANSACTION, LESS_THAN_THIRTY_DAYS, THIRTY_TO_SIXTY_DAYS, MORE_THAN_SIXTY_DAYS</i>
- *   </li>
- *   <li>
- *     <b>suspiciousAccountActivity:</b> This indicates whether the 3DS Requestor has experienced suspicious activity,
- *     including previous fraud, on the cardholder account.
- *   </li>
- *   <li>
- *     <b>totalPurchasesSixMonthCount:</b> This is the total number of purchases from this cardholder account in the previous six months.
- *   </li>
- *   <li>
- *     <b>transactionCountForPreviousDay:</b> This is the number of transactions (successful and abandoned) for this cardholder account
- *     with the 3DS Requestor across all payment accounts in the previous 24 hours.
- *   </li>
- *   <li>
- *     <b>transactionCountForPreviousYear:</b> This is the number of transactions (successful and abandoned) for this cardholder account
- *     with the 3DS Requestor across all payment accounts in the previous year.
- *   </li>
- *   <li>
- *     <b>shippingDetailsUsage:</b> This is the shipping usage information.
- *   </li>
- *   <li>
- *     <b>userLogin:</b> This is the cardholder login information.
- *   </li>
- *   <li>
- *     <b>paymentAccountDetails:</b> These are the details of the current payment account of the cardholder.
- *   </li>
- *   <li>
- *     <b>priorThreeDSAuthentication:</b> This is the previous authentication information used with current merchant, cardholder, and card.
- *   </li>
- *   <li>
- *     <b>travelDetails:</b> These are the Amex-specific travel details.
- *   </li>
- * </ul>
+ * User account details from the merchant website for 3DS authentication
  */
 public class UserAccountDetails {
 
@@ -117,10 +62,11 @@ public class UserAccountDetails {
   private UserAccountDetails(final Builder builder) {
     setAddCardAttemptsForLastDay(builder.addCardAttemptsForLastDay);
     setChangedDate(builder.changedDate);
-    setPasswordChangedRange(builder.passwordChangedRange);
+    setChangedRange(builder.changedRange);
     setCreatedDate(builder.createdDate);
-    setCreatedRange(builder.accountCreatedRange);
+    setCreatedRange(builder.createdRange);
     setPasswordChangedDate(builder.passwordChangedDate);
+    setPasswordChangedRange(builder.passwordChangedRange);
     setSuspiciousAccountActivity(builder.suspiciousAccountActivity);
     setTotalPurchasesSixMonthCount(builder.totalPurchasesSixMonthCount);
     setTransactionCountForPreviousDay(builder.transactionCountForPreviousDay);
@@ -136,14 +82,14 @@ public class UserAccountDetails {
     return new Builder();
   }
 
+
   public UserAccountDetails addCardAttemptsForLastDay(Integer addCardAttemptsForLastDay) {
     this.addCardAttemptsForLastDay = addCardAttemptsForLastDay;
     return this;
   }
 
   /**
-   * This is the number of Add Card attempts in the last 24 hours.  <br>
-   * Maximum: 999
+   * Number of attempts to add a card in the last 24 hours
    *
    * @return addCardAttemptsForLastDay
    */
@@ -154,6 +100,7 @@ public class UserAccountDetails {
   public void setAddCardAttemptsForLastDay(Integer addCardAttemptsForLastDay) {
     this.addCardAttemptsForLastDay = addCardAttemptsForLastDay;
   }
+
 
   public UserAccountDetails changedDate(String changedDate) {
     this.changedDate = changedDate;
@@ -173,13 +120,14 @@ public class UserAccountDetails {
     this.changedDate = changedDate;
   }
 
-  public UserAccountDetails changedRange(PasswordChangedRange passwordChangedRange) {
-    this.passwordChangedRange = passwordChangedRange;
+
+  public UserAccountDetails changedRange(AccountChangedRange changedRange) {
+    this.changedRange = changedRange;
     return this;
   }
 
   /**
-   * This is the length of time between the most recent change to the cardholder’s account information and the API call of the current transaction.
+   * Get changedRange
    *
    * @return changedRange
    */
@@ -191,13 +139,14 @@ public class UserAccountDetails {
     this.changedRange = changedRange;
   }
 
+
   public UserAccountDetails createdDate(String createdDate) {
     this.createdDate = createdDate;
     return this;
   }
 
   /**
-   * This is the date when the cardholder opened the account with the 3DS Requestor. The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
+   * This is the date when the cardholder opened the account with the 3DS Requestor. The ISO 8601 date format is expected, i.e., YYYY-MM-DD
    *
    * @return createdDate
    */
@@ -209,13 +158,14 @@ public class UserAccountDetails {
     this.createdDate = createdDate;
   }
 
+
   public UserAccountDetails createdRange(AccountCreatedRange createdRange) {
     this.createdRange = createdRange;
     return this;
   }
 
   /**
-   * This is the length of time between the cardholder opening the account with the 3DS Requestor and the API call of the current transaction.
+   * Get createdRange
    *
    * @return createdRange
    */
@@ -226,6 +176,7 @@ public class UserAccountDetails {
   public void setCreatedRange(AccountCreatedRange createdRange) {
     this.createdRange = createdRange;
   }
+
 
   public UserAccountDetails passwordChangedDate(String passwordChangedDate) {
     this.passwordChangedDate = passwordChangedDate;
@@ -245,13 +196,14 @@ public class UserAccountDetails {
     this.passwordChangedDate = passwordChangedDate;
   }
 
+
   public UserAccountDetails passwordChangedRange(PasswordChangedRange passwordChangedRange) {
     this.passwordChangedRange = passwordChangedRange;
     return this;
   }
 
   /**
-   * This is the length of time between the most recent password change or cardholder account reset and the API call of the current transaction.
+   * Get passwordChangedRange
    *
    * @return passwordChangedRange
    */
@@ -263,13 +215,14 @@ public class UserAccountDetails {
     this.passwordChangedRange = passwordChangedRange;
   }
 
+
   public UserAccountDetails suspiciousAccountActivity(Boolean suspiciousAccountActivity) {
     this.suspiciousAccountActivity = suspiciousAccountActivity;
     return this;
   }
 
   /**
-   * This indicates whether the 3DS Requestor has experienced suspicious activity, including previous fraud, on the cardholder account.
+   * Whether the 3DS Requestor has experienced suspicious activity on the cardholder account
    *
    * @return suspiciousAccountActivity
    */
@@ -281,14 +234,14 @@ public class UserAccountDetails {
     this.suspiciousAccountActivity = suspiciousAccountActivity;
   }
 
+
   public UserAccountDetails totalPurchasesSixMonthCount(Integer totalPurchasesSixMonthCount) {
     this.totalPurchasesSixMonthCount = totalPurchasesSixMonthCount;
     return this;
   }
 
   /**
-   * This is the total number of purchases from this cardholder account in the previous six months.  <br>
-   * Maximum: 9999
+   * Transaction count for last 6 months
    *
    * @return totalPurchasesSixMonthCount
    */
@@ -300,15 +253,14 @@ public class UserAccountDetails {
     this.totalPurchasesSixMonthCount = totalPurchasesSixMonthCount;
   }
 
+
   public UserAccountDetails transactionCountForPreviousDay(Integer transactionCountForPreviousDay) {
     this.transactionCountForPreviousDay = transactionCountForPreviousDay;
     return this;
   }
 
   /**
-   * This is the number of transactions (successful and abandoned) for this cardholder account with the 3DS Requestor across all payment accounts in
-   * the previous 24 hours.  <br>
-   * Maximum: 999
+   * Number of transactions in the previous day
    *
    * @return transactionCountForPreviousDay
    */
@@ -320,15 +272,14 @@ public class UserAccountDetails {
     this.transactionCountForPreviousDay = transactionCountForPreviousDay;
   }
 
+
   public UserAccountDetails transactionCountForPreviousYear(Integer transactionCountForPreviousYear) {
     this.transactionCountForPreviousYear = transactionCountForPreviousYear;
     return this;
   }
 
   /**
-   * This is the number of transactions (successful and abandoned) for this cardholder account with the 3DS Requestor across all payment accounts
-   * in the previous year.  <br>
-   * Maximum: 999
+   * Number of transactions in the previous year
    *
    * @return transactionCountForPreviousYear
    */
@@ -340,13 +291,14 @@ public class UserAccountDetails {
     this.transactionCountForPreviousYear = transactionCountForPreviousYear;
   }
 
+
   public UserAccountDetails shippingDetailsUsage(ShippingDetailsUsage shippingDetailsUsage) {
     this.shippingDetailsUsage = shippingDetailsUsage;
     return this;
   }
 
   /**
-   * This is the shipping usage information.
+   * Get shippingDetailsUsage
    *
    * @return shippingDetailsUsage
    */
@@ -358,13 +310,14 @@ public class UserAccountDetails {
     this.shippingDetailsUsage = shippingDetailsUsage;
   }
 
+
   public UserAccountDetails userLogin(UserLogin userLogin) {
     this.userLogin = userLogin;
     return this;
   }
 
   /**
-   * This is the cardholder login information.
+   * Get userLogin
    *
    * @return userLogin
    */
@@ -376,13 +329,14 @@ public class UserAccountDetails {
     this.userLogin = userLogin;
   }
 
+
   public UserAccountDetails paymentAccountDetails(PaymentAccountDetails paymentAccountDetails) {
     this.paymentAccountDetails = paymentAccountDetails;
     return this;
   }
 
   /**
-   * These are the details of the current payment account of the cardholder.
+   * Get paymentAccountDetails
    *
    * @return paymentAccountDetails
    */
@@ -394,13 +348,14 @@ public class UserAccountDetails {
     this.paymentAccountDetails = paymentAccountDetails;
   }
 
+
   public UserAccountDetails priorThreeDSAuthentication(PriorThreedsAuthentication priorThreeDSAuthentication) {
     this.priorThreeDSAuthentication = priorThreeDSAuthentication;
     return this;
   }
 
   /**
-   * This is the previous authentication information used with current merchant, cardholder, and card.
+   * Get priorThreeDSAuthentication
    *
    * @return priorThreeDSAuthentication
    */
@@ -412,13 +367,14 @@ public class UserAccountDetails {
     this.priorThreeDSAuthentication = priorThreeDSAuthentication;
   }
 
+
   public UserAccountDetails travelDetails(TravelDetails travelDetails) {
     this.travelDetails = travelDetails;
     return this;
   }
 
   /**
-   * These are the Amex-specific travel details.
+   * Get travelDetails
    *
    * @return travelDetails
    */
@@ -459,9 +415,7 @@ public class UserAccountDetails {
 
   @Override
   public int hashCode() {
-    return Objects.hash(addCardAttemptsForLastDay, changedDate, passwordChangedRange, createdDate, createdRange, passwordChangedDate, passwordChangedRange,
-        suspiciousAccountActivity, totalPurchasesSixMonthCount, transactionCountForPreviousDay, transactionCountForPreviousYear, shippingDetailsUsage,
-        userLogin, paymentAccountDetails, priorThreeDSAuthentication, travelDetails);
+    return Objects.hash(addCardAttemptsForLastDay, changedDate, changedRange, createdDate, createdRange, passwordChangedDate, passwordChangedRange, suspiciousAccountActivity, totalPurchasesSixMonthCount, transactionCountForPreviousDay, transactionCountForPreviousYear, shippingDetailsUsage, userLogin, paymentAccountDetails, priorThreeDSAuthentication, travelDetails);
   }
 
   @Override
@@ -499,15 +453,16 @@ public class UserAccountDetails {
   }
 
   /**
-   * {@code UserAccountDetails} builder static inner class.
+   * User account details from the merchant website for 3DS authentication builder static inner class.
    */
   public static final class Builder {
     private Integer addCardAttemptsForLastDay;
     private String changedDate;
-    private PasswordChangedRange passwordChangedRange;
+    private AccountChangedRange changedRange;
     private String createdDate;
-    private AccountCreatedRange accountCreatedRange;
+    private AccountCreatedRange createdRange;
     private String passwordChangedDate;
+    private PasswordChangedRange passwordChangedRange;
     private Boolean suspiciousAccountActivity;
     private Integer totalPurchasesSixMonthCount;
     private Integer transactionCountForPreviousDay;
@@ -522,9 +477,11 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code addCardAttemptsForLastDay} and returns a reference to this Builder enabling method chaining.
+     * Number of attempts to add a card in the last 24 hours
+     * <p>
+     * Sets the addCardAttemptsForLastDay and returns a reference to this Builder enabling method chaining.
      *
-     * @param addCardAttemptsForLastDay the {@code addCardAttemptsForLastDay} to set
+     * @param addCardAttemptsForLastDay the addCardAttemptsForLastDay to set
      * @return a reference to this Builder
      */
     public Builder addCardAttemptsForLastDay(Integer addCardAttemptsForLastDay) {
@@ -533,9 +490,11 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code changedDate} and returns a reference to this Builder enabling method chaining.
+     * This is the date that the cardholder’s account with the 3DS Requestor was last changed. The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
+     * <p>
+     * Sets the changedDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param changedDate the {@code changedDate} to set
+     * @param changedDate the changedDate to set
      * @return a reference to this Builder
      */
     public Builder changedDate(String changedDate) {
@@ -544,20 +503,22 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code changedRange} and returns a reference to this Builder enabling method chaining.
+     * Sets the changedRange and returns a reference to this Builder enabling method chaining.
      *
-     * @param passwordChangedRange the {@code changedRange} to set
+     * @param changedRange the changedRange to set
      * @return a reference to this Builder
      */
-    public Builder changedRange(PasswordChangedRange passwordChangedRange) {
-      this.passwordChangedRange = passwordChangedRange;
+    public Builder changedRange(AccountChangedRange changedRange) {
+      this.changedRange = changedRange;
       return this;
     }
 
     /**
-     * Sets the {@code createdDate} and returns a reference to this Builder enabling method chaining.
+     * This is the date when the cardholder opened the account with the 3DS Requestor. The ISO 8601 date format is expected, i.e., YYYY-MM-DD
+     * <p>
+     * Sets the createdDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param createdDate the {@code createdDate} to set
+     * @param createdDate the createdDate to set
      * @return a reference to this Builder
      */
     public Builder createdDate(String createdDate) {
@@ -566,20 +527,22 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code createdRange} and returns a reference to this Builder enabling method chaining.
+     * Sets the createdRange and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountCreatedRange the {@code createdRange} to set
+     * @param createdRange the createdRange to set
      * @return a reference to this Builder
      */
-    public Builder createdRange(AccountCreatedRange accountCreatedRange) {
-      this.accountCreatedRange = accountCreatedRange;
+    public Builder createdRange(AccountCreatedRange createdRange) {
+      this.createdRange = createdRange;
       return this;
     }
 
     /**
-     * Sets the {@code passwordChangedDate} and returns a reference to this Builder enabling method chaining.
+     * This is the date when the cardholder’s account was reset or the password was changed. The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
+     * <p>
+     * Sets the passwordChangedDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param passwordChangedDate the {@code passwordChangedDate} to set
+     * @param passwordChangedDate the passwordChangedDate to set
      * @return a reference to this Builder
      */
     public Builder passwordChangedDate(String passwordChangedDate) {
@@ -588,9 +551,9 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code passwordChangedRange} and returns a reference to this Builder enabling method chaining.
+     * Sets the passwordChangedRange and returns a reference to this Builder enabling method chaining.
      *
-     * @param passwordChangedRange the {@code passwordChangedRange} to set
+     * @param passwordChangedRange the passwordChangedRange to set
      * @return a reference to this Builder
      */
     public Builder passwordChangedRange(PasswordChangedRange passwordChangedRange) {
@@ -599,9 +562,11 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code suspiciousAccountActivity} and returns a reference to this Builder enabling method chaining.
+     * Whether the 3DS Requestor has experienced suspicious activity on the cardholder account
+     * <p>
+     * Sets the suspiciousAccountActivity and returns a reference to this Builder enabling method chaining.
      *
-     * @param suspiciousAccountActivity the {@code suspiciousAccountActivity} to set
+     * @param suspiciousAccountActivity the suspiciousAccountActivity to set
      * @return a reference to this Builder
      */
     public Builder suspiciousAccountActivity(Boolean suspiciousAccountActivity) {
@@ -610,9 +575,11 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code totalPurchasesSixMonthCount} and returns a reference to this Builder enabling method chaining.
+     * Transaction count for last 6 months
+     * <p>
+     * Sets the totalPurchasesSixMonthCount and returns a reference to this Builder enabling method chaining.
      *
-     * @param totalPurchasesSixMonthCount the {@code totalPurchasesSixMonthCount} to set
+     * @param totalPurchasesSixMonthCount the totalPurchasesSixMonthCount to set
      * @return a reference to this Builder
      */
     public Builder totalPurchasesSixMonthCount(Integer totalPurchasesSixMonthCount) {
@@ -621,9 +588,11 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code transactionCountForPreviousDay} and returns a reference to this Builder enabling method chaining.
+     * Number of transactions in the previous day
+     * <p>
+     * Sets the transactionCountForPreviousDay and returns a reference to this Builder enabling method chaining.
      *
-     * @param transactionCountForPreviousDay the {@code transactionCountForPreviousDay} to set
+     * @param transactionCountForPreviousDay the transactionCountForPreviousDay to set
      * @return a reference to this Builder
      */
     public Builder transactionCountForPreviousDay(Integer transactionCountForPreviousDay) {
@@ -632,9 +601,11 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code transactionCountForPreviousYear} and returns a reference to this Builder enabling method chaining.
+     * Number of transactions in the previous year
+     * <p>
+     * Sets the transactionCountForPreviousYear and returns a reference to this Builder enabling method chaining.
      *
-     * @param transactionCountForPreviousYear the {@code transactionCountForPreviousYear} to set
+     * @param transactionCountForPreviousYear the transactionCountForPreviousYear to set
      * @return a reference to this Builder
      */
     public Builder transactionCountForPreviousYear(Integer transactionCountForPreviousYear) {
@@ -643,9 +614,9 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code shippingDetailsUsage} and returns a reference to this Builder enabling method chaining.
+     * Sets the shippingDetailsUsage and returns a reference to this Builder enabling method chaining.
      *
-     * @param shippingDetailsUsage the {@code shippingDetailsUsage} to set
+     * @param shippingDetailsUsage the shippingDetailsUsage to set
      * @return a reference to this Builder
      */
     public Builder shippingDetailsUsage(ShippingDetailsUsage shippingDetailsUsage) {
@@ -654,9 +625,9 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code userLogin} and returns a reference to this Builder enabling method chaining.
+     * Sets the userLogin and returns a reference to this Builder enabling method chaining.
      *
-     * @param userLogin the {@code userLogin} to set
+     * @param userLogin the userLogin to set
      * @return a reference to this Builder
      */
     public Builder userLogin(UserLogin userLogin) {
@@ -665,9 +636,9 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code paymentAccountDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentAccountDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentAccountDetails the {@code paymentAccountDetails} to set
+     * @param paymentAccountDetails the paymentAccountDetails to set
      * @return a reference to this Builder
      */
     public Builder paymentAccountDetails(PaymentAccountDetails paymentAccountDetails) {
@@ -676,9 +647,9 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code priorThreeDSAuthentication} and returns a reference to this Builder enabling method chaining.
+     * Sets the priorThreeDSAuthentication and returns a reference to this Builder enabling method chaining.
      *
-     * @param priorThreeDSAuthentication the {@code priorThreeDSAuthentication} to set
+     * @param priorThreeDSAuthentication the priorThreeDSAuthentication to set
      * @return a reference to this Builder
      */
     public Builder priorThreeDSAuthentication(PriorThreedsAuthentication priorThreeDSAuthentication) {
@@ -687,9 +658,9 @@ public class UserAccountDetails {
     }
 
     /**
-     * Sets the {@code travelDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the travelDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param travelDetails the {@code travelDetails} to set
+     * @param travelDetails the travelDetails to set
      * @return a reference to this Builder
      */
     public Builder travelDetails(TravelDetails travelDetails) {
@@ -698,13 +669,12 @@ public class UserAccountDetails {
     }
 
     /**
-     * Returns a {@code UserAccountDetails} built from the parameters previously set.
+     * Returns a UserAccountDetails built from the parameters previously set.
      *
-     * @return a {@code UserAccountDetails} built with parameters of this {@code UserAccountDetails.Builder}
+     * @return a UserAccountDetails built with parameters of this UserAccountDetails.Builder
      */
     public UserAccountDetails build() {
       return new UserAccountDetails(this);
     }
   }
 }
-

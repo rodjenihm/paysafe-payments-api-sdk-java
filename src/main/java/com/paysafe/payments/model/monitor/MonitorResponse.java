@@ -1,14 +1,23 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.monitor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.monitor.enums.ServiceStatus;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+
+
+/**
+ * The response returned by /v1/monitor endpoint.
+ */
 public class MonitorResponse {
 
   @JsonProperty("status")
@@ -18,7 +27,7 @@ public class MonitorResponse {
     super();
   }
 
-  private MonitorResponse(Builder builder) {
+  private MonitorResponse(final Builder builder) {
     setStatus(builder.status);
   }
 
@@ -26,13 +35,14 @@ public class MonitorResponse {
     return new Builder();
   }
 
+
   public MonitorResponse status(ServiceStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the service. Expected value: READY
+   * Get status
    *
    * @return status
    */
@@ -52,8 +62,8 @@ public class MonitorResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MonitorResponse verifyThatTheServiceIsAccessible = (MonitorResponse) o;
-    return Objects.equals(this.status, verifyThatTheServiceIsAccessible.status);
+    MonitorResponse monitorResponse = (MonitorResponse) o;
+    return Objects.equals(this.status, monitorResponse.status);
   }
 
   @Override
@@ -63,6 +73,7 @@ public class MonitorResponse {
 
   @Override
   public String toString() {
+
     return "class MonitorResponse {\n"
         + "    status: " + toIndentedString(status) + "\n"
         + "}";
@@ -80,7 +91,7 @@ public class MonitorResponse {
   }
 
   /**
-   * {@code MonitorResponse} builder static inner class.
+   * The response returned by /v1/monitor endpoint. builder static inner class.
    */
   public static final class Builder {
     private ServiceStatus status;
@@ -89,9 +100,9 @@ public class MonitorResponse {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
     public Builder status(ServiceStatus status) {
@@ -100,9 +111,9 @@ public class MonitorResponse {
     }
 
     /**
-     * Returns a {@code MonitorResponse} built from the parameters previously set.
+     * Returns a MonitorResponse built from the parameters previously set.
      *
-     * @return a {@code MonitorResponse} built with parameters of this {@code MonitorResponse.Builder}
+     * @return a MonitorResponse built with parameters of this MonitorResponse.Builder
      */
     public MonitorResponse build() {
       return new MonitorResponse(this);

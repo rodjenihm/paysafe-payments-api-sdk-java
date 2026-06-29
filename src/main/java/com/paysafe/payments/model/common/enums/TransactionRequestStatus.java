@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.enums;
 
@@ -6,18 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This is the status of the transaction request for standalone and original credits. Possible values are:
- * <ul>
- * <li> RECEIVED – Our system has received the request and is waiting for the downstream processor’s response.  </li>
- * <li> INITIATED – The transaction was initiated with the downstream provider.  </li>
- * <li> PENDING - The transaction is awaiting the payment service provider's response.  </li>
- * <li> FAILED – The transaction failed, due to either an error or being declined.  </li>
- * <li> CANCELLED – The transaction request is cancelled.  </li>
- * <li> EXPIRED – The transaction request is expired.  </li>
- * <li> COMPLETED – The transaction request is completed. </li>
- * </ul>
+ * This is the status of the transaction request for standalone and original credits. Possible values are: - RECEIVED – Our system has received the request and is waiting for the downstream processor's response. - INITIATED – The transaction was initiated with the downstream provider. - PENDING - The transaction is awaiting the payment service provider's response. - FAILED – The transaction failed, due to either an error or being declined. - CANCELLED – The transaction request is cancelled. - EXPIRED – The transaction request is expired. - COMPLETED – The transaction request is completed.
  */
 public enum TransactionRequestStatus {
+
   RECEIVED("RECEIVED"),
 
   INITIATED("INITIATED"),

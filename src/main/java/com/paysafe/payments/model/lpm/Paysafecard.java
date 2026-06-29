@@ -1,12 +1,20 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.lpm.enums.CountryCode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.lpm.enums.KeyLevelRestriction;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
  * These are the details of the paysafecard used for the transaction.
@@ -20,7 +28,7 @@ public class Paysafecard {
   @JsonProperty("kycLevelRestriction")
   private KeyLevelRestriction kycLevelRestriction;
   @JsonProperty("countryRestriction")
-  private CountryCode countryRestriction;
+  private String countryRestriction;
   @JsonProperty("submerchantId")
   private String submerchantId;
 
@@ -40,14 +48,14 @@ public class Paysafecard {
     return new Builder();
   }
 
+
   public Paysafecard consumerId(String consumerId) {
     this.consumerId = consumerId;
     return this;
   }
 
   /**
-   * This is the merchant's unique identifier of the customer. For security purposes, if any personal data is used
-   * (for example, customer's user name, email address, etc.), it has to be encrypted or hashed. <b>Mandatory.</b>
+   * This is the merchant's unique identifier of the customer. For security purposes, if any personal data is used (for example, customer's user name, email address, etc.), it has to be encrypted or hashed. **Mandatory.**
    *
    * @return consumerId
    */
@@ -59,13 +67,14 @@ public class Paysafecard {
     this.consumerId = consumerId;
   }
 
+
   public Paysafecard minAgeRestriction(Integer minAgeRestriction) {
     this.minAgeRestriction = minAgeRestriction;
     return this;
   }
 
   /**
-   * payment can be restricted for a certain minimum consumer age (implicitly restricts payment to registered consumers only)
+   * Payment can be restricted for a certain minimum consumer age (implicitly restricts payment to registered consumers only)
    *
    * @return minAgeRestriction
    */
@@ -77,13 +86,15 @@ public class Paysafecard {
     this.minAgeRestriction = minAgeRestriction;
   }
 
+
   public Paysafecard kycLevelRestriction(KeyLevelRestriction kycLevelRestriction) {
     this.kycLevelRestriction = kycLevelRestriction;
     return this;
   }
 
   /**
-   * Payment can be restricted for a certain minimum kyc level (implicitly restricts payment to registered consumers only).
+   * Get kycLevelRestriction
+   *
    * @return kycLevelRestriction
    */
   public KeyLevelRestriction getKycLevelRestriction() {
@@ -94,34 +105,41 @@ public class Paysafecard {
     this.kycLevelRestriction = kycLevelRestriction;
   }
 
-  public Paysafecard countryRestriction(CountryCode countryRestriction) {
+
+  public Paysafecard countryRestriction(String countryRestriction) {
     this.countryRestriction = countryRestriction;
     return this;
   }
 
   /**
-   * This is the code of the country to which the transaction will be restricted. Optional.
+   * This is the code of the country to which the transaction will be restricted. Optional. See [Country codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes)
    *
    * @return countryRestriction
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#country-codes>Country codes</a>
    */
-  public CountryCode getCountryRestriction() {
+  public String getCountryRestriction() {
     return countryRestriction;
   }
 
-  public void setCountryRestriction(CountryCode countryRestriction) {
+  public void setCountryRestriction(String countryRestriction) {
     this.countryRestriction = countryRestriction;
   }
 
+
+  public Paysafecard submerchantId(String submerchantId) {
+    this.submerchantId = submerchantId;
+    return this;
+  }
+
   /**
-   * The Submerchant Id (Reporting Criteria) is used to classify sub-merchants at PaysafeCard side.
+   * The Submerchant Id (Reporting Criteria) is used to classify sub-merchants at PaysafeCard side
+   *
    * @return submerchantId
    */
   public String getSubmerchantId() {
     return submerchantId;
   }
 
-  public void setSubmerchantId(final String submerchantId) {
+  public void setSubmerchantId(String submerchantId) {
     this.submerchantId = submerchantId;
   }
 
@@ -170,22 +188,24 @@ public class Paysafecard {
   }
 
   /**
-   * {@code Paysafecard} builder static inner class.
+   * These are the details of the paysafecard used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String consumerId;
     private Integer minAgeRestriction;
     private KeyLevelRestriction kycLevelRestriction;
-    private CountryCode countryRestriction;
+    private String countryRestriction;
     private String submerchantId;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code consumerId} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant's unique identifier of the customer. For security purposes, if any personal data is used (for example, customer's user name, email address, etc.), it has to be encrypted or hashed. **Mandatory.**
+     * <p>
+     * Sets the consumerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param consumerId the {@code consumerId} to set
+     * @param consumerId the consumerId to set
      * @return a reference to this Builder
      */
     public Builder consumerId(String consumerId) {
@@ -194,9 +214,11 @@ public class Paysafecard {
     }
 
     /**
-     * Sets the {@code minAgeRestriction} and returns a reference to this Builder enabling method chaining.
+     * Payment can be restricted for a certain minimum consumer age (implicitly restricts payment to registered consumers only)
+     * <p>
+     * Sets the minAgeRestriction and returns a reference to this Builder enabling method chaining.
      *
-     * @param minAgeRestriction the {@code minAgeRestriction} to set
+     * @param minAgeRestriction the minAgeRestriction to set
      * @return a reference to this Builder
      */
     public Builder minAgeRestriction(Integer minAgeRestriction) {
@@ -205,9 +227,9 @@ public class Paysafecard {
     }
 
     /**
-     * Sets the {@code kycLevelRestriction} and returns a reference to this Builder enabling method chaining.
+     * Sets the kycLevelRestriction and returns a reference to this Builder enabling method chaining.
      *
-     * @param kycLevelRestriction the {@code kycLevelRestriction} to set
+     * @param kycLevelRestriction the kycLevelRestriction to set
      * @return a reference to this Builder
      */
     public Builder kycLevelRestriction(KeyLevelRestriction kycLevelRestriction) {
@@ -216,35 +238,38 @@ public class Paysafecard {
     }
 
     /**
-     * Sets the {@code countryRestriction} and returns a reference to this Builder enabling method chaining.
+     * This is the code of the country to which the transaction will be restricted. Optional. See [Country codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes)
+     * <p>
+     * Sets the countryRestriction and returns a reference to this Builder enabling method chaining.
      *
-     * @param countryRestriction the {@code countryRestriction} to set
+     * @param countryRestriction the countryRestriction to set
      * @return a reference to this Builder
      */
-    public Builder countryRestriction(CountryCode countryRestriction) {
+    public Builder countryRestriction(String countryRestriction) {
       this.countryRestriction = countryRestriction;
       return this;
     }
 
     /**
-     * Sets the {@code submerchantId} and returns a reference to this Builder enabling method chaining.
+     * The Submerchant Id (Reporting Criteria) is used to classify sub-merchants at PaysafeCard side
+     * <p>
+     * Sets the submerchantId and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code submerchantId} to set
+     * @param submerchantId the submerchantId to set
      * @return a reference to this Builder
      */
-    public Builder submerchantId(final String val) {
-      submerchantId = val;
+    public Builder submerchantId(String submerchantId) {
+      this.submerchantId = submerchantId;
       return this;
     }
 
     /**
-     * Returns a {@code Paysafecard} built from the parameters previously set.
+     * Returns a Paysafecard built from the parameters previously set.
      *
-     * @return a {@code Paysafecard} built with parameters of this {@code Paysafecard.Builder}
+     * @return a Paysafecard built with parameters of this Paysafecard.Builder
      */
     public Paysafecard build() {
       return new Paysafecard(this);
     }
   }
 }
-

@@ -1,13 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.standalonecredit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.Meta;
+
+
 
 /**
  * StandaloneCreditList
@@ -15,7 +21,7 @@ import com.paysafe.payments.model.common.Meta;
 public class StandaloneCreditList {
 
   @JsonProperty("standaloneCredits")
-  private List<StandaloneCredit> standaloneCredits = null;
+  private List<StandaloneCredit> standaloneCredits;
   @JsonProperty("meta")
   private Meta meta;
 
@@ -32,29 +38,30 @@ public class StandaloneCreditList {
     return new Builder();
   }
 
-  public StandaloneCreditList standaloneCredits(List<StandaloneCredit> standalonecredits) {
-    this.standaloneCredits = standalonecredits;
+
+  public StandaloneCreditList standaloneCredits(List<StandaloneCredit> standaloneCredits) {
+    this.standaloneCredits = standaloneCredits;
     return this;
   }
 
-  public StandaloneCreditList addStandaloneCreditsItem(StandaloneCredit standalonecreditsItem) {
+  public StandaloneCreditList addStandaloneCreditsItem(StandaloneCredit standaloneCreditsItem) {
     if (this.standaloneCredits == null) {
       this.standaloneCredits = new ArrayList<>();
     }
-    this.standaloneCredits.add(standalonecreditsItem);
+    this.standaloneCredits.add(standaloneCreditsItem);
     return this;
   }
 
-  public StandaloneCreditList removeStandaloneCreditsItem(StandaloneCredit standalonecreditsItem) {
-    if (standalonecreditsItem != null && this.standaloneCredits != null) {
-      this.standaloneCredits.remove(standalonecreditsItem);
+  public StandaloneCreditList removeStandaloneCreditsItem(StandaloneCredit standaloneCreditsItem) {
+    if (standaloneCreditsItem != null && this.standaloneCredits != null) {
+      this.standaloneCredits.remove(standaloneCreditsItem);
     }
 
     return this;
   }
 
   /**
-   * An array of Standalone Credits.
+   * Get standaloneCredits
    *
    * @return standaloneCredits
    */
@@ -66,13 +73,14 @@ public class StandaloneCreditList {
     this.standaloneCredits = standaloneCredits;
   }
 
+
   public StandaloneCreditList meta(Meta meta) {
     this.meta = meta;
     return this;
   }
 
   /**
-   * Contains meta info for the pagination APIs
+   * Get meta
    *
    * @return meta
    */
@@ -104,7 +112,8 @@ public class StandaloneCreditList {
 
   @Override
   public String toString() {
-    return "class StandaloneCreditList{\n"
+
+    return "class StandaloneCreditList {\n"
         + "    standaloneCredits: " + toIndentedString(standaloneCredits) + "\n"
         + "    meta: " + toIndentedString(meta) + "\n"
         + "}";
@@ -114,7 +123,7 @@ public class StandaloneCreditList {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  public String toIndentedString(Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }
@@ -122,19 +131,19 @@ public class StandaloneCreditList {
   }
 
   /**
-   * {@code StandaloneCreditList} builder static inner class.
+   * StandaloneCreditList builder static inner class.
    */
   public static final class Builder {
-    private Meta meta;
     private List<StandaloneCredit> standaloneCredits;
+    private Meta meta;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code standaloneCredits} and returns a reference to this Builder enabling method chaining.
+     * Sets the standaloneCredits and returns a reference to this Builder enabling method chaining.
      *
-     * @param standaloneCredits the {@code standaloneCredits} to set
+     * @param standaloneCredits the standaloneCredits to set
      * @return a reference to this Builder
      */
     public Builder standaloneCredits(List<StandaloneCredit> standaloneCredits) {
@@ -143,9 +152,9 @@ public class StandaloneCreditList {
     }
 
     /**
-     * Sets the {@code meta} and returns a reference to this Builder enabling method chaining.
+     * Sets the meta and returns a reference to this Builder enabling method chaining.
      *
-     * @param meta the {@code meta} to set
+     * @param meta the meta to set
      * @return a reference to this Builder
      */
     public Builder meta(Meta meta) {
@@ -154,13 +163,12 @@ public class StandaloneCreditList {
     }
 
     /**
-     * Returns a {@code StandaloneCreditList} built from the parameters previously set.
+     * Returns a StandaloneCreditList built from the parameters previously set.
      *
-     * @return a {@code StandaloneCreditList} built with parameters of this {@code StandaloneCreditList.Builder}
+     * @return a StandaloneCreditList built with parameters of this StandaloneCreditList.Builder
      */
     public StandaloneCreditList build() {
       return new StandaloneCreditList(this);
     }
   }
 }
-

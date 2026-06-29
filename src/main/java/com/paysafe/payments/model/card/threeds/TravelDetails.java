@@ -1,48 +1,30 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.threeds;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * These are the Amex-specific travel details.
- * <ul>
- *   <li>
- *     <b>isAirTravel:</b> This indicates whether the transaction is an air travel related purchase, e.g., a ticket purchase  <br>
- *     Default: false
- *   </li>
- *   <li>
- *     <b>airlineCarrier:</b> This is the selected airline carrier.
- *   </li>
- *   <li>
- *     <b>departureDate:</b> This is the date of departure in the time zone of the departure location.
- *     The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
- *   </li>
- *   <li>
- *     <b>destination:</b> This is the airport code of the destination airport.
- *   </li>
- *   <li>
- *     <b>origin:</b> This is the airport code of the originating airport.
- *   </li>
- *   <li>
- *     <b>passengerFirstName:</b> This is the first name of the cardholder from the billing details.
- *   </li>
- *   <li>
- *     <b>passengerLastName:</b> This is the last name of the cardholder from the billing details.
- *   </li>
- * </ul>
+ * Travel-related details for the transaction
  */
 public class TravelDetails {
 
   @JsonProperty("isAirTravel")
-  private Boolean isAirTravel = false;
+  private Boolean isAirTravel;
   @JsonProperty("airlineCarrier")
   private String airlineCarrier;
   @JsonProperty("departureDate")
-  private LocalDate departureDate;
+  private String departureDate;
   @JsonProperty("destination")
   private String destination;
   @JsonProperty("origin")
@@ -56,7 +38,7 @@ public class TravelDetails {
     super();
   }
 
-  private TravelDetails(Builder builder) {
+  private TravelDetails(final Builder builder) {
     setIsAirTravel(builder.isAirTravel);
     setAirlineCarrier(builder.airlineCarrier);
     setDepartureDate(builder.departureDate);
@@ -70,13 +52,14 @@ public class TravelDetails {
     return new Builder();
   }
 
+
   public TravelDetails isAirTravel(Boolean isAirTravel) {
     this.isAirTravel = isAirTravel;
     return this;
   }
 
   /**
-   * This indicates whether the transaction is an air travel related purchase, e.g., a ticket purchase
+   * Whether the travel involves air travel
    *
    * @return isAirTravel
    */
@@ -88,13 +71,14 @@ public class TravelDetails {
     this.isAirTravel = isAirTravel;
   }
 
+
   public TravelDetails airlineCarrier(String airlineCarrier) {
     this.airlineCarrier = airlineCarrier;
     return this;
   }
 
   /**
-   * This is the selected airline carrier.
+   * Airline carrier
    *
    * @return airlineCarrier
    */
@@ -106,23 +90,25 @@ public class TravelDetails {
     this.airlineCarrier = airlineCarrier;
   }
 
-  public TravelDetails departureDate(LocalDate departureDate) {
+
+  public TravelDetails departureDate(String departureDate) {
     this.departureDate = departureDate;
     return this;
   }
 
   /**
-   * This is the date of departure in the time zone of the departure location. The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
+   * Date of departure in the time zone of the departure location. The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
    *
    * @return departureDate
    */
-  public LocalDate getDepartureDate() {
+  public String getDepartureDate() {
     return departureDate;
   }
 
-  public void setDepartureDate(LocalDate departureDate) {
+  public void setDepartureDate(String departureDate) {
     this.departureDate = departureDate;
   }
+
 
   public TravelDetails destination(String destination) {
     this.destination = destination;
@@ -130,7 +116,7 @@ public class TravelDetails {
   }
 
   /**
-   * This is the airport code of the destination airport.
+   * Travel destination Airport Code
    *
    * @return destination
    */
@@ -142,13 +128,14 @@ public class TravelDetails {
     this.destination = destination;
   }
 
+
   public TravelDetails origin(String origin) {
     this.origin = origin;
     return this;
   }
 
   /**
-   * This is the airport code of the originating airport.
+   * Travel origin Airport Code
    *
    * @return origin
    */
@@ -160,13 +147,14 @@ public class TravelDetails {
     this.origin = origin;
   }
 
+
   public TravelDetails passengerFirstName(String passengerFirstName) {
     this.passengerFirstName = passengerFirstName;
     return this;
   }
 
   /**
-   * This is the first name of the cardholder from the billing details.
+   * First name of the passenger
    *
    * @return passengerFirstName
    */
@@ -178,13 +166,14 @@ public class TravelDetails {
     this.passengerFirstName = passengerFirstName;
   }
 
+
   public TravelDetails passengerLastName(String passengerLastName) {
     this.passengerLastName = passengerLastName;
     return this;
   }
 
   /**
-   * This is the last name of the cardholder from the billing details.
+   * Last name of the passenger
    *
    * @return passengerLastName
    */
@@ -245,12 +234,12 @@ public class TravelDetails {
   }
 
   /**
-   * {@code TravelDetails} builder static inner class.
+   * Travel-related details for the transaction builder static inner class.
    */
   public static final class Builder {
     private Boolean isAirTravel;
     private String airlineCarrier;
-    private LocalDate departureDate;
+    private String departureDate;
     private String destination;
     private String origin;
     private String passengerFirstName;
@@ -260,9 +249,11 @@ public class TravelDetails {
     }
 
     /**
-     * Sets the {@code isAirTravel} and returns a reference to this Builder enabling method chaining.
+     * Whether the travel involves air travel
+     * <p>
+     * Sets the isAirTravel and returns a reference to this Builder enabling method chaining.
      *
-     * @param isAirTravel the {@code isAirTravel} to set
+     * @param isAirTravel the isAirTravel to set
      * @return a reference to this Builder
      */
     public Builder isAirTravel(Boolean isAirTravel) {
@@ -271,9 +262,11 @@ public class TravelDetails {
     }
 
     /**
-     * Sets the {@code airlineCarrier} and returns a reference to this Builder enabling method chaining.
+     * Airline carrier
+     * <p>
+     * Sets the airlineCarrier and returns a reference to this Builder enabling method chaining.
      *
-     * @param airlineCarrier the {@code airlineCarrier} to set
+     * @param airlineCarrier the airlineCarrier to set
      * @return a reference to this Builder
      */
     public Builder airlineCarrier(String airlineCarrier) {
@@ -282,20 +275,24 @@ public class TravelDetails {
     }
 
     /**
-     * Sets the {@code departureDate} and returns a reference to this Builder enabling method chaining.
+     * Date of departure in the time zone of the departure location. The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
+     * <p>
+     * Sets the departureDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param departureDate the {@code departureDate} to set
+     * @param departureDate the departureDate to set
      * @return a reference to this Builder
      */
-    public Builder departureDate(LocalDate departureDate) {
+    public Builder departureDate(String departureDate) {
       this.departureDate = departureDate;
       return this;
     }
 
     /**
-     * Sets the {@code destination} and returns a reference to this Builder enabling method chaining.
+     * Travel destination Airport Code
+     * <p>
+     * Sets the destination and returns a reference to this Builder enabling method chaining.
      *
-     * @param destination the {@code destination} to set
+     * @param destination the destination to set
      * @return a reference to this Builder
      */
     public Builder destination(String destination) {
@@ -304,9 +301,11 @@ public class TravelDetails {
     }
 
     /**
-     * Sets the {@code origin} and returns a reference to this Builder enabling method chaining.
+     * Travel origin Airport Code
+     * <p>
+     * Sets the origin and returns a reference to this Builder enabling method chaining.
      *
-     * @param origin the {@code origin} to set
+     * @param origin the origin to set
      * @return a reference to this Builder
      */
     public Builder origin(String origin) {
@@ -315,9 +314,11 @@ public class TravelDetails {
     }
 
     /**
-     * Sets the {@code passengerFirstName} and returns a reference to this Builder enabling method chaining.
+     * First name of the passenger
+     * <p>
+     * Sets the passengerFirstName and returns a reference to this Builder enabling method chaining.
      *
-     * @param passengerFirstName the {@code passengerFirstName} to set
+     * @param passengerFirstName the passengerFirstName to set
      * @return a reference to this Builder
      */
     public Builder passengerFirstName(String passengerFirstName) {
@@ -326,9 +327,11 @@ public class TravelDetails {
     }
 
     /**
-     * Sets the {@code passengerLastName} and returns a reference to this Builder enabling method chaining.
+     * Last name of the passenger
+     * <p>
+     * Sets the passengerLastName and returns a reference to this Builder enabling method chaining.
      *
-     * @param passengerLastName the {@code passengerLastName} to set
+     * @param passengerLastName the passengerLastName to set
      * @return a reference to this Builder
      */
     public Builder passengerLastName(String passengerLastName) {
@@ -337,13 +340,12 @@ public class TravelDetails {
     }
 
     /**
-     * Returns a {@code TravelDetails} built from the parameters previously set.
+     * Returns a TravelDetails built from the parameters previously set.
      *
-     * @return a {@code TravelDetails} built with parameters of this {@code TravelDetails.Builder}
+     * @return a TravelDetails built with parameters of this TravelDetails.Builder
      */
     public TravelDetails build() {
       return new TravelDetails(this);
     }
   }
 }
-

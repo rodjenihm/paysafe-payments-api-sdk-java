@@ -1,16 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.airline;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.travel.airline.enums.ComputerizedReservationSystem;
 
+
+
 /**
- * Contains information about your airline travel.
- * <b>Note:</b> This object is only for Airline Merchants..
- * <b>Note:</b> This field has to be passed only in case of card transactions.
+ * Contains information about your airline travel. <br>**Note:** This object is only for Airline Merchants. <br>**Note:** This field has to be passed only in case of card transactions.
  */
 public class AirlineTravelDetails {
 
@@ -33,7 +39,7 @@ public class AirlineTravelDetails {
   @JsonProperty("totalTaxes")
   private Integer totalTaxes;
   @JsonProperty("ticket")
-  private Ticket ticket;
+  private AirlineTicket ticket;
   @JsonProperty("passengers")
   private Passengers passengers;
   @JsonProperty("customerReferenceNumber")
@@ -41,13 +47,13 @@ public class AirlineTravelDetails {
   @JsonProperty("travelAgency")
   private TravelAgency travelAgency;
   @JsonProperty("tripLegs")
-  private TripLegs tripLegs;
+  private AirlineTripLegs tripLegs;
 
   public AirlineTravelDetails() {
     super();
   }
 
-  private AirlineTravelDetails(Builder builder) {
+  private AirlineTravelDetails(final Builder builder) {
     setPassengerNameRecord(builder.passengerNameRecord);
     setPassengerName(builder.passengerName);
     setDepartureDate(builder.departureDate);
@@ -68,13 +74,14 @@ public class AirlineTravelDetails {
     return new Builder();
   }
 
+
   public AirlineTravelDetails passengerNameRecord(String passengerNameRecord) {
     this.passengerNameRecord = passengerNameRecord;
     return this;
   }
 
   /**
-   * The airline company uses the passengerNameRecord as a reservation number.
+   * The airline company uses the passengerNameRecord as a reservation number
    *
    * @return passengerNameRecord
    */
@@ -86,13 +93,14 @@ public class AirlineTravelDetails {
     this.passengerNameRecord = passengerNameRecord;
   }
 
+
   public AirlineTravelDetails passengerName(String passengerName) {
     this.passengerName = passengerName;
     return this;
   }
 
   /**
-   * Name of the passenger to whom the ticket was issued.
+   * Name of the passenger to whom the ticket was issued
    *
    * @return passengerName
    */
@@ -104,13 +112,14 @@ public class AirlineTravelDetails {
     this.passengerName = passengerName;
   }
 
+
   public AirlineTravelDetails departureDate(String departureDate) {
     this.departureDate = departureDate;
     return this;
   }
 
   /**
-   * Date of passenger’s departure. Date format = YYYY-MM-DD, ISO 8601 expected. For example 2022-12-20.
+   * Date of passenger's departure. Date format YYYY-MM-DD, ISO 8601 expected. For example 2022-12-20
    *
    * @return departureDate
    */
@@ -122,13 +131,14 @@ public class AirlineTravelDetails {
     this.departureDate = departureDate;
   }
 
+
   public AirlineTravelDetails origin(String origin) {
     this.origin = origin;
     return this;
   }
 
   /**
-   * Departure Airport Code: IATA Airport Code.
+   * Origin airport code (IATA Airport Code)
    *
    * @return origin
    */
@@ -140,28 +150,16 @@ public class AirlineTravelDetails {
     this.origin = origin;
   }
 
+
   public AirlineTravelDetails computerizedReservationSystem(ComputerizedReservationSystem computerizedReservationSystem) {
     this.computerizedReservationSystem = computerizedReservationSystem;
     return this;
   }
 
   /**
-   * Indicates the computerized reservation system used to make the reservation and purchase the ticket.
-   * For tickets purchased in Germany, this field should one of these codes: <ul>
-   * <li> STRT - Start   </li>
-   * <li> PARS - TWA   </li>
-   * <li> DATS - Delta   </li>
-   * <li> SABR - Sabre   </li>
-   * <li> DALA - Covia-Apollo   </li>
-   * <li> BLAN - Dr. Blank   </li>
-   * <li> DERD - DER  </li>
-   * <li> TUID - TUI  </li>
-   * </ul>
-   *
-   * <b>Note:</b> Required only if the ticket is purchased in Germany. Otherwise it can be omitted.
+   * Get computerizedReservationSystem
    *
    * @return computerizedReservationSystem
-   * l
    */
   public ComputerizedReservationSystem getComputerizedReservationSystem() {
     return computerizedReservationSystem;
@@ -171,13 +169,14 @@ public class AirlineTravelDetails {
     this.computerizedReservationSystem = computerizedReservationSystem;
   }
 
+
   public AirlineTravelDetails additionalBookingReference(String additionalBookingReference) {
     this.additionalBookingReference = additionalBookingReference;
     return this;
   }
 
   /**
-   * BookingReference field. Typically used for the PNR, but should allow an airline to specify any other reference if they feel fit.
+   * Additional booking reference information
    *
    * @return additionalBookingReference
    */
@@ -189,13 +188,14 @@ public class AirlineTravelDetails {
     this.additionalBookingReference = additionalBookingReference;
   }
 
+
   public AirlineTravelDetails totalFare(Integer totalFare) {
     this.totalFare = totalFare;
     return this;
   }
 
   /**
-   * Total fare for all legs on the ticket, excluding taxes and fees. If multiple tickets are purchased, this is the total fare for all tickets
+   * Total fare amount in minor units
    *
    * @return totalFare
    */
@@ -207,13 +207,14 @@ public class AirlineTravelDetails {
     this.totalFare = totalFare;
   }
 
+
   public AirlineTravelDetails totalFee(Integer totalFee) {
     this.totalFee = totalFee;
     return this;
   }
 
   /**
-   * Total fee for all legs on the ticket. If multiple tickets are purchased, this is the total fee for all tickets.
+   * Total fee amount in minor units
    *
    * @return totalFee
    */
@@ -225,13 +226,14 @@ public class AirlineTravelDetails {
     this.totalFee = totalFee;
   }
 
+
   public AirlineTravelDetails totalTaxes(Integer totalTaxes) {
     this.totalTaxes = totalTaxes;
     return this;
   }
 
   /**
-   * Total taxes for all legs on the ticket. If multiple tickets are purchased, this is the total taxes for all tickets.
+   * Total taxes amount in minor units
    *
    * @return totalTaxes
    */
@@ -243,23 +245,25 @@ public class AirlineTravelDetails {
     this.totalTaxes = totalTaxes;
   }
 
-  public AirlineTravelDetails ticket(Ticket ticket) {
+
+  public AirlineTravelDetails ticket(AirlineTicket ticket) {
     this.ticket = ticket;
     return this;
   }
 
   /**
-   * Information about the Airline Ticket Number and if the ticket is restricted.
+   * Get ticket
    *
    * @return ticket
    */
-  public Ticket getTicket() {
+  public AirlineTicket getTicket() {
     return ticket;
   }
 
-  public void setTicket(Ticket ticket) {
+  public void setTicket(AirlineTicket ticket) {
     this.ticket = ticket;
   }
+
 
   public AirlineTravelDetails passengers(Passengers passengers) {
     this.passengers = passengers;
@@ -279,13 +283,14 @@ public class AirlineTravelDetails {
     this.passengers = passengers;
   }
 
+
   public AirlineTravelDetails customerReferenceNumber(String customerReferenceNumber) {
     this.customerReferenceNumber = customerReferenceNumber;
     return this;
   }
 
   /**
-   * Contains the code that the cardholder supplied to the card acceptor.
+   * Contains the code that the cardholder supplied to the card acceptor
    *
    * @return customerReferenceNumber
    */
@@ -297,13 +302,14 @@ public class AirlineTravelDetails {
     this.customerReferenceNumber = customerReferenceNumber;
   }
 
+
   public AirlineTravelDetails travelAgency(TravelAgency travelAgency) {
     this.travelAgency = travelAgency;
     return this;
   }
 
   /**
-   * Information about the travel agency if the ticket was issued by a travel agency.
+   * Get travelAgency
    *
    * @return travelAgency
    */
@@ -315,21 +321,22 @@ public class AirlineTravelDetails {
     this.travelAgency = travelAgency;
   }
 
-  public AirlineTravelDetails tripLegs(TripLegs tripLegs) {
+
+  public AirlineTravelDetails tripLegs(AirlineTripLegs tripLegs) {
     this.tripLegs = tripLegs;
     return this;
   }
 
   /**
-   * A grouping of four separate trip segments. Each leg contains detailed itinerary information.
+   * Get tripLegs
    *
    * @return tripLegs
    */
-  public TripLegs getTripLegs() {
+  public AirlineTripLegs getTripLegs() {
     return tripLegs;
   }
 
-  public void setTripLegs(TripLegs tripLegs) {
+  public void setTripLegs(AirlineTripLegs tripLegs) {
     this.tripLegs = tripLegs;
   }
 
@@ -360,8 +367,7 @@ public class AirlineTravelDetails {
 
   @Override
   public int hashCode() {
-    return Objects.hash(passengerNameRecord, passengerName, departureDate, origin, computerizedReservationSystem, additionalBookingReference,
-        totalFare, totalFee, totalTaxes, ticket, passengers, customerReferenceNumber, travelAgency, tripLegs);
+    return Objects.hash(passengerNameRecord, passengerName, departureDate, origin, computerizedReservationSystem, additionalBookingReference, totalFare, totalFee, totalTaxes, ticket, passengers, customerReferenceNumber, travelAgency, tripLegs);
   }
 
   @Override
@@ -397,7 +403,7 @@ public class AirlineTravelDetails {
   }
 
   /**
-   * {@code AirlineTravelDetails} builder static inner class.
+   * Contains information about your airline travel. <br>**Note:** This object is only for Airline Merchants. <br>**Note:** This field has to be passed only in case of card transactions. builder static inner class.
    */
   public static final class Builder {
     private String passengerNameRecord;
@@ -409,19 +415,21 @@ public class AirlineTravelDetails {
     private Integer totalFare;
     private Integer totalFee;
     private Integer totalTaxes;
-    private Ticket ticket;
+    private AirlineTicket ticket;
     private Passengers passengers;
     private String customerReferenceNumber;
     private TravelAgency travelAgency;
-    private TripLegs tripLegs;
+    private AirlineTripLegs tripLegs;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code passengerNameRecord} and returns a reference to this Builder enabling method chaining.
+     * The airline company uses the passengerNameRecord as a reservation number
+     * <p>
+     * Sets the passengerNameRecord and returns a reference to this Builder enabling method chaining.
      *
-     * @param passengerNameRecord the {@code passengerNameRecord} to set
+     * @param passengerNameRecord the passengerNameRecord to set
      * @return a reference to this Builder
      */
     public Builder passengerNameRecord(String passengerNameRecord) {
@@ -430,9 +438,11 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code passengerName} and returns a reference to this Builder enabling method chaining.
+     * Name of the passenger to whom the ticket was issued
+     * <p>
+     * Sets the passengerName and returns a reference to this Builder enabling method chaining.
      *
-     * @param passengerName the {@code passengerName} to set
+     * @param passengerName the passengerName to set
      * @return a reference to this Builder
      */
     public Builder passengerName(String passengerName) {
@@ -441,9 +451,11 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code departureDate} and returns a reference to this Builder enabling method chaining.
+     * Date of passenger's departure. Date format YYYY-MM-DD, ISO 8601 expected. For example 2022-12-20
+     * <p>
+     * Sets the departureDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param departureDate the {@code departureDate} to set
+     * @param departureDate the departureDate to set
      * @return a reference to this Builder
      */
     public Builder departureDate(String departureDate) {
@@ -452,9 +464,11 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code origin} and returns a reference to this Builder enabling method chaining.
+     * Origin airport code (IATA Airport Code)
+     * <p>
+     * Sets the origin and returns a reference to this Builder enabling method chaining.
      *
-     * @param origin the {@code origin} to set
+     * @param origin the origin to set
      * @return a reference to this Builder
      */
     public Builder origin(String origin) {
@@ -463,9 +477,9 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code computerizedReservationSystem} and returns a reference to this Builder enabling method chaining.
+     * Sets the computerizedReservationSystem and returns a reference to this Builder enabling method chaining.
      *
-     * @param computerizedReservationSystem the {@code computerizedReservationSystem} to set
+     * @param computerizedReservationSystem the computerizedReservationSystem to set
      * @return a reference to this Builder
      */
     public Builder computerizedReservationSystem(ComputerizedReservationSystem computerizedReservationSystem) {
@@ -474,9 +488,11 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code additionalBookingReference} and returns a reference to this Builder enabling method chaining.
+     * Additional booking reference information
+     * <p>
+     * Sets the additionalBookingReference and returns a reference to this Builder enabling method chaining.
      *
-     * @param additionalBookingReference the {@code additionalBookingReference} to set
+     * @param additionalBookingReference the additionalBookingReference to set
      * @return a reference to this Builder
      */
     public Builder additionalBookingReference(String additionalBookingReference) {
@@ -485,9 +501,11 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code totalFare} and returns a reference to this Builder enabling method chaining.
+     * Total fare amount in minor units
+     * <p>
+     * Sets the totalFare and returns a reference to this Builder enabling method chaining.
      *
-     * @param totalFare the {@code totalFare} to set
+     * @param totalFare the totalFare to set
      * @return a reference to this Builder
      */
     public Builder totalFare(Integer totalFare) {
@@ -496,9 +514,11 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code totalFee} and returns a reference to this Builder enabling method chaining.
+     * Total fee amount in minor units
+     * <p>
+     * Sets the totalFee and returns a reference to this Builder enabling method chaining.
      *
-     * @param totalFee the {@code totalFee} to set
+     * @param totalFee the totalFee to set
      * @return a reference to this Builder
      */
     public Builder totalFee(Integer totalFee) {
@@ -507,9 +527,11 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code totalTaxes} and returns a reference to this Builder enabling method chaining.
+     * Total taxes amount in minor units
+     * <p>
+     * Sets the totalTaxes and returns a reference to this Builder enabling method chaining.
      *
-     * @param totalTaxes the {@code totalTaxes} to set
+     * @param totalTaxes the totalTaxes to set
      * @return a reference to this Builder
      */
     public Builder totalTaxes(Integer totalTaxes) {
@@ -518,20 +540,20 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code ticket} and returns a reference to this Builder enabling method chaining.
+     * Sets the ticket and returns a reference to this Builder enabling method chaining.
      *
-     * @param ticket the {@code ticket} to set
+     * @param ticket the ticket to set
      * @return a reference to this Builder
      */
-    public Builder ticket(Ticket ticket) {
+    public Builder ticket(AirlineTicket ticket) {
       this.ticket = ticket;
       return this;
     }
 
     /**
-     * Sets the {@code passengers} and returns a reference to this Builder enabling method chaining.
+     * Sets the passengers and returns a reference to this Builder enabling method chaining.
      *
-     * @param passengers the {@code passengers} to set
+     * @param passengers the passengers to set
      * @return a reference to this Builder
      */
     public Builder passengers(Passengers passengers) {
@@ -540,9 +562,11 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code customerReferenceNumber} and returns a reference to this Builder enabling method chaining.
+     * Contains the code that the cardholder supplied to the card acceptor
+     * <p>
+     * Sets the customerReferenceNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param customerReferenceNumber the {@code customerReferenceNumber} to set
+     * @param customerReferenceNumber the customerReferenceNumber to set
      * @return a reference to this Builder
      */
     public Builder customerReferenceNumber(String customerReferenceNumber) {
@@ -551,9 +575,9 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code travelAgency} and returns a reference to this Builder enabling method chaining.
+     * Sets the travelAgency and returns a reference to this Builder enabling method chaining.
      *
-     * @param travelAgency the {@code travelAgency} to set
+     * @param travelAgency the travelAgency to set
      * @return a reference to this Builder
      */
     public Builder travelAgency(TravelAgency travelAgency) {
@@ -562,24 +586,23 @@ public class AirlineTravelDetails {
     }
 
     /**
-     * Sets the {@code tripLegs} and returns a reference to this Builder enabling method chaining.
+     * Sets the tripLegs and returns a reference to this Builder enabling method chaining.
      *
-     * @param tripLegs the {@code tripLegs} to set
+     * @param tripLegs the tripLegs to set
      * @return a reference to this Builder
      */
-    public Builder tripLegs(TripLegs tripLegs) {
+    public Builder tripLegs(AirlineTripLegs tripLegs) {
       this.tripLegs = tripLegs;
       return this;
     }
 
     /**
-     * Returns a {@code AirlineTravelDetails} built from the parameters previously set.
+     * Returns a AirlineTravelDetails built from the parameters previously set.
      *
-     * @return a {@code AirlineTravelDetails} built with parameters of this {@code AirlineTravelDetails.Builder}
+     * @return a AirlineTravelDetails built with parameters of this AirlineTravelDetails.Builder
      */
     public AirlineTravelDetails build() {
       return new AirlineTravelDetails(this);
     }
   }
 }
-

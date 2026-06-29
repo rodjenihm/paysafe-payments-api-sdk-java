@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.applepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * ApplePayPaymentToken
+ * The Apple Pay payment token containing encrypted payment credentials
  */
 public class ApplePayPaymentToken {
 
@@ -20,7 +28,7 @@ public class ApplePayPaymentToken {
     super();
   }
 
-  private ApplePayPaymentToken(Builder builder) {
+  private ApplePayPaymentToken(final Builder builder) {
     setToken(builder.token);
     setBillingContact(builder.billingContact);
   }
@@ -29,13 +37,14 @@ public class ApplePayPaymentToken {
     return new Builder();
   }
 
+
   public ApplePayPaymentToken token(ApplePayTokenData token) {
     this.token = token;
     return this;
   }
 
   /**
-   * This object contains the user's payment credentials.
+   * Get token
    *
    * @return token
    */
@@ -47,13 +56,14 @@ public class ApplePayPaymentToken {
     this.token = token;
   }
 
+
   public ApplePayPaymentToken billingContact(ApplePayBillingContact billingContact) {
     this.billingContact = billingContact;
     return this;
   }
 
   /**
-   * The billing contact provided by the user for this transaction in Apple Pay wallet
+   * Get billingContact
    *
    * @return billingContact
    */
@@ -104,7 +114,7 @@ public class ApplePayPaymentToken {
   }
 
   /**
-   * {@code ApplePayPaymentToken} builder static inner class.
+   * The Apple Pay payment token containing encrypted payment credentials builder static inner class.
    */
   public static final class Builder {
     private ApplePayTokenData token;
@@ -114,9 +124,9 @@ public class ApplePayPaymentToken {
     }
 
     /**
-     * Sets the {@code token} and returns a reference to this Builder enabling method chaining.
+     * Sets the token and returns a reference to this Builder enabling method chaining.
      *
-     * @param token the {@code token} to set
+     * @param token the token to set
      * @return a reference to this Builder
      */
     public Builder token(ApplePayTokenData token) {
@@ -125,9 +135,9 @@ public class ApplePayPaymentToken {
     }
 
     /**
-     * Sets the {@code billingContact} and returns a reference to this Builder enabling method chaining.
+     * Sets the billingContact and returns a reference to this Builder enabling method chaining.
      *
-     * @param billingContact the {@code billingContact} to set
+     * @param billingContact the billingContact to set
      * @return a reference to this Builder
      */
     public Builder billingContact(ApplePayBillingContact billingContact) {
@@ -136,13 +146,12 @@ public class ApplePayPaymentToken {
     }
 
     /**
-     * Returns a {@code ApplePayPaymentToken} built from the parameters previously set.
+     * Returns a ApplePayPaymentToken built from the parameters previously set.
      *
-     * @return a {@code ApplePayPaymentToken} built with parameters of this {@code ApplePayPaymentToken.Builder}
+     * @return a ApplePayPaymentToken built with parameters of this ApplePayPaymentToken.Builder
      */
     public ApplePayPaymentToken build() {
       return new ApplePayPaymentToken(this);
     }
   }
 }
-

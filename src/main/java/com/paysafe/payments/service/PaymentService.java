@@ -18,10 +18,11 @@ public interface PaymentService {
    * <p>Endpoint:
    * <strong>POST /v1/payments</strong></p>
    *
+   * @param paymentRequest the request object containing payment details
    * @return Payment
    * @throws PaysafeSdkException if an error occurs
    */
-  Payment processPayment(final PaymentRequest paymentReqBody) throws PaysafeSdkException;
+  Payment processPayment(final PaymentRequest paymentRequest) throws PaysafeSdkException;
 
   /**
    * Creates a payment. The request will be executed using custom RequestOptions
@@ -30,11 +31,12 @@ public interface PaymentService {
    * <p>Endpoint:
    * <strong>POST /v1/payments</strong></p>
    *
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param paymentRequest the request object containing payment details
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return Payment
    * @throws PaysafeSdkException if an error occurs
    */
-  Payment processPayment(final PaymentRequest paymentReqBody, final RequestOptions requestOptions) throws PaysafeSdkException;
+  Payment processPayment(final PaymentRequest paymentRequest, final RequestOptions requestOptions) throws PaysafeSdkException;
 
   /**
    * Gets the payment using merchant reference number. Uses PaysafeClient configuration to execute request.
@@ -42,12 +44,12 @@ public interface PaymentService {
    * <p>Endpoint:
    * <strong>GET /v1/payments</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the request when creating payment handle.
-   * @param endDate        This is the end date in UTC. If null is provided, current date will be used.
-   * @param limit          This is the total number of records to return. If null is provided, default value (10) will be used.
-   * @param offset         This is the starting position, where 0 is the first record. If null is provided, default value (0) will be used.
-   * @param startDate      This is the start date in UTC. If null is provided, default value (30 days before the end date) will be used.
-   * @return a PaymentList object containing a list of verifications and meta information for the pagination APIs.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the request when creating payment handle
+   * @param endDate        the end date in UTC; if null is provided, current date will be used
+   * @param limit          the total number of records to return; if null is provided, default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, default value (30 days before the end date) will be used
+   * @return a PaymentList object containing a list of verifications and meta information for the pagination APIs
    * @throws PaysafeSdkException if an error occurs
    */
   PaymentList getPaymentsUsingMerchantReferenceNumber(final String merchantRefNum, final String endDate, final Integer limit,
@@ -60,13 +62,13 @@ public interface PaymentService {
    * <p>Endpoint:
    * <strong>GET /v1/payments</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the request when creating payment handle.
-   * @param endDate        This is the end date in UTC. If null is provided, current date will be used.
-   * @param limit          This is the total number of records to return. If null is provided, default value (10) will be used.
-   * @param offset         This is the starting position, where 0 is the first record. If null is provided, default value (0) will be used.
-   * @param startDate      This is the start date in UTC. If null is provided, default value (30 days before the end date) will be used.
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return a PaymentList object containing a list of verifications and meta information for the pagination APIs.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the request when creating payment handle
+   * @param endDate        the end date in UTC; if null is provided, current date will be used
+   * @param limit          the total number of records to return; if null is provided, default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, default value (30 days before the end date) will be used
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return a PaymentList object containing a list of verifications and meta information for the pagination APIs
    * @throws PaysafeSdkException if an error occurs
    */
   PaymentList getPaymentsUsingMerchantReferenceNumber(final String merchantRefNum, final String endDate, final Integer limit,
@@ -93,7 +95,7 @@ public interface PaymentService {
    * <strong>POST /v1/payments/{paymentId}</strong></p>
    *
    * @param paymentId      the id of the payment
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return Payment containing the payment details
    * @throws PaysafeSdkException if an error occurs
    */
@@ -105,6 +107,8 @@ public interface PaymentService {
    * <p>Endpoint:
    * <strong>PUT /v1/payments/{paymentId}</strong></p>
    *
+   * @param paymentId      the id of the payment
+   * @param cancelRequest  the request object containing cancellation details
    * @return CancelResponse
    * @throws PaysafeSdkException if an error occurs
    */
@@ -117,7 +121,9 @@ public interface PaymentService {
    * <p>Endpoint:
    * <strong>PUT /v1/payments/{paymentId}</strong></p>
    *
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param paymentId      the id of the payment
+   * @param cancelRequest  the request object containing cancellation details
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return CancelResponse
    * @throws PaysafeSdkException if an error occurs
    */

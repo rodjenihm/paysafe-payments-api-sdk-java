@@ -1,17 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.customer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.customer.enums.AddressStatus;
 
+
+
 /**
- * These are the address details associated with the customer.
+ * These are the address details associated with the customer
  */
 public class Address {
 
@@ -37,7 +42,6 @@ public class Address {
   private String phone;
   @JsonProperty("defaultShippingAddressIndicator")
   private Boolean defaultShippingAddressIndicator;
-
   private Map<String, Object> additionalParameters;
 
   public Address() {
@@ -56,12 +60,13 @@ public class Address {
     setZip(builder.zip);
     setPhone(builder.phone);
     setDefaultShippingAddressIndicator(builder.defaultShippingAddressIndicator);
-    setAdditionalParameters(builder.additionalParameters);
+    this.additionalParameters = builder.additionalParameters;
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public Address id(String id) {
     this.id = id;
@@ -81,13 +86,14 @@ public class Address {
     this.id = id;
   }
 
+
   public Address status(AddressStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the address.
+   * Get status
    *
    * @return status
    */
@@ -98,6 +104,7 @@ public class Address {
   public void setStatus(AddressStatus status) {
     this.status = status;
   }
+
 
   public Address nickName(String nickName) {
     this.nickName = nickName;
@@ -117,14 +124,14 @@ public class Address {
     this.nickName = nickName;
   }
 
+
   public Address street(String street) {
     this.street = street;
     return this;
   }
 
   /**
-   * This is the first line of the customer''s street address.
-   * <b>Note:</b> This is required only when the address is to be used in association with a bank account.
+   * This is the first line of the customer's street address. **Note:** This is required only when the address is to be used in association with a bank account.
    *
    * @return street
    */
@@ -135,6 +142,7 @@ public class Address {
   public void setStreet(String street) {
     this.street = street;
   }
+
 
   public Address street2(String street2) {
     this.street2 = street2;
@@ -154,13 +162,14 @@ public class Address {
     this.street2 = street2;
   }
 
+
   public Address city(String city) {
     this.city = city;
     return this;
   }
 
   /**
-   * This is the city where the address is located.   <b>Note:</b> This is required only when the address is to be used in association with a bank account.
+   * This is the city where the address is located.   **Note:** This is required only when the address is to be used in association with a bank account.
    *
    * @return city
    */
@@ -172,17 +181,14 @@ public class Address {
     this.city = city;
   }
 
+
   public Address state(String state) {
     this.state = state;
     return this;
   }
 
   /**
-   * This is the state/province/region in which the customer lives.
-   * See <a href="https://developer.paysafe.com/en/support/reference-information/codes/#province-codes">Province Codes</a>
-   * or <a href="https://developer.paysafe.com/en/support/reference-information/codes/#state-codes">State Codes</a> for Canada or the United States.
-   *  <br>
-   * Other countries have no restrictions.
+   * This is the state/province/region in which the customer lives. See [Province Codes](https://developer.paysafe.com/en/support/reference-information/codes/#province-codes) or [State Codes](https://developer.paysafe.com/en/support/reference-information/codes/#state-codes) for Canada or the United States. Other countries have no restrictions.
    *
    * @return state
    */
@@ -194,16 +200,16 @@ public class Address {
     this.state = state;
   }
 
+
   public Address country(String country) {
     this.country = country;
     return this;
   }
 
   /**
-   * This is the country where the address is located.
+   * This is the country where the address is located. See [Country codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes)
    *
    * @return country
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#country-codes>Country codes</a>
    */
   public String getCountry() {
     return country;
@@ -212,6 +218,7 @@ public class Address {
   public void setCountry(String country) {
     this.country = country;
   }
+
 
   public Address zip(String zip) {
     this.zip = zip;
@@ -231,13 +238,14 @@ public class Address {
     this.zip = zip;
   }
 
+
   public Address phone(String phone) {
     this.phone = phone;
     return this;
   }
 
   /**
-   * This is the customer's phone number.
+   * This is the customer's phone number
    *
    * @return phone
    */
@@ -249,13 +257,14 @@ public class Address {
     this.phone = phone;
   }
 
+
   public Address defaultShippingAddressIndicator(Boolean defaultShippingAddressIndicator) {
     this.defaultShippingAddressIndicator = defaultShippingAddressIndicator;
     return this;
   }
 
   /**
-   * Flag to mark this address as the default shipping address.
+   * Flag to mark this address as the default shipping address
    *
    * @return defaultShippingAddressIndicator
    */
@@ -270,13 +279,13 @@ public class Address {
   /**
    * This map holds additional parameters that can be used for features not available in this client library.
    * During serialization, each key-value pair is treated as if the key were a top-level field in the serialized object,
-   * i.e. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
+   * e.g. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
    *
    * @return additionalParameters
    */
   @JsonAnyGetter
   public Map<String, Object> getAdditionalParameters() {
-    return additionalParameters;
+    return this.additionalParameters;
   }
 
   public void setAdditionalParameters(Map<String, Object> additionalParameters) {
@@ -284,10 +293,10 @@ public class Address {
   }
 
   public void addAdditionalParameter(String key, Object value) {
-    if (additionalParameters == null) {
-      additionalParameters = new HashMap<>();
+    if (this.additionalParameters == null) {
+      this.additionalParameters = new HashMap<>();
     }
-    additionalParameters.put(key, value);
+    this.additionalParameters.put(key, value);
   }
 
   @Override
@@ -314,7 +323,7 @@ public class Address {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, status, nickName, street, street2, city, state, country, zip, phone, defaultShippingAddressIndicator, additionalParameters);
+    return Objects.hash(id, status, nickName, street, street2, city, state, country, zip, phone, defaultShippingAddressIndicator);
   }
 
   @Override
@@ -332,7 +341,6 @@ public class Address {
         + "    zip: " + toIndentedString(zip) + "\n"
         + "    phone: " + toIndentedString(phone) + "\n"
         + "    defaultShippingAddressIndicator: " + toIndentedString(defaultShippingAddressIndicator) + "\n"
-        + "    additionalParameters: " + toIndentedString(additionalParameters) + "\n"
         + "}";
   }
 
@@ -348,7 +356,7 @@ public class Address {
   }
 
   /**
-   * {@code Address} builder static inner class.
+   * These are the address details associated with the customer builder static inner class.
    */
   public static final class Builder {
     private String id;
@@ -368,9 +376,11 @@ public class Address {
     }
 
     /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
+     * This is the ID of request, returned in the response.
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -379,9 +389,9 @@ public class Address {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
     public Builder status(AddressStatus status) {
@@ -390,9 +400,11 @@ public class Address {
     }
 
     /**
-     * Sets the {@code nickName} and returns a reference to this Builder enabling method chaining.
+     * This is an alias defined by the customer for this address (e.g., \"home address\").
+     * <p>
+     * Sets the nickName and returns a reference to this Builder enabling method chaining.
      *
-     * @param nickName the {@code nickName} to set
+     * @param nickName the nickName to set
      * @return a reference to this Builder
      */
     public Builder nickName(String nickName) {
@@ -401,9 +413,11 @@ public class Address {
     }
 
     /**
-     * Sets the {@code street} and returns a reference to this Builder enabling method chaining.
+     * This is the first line of the customer's street address. **Note:** This is required only when the address is to be used in association with a bank account.
+     * <p>
+     * Sets the street and returns a reference to this Builder enabling method chaining.
      *
-     * @param street the {@code street} to set
+     * @param street the street to set
      * @return a reference to this Builder
      */
     public Builder street(String street) {
@@ -412,9 +426,11 @@ public class Address {
     }
 
     /**
-     * Sets the {@code street2} and returns a reference to this Builder enabling method chaining.
+     * This is the second line of the customer's street address, if required.
+     * <p>
+     * Sets the street2 and returns a reference to this Builder enabling method chaining.
      *
-     * @param street2 the {@code street2} to set
+     * @param street2 the street2 to set
      * @return a reference to this Builder
      */
     public Builder street2(String street2) {
@@ -423,9 +439,11 @@ public class Address {
     }
 
     /**
-     * Sets the {@code city} and returns a reference to this Builder enabling method chaining.
+     * This is the city where the address is located.   **Note:** This is required only when the address is to be used in association with a bank account.
+     * <p>
+     * Sets the city and returns a reference to this Builder enabling method chaining.
      *
-     * @param city the {@code city} to set
+     * @param city the city to set
      * @return a reference to this Builder
      */
     public Builder city(String city) {
@@ -434,9 +452,11 @@ public class Address {
     }
 
     /**
-     * Sets the {@code state} and returns a reference to this Builder enabling method chaining.
+     * This is the state/province/region in which the customer lives. See [Province Codes](https://developer.paysafe.com/en/support/reference-information/codes/#province-codes) or [State Codes](https://developer.paysafe.com/en/support/reference-information/codes/#state-codes) for Canada or the United States. Other countries have no restrictions.
+     * <p>
+     * Sets the state and returns a reference to this Builder enabling method chaining.
      *
-     * @param state the {@code state} to set
+     * @param state the state to set
      * @return a reference to this Builder
      */
     public Builder state(String state) {
@@ -445,9 +465,11 @@ public class Address {
     }
 
     /**
-     * Sets the {@code country} and returns a reference to this Builder enabling method chaining.
+     * This is the country where the address is located. See [Country codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes)
+     * <p>
+     * Sets the country and returns a reference to this Builder enabling method chaining.
      *
-     * @param country the {@code country} to set
+     * @param country the country to set
      * @return a reference to this Builder
      */
     public Builder country(String country) {
@@ -456,9 +478,11 @@ public class Address {
     }
 
     /**
-     * Sets the {@code zip} and returns a reference to this Builder enabling method chaining.
+     * This is the zip, postal, or post code of the customer's address.
+     * <p>
+     * Sets the zip and returns a reference to this Builder enabling method chaining.
      *
-     * @param zip the {@code zip} to set
+     * @param zip the zip to set
      * @return a reference to this Builder
      */
     public Builder zip(String zip) {
@@ -467,9 +491,11 @@ public class Address {
     }
 
     /**
-     * Sets the {@code phone} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's phone number
+     * <p>
+     * Sets the phone and returns a reference to this Builder enabling method chaining.
      *
-     * @param phone the {@code phone} to set
+     * @param phone the phone to set
      * @return a reference to this Builder
      */
     public Builder phone(String phone) {
@@ -478,39 +504,15 @@ public class Address {
     }
 
     /**
-     * Sets the {@code defaultShippingAddressIndicator} and returns a reference to this Builder enabling method chaining.
+     * Flag to mark this address as the default shipping address
+     * <p>
+     * Sets the defaultShippingAddressIndicator and returns a reference to this Builder enabling method chaining.
      *
-     * @param defaultShippingAddressIndicator the {@code defaultShippingAddressIndicator} to set
+     * @param defaultShippingAddressIndicator the defaultShippingAddressIndicator to set
      * @return a reference to this Builder
      */
     public Builder defaultShippingAddressIndicator(Boolean defaultShippingAddressIndicator) {
       this.defaultShippingAddressIndicator = defaultShippingAddressIndicator;
-      return this;
-    }
-
-    /**
-     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAdditionalParameter(String key, Object value) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.put(key, value);
-      return this;
-    }
-
-    /**
-     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAllAdditionalParameters(Map<String, Object> additionalParameters) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.putAll(additionalParameters);
       return this;
     }
 
@@ -526,13 +528,41 @@ public class Address {
     }
 
     /**
-     * Returns a {@code Address} built from the parameters previously set.
+     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code Address} built with parameters of this {@code Address.Builder}
+     * @param key the key to insert
+     * @param value the value to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAdditionalParameter(String key, Object value) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.put(key, value);
+      return this;
+    }
+
+    /**
+     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
+     *
+     * @param additionalParameters the key/value pairs to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAllAdditionalParameters(Map<String, Object> additionalParameters) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.putAll(additionalParameters);
+      return this;
+    }
+
+    /**
+     * Returns a Address built from the parameters previously set.
+     *
+     * @return a Address built with parameters of this Address.Builder
      */
     public Address build() {
       return new Address(this);
     }
   }
 }
-

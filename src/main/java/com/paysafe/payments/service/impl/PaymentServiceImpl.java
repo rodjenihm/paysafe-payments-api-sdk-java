@@ -3,7 +3,6 @@
 package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.buildQueryParameters;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
@@ -40,7 +39,7 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
   public Payment processPayment(final PaymentRequest paymentRequest, final RequestOptions requestOptions) throws PaysafeSdkException {
     PaysafeApiResponse response = paysafeApiClient.executePost(PAYMENT_ENDPOINT, paymentRequest, requestOptions);
-    return processResponse(response, Payment.class);
+    return paysafeApiClient.processResponse(response, Payment.class);
   }
 
   /**
@@ -58,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
   public Payment getPaymentById(final String paymentId, final RequestOptions requestOptions) throws PaysafeSdkException {
     final String path = String.format("%s/%s", PAYMENT_ENDPOINT, paymentId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, Payment.class);
+    return paysafeApiClient.processResponse(response, Payment.class);
   }
 
   /**
@@ -83,7 +82,7 @@ public class PaymentServiceImpl implements PaymentService {
     final String path = String.format("%s%s", PAYMENT_ENDPOINT,
         buildQueryParameters(merchantRefNum, endDate, limit, offset, startDate, null, null));
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, PaymentList.class);
+    return paysafeApiClient.processResponse(response, PaymentList.class);
   }
 
   /**
@@ -102,6 +101,6 @@ public class PaymentServiceImpl implements PaymentService {
       throws PaysafeSdkException {
     final String path = String.format("%s/%s", PAYMENT_ENDPOINT, paymentId);
     PaysafeApiResponse response = paysafeApiClient.executePut(path, cancelRequest, requestOptions);
-    return processResponse(response, CancelResponse.class);
+    return paysafeApiClient.processResponse(response, CancelResponse.class);
   }
 }

@@ -1,10 +1,18 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
  * Contains meta info for the pagination APIs
@@ -22,7 +30,7 @@ public class Meta {
     super();
   }
 
-  private Meta(Builder builder) {
+  private Meta(final Builder builder) {
     setNumberOfRecords(builder.numberOfRecords);
     setLimit(builder.limit);
     setPage(builder.page);
@@ -32,13 +40,14 @@ public class Meta {
     return new Builder();
   }
 
+
   public Meta numberOfRecords(Integer numberOfRecords) {
     this.numberOfRecords = numberOfRecords;
     return this;
   }
 
   /**
-   * This is the number of records returned in the  lookup.
+   * This is the number of records returned in the lookup
    *
    * @return numberOfRecords
    */
@@ -50,13 +59,14 @@ public class Meta {
     this.numberOfRecords = numberOfRecords;
   }
 
+
   public Meta limit(Integer limit) {
     this.limit = limit;
     return this;
   }
 
   /**
-   * This is the number of records returned per page.
+   * This is the number of records returned per page
    *
    * @return limit
    */
@@ -68,13 +78,14 @@ public class Meta {
     this.limit = limit;
   }
 
+
   public Meta page(Integer page) {
     this.page = page;
     return this;
   }
 
   /**
-   * This is the page of records on which the lookup  starts.
+   * This is the page of records on which the lookup starts
    *
    * @return page
    */
@@ -127,7 +138,7 @@ public class Meta {
   }
 
   /**
-   * {@code Meta} builder static inner class.
+   * Contains meta info for the pagination APIs builder static inner class.
    */
   public static final class Builder {
     private Integer numberOfRecords;
@@ -138,9 +149,11 @@ public class Meta {
     }
 
     /**
-     * Sets the {@code numberOfRecords} and returns a reference to this Builder enabling method chaining.
+     * This is the number of records returned in the lookup
+     * <p>
+     * Sets the numberOfRecords and returns a reference to this Builder enabling method chaining.
      *
-     * @param numberOfRecords the {@code numberOfRecords} to set
+     * @param numberOfRecords the numberOfRecords to set
      * @return a reference to this Builder
      */
     public Builder numberOfRecords(Integer numberOfRecords) {
@@ -149,9 +162,11 @@ public class Meta {
     }
 
     /**
-     * Sets the {@code limit} and returns a reference to this Builder enabling method chaining.
+     * This is the number of records returned per page
+     * <p>
+     * Sets the limit and returns a reference to this Builder enabling method chaining.
      *
-     * @param limit the {@code limit} to set
+     * @param limit the limit to set
      * @return a reference to this Builder
      */
     public Builder limit(Integer limit) {
@@ -160,9 +175,11 @@ public class Meta {
     }
 
     /**
-     * Sets the {@code page} and returns a reference to this Builder enabling method chaining.
+     * This is the page of records on which the lookup starts
+     * <p>
+     * Sets the page and returns a reference to this Builder enabling method chaining.
      *
-     * @param page the {@code page} to set
+     * @param page the page to set
      * @return a reference to this Builder
      */
     public Builder page(Integer page) {
@@ -171,13 +188,12 @@ public class Meta {
     }
 
     /**
-     * Returns a {@code Meta} built from the parameters previously set.
+     * Returns a Meta built from the parameters previously set.
      *
-     * @return a {@code Meta} built with parameters of this {@code Meta.Builder}
+     * @return a Meta built with parameters of this Meta.Builder
      */
     public Meta build() {
       return new Meta(this);
     }
   }
 }
-

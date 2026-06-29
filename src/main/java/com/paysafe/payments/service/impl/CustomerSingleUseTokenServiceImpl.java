@@ -2,8 +2,6 @@
 
 package com.paysafe.payments.service.impl;
 
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
-
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
 import com.paysafe.payments.api.RequestOptions;
@@ -46,7 +44,7 @@ public class CustomerSingleUseTokenServiceImpl implements CustomerSingleUseToken
     PaysafeApiResponse response = paysafeApiClient.executePost(String.format(CREATE_CUSTOMER_SINGLE_USE_TOKEN_ENDPOINT, customerId),
         requestBody, requestOptions);
 
-    return processResponse(response, SingleUseCustomerToken.class);
+    return paysafeApiClient.processResponse(response, SingleUseCustomerToken.class);
   }
 
   /**
@@ -66,6 +64,6 @@ public class CustomerSingleUseTokenServiceImpl implements CustomerSingleUseToken
     String endpoint = String.format(GET_CUSTOMER_SINGLE_USE_TOKEN_ENDPOINT, singleUseCustomerTokenId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(endpoint, requestOptions);
 
-    return processResponse(response, SingleUseCustomerToken.class);
+    return paysafeApiClient.processResponse(response, SingleUseCustomerToken.class);
   }
 }

@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.enums;
 
@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This is the account name inquiry name result returned by the acquirer.
+ * The account name inquiry full name set result returned by the acquirer.
  */
 public enum NameVerification {
+
   MATCH("MATCH"),
 
   PARTIAL_MATCH("PARTIAL_MATCH"),
@@ -18,7 +19,6 @@ public enum NameVerification {
   NOT_PROCESSED("NOT_PROCESSED"),
 
   UNKNOWN("UNKNOWN");
-
 
   private final String value;
 

@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Venmo
+ * Venmo.
  */
 public class Venmo {
 
@@ -22,7 +30,7 @@ public class Venmo {
     super();
   }
 
-  private Venmo(Builder builder) {
+  private Venmo(final Builder builder) {
     setConsumerId(builder.consumerId);
     setMerchantAccountId(builder.merchantAccountId);
     setProfileId(builder.profileId);
@@ -32,15 +40,14 @@ public class Venmo {
     return new Builder();
   }
 
+
   public Venmo consumerId(String consumerId) {
     this.consumerId = consumerId;
     return this;
   }
 
   /**
-   * This is your identifier for your consumer and must be unique per consumer. We store this after your first successful Venmo transaction for a given
-   * consumer (during this first transaction the consumer agrees to link their Venmo wallet for future transactions). When you subsequently send in the
-   * same consumerId, we debit the consumer’s wallet directly without the consumer having to agree to each transaction.
+   * This is your identifier for your consumer and must be unique per consumer. We store this after your first successful Venmo transaction for a given consumer (during this first transaction the consumer agrees to link their Venmo wallet for future transactions). When you subsequently send in the same consumerId, we debit the consumer's wallet directly without the consumer having to agree to each transaction
    *
    * @return consumerId
    */
@@ -52,16 +59,14 @@ public class Venmo {
     this.consumerId = consumerId;
   }
 
+
   public Venmo merchantAccountId(String merchantAccountId) {
     this.merchantAccountId = merchantAccountId;
     return this;
   }
 
   /**
-   * You can set up multiple accounts with Braintree, and each account can settle funds into a different bank account.
-   * This parameter therefore allows you to control which of your bank accounts is used to receive settlement.  <br>
-   * This only applies to pay-ins and not payouts.  <br> If you pass it for payouts the value will be ignored.  <br>
-   * If not supplied for pay-ins, your default Braintree account will be used.
+   * You can set up multiple accounts with Braintree, and each account can settle funds into a different bank account. This parameter therefore allows you to control which of your bank accounts is used to receive settlement. This only applies to pay-ins and not payouts. If you pass it for payouts the value will be ignored. If not supplied for pay-ins, your default Braintree account will be used
    *
    * @return merchantAccountId
    */
@@ -73,18 +78,14 @@ public class Venmo {
     this.merchantAccountId = merchantAccountId;
   }
 
+
   public Venmo profileId(String profileId) {
     this.profileId = profileId;
     return this;
   }
 
   /**
-   * You can set up multiple profiles with Braintree, where each profile shows the consumer a different logo and description during checkout on the Venmo app,
-   * and on the Venmo statement. This parameter therefore allows you to vary the consumer experience (for example, if you have multiple brands, you can display
-   * a different logo for each).  <br>
-   * This only applies to pay-ins and not payouts.  <br>
-   * If you pass it for payouts the value will be ignored.  <br>
-   * If not supplied for pay-ins, your default profile will be used.
+   * You can set up multiple profiles with Braintree, where each profile shows the consumer a different logo and description during checkout on the Venmo app, and on the Venmo statement. This parameter therefore allows you to vary the consumer experience (for example, if you have multiple brands, you can display a different logo for each). This only applies to pay-ins and not payouts. If you pass it for payouts the value will be ignored. If not supplied for pay-ins, your default profile will be used
    *
    * @return profileId
    */
@@ -137,7 +138,7 @@ public class Venmo {
   }
 
   /**
-   * {@code Venmo} builder static inner class.
+   * Venmo. builder static inner class.
    */
   public static final class Builder {
     private String consumerId;
@@ -148,9 +149,11 @@ public class Venmo {
     }
 
     /**
-     * Sets the {@code consumerId} and returns a reference to this Builder enabling method chaining.
+     * This is your identifier for your consumer and must be unique per consumer. We store this after your first successful Venmo transaction for a given consumer (during this first transaction the consumer agrees to link their Venmo wallet for future transactions). When you subsequently send in the same consumerId, we debit the consumer's wallet directly without the consumer having to agree to each transaction
+     * <p>
+     * Sets the consumerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param consumerId the {@code consumerId} to set
+     * @param consumerId the consumerId to set
      * @return a reference to this Builder
      */
     public Builder consumerId(String consumerId) {
@@ -159,9 +162,11 @@ public class Venmo {
     }
 
     /**
-     * Sets the {@code merchantAccountId} and returns a reference to this Builder enabling method chaining.
+     * You can set up multiple accounts with Braintree, and each account can settle funds into a different bank account. This parameter therefore allows you to control which of your bank accounts is used to receive settlement. This only applies to pay-ins and not payouts. If you pass it for payouts the value will be ignored. If not supplied for pay-ins, your default Braintree account will be used
+     * <p>
+     * Sets the merchantAccountId and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantAccountId the {@code merchantAccountId} to set
+     * @param merchantAccountId the merchantAccountId to set
      * @return a reference to this Builder
      */
     public Builder merchantAccountId(String merchantAccountId) {
@@ -170,9 +175,11 @@ public class Venmo {
     }
 
     /**
-     * Sets the {@code profileId} and returns a reference to this Builder enabling method chaining.
+     * You can set up multiple profiles with Braintree, where each profile shows the consumer a different logo and description during checkout on the Venmo app, and on the Venmo statement. This parameter therefore allows you to vary the consumer experience (for example, if you have multiple brands, you can display a different logo for each). This only applies to pay-ins and not payouts. If you pass it for payouts the value will be ignored. If not supplied for pay-ins, your default profile will be used
+     * <p>
+     * Sets the profileId and returns a reference to this Builder enabling method chaining.
      *
-     * @param profileId the {@code profileId} to set
+     * @param profileId the profileId to set
      * @return a reference to this Builder
      */
     public Builder profileId(String profileId) {
@@ -181,13 +188,12 @@ public class Venmo {
     }
 
     /**
-     * Returns a {@code Venmo} built from the parameters previously set.
+     * Returns a Venmo built from the parameters previously set.
      *
-     * @return a {@code Venmo} built with parameters of this {@code Venmo.Builder}
+     * @return a Venmo built with parameters of this Venmo.Builder
      */
     public Venmo build() {
       return new Venmo(this);
     }
   }
 }
-

@@ -1,31 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.threeds;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.card.enums.PriorThreeDsAuthenticationMethod;
 
+
+
 /**
- * This is the previous authentication information used with current merchant, cardholder and card.
- * <ul>
- *   <li>
- *     <b>id:</b> This is the previous authentication ID for the cardholder.  <br>
- *     <b>Note:</b> For recurring payments, this is the authenticationId of the first authentication.
- *   </li>
- *   <li>
- *     <b>data:</b> This field is reserved for future iterations of 3D Secure 2.
- *   </li>
- *   <li>
- *     <b>method:</b> This is the mechanism used previously by the cardholder to authenticate to the 3DS Requestor.
- *     <i>Allowed values: FRICTIONLESS_AUTHENTICATION, ACS_CHALLENGE, AVS_VERIFIED, OTHER_ISSUER_METHOD</i>
- *   </li>
- *   <li>
- *     <b>time:</b> This is the date and time of the cardholder authentication.
- *     The ISO 8601 date format is expected, i.e., YYYY-MM-DD-THH:MM:SSZ.
- *   </li>
- * </ul>
+ * Previous authentication information used with current merchant, cardholder and card
  */
 public class PriorThreedsAuthentication {
 
@@ -42,7 +33,7 @@ public class PriorThreedsAuthentication {
     super();
   }
 
-  private PriorThreedsAuthentication(Builder builder) {
+  private PriorThreedsAuthentication(final Builder builder) {
     setId(builder.id);
     setData(builder.data);
     setMethod(builder.method);
@@ -53,13 +44,14 @@ public class PriorThreedsAuthentication {
     return new Builder();
   }
 
+
   public PriorThreedsAuthentication id(String id) {
     this.id = id;
     return this;
   }
 
   /**
-   * This is the previous authentication ID for the cardholder.  <b>Note:</b> For recurring payments, this is the authenticationId of the first authentication.
+   * Previous authentication ID for the cardholder. For recurring payments, this is the authenticationId of the first authentication
    *
    * @return id
    */
@@ -71,13 +63,14 @@ public class PriorThreedsAuthentication {
     this.id = id;
   }
 
+
   public PriorThreedsAuthentication data(String data) {
     this.data = data;
     return this;
   }
 
   /**
-   * This field is reserved for future iterations of 3D Secure 2.
+   * Field reserved for future iterations of 3D Secure 2
    *
    * @return data
    */
@@ -89,13 +82,14 @@ public class PriorThreedsAuthentication {
     this.data = data;
   }
 
+
   public PriorThreedsAuthentication method(PriorThreeDsAuthenticationMethod method) {
     this.method = method;
     return this;
   }
 
   /**
-   * This is the mechanism used previously by the cardholder to authenticate to the 3DS Requestor.
+   * Get method
    *
    * @return method
    */
@@ -107,13 +101,14 @@ public class PriorThreedsAuthentication {
     this.method = method;
   }
 
+
   public PriorThreedsAuthentication time(String time) {
     this.time = time;
     return this;
   }
 
   /**
-   * This is the date and time of the cardholder authentication. The ISO 8601 date format is expected, i.e., YYYY-MM-DD-THH:MM:SSZ.
+   * Date and time of the cardholder authentication in ISO 8601 format (YYYY-MM-DD-THH:MM:SSZ)
    *
    * @return time
    */
@@ -168,7 +163,7 @@ public class PriorThreedsAuthentication {
   }
 
   /**
-   * {@code PriorThreedsAuthentication} builder static inner class.
+   * Previous authentication information used with current merchant, cardholder and card builder static inner class.
    */
   public static final class Builder {
     private String id;
@@ -180,9 +175,11 @@ public class PriorThreedsAuthentication {
     }
 
     /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
+     * Previous authentication ID for the cardholder. For recurring payments, this is the authenticationId of the first authentication
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -191,9 +188,11 @@ public class PriorThreedsAuthentication {
     }
 
     /**
-     * Sets the {@code data} and returns a reference to this Builder enabling method chaining.
+     * Field reserved for future iterations of 3D Secure 2
+     * <p>
+     * Sets the data and returns a reference to this Builder enabling method chaining.
      *
-     * @param data the {@code data} to set
+     * @param data the data to set
      * @return a reference to this Builder
      */
     public Builder data(String data) {
@@ -202,9 +201,9 @@ public class PriorThreedsAuthentication {
     }
 
     /**
-     * Sets the {@code method} and returns a reference to this Builder enabling method chaining.
+     * Sets the method and returns a reference to this Builder enabling method chaining.
      *
-     * @param method the {@code method} to set
+     * @param method the method to set
      * @return a reference to this Builder
      */
     public Builder method(PriorThreeDsAuthenticationMethod method) {
@@ -213,9 +212,11 @@ public class PriorThreedsAuthentication {
     }
 
     /**
-     * Sets the {@code time} and returns a reference to this Builder enabling method chaining.
+     * Date and time of the cardholder authentication in ISO 8601 format (YYYY-MM-DD-THH:MM:SSZ)
+     * <p>
+     * Sets the time and returns a reference to this Builder enabling method chaining.
      *
-     * @param time the {@code time} to set
+     * @param time the time to set
      * @return a reference to this Builder
      */
     public Builder time(String time) {
@@ -224,13 +225,12 @@ public class PriorThreedsAuthentication {
     }
 
     /**
-     * Returns a {@code PriorThreedsAuthentication} built from the parameters previously set.
+     * Returns a PriorThreedsAuthentication built from the parameters previously set.
      *
-     * @return a {@code PriorThreedsAuthentication} built with parameters of this {@code PriorThreedsAuthentication.Builder}
+     * @return a PriorThreedsAuthentication built with parameters of this PriorThreedsAuthentication.Builder
      */
     public PriorThreedsAuthentication build() {
       return new PriorThreedsAuthentication(this);
     }
   }
 }
-

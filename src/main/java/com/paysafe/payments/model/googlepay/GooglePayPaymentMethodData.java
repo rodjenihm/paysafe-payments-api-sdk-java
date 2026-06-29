@@ -1,13 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.googlepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * Payment method parameter of Google Pay Token.
+ * Payment method parameter of Google Pay Token
  */
 public class GooglePayPaymentMethodData {
 
@@ -24,9 +33,10 @@ public class GooglePayPaymentMethodData {
     super();
   }
 
-  private GooglePayPaymentMethodData(Builder builder) {
+  private GooglePayPaymentMethodData(final Builder builder) {
     setDescription(builder.description);
     setInfo(builder.info);
+    setTokenizationData(builder.tokenizationData);
     setType(builder.type);
   }
 
@@ -34,13 +44,14 @@ public class GooglePayPaymentMethodData {
     return new Builder();
   }
 
+
   public GooglePayPaymentMethodData description(String description) {
     this.description = description;
     return this;
   }
 
   /**
-   * A descriptive text.
+   * A descriptive text
    *
    * @return description
    */
@@ -51,6 +62,7 @@ public class GooglePayPaymentMethodData {
   public void setDescription(String description) {
     this.description = description;
   }
+
 
   public GooglePayPaymentMethodData info(GooglePayPaymentMethodDataInfo info) {
     this.info = info;
@@ -70,13 +82,14 @@ public class GooglePayPaymentMethodData {
     this.info = info;
   }
 
+
   public GooglePayPaymentMethodData tokenizationData(GooglePayPaymentMethodDataTokenizationData tokenizationData) {
     this.tokenizationData = tokenizationData;
     return this;
   }
 
   /**
-   * The tokenization data for Google Pay.
+   * Get tokenizationData
    *
    * @return tokenizationData
    */
@@ -88,13 +101,14 @@ public class GooglePayPaymentMethodData {
     this.tokenizationData = tokenizationData;
   }
 
+
   public GooglePayPaymentMethodData type(String type) {
     this.type = type;
     return this;
   }
 
   /**
-   * Get type
+   * Type property of Google Pay Payment Method
    *
    * @return type
    */
@@ -149,20 +163,23 @@ public class GooglePayPaymentMethodData {
   }
 
   /**
-   * {@code GooglePayPaymentMethodData} builder static inner class.
+   * Payment method parameter of Google Pay Token builder static inner class.
    */
   public static final class Builder {
     private String description;
     private GooglePayPaymentMethodDataInfo info;
+    private GooglePayPaymentMethodDataTokenizationData tokenizationData;
     private String type;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code description} and returns a reference to this Builder enabling method chaining.
+     * A descriptive text
+     * <p>
+     * Sets the description and returns a reference to this Builder enabling method chaining.
      *
-     * @param description the {@code description} to set
+     * @param description the description to set
      * @return a reference to this Builder
      */
     public Builder description(String description) {
@@ -171,9 +188,9 @@ public class GooglePayPaymentMethodData {
     }
 
     /**
-     * Sets the {@code info} and returns a reference to this Builder enabling method chaining.
+     * Sets the info and returns a reference to this Builder enabling method chaining.
      *
-     * @param info the {@code info} to set
+     * @param info the info to set
      * @return a reference to this Builder
      */
     public Builder info(GooglePayPaymentMethodDataInfo info) {
@@ -182,9 +199,22 @@ public class GooglePayPaymentMethodData {
     }
 
     /**
-     * Sets the {@code type} and returns a reference to this Builder enabling method chaining.
+     * Sets the tokenizationData and returns a reference to this Builder enabling method chaining.
      *
-     * @param type the {@code type} to set
+     * @param tokenizationData the tokenizationData to set
+     * @return a reference to this Builder
+     */
+    public Builder tokenizationData(GooglePayPaymentMethodDataTokenizationData tokenizationData) {
+      this.tokenizationData = tokenizationData;
+      return this;
+    }
+
+    /**
+     * Type property of Google Pay Payment Method
+     * <p>
+     * Sets the type and returns a reference to this Builder enabling method chaining.
+     *
+     * @param type the type to set
      * @return a reference to this Builder
      */
     public Builder type(String type) {
@@ -193,13 +223,12 @@ public class GooglePayPaymentMethodData {
     }
 
     /**
-     * Returns a {@code GooglePayPaymentMethodData} built from the parameters previously set.
+     * Returns a GooglePayPaymentMethodData built from the parameters previously set.
      *
-     * @return a {@code GooglePayPaymentMethodData} built with parameters of this {@code GooglePayPaymentMethodData.Builder}
+     * @return a GooglePayPaymentMethodData built with parameters of this GooglePayPaymentMethodData.Builder
      */
     public GooglePayPaymentMethodData build() {
       return new GooglePayPaymentMethodData(this);
     }
   }
 }
-

@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.enums;
 
@@ -6,15 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Enum representing the possible statuses of an Enrollment Lookup request.
- * <p>Values:</p>
- * <ul>
- *   <li><strong>COMPLETED:</strong> The transaction has been completed successfully. The authentication was successful.</li>
- *   <li><strong>FAILED:</strong> The authentication request failed. Further investigation is required, and the error code
- *   should be checked for more details.</li>
- * </ul>
+ * The status of the Enrollment Lookup request.
  */
 public enum AuthenticationStatus {
+
   COMPLETED("COMPLETED"),
 
   FAILED("FAILED");

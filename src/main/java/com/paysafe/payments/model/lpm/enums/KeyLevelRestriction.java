@@ -1,18 +1,16 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.paysafe.payments.model.payment.Payment;
 
 /**
- * Payment can be restricted for a certain minimum kyc level (implicitly restricts payment to registered consumers only). Possible values are:
- * <ul>
- * <li>FULL </li>
- * <li>SIMPLE. </li>
- * </ul>
+ * Payment can be restricted for a certain minimum kyc level (implicitly restricts payment to registered consumers only). Possible values are: - FULL - SIMPLE
  */
 public enum KeyLevelRestriction {
+
   FULL("FULL"),
 
   SIMPLE("SIMPLE");

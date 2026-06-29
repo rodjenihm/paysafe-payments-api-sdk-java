@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.error;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Contains error info for the given field
+ * If applicable, this is a list of fields that have issues.
  */
 public class FieldError {
 
@@ -20,7 +28,7 @@ public class FieldError {
     super();
   }
 
-  private FieldError(Builder builder) {
+  private FieldError(final Builder builder) {
     setField(builder.field);
     setError(builder.error);
   }
@@ -29,13 +37,14 @@ public class FieldError {
     return new Builder();
   }
 
+
   public FieldError field(String field) {
     this.field = field;
     return this;
   }
 
   /**
-   * Identifies the JSON request field.
+   * Identifies the JSON request field
    *
    * @return field
    */
@@ -47,13 +56,14 @@ public class FieldError {
     this.field = field;
   }
 
+
   public FieldError error(String error) {
     this.error = error;
     return this;
   }
 
   /**
-   * The problem associated with field.
+   * The problem associated with field
    *
    * @return error
    */
@@ -104,7 +114,7 @@ public class FieldError {
   }
 
   /**
-   * {@code FieldError} builder static inner class.
+   * If applicable, this is a list of fields that have issues. builder static inner class.
    */
   public static final class Builder {
     private String field;
@@ -114,9 +124,11 @@ public class FieldError {
     }
 
     /**
-     * Sets the {@code field} and returns a reference to this Builder enabling method chaining.
+     * Identifies the JSON request field
+     * <p>
+     * Sets the field and returns a reference to this Builder enabling method chaining.
      *
-     * @param field the {@code field} to set
+     * @param field the field to set
      * @return a reference to this Builder
      */
     public Builder field(String field) {
@@ -125,9 +137,11 @@ public class FieldError {
     }
 
     /**
-     * Sets the {@code error} and returns a reference to this Builder enabling method chaining.
+     * The problem associated with field
+     * <p>
+     * Sets the error and returns a reference to this Builder enabling method chaining.
      *
-     * @param error the {@code error} to set
+     * @param error the error to set
      * @return a reference to this Builder
      */
     public Builder error(String error) {
@@ -136,13 +150,12 @@ public class FieldError {
     }
 
     /**
-     * Returns a {@code FieldError} built from the parameters previously set.
+     * Returns a FieldError built from the parameters previously set.
      *
-     * @return a {@code FieldError} built with parameters of this {@code FieldError.Builder}
+     * @return a FieldError built with parameters of this FieldError.Builder
      */
     public FieldError build() {
       return new FieldError(this);
     }
   }
 }
-

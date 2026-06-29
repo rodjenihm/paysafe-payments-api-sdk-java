@@ -1,34 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.enums.NetworkTokenStatus;
 
+
+
 /**
- * Holds network token fields  <br>
- * <ul>
- *   <li>
- *     <b>bin:</b> These are the first 6 digits of the network token.  <br>
- *     Example: 411111
- *   </li>
- *   <li>
- *     <b>lastDigits:</b> These are the last four digits of the network token.  <br>
- *     Example: 6585
- *   </li>
- *   <li>
- *     <b>status:</b> The status of the network token.  <br>
- *     <i>Allowed values: ACTIVE, INACTIVE, SUSPENDED</i>
- *   </li>
- *   <li>
- *     <b>expiry:</b> This is the card's expiry date.
- *   </li>
- *   <li>
- *     <b>cardArt:</b> Holds network token card art fields.
- *   </li>
- * </ul>
+ * Holds network token fields.
  */
 public class NetworkToken {
 
@@ -47,7 +35,7 @@ public class NetworkToken {
     super();
   }
 
-  private NetworkToken(Builder builder) {
+  private NetworkToken(final Builder builder) {
     setBin(builder.bin);
     setLastDigits(builder.lastDigits);
     setStatus(builder.status);
@@ -59,13 +47,14 @@ public class NetworkToken {
     return new Builder();
   }
 
+
   public NetworkToken bin(String bin) {
     this.bin = bin;
     return this;
   }
 
   /**
-   * These are the first 6 digits of the network token.
+   * These are the first 6 digits of the network token. Example: 411111
    *
    * @return bin
    */
@@ -77,13 +66,14 @@ public class NetworkToken {
     this.bin = bin;
   }
 
+
   public NetworkToken lastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
     return this;
   }
 
   /**
-   * These are the last four digits of the network token.
+   * These are the last four digits of the network token. Example: 6585
    *
    * @return lastDigits
    */
@@ -95,13 +85,14 @@ public class NetworkToken {
     this.lastDigits = lastDigits;
   }
 
+
   public NetworkToken status(NetworkTokenStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * The status of the network token.
+   * Get status
    *
    * @return status
    */
@@ -113,13 +104,14 @@ public class NetworkToken {
     this.status = status;
   }
 
+
   public NetworkToken expiry(CardExpiry expiry) {
     this.expiry = expiry;
     return this;
   }
 
   /**
-   * This is the card's expiry date.
+   * Get expiry
    *
    * @return expiry
    */
@@ -131,13 +123,14 @@ public class NetworkToken {
     this.expiry = expiry;
   }
 
+
   public NetworkToken cardArt(NetworkTokenCardArt cardArt) {
     this.cardArt = cardArt;
     return this;
   }
 
   /**
-   * Holds network token card art fields
+   * Get cardArt
    *
    * @return cardArt
    */
@@ -194,7 +187,7 @@ public class NetworkToken {
   }
 
   /**
-   * {@code NetworkToken} builder static inner class.
+   * Holds network token fields. builder static inner class.
    */
   public static final class Builder {
     private String bin;
@@ -207,9 +200,11 @@ public class NetworkToken {
     }
 
     /**
-     * Sets the {@code bin} and returns a reference to this Builder enabling method chaining.
+     * These are the first 6 digits of the network token. Example: 411111
+     * <p>
+     * Sets the bin and returns a reference to this Builder enabling method chaining.
      *
-     * @param bin the {@code bin} to set
+     * @param bin the bin to set
      * @return a reference to this Builder
      */
     public Builder bin(String bin) {
@@ -218,9 +213,11 @@ public class NetworkToken {
     }
 
     /**
-     * Sets the {@code lastDigits} and returns a reference to this Builder enabling method chaining.
+     * These are the last four digits of the network token. Example: 6585
+     * <p>
+     * Sets the lastDigits and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastDigits the {@code lastDigits} to set
+     * @param lastDigits the lastDigits to set
      * @return a reference to this Builder
      */
     public Builder lastDigits(String lastDigits) {
@@ -229,9 +226,9 @@ public class NetworkToken {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
     public Builder status(NetworkTokenStatus status) {
@@ -240,9 +237,9 @@ public class NetworkToken {
     }
 
     /**
-     * Sets the {@code expiry} and returns a reference to this Builder enabling method chaining.
+     * Sets the expiry and returns a reference to this Builder enabling method chaining.
      *
-     * @param expiry the {@code expiry} to set
+     * @param expiry the expiry to set
      * @return a reference to this Builder
      */
     public Builder expiry(CardExpiry expiry) {
@@ -251,9 +248,9 @@ public class NetworkToken {
     }
 
     /**
-     * Sets the {@code cardArt} and returns a reference to this Builder enabling method chaining.
+     * Sets the cardArt and returns a reference to this Builder enabling method chaining.
      *
-     * @param cardArt the {@code cardArt} to set
+     * @param cardArt the cardArt to set
      * @return a reference to this Builder
      */
     public Builder cardArt(NetworkTokenCardArt cardArt) {
@@ -262,13 +259,12 @@ public class NetworkToken {
     }
 
     /**
-     * Returns a {@code NetworkToken} built from the parameters previously set.
+     * Returns a NetworkToken built from the parameters previously set.
      *
-     * @return a {@code NetworkToken} built with parameters of this {@code NetworkToken.Builder}
+     * @return a NetworkToken built with parameters of this NetworkToken.Builder
      */
     public NetworkToken build() {
       return new NetworkToken(this);
     }
   }
 }
-

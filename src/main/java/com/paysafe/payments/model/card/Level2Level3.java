@@ -1,21 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Represents Level 2 and Level 3 transaction data for detailed purchase information.
- * Level 2 and Level 3 (L2/L3) credit card processing refers to certain B2B card transactions for which the merchant might be eligible
- * for lower credit card interchange rates. The lower rates may be available for merchants who provide more detailed information when
- * processing card-not-present transactions. In order to be eligible for L2/L3 transactions:
- * <ul>
- *   <li>Your merchant account must be properly configured by Paysafe.</li>
- *   <li>The BIN of the credit card used for the transaction must be eligible – typically,these are government-issued credit cards.</li>
- * </ul>
- * <b>Note:</b> Not all processing gateways support this parameter. Contact your account manager for more information.
+ * Level 2 and Level 3 (L2/L3) credit card processing refers to certain B2B card transactions for which the merchant might be eligible for lower credit card interchange rates. The lower rates may be available for merchants who provide more detailed information when processing card-not-present transactions. In order to be eligible for L2/L3 transactions:  - Your merchant account must be properly configured by Paysafe.  - The BIN of the credit card used for the transaction must be eligible – typically, these are government-issued credit cards.  **Note:** Not all processing gateways support this parameter. Contact your account manager for more information.
  */
 public class Level2Level3 {
 
@@ -42,7 +42,7 @@ public class Level2Level3 {
     super();
   }
 
-  private Level2Level3(Builder builder) {
+  private Level2Level3(final Builder builder) {
     setExemptLocalTax(builder.exemptLocalTax);
     setLocalTaxAmount(builder.localTaxAmount);
     setNationalTaxAmount(builder.nationalTaxAmount);
@@ -58,14 +58,14 @@ public class Level2Level3 {
     return new Builder();
   }
 
+
   public Level2Level3 exemptLocalTax(Boolean exemptLocalTax) {
     this.exemptLocalTax = exemptLocalTax;
     return this;
   }
 
   /**
-   * This indicates whether local tax is exempted for the request. If set to true, then the localTaxAmount parameter will be ignored.
-   * <b>Note:</b> This value defaults to false.
+   * This indicates whether or not local tax is exempted for the request. If set to true, then the  localTaxAmount parameter will be ignored. **Note:** This value defaults to false
    *
    * @return exemptLocalTax
    */
@@ -77,13 +77,14 @@ public class Level2Level3 {
     this.exemptLocalTax = exemptLocalTax;
   }
 
+
   public Level2Level3 localTaxAmount(Integer localTaxAmount) {
     this.localTaxAmount = localTaxAmount;
     return this;
   }
 
   /**
-   * This is the local sales tax applied to the purchase.
+   * This is the local sales tax applied to the purchase, in minor units
    *
    * @return localTaxAmount
    */
@@ -95,14 +96,14 @@ public class Level2Level3 {
     this.localTaxAmount = localTaxAmount;
   }
 
+
   public Level2Level3 nationalTaxAmount(Integer nationalTaxAmount) {
     this.nationalTaxAmount = nationalTaxAmount;
     return this;
   }
 
   /**
-   * This is the national tax included in the transaction amount.  <br>
-   * Maximum: 99999999999
+   * This is the national tax included in the transaction amount, in minor units
    *
    * @return nationalTaxAmount
    */
@@ -114,14 +115,14 @@ public class Level2Level3 {
     this.nationalTaxAmount = nationalTaxAmount;
   }
 
+
   public Level2Level3 freightAmount(Integer freightAmount) {
     this.freightAmount = freightAmount;
     return this;
   }
 
   /**
-   * This is the freight or shipping portion of the total transaction amount.  <br>
-   * Maximum: 99999999999
+   * This is the freight or shipping cost included in the transaction amount, in minor units
    *
    * @return freightAmount
    */
@@ -133,14 +134,14 @@ public class Level2Level3 {
     this.freightAmount = freightAmount;
   }
 
+
   public Level2Level3 dutyAmount(Integer dutyAmount) {
     this.dutyAmount = dutyAmount;
     return this;
   }
 
   /**
-   * This is the duty associated with the import of the purchased goods.  <br>
-   * Maximum: 99999999999
+   * This is the duty associated with the import of the purchased goods, in minor units
    *
    * @return dutyAmount
    */
@@ -152,14 +153,14 @@ public class Level2Level3 {
     this.dutyAmount = dutyAmount;
   }
 
+
   public Level2Level3 destinationZip(String destinationZip) {
     this.destinationZip = destinationZip;
     return this;
   }
 
   /**
-   * This is the postal/zip code of the address to which the purchased goods will be delivered.
-   * This field  can be identical to the shipFromZip if the customer is present and takes immediate possession of the goods.
+   * This is the postal/zip code of the address to which the purchased goods will be delivered. This field can be identical to the shipFromZip if the customer is present and takes immediate possession of the goods
    *
    * @return destinationZip
    */
@@ -171,16 +172,16 @@ public class Level2Level3 {
     this.destinationZip = destinationZip;
   }
 
+
   public Level2Level3 destinationCountry(String destinationCountry) {
     this.destinationCountry = destinationCountry;
     return this;
   }
 
   /**
-   * This is the country to which the goods are being shipped.
+   * This is the country to which the goods are being shipped
    *
    * @return destinationCountry
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#country-codes>Country codes</a>
    */
   public String getDestinationCountry() {
     return destinationCountry;
@@ -190,13 +191,14 @@ public class Level2Level3 {
     this.destinationCountry = destinationCountry;
   }
 
+
   public Level2Level3 shipFromZip(String shipFromZip) {
     this.shipFromZip = shipFromZip;
     return this;
   }
 
   /**
-   * This is the postal/zip code of the address from which the purchased goods are being shipped.
+   * This is the postal/zip code of the address from which the purchased goods are being shipped
    *
    * @return shipFromZip
    */
@@ -208,13 +210,14 @@ public class Level2Level3 {
     this.shipFromZip = shipFromZip;
   }
 
+
   public Level2Level3 lineItems(LineItems lineItems) {
     this.lineItems = lineItems;
     return this;
   }
 
   /**
-   * This is more detailed information about the items that are being purchased for Level2Level3 merchants
+   * Get lineItems
    *
    * @return lineItems
    */
@@ -234,22 +237,21 @@ public class Level2Level3 {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Level2Level3 level2level3 = (Level2Level3) o;
-    return Objects.equals(this.exemptLocalTax, level2level3.exemptLocalTax) &&
-        Objects.equals(this.localTaxAmount, level2level3.localTaxAmount) &&
-        Objects.equals(this.nationalTaxAmount, level2level3.nationalTaxAmount) &&
-        Objects.equals(this.freightAmount, level2level3.freightAmount) &&
-        Objects.equals(this.dutyAmount, level2level3.dutyAmount) &&
-        Objects.equals(this.destinationZip, level2level3.destinationZip) &&
-        Objects.equals(this.destinationCountry, level2level3.destinationCountry) &&
-        Objects.equals(this.shipFromZip, level2level3.shipFromZip) &&
-        Objects.equals(this.lineItems, level2level3.lineItems);
+    Level2Level3 level2Level3 = (Level2Level3) o;
+    return Objects.equals(this.exemptLocalTax, level2Level3.exemptLocalTax) &&
+        Objects.equals(this.localTaxAmount, level2Level3.localTaxAmount) &&
+        Objects.equals(this.nationalTaxAmount, level2Level3.nationalTaxAmount) &&
+        Objects.equals(this.freightAmount, level2Level3.freightAmount) &&
+        Objects.equals(this.dutyAmount, level2Level3.dutyAmount) &&
+        Objects.equals(this.destinationZip, level2Level3.destinationZip) &&
+        Objects.equals(this.destinationCountry, level2Level3.destinationCountry) &&
+        Objects.equals(this.shipFromZip, level2Level3.shipFromZip) &&
+        Objects.equals(this.lineItems, level2Level3.lineItems);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(exemptLocalTax, localTaxAmount, nationalTaxAmount, freightAmount, dutyAmount, destinationZip, destinationCountry,
-        shipFromZip, lineItems);
+    return Objects.hash(exemptLocalTax, localTaxAmount, nationalTaxAmount, freightAmount, dutyAmount, destinationZip, destinationCountry, shipFromZip, lineItems);
   }
 
   @Override
@@ -280,7 +282,7 @@ public class Level2Level3 {
   }
 
   /**
-   * {@code Level2Level3} builder static inner class.
+   * Level 2 and Level 3 (L2/L3) credit card processing refers to certain B2B card transactions for which the merchant might be eligible for lower credit card interchange rates. The lower rates may be available for merchants who provide more detailed information when processing card-not-present transactions. In order to be eligible for L2/L3 transactions:  - Your merchant account must be properly configured by Paysafe.  - The BIN of the credit card used for the transaction must be eligible – typically, these are government-issued credit cards.  **Note:** Not all processing gateways support this parameter. Contact your account manager for more information. builder static inner class.
    */
   public static final class Builder {
     private Boolean exemptLocalTax;
@@ -297,9 +299,11 @@ public class Level2Level3 {
     }
 
     /**
-     * Sets the {@code exemptLocalTax} and returns a reference to this Builder enabling method chaining.
+     * This indicates whether or not local tax is exempted for the request. If set to true, then the  localTaxAmount parameter will be ignored. **Note:** This value defaults to false
+     * <p>
+     * Sets the exemptLocalTax and returns a reference to this Builder enabling method chaining.
      *
-     * @param exemptLocalTax the {@code exemptLocalTax} to set
+     * @param exemptLocalTax the exemptLocalTax to set
      * @return a reference to this Builder
      */
     public Builder exemptLocalTax(Boolean exemptLocalTax) {
@@ -308,9 +312,11 @@ public class Level2Level3 {
     }
 
     /**
-     * Sets the {@code localTaxAmount} and returns a reference to this Builder enabling method chaining.
+     * This is the local sales tax applied to the purchase, in minor units
+     * <p>
+     * Sets the localTaxAmount and returns a reference to this Builder enabling method chaining.
      *
-     * @param localTaxAmount the {@code localTaxAmount} to set
+     * @param localTaxAmount the localTaxAmount to set
      * @return a reference to this Builder
      */
     public Builder localTaxAmount(Integer localTaxAmount) {
@@ -319,9 +325,11 @@ public class Level2Level3 {
     }
 
     /**
-     * Sets the {@code nationalTaxAmount} and returns a reference to this Builder enabling method chaining.
+     * This is the national tax included in the transaction amount, in minor units
+     * <p>
+     * Sets the nationalTaxAmount and returns a reference to this Builder enabling method chaining.
      *
-     * @param nationalTaxAmount the {@code nationalTaxAmount} to set
+     * @param nationalTaxAmount the nationalTaxAmount to set
      * @return a reference to this Builder
      */
     public Builder nationalTaxAmount(Integer nationalTaxAmount) {
@@ -330,9 +338,11 @@ public class Level2Level3 {
     }
 
     /**
-     * Sets the {@code freightAmount} and returns a reference to this Builder enabling method chaining.
+     * This is the freight or shipping cost included in the transaction amount, in minor units
+     * <p>
+     * Sets the freightAmount and returns a reference to this Builder enabling method chaining.
      *
-     * @param freightAmount the {@code freightAmount} to set
+     * @param freightAmount the freightAmount to set
      * @return a reference to this Builder
      */
     public Builder freightAmount(Integer freightAmount) {
@@ -341,9 +351,11 @@ public class Level2Level3 {
     }
 
     /**
-     * Sets the {@code dutyAmount} and returns a reference to this Builder enabling method chaining.
+     * This is the duty associated with the import of the purchased goods, in minor units
+     * <p>
+     * Sets the dutyAmount and returns a reference to this Builder enabling method chaining.
      *
-     * @param dutyAmount the {@code dutyAmount} to set
+     * @param dutyAmount the dutyAmount to set
      * @return a reference to this Builder
      */
     public Builder dutyAmount(Integer dutyAmount) {
@@ -352,9 +364,11 @@ public class Level2Level3 {
     }
 
     /**
-     * Sets the {@code destinationZip} and returns a reference to this Builder enabling method chaining.
+     * This is the postal/zip code of the address to which the purchased goods will be delivered. This field can be identical to the shipFromZip if the customer is present and takes immediate possession of the goods
+     * <p>
+     * Sets the destinationZip and returns a reference to this Builder enabling method chaining.
      *
-     * @param destinationZip the {@code destinationZip} to set
+     * @param destinationZip the destinationZip to set
      * @return a reference to this Builder
      */
     public Builder destinationZip(String destinationZip) {
@@ -363,9 +377,11 @@ public class Level2Level3 {
     }
 
     /**
-     * Sets the {@code destinationCountry} and returns a reference to this Builder enabling method chaining.
+     * This is the country to which the goods are being shipped
+     * <p>
+     * Sets the destinationCountry and returns a reference to this Builder enabling method chaining.
      *
-     * @param destinationCountry the {@code destinationCountry} to set
+     * @param destinationCountry the destinationCountry to set
      * @return a reference to this Builder
      */
     public Builder destinationCountry(String destinationCountry) {
@@ -374,9 +390,11 @@ public class Level2Level3 {
     }
 
     /**
-     * Sets the {@code shipFromZip} and returns a reference to this Builder enabling method chaining.
+     * This is the postal/zip code of the address from which the purchased goods are being shipped
+     * <p>
+     * Sets the shipFromZip and returns a reference to this Builder enabling method chaining.
      *
-     * @param shipFromZip the {@code shipFromZip} to set
+     * @param shipFromZip the shipFromZip to set
      * @return a reference to this Builder
      */
     public Builder shipFromZip(String shipFromZip) {
@@ -385,9 +403,9 @@ public class Level2Level3 {
     }
 
     /**
-     * Sets the {@code lineItems} and returns a reference to this Builder enabling method chaining.
+     * Sets the lineItems and returns a reference to this Builder enabling method chaining.
      *
-     * @param lineItems the {@code lineItems} to set
+     * @param lineItems the lineItems to set
      * @return a reference to this Builder
      */
     public Builder lineItems(LineItems lineItems) {
@@ -396,13 +414,12 @@ public class Level2Level3 {
     }
 
     /**
-     * Returns a {@code Level2Level3} built from the parameters previously set.
+     * Returns a Level2Level3 built from the parameters previously set.
      *
-     * @return a {@code Level2Level3} built with parameters of this {@code Level2Level3.Builder}
+     * @return a Level2Level3 built with parameters of this Level2Level3.Builder
      */
     public Level2Level3 build() {
       return new Level2Level3(this);
     }
   }
 }
-

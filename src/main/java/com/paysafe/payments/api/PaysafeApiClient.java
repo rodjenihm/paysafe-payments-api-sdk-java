@@ -49,14 +49,15 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicClassicHttpRequest;
 import org.apache.hc.core5.util.Timeout;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.paysafe.payments.config.Environment;
 import com.paysafe.payments.errorhandling.exception.ApiConnectionException;
 import com.paysafe.payments.errorhandling.exception.IllegalArgumentException;
 import com.paysafe.payments.errorhandling.exception.PaysafeSdkException;
+import com.paysafe.payments.logging.JsonSlf4jLogger;
+import com.paysafe.payments.logging.LoggingLevel;
+import com.paysafe.payments.logging.SdkLogger;
 
 public class PaysafeApiClient {
 
@@ -84,8 +85,6 @@ public class PaysafeApiClient {
   public static final String JAVA_VM_VERSION = "java.vm.version";
   public static final String JAVA_VM_VENDOR = "java.vm.vendor";
 
-  private static final Logger logger = LoggerFactory.getLogger(PaysafeApiClient.class);
-
   // uri parameters
   private static final String PATH = "/paymenthub";
   private static final String URI_FORMAT = "%s%s%s";
@@ -107,6 +106,18 @@ public class PaysafeApiClient {
   private static final String BASE_URL_LIVE = "https://api.paysafe.com";
   private static final String BASE_URL_TEST = "https://api.test.paysafe.com";
 
+  // log messages actions
+  private static final String ACTION_EXECUTING = "Executing";
+  private static final String ACTION_EXCEPTION = "Exception while executing";
+  private static final String ACTION_RECEIVED_RESPONSE = "Received response for";
+
+  // http methods
+  private static final String GET = "GET";
+  private static final String POST = "POST";
+  private static final String PUT = "PUT";
+  private static final String PATCH = "PATCH";
+  private static final String DELETE = "DELETE";
+
   // configuration of this PaysafeApiClient instance
   private final String apiKey;
   private final int clientConnectTimeout;
@@ -115,6 +126,8 @@ public class PaysafeApiClient {
   private final SSLContext customSslContext;
   private final Proxy providedProxy;
   private final Environment environment;
+  private final SdkLogger logger;
+  private final LoggingLevel loggingLevel;
 
   private String baseUrl;
 
@@ -135,6 +148,8 @@ public class PaysafeApiClient {
     this.customSslContext = null;
     this.providedProxy = null;
     this.environment = environment;
+    this.loggingLevel = LoggingLevel.ERROR;
+    this.logger = new JsonSlf4jLogger(LoggingLevel.ERROR);
 
     if (Environment.LIVE.equals(environment)) {
       baseUrl = BASE_URL_LIVE;
@@ -151,6 +166,8 @@ public class PaysafeApiClient {
     customSslContext = builder.sslContext;
     providedProxy = builder.proxy;
     environment = builder.environment == null ? Environment.TEST : builder.environment;
+    loggingLevel = builder.loggingLevel != null ? builder.loggingLevel : LoggingLevel.ERROR;
+    logger = builder.logger != null ? builder.logger : new JsonSlf4jLogger(loggingLevel);
 
     if (Environment.LIVE.equals(builder.environment)) {
       baseUrl = BASE_URL_LIVE;
@@ -170,15 +187,16 @@ public class PaysafeApiClient {
   /**
    * Helper method for building json request body for POST requests.
    *
+   * @param <T> type of the request body, e.g. PaymentRequest, RefundRequest, etc.
    * @param requestBody to write as json
    * @return json string representing requestBody
    * @throws PaysafeSdkException in case of JsonProcessingException, not expected to happen
    */
-  public static <T> String buildJsonRequestBody(final T requestBody) throws PaysafeSdkException {
+  public <T> String buildJsonRequestBody(final T requestBody) throws PaysafeSdkException {
     try {
       return getObjectMapper().writeValueAsString(requestBody);
     } catch (JsonProcessingException e) {
-      logger.error("Exception while creating json request body: {}", e.getMessage(), e);
+      logger.logError("Exception while creating json request body", e, requestBody);
       throw new PaysafeSdkException("Error creating json request body");
     }
   }
@@ -187,11 +205,12 @@ public class PaysafeApiClient {
    * Generic method for processing http response - mapping from json response to corresponding Java class.
    *
    * @param response   which to process
-   * @param returnType which to return, i.e. PaymentHandle.class
-   * @return T
+   * @param <R>        return type which to return, e.g. PaymentHandle.class
+   * @param returnType for example PaymentHandle.class
+   * @return response mapped to Java class of type R, e.g. PaymentHandle, Verification, etc.
    * @throws PaysafeSdkException containing error details, correlation id and http status code, if present
    */
-  public static <R> R processResponse(final PaysafeApiResponse response, final Class<R> returnType)
+  public <R> R processResponse(final PaysafeApiResponse response, final Class<R> returnType)
       throws PaysafeSdkException {
 
     try {
@@ -201,7 +220,7 @@ public class PaysafeApiClient {
         throw buildPaysafeSdkException("Paysafe Payments API request unsuccessful", response, returnType);
       }
     } catch (JsonProcessingException e) {
-      logger.error("Exception while processing response from PaymentsAPI: {}", e.getMessage(), e);
+      logger.logError("Exception while processing response from PaymentsAPI", e, response);
       throw buildPaysafeSdkException(String.format("Error processing json response: %s", e.getMessage()), response, returnType);
     }
   }
@@ -369,7 +388,9 @@ public class PaysafeApiClient {
 
   /**
    * <b>Use only for testing.</b> Overrides the base url for Paysafe Payments API endpoints
-   * with provided value, i.e. of your mocked server.
+   * with provided value, e.g. of your mocked server.
+   *
+   * @param baseUrl the base url to use for executing requests, e.g. http://localhost:8080
    */
   public void overrideBaseUrl(final String baseUrl) {
     this.baseUrl = baseUrl;
@@ -381,9 +402,13 @@ public class PaysafeApiClient {
     setRequestHeaders(httpGet);
 
     try (CloseableHttpClient httpClient = buildHttpClient(requestOptions)) {
-      return httpClient.execute(httpGet, this::handleApiResponse);
+      logger.logEvent(buildLogMessage(ACTION_EXECUTING, GET, httpGet.getRequestUri()), null);
+      PaysafeApiResponse response = httpClient.execute(httpGet, this::handleApiResponse);
+      logger.logEvent(buildLogMessage(ACTION_RECEIVED_RESPONSE, GET, httpGet.getRequestUri()), response);
+
+      return response;
     } catch (IOException e) {
-      logger.error("Exception while executing GET request at {}: {}", httpGet.getRequestUri(), e.getMessage(), e);
+      logger.logError(buildLogMessage(ACTION_EXCEPTION, GET, httpGet.getRequestUri()), e, null);
       throw new ApiConnectionException(String.format(CONNECTION_ERROR_MESSAGE, uri, e.getMessage()));
     }
   }
@@ -402,9 +427,13 @@ public class PaysafeApiClient {
     httpPost.setEntity(requestEntity);
 
     try (CloseableHttpClient httpClient = buildHttpClient(requestOptions)) {
-      return httpClient.execute(httpPost, this::handleApiResponse);
+      logger.logEvent(buildLogMessage(ACTION_EXECUTING, POST, httpPost.getRequestUri()), requestBody);
+      PaysafeApiResponse response = httpClient.execute(httpPost, this::handleApiResponse);
+      logger.logEvent(buildLogMessage(ACTION_RECEIVED_RESPONSE, POST, httpPost.getRequestUri()), response);
+
+      return response;
     } catch (IOException e) {
-      logger.error("Exception while executing POST request at {}: {}", httpPost.getRequestUri(), e.getMessage(), e);
+      logger.logError(buildLogMessage(ACTION_EXCEPTION, POST, httpPost.getRequestUri()), e, requestBody);
       throw new ApiConnectionException(String.format(CONNECTION_ERROR_MESSAGE, uri, e.getMessage()));
     }
   }
@@ -423,9 +452,13 @@ public class PaysafeApiClient {
     httpPut.setEntity(requestEntity);
 
     try (CloseableHttpClient httpClient = buildHttpClient(requestOptions)) {
-      return httpClient.execute(httpPut, this::handleApiResponse);
+      logger.logEvent(buildLogMessage(ACTION_EXECUTING, PUT, httpPut.getRequestUri()), requestBody);
+      PaysafeApiResponse response = httpClient.execute(httpPut, this::handleApiResponse);
+      logger.logEvent(buildLogMessage(ACTION_RECEIVED_RESPONSE, PUT, httpPut.getRequestUri()), response);
+
+      return response;
     } catch (IOException e) {
-      logger.error("Exception while executing PUT request at {}: {}", httpPut.getRequestUri(), e.getMessage(), e);
+      logger.logError(buildLogMessage(ACTION_EXCEPTION, PUT, httpPut.getRequestUri()), e, requestBody);
       throw new ApiConnectionException(String.format(CONNECTION_ERROR_MESSAGE, uri, e.getMessage()));
     }
   }
@@ -444,9 +477,13 @@ public class PaysafeApiClient {
     httpPatch.setEntity(requestEntity);
 
     try (CloseableHttpClient httpClient = buildHttpClient(requestOptions)) {
-      return httpClient.execute(httpPatch, this::handleApiResponse);
+      logger.logEvent(buildLogMessage(ACTION_EXECUTING, PATCH, httpPatch.getRequestUri()), requestBody);
+      PaysafeApiResponse response = httpClient.execute(httpPatch, this::handleApiResponse);
+      logger.logEvent(buildLogMessage(ACTION_RECEIVED_RESPONSE, PATCH, httpPatch.getRequestUri()), response);
+
+      return response;
     } catch (IOException e) {
-      logger.error("Exception while executing PATCH request at {}: {}", httpPatch.getRequestUri(), e.getMessage(), e);
+      logger.logError(buildLogMessage(ACTION_EXCEPTION, PATCH, httpPatch.getRequestUri()), e, requestBody);
       throw new ApiConnectionException(String.format(CONNECTION_ERROR_MESSAGE, uri, e.getMessage()));
     }
   }
@@ -461,10 +498,111 @@ public class PaysafeApiClient {
     }
 
     try (CloseableHttpClient httpClient = buildHttpClient(requestOptions)) {
-      return httpClient.execute(httpDelete, this::handleApiResponse);
+      logger.logEvent(buildLogMessage(ACTION_EXECUTING, DELETE, httpDelete.getRequestUri()), null);
+      PaysafeApiResponse response = httpClient.execute(httpDelete, this::handleApiResponse);
+      logger.logEvent(buildLogMessage(ACTION_RECEIVED_RESPONSE, DELETE, httpDelete.getRequestUri()), response);
+
+      return response;
     } catch (IOException e) {
-      logger.error("Exception while executing DELETE request at {}: {}", httpDelete.getRequestUri(), e.getMessage(), e);
+      logger.logError(buildLogMessage(ACTION_EXCEPTION, DELETE, httpDelete.getRequestUri()), e, null);
       throw new ApiConnectionException(String.format(CONNECTION_ERROR_MESSAGE, uri, e.getMessage()));
+    }
+  }
+
+  /**
+   * Executes a raw HTTP request with the specified method
+   * @param method HTTP method (GET, POST, PUT, PATCH, DELETE)
+   * @param endpoint API endpoint (relative to /paymenthub)
+   * @param requestBody request body for POST/PUT/PATCH
+   * @param options DirectRequestOptions including custom headers
+   * @return PaysafeApiResponse
+   * @throws PaysafeSdkException on error
+   */
+  public PaysafeApiResponse executeRaw(String method, String endpoint, Object requestBody, DirectRequestOptions options) throws PaysafeSdkException {
+    URI uri = URI.create(this.baseUrl + endpoint);
+    BasicClassicHttpRequest httpRequest = createHttpRequest(method, uri);
+
+    setRequestHeaders(httpRequest);
+    setCustomHeaders(httpRequest, options);
+    setRequestBody(httpRequest, requestBody);
+
+    try (CloseableHttpClient httpClient = buildHttpClient(options)) {
+      logger.logEvent(buildRawLogMessage(ACTION_EXECUTING, method.toUpperCase(), httpRequest.getRequestUri()), requestBody);
+      PaysafeApiResponse response = httpClient.execute(httpRequest, this::handleApiResponse);
+      logger.logEvent(buildRawLogMessage(ACTION_RECEIVED_RESPONSE, method.toUpperCase(), httpRequest.getRequestUri()), response);
+
+      return response;
+    } catch (IOException e) {
+      logger.logError(buildRawLogMessage(ACTION_EXCEPTION, method.toUpperCase(), httpRequest.getRequestUri()), e, requestBody);
+      throw new PaysafeSdkException("Error executing raw request: " + e.getMessage());
+    }
+  }
+
+  /**
+   * Creates the appropriate HTTP request object based on the method
+   */
+  private BasicClassicHttpRequest createHttpRequest(String method, URI uri) throws PaysafeSdkException {
+    String methodUpper = method.toUpperCase();
+    switch (methodUpper) {
+      case GET:
+        return new HttpGet(uri);
+      case POST:
+        return new HttpPost(uri);
+      case PUT:
+        return new HttpPut(uri);
+      case PATCH:
+        return new HttpPatch(uri);
+      case DELETE:
+        return new HttpDelete(uri);
+      default:
+        throw new PaysafeSdkException("Unsupported HTTP method: " + method);
+    }
+  }
+
+  /**
+   * Sets custom headers from DirectRequestOptions on the HTTP request
+   */
+  private void setCustomHeaders(BasicClassicHttpRequest httpRequest, DirectRequestOptions options) {
+    if (options != null && options.getCustomHeaders() != null) {
+      for (Map.Entry<String, String> entry : options.getCustomHeaders().entrySet()) {
+        httpRequest.setHeader(entry.getKey(), entry.getValue());
+      }
+    }
+  }
+
+  /**
+   * Sets the request body for POST, PUT, and PATCH requests
+   */
+  private void setRequestBody(BasicClassicHttpRequest httpRequest, Object requestBody) throws PaysafeSdkException {
+    if (isRequestWithBody(httpRequest) && requestBody != null) {
+      String jsonRequestBody = buildJsonRequestBody(requestBody);
+      StringEntity requestEntity = new StringEntity(jsonRequestBody, ContentType.APPLICATION_JSON);
+      setEntityOnRequest(httpRequest, requestEntity);
+    }
+  }
+
+  /**
+   * Checks if the HTTP request supports a request body
+   */
+  private boolean isRequestWithBody(BasicClassicHttpRequest httpRequest) {
+    return httpRequest instanceof HttpPost ||
+           httpRequest instanceof HttpPut ||
+           httpRequest instanceof HttpPatch;
+  }
+
+  /**
+   * Sets the entity on the appropriate HTTP request type
+   */
+  private void setEntityOnRequest(BasicClassicHttpRequest httpRequest, StringEntity requestEntity) {
+    if (httpRequest instanceof HttpPost) {
+      HttpPost post = (HttpPost) httpRequest;
+      post.setEntity(requestEntity);
+    } else if (httpRequest instanceof HttpPut) {
+      HttpPut put = (HttpPut) httpRequest;
+      put.setEntity(requestEntity);
+    } else if (httpRequest instanceof HttpPatch) {
+      HttpPatch patch = (HttpPatch) httpRequest;
+      patch.setEntity(requestEntity);
     }
   }
 
@@ -487,7 +625,7 @@ public class PaysafeApiClient {
         sdkVersion = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8).trim();
       }
     } catch (IOException e) {
-      logger.error("IOException while parsing sdk version from VERSION file", e);
+      logger.logError("IOException while parsing sdk version from VERSION file", e, null);
     }
 
     String osDetails = System.getProperty(OS_NAME) + "; "
@@ -500,6 +638,14 @@ public class PaysafeApiClient {
         + System.getProperty(JAVA_VM_VENDOR);
 
     return String.format("PaymentsAPI JAVASDK/%s (%s) JAVA (%s)", sdkVersion, osDetails, javaDetails);
+  }
+
+  private String buildLogMessage(String action, String method, String uri) {
+    return String.format("%s %s request %s", action, method, uri);
+  }
+
+  private String buildRawLogMessage(String action, String method, String uri) {
+    return String.format("%s %s raw request %s", action, method, uri);
   }
 
   private PaysafeApiResponse handleApiResponse(final ClassicHttpResponse response) throws IOException, ParseException {
@@ -531,6 +677,8 @@ public class PaysafeApiClient {
     private Integer maxAutomaticRetries;
     private SSLContext sslContext;
     private Proxy proxy;
+    private SdkLogger logger;
+    private LoggingLevel loggingLevel;
 
     /**
      * Sets the {@code apiKey} and returns a reference to this Builder enabling method chaining.
@@ -603,6 +751,28 @@ public class PaysafeApiClient {
      */
     public Builder proxy(Proxy proxy) {
       this.proxy = proxy;
+      return this;
+    }
+
+    /**
+     * Sets the {@code logger} and returns a reference to this Builder enabling method chaining.
+     *
+     * @param logger the {@code logger} to set
+     * @return a reference to this Builder
+     */
+    public Builder logger(SdkLogger logger) {
+      this.logger = logger;
+      return this;
+    }
+
+    /**
+     * Sets the {@code loggingLevel} and returns a reference to this Builder enabling method chaining.
+     *
+     * @param loggingLevel the {@code loggingLevel} to set
+     * @return a reference to this Builder
+     */
+    public Builder loggingLevel(LoggingLevel loggingLevel) {
+      this.loggingLevel = loggingLevel;
       return this;
     }
 

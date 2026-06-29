@@ -1,28 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.threeds;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.card.enums.InitialUsageRange;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.card.enums.ShippingAddressUsageRange;
+
+
 
 /**
- * This is the shipping usage information.
- * <ul>
- *   <li>
- *     <b>cardHolderNameMatch:</b> This indicates whether the cardholder name on the account is identical
- *     to the shipping name used for this transaction.
- *   </li>
- *   <li>
- *     <b>initialUsageDate:</b> This is the date when the shipping address for this transaction was first used with the 3DS Requestor.
- *     The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
- *   </li>
- *   <li>
- *     <b>initialUsageRange:</b> This is the card expiry month.  <br>
- *     <i>Allowed values: CURRENT_TRANSACTION, LESS_THAN_THIRTY_DAYS, THIRTY_TO_SIXTY_DAYS, MORE_THAN_SIXTY_DAYS</i>
- *   </li>
- * </ul>
+ * Shipping usage information
  */
 public class ShippingDetailsUsage {
 
@@ -31,13 +25,13 @@ public class ShippingDetailsUsage {
   @JsonProperty("initialUsageDate")
   private String initialUsageDate;
   @JsonProperty("initialUsageRange")
-  private InitialUsageRange initialUsageRange;
+  private ShippingAddressUsageRange initialUsageRange;
 
   public ShippingDetailsUsage() {
     super();
   }
 
-  private ShippingDetailsUsage(Builder builder) {
+  private ShippingDetailsUsage(final Builder builder) {
     setCardHolderNameMatch(builder.cardHolderNameMatch);
     setInitialUsageDate(builder.initialUsageDate);
     setInitialUsageRange(builder.initialUsageRange);
@@ -47,13 +41,14 @@ public class ShippingDetailsUsage {
     return new Builder();
   }
 
+
   public ShippingDetailsUsage cardHolderNameMatch(Boolean cardHolderNameMatch) {
     this.cardHolderNameMatch = cardHolderNameMatch;
     return this;
   }
 
   /**
-   * This indicates whether the cardholder name on the account is identical to the shipping name used for this transaction.
+   * Whether the shipping name matches the cardholder name
    *
    * @return cardHolderNameMatch
    */
@@ -65,14 +60,14 @@ public class ShippingDetailsUsage {
     this.cardHolderNameMatch = cardHolderNameMatch;
   }
 
+
   public ShippingDetailsUsage initialUsageDate(String initialUsageDate) {
     this.initialUsageDate = initialUsageDate;
     return this;
   }
 
   /**
-   * This is the date when the shipping address for this transaction was first used with the 3DS Requestor.
-   * The ISO 8601 date format is expected, i.e., YYYY-MM-DD.
+   * Date when the shipping address was first used the 3DS Requestor
    *
    * @return initialUsageDate
    */
@@ -84,7 +79,8 @@ public class ShippingDetailsUsage {
     this.initialUsageDate = initialUsageDate;
   }
 
-  public ShippingDetailsUsage initialUsageRange(InitialUsageRange initialUsageRange) {
+
+  public ShippingDetailsUsage initialUsageRange(ShippingAddressUsageRange initialUsageRange) {
     this.initialUsageRange = initialUsageRange;
     return this;
   }
@@ -94,11 +90,11 @@ public class ShippingDetailsUsage {
    *
    * @return initialUsageRange
    */
-  public InitialUsageRange getInitialUsageRange() {
+  public ShippingAddressUsageRange getInitialUsageRange() {
     return initialUsageRange;
   }
 
-  public void setInitialUsageRange(InitialUsageRange initialUsageRange) {
+  public void setInitialUsageRange(ShippingAddressUsageRange initialUsageRange) {
     this.initialUsageRange = initialUsageRange;
   }
 
@@ -143,20 +139,22 @@ public class ShippingDetailsUsage {
   }
 
   /**
-   * {@code ShippingDetailsUsage} builder static inner class.
+   * Shipping usage information builder static inner class.
    */
   public static final class Builder {
     private Boolean cardHolderNameMatch;
     private String initialUsageDate;
-    private InitialUsageRange initialUsageRange;
+    private ShippingAddressUsageRange initialUsageRange;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code cardHolderNameMatch} and returns a reference to this Builder enabling method chaining.
+     * Whether the shipping name matches the cardholder name
+     * <p>
+     * Sets the cardHolderNameMatch and returns a reference to this Builder enabling method chaining.
      *
-     * @param cardHolderNameMatch the {@code cardHolderNameMatch} to set
+     * @param cardHolderNameMatch the cardHolderNameMatch to set
      * @return a reference to this Builder
      */
     public Builder cardHolderNameMatch(Boolean cardHolderNameMatch) {
@@ -165,9 +163,11 @@ public class ShippingDetailsUsage {
     }
 
     /**
-     * Sets the {@code initialUsageDate} and returns a reference to this Builder enabling method chaining.
+     * Date when the shipping address was first used the 3DS Requestor
+     * <p>
+     * Sets the initialUsageDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param initialUsageDate the {@code initialUsageDate} to set
+     * @param initialUsageDate the initialUsageDate to set
      * @return a reference to this Builder
      */
     public Builder initialUsageDate(String initialUsageDate) {
@@ -176,24 +176,23 @@ public class ShippingDetailsUsage {
     }
 
     /**
-     * Sets the {@code initialUsageRange} and returns a reference to this Builder enabling method chaining.
+     * Sets the initialUsageRange and returns a reference to this Builder enabling method chaining.
      *
-     * @param initialUsageRange the {@code initialUsageRange} to set
+     * @param initialUsageRange the initialUsageRange to set
      * @return a reference to this Builder
      */
-    public Builder initialUsageRange(InitialUsageRange initialUsageRange) {
+    public Builder initialUsageRange(ShippingAddressUsageRange initialUsageRange) {
       this.initialUsageRange = initialUsageRange;
       return this;
     }
 
     /**
-     * Returns a {@code ShippingDetailsUsage} built from the parameters previously set.
+     * Returns a ShippingDetailsUsage built from the parameters previously set.
      *
-     * @return a {@code ShippingDetailsUsage} built with parameters of this {@code ShippingDetailsUsage.Builder}
+     * @return a ShippingDetailsUsage built with parameters of this ShippingDetailsUsage.Builder
      */
     public ShippingDetailsUsage build() {
       return new ShippingDetailsUsage(this);
     }
   }
 }
-

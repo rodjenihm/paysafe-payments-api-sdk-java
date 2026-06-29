@@ -1,16 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.paymenthandle.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.paysafe.payments.model.payment.Payment;
 
 /**
- * This is the payment type associated with the Payment Handle used for this request. For Apple Pay and Google Pay, paymentType is 'CARD'.
- * <b>Note:</b> this may not be an exhaustive list.
+ * Payment type associated with the request.
  */
 public enum PaymentType {
+
   CARD("CARD"),
+
+  APPLEPAY("APPLEPAY"),
+
+  GOOGLEPAY("GOOGLEPAY"),
 
   SKRILL("SKRILL"),
 
@@ -22,7 +27,7 @@ public enum PaymentType {
 
   PAYPAL("PAYPAL"),
 
-  PAY_BY_BANK("PAY BY BANK"),
+  PAY_BY_BANK("PAY_BY_BANK"),
 
   VENMO("VENMO"),
 
@@ -40,7 +45,7 @@ public enum PaymentType {
 
   RAPID_TRANSFER("RAPID_TRANSFER"),
 
-  SKRILL1TAP("SKRILL1TAP"),
+  SKRILL1_TAP("SKRILL1TAP"),
 
   ACH("ACH"),
 

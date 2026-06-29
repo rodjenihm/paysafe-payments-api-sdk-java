@@ -3,7 +3,6 @@
 package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.processDeleteResponse;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
@@ -47,7 +46,7 @@ public class CustomerPaymentHandleServiceImpl implements CustomerPaymentHandleSe
 
     final String path = String.format(CREATE_CUSTOMER_PAYMENT_HANDLE_ENDPOINT, customerId);
     PaysafeApiResponse response = paysafeApiClient.executePost(path, customerPaymentHandleRequest, requestOptions);
-    return processResponse(response, CustomerPaymentHandle.class);
+    return paysafeApiClient.processResponse(response, CustomerPaymentHandle.class);
   }
 
   /**
@@ -66,7 +65,7 @@ public class CustomerPaymentHandleServiceImpl implements CustomerPaymentHandleSe
 
     final String path = String.format(CUSTOMER_PAYMENT_HANDLES_ENDPOINT, customerId, paymentHandleId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, CustomerPaymentHandle.class);
+    return paysafeApiClient.processResponse(response, CustomerPaymentHandle.class);
   }
 
   /**
@@ -85,7 +84,7 @@ public class CustomerPaymentHandleServiceImpl implements CustomerPaymentHandleSe
 
     final String path = String.format(CUSTOMER_PAYMENT_HANDLES_ENDPOINT, customerId, paymentHandleId);
     PaysafeApiResponse response = paysafeApiClient.executePut(path, customerPaymentHandleRequest, requestOptions);
-    return processResponse(response, CustomerPaymentHandle.class);
+    return paysafeApiClient.processResponse(response, CustomerPaymentHandle.class);
   }
 
   /**

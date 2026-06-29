@@ -1,19 +1,24 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.carrental;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.travel.carrental.enums.CarRentalExtraChargeType;
 import com.paysafe.payments.model.common.travel.carrental.enums.VehicleClass;
+import com.paysafe.payments.model.customer.Customer;
+
+
 
 /**
- * Contains information about your car rental. <br>
- * <b>Note:</b> This object is only for Car rental Merchants.. <br>
- * <b>Note:</b> This field has to be passed only in case of card transactions.
+ * Contains information about your car rental. <br>**Note:** This object is only for Car rental Merchants. <br>**Note:** This field has to be passed only in case of card transactions.
  */
 public class CarRentalDetails {
 
@@ -26,7 +31,7 @@ public class CarRentalDetails {
   @JsonProperty("noShow")
   private Boolean noShow;
   @JsonProperty("extraCharges")
-  private List<CarRentalExtraChargeType> extraCharges = null;
+  private List<CarRentalExtraChargeType> extraCharges;
   @JsonProperty("customerServicePhone")
   private String customerServicePhone;
   @JsonProperty("returnDetails")
@@ -40,7 +45,7 @@ public class CarRentalDetails {
     super();
   }
 
-  private CarRentalDetails(Builder builder) {
+  private CarRentalDetails(final Builder builder) {
     setRentalAgreementNumber(builder.rentalAgreementNumber);
     setRenterName(builder.renterName);
     setRentalDays(builder.rentalDays);
@@ -56,13 +61,14 @@ public class CarRentalDetails {
     return new Builder();
   }
 
+
   public CarRentalDetails rentalAgreementNumber(String rentalAgreementNumber) {
     this.rentalAgreementNumber = rentalAgreementNumber;
     return this;
   }
 
   /**
-   * The rental agreement number for the car rental. Required during settlement.
+   * The rental agreement number for the car rental. Required during settlement
    *
    * @return rentalAgreementNumber
    */
@@ -74,13 +80,14 @@ public class CarRentalDetails {
     this.rentalAgreementNumber = rentalAgreementNumber;
   }
 
+
   public CarRentalDetails renterName(String renterName) {
     this.renterName = renterName;
     return this;
   }
 
   /**
-   * The name of the person renting the car. Required during settlement request with Mastercard or Amex for integration with TSYS processor.
+   * The name of the person renting the car. Required during settlement request with Mastercard or Amex for integration with TSYS processor
    *
    * @return renterName
    */
@@ -92,15 +99,14 @@ public class CarRentalDetails {
     this.renterName = renterName;
   }
 
+
   public CarRentalDetails rentalDays(Integer rentalDays) {
     this.rentalDays = rentalDays;
     return this;
   }
 
   /**
-   * The total number of days the car is rented for. Required during authorization request for integration with TSYS processor.  <br>
-   * Minimum: 1
-   * maximum: 99
+   * The total number of days the car is rented for. Required during authorization request for integration with TSYS processor
    *
    * @return rentalDays
    */
@@ -112,17 +118,14 @@ public class CarRentalDetails {
     this.rentalDays = rentalDays;
   }
 
+
   public CarRentalDetails noShow(Boolean noShow) {
     this.noShow = noShow;
     return this;
   }
 
   /**
-   * Indicates if the customer didn't check in for their booking. Possible values:
-   * <ul>
-   *   <li>true if the customer didn't check in</li>
-   *   <li>false if the customer checked in</li>
-   * </ul>
+   * Indicates if the customer didn't check in for their booking. true if the customer didn't check in, false if the customer checked in
    *
    * @return noShow
    */
@@ -133,6 +136,7 @@ public class CarRentalDetails {
   public void setNoShow(Boolean noShow) {
     this.noShow = noShow;
   }
+
 
   public CarRentalDetails extraCharges(List<CarRentalExtraChargeType> extraCharges) {
     this.extraCharges = extraCharges;
@@ -156,7 +160,7 @@ public class CarRentalDetails {
   }
 
   /**
-   * Indicates if the reservation includes additional ancillary charges.
+   * Indicates if the reservation includes additional ancillary charges
    *
    * @return extraCharges
    */
@@ -168,14 +172,14 @@ public class CarRentalDetails {
     this.extraCharges = extraCharges;
   }
 
+
   public CarRentalDetails customerServicePhone(String customerServicePhone) {
     this.customerServicePhone = customerServicePhone;
     return this;
   }
 
   /**
-   * The customer service phone number of the car rental company. Allowed numeric characters only.
-   * Required during settlement request for integration with TSYS processor.
+   * Customer service phone number
    *
    * @return customerServicePhone
    */
@@ -187,13 +191,14 @@ public class CarRentalDetails {
     this.customerServicePhone = customerServicePhone;
   }
 
+
   public CarRentalDetails returnDetails(CarRentalReturnDetails returnDetails) {
     this.returnDetails = returnDetails;
     return this;
   }
 
   /**
-   * Contains return details information for car rental  <b>Note:</b> This object is only for Car Rental Merchants.
+   * Get returnDetails
    *
    * @return returnDetails
    */
@@ -205,13 +210,14 @@ public class CarRentalDetails {
     this.returnDetails = returnDetails;
   }
 
+
   public CarRentalDetails pickupDetails(CarRentalPickupDetails pickupDetails) {
     this.pickupDetails = pickupDetails;
     return this;
   }
 
   /**
-   * Contains pickup details information for car rental  <b>Note:</b> This object is only for Car Rental Merchants.
+   * Get pickupDetails
    *
    * @return pickupDetails
    */
@@ -223,14 +229,14 @@ public class CarRentalDetails {
     this.pickupDetails = pickupDetails;
   }
 
+
   public CarRentalDetails vehicleClass(VehicleClass vehicleClass) {
     this.vehicleClass = vehicleClass;
     return this;
   }
 
   /**
-   * A code that corresponds to the classification of the rental vehicle (e.g., midsize, luxury, cargo van, etc.).
-   * Required during settlement request with Amex for integration with TSYS processor.
+   * Get vehicleClass
    *
    * @return vehicleClass
    */
@@ -295,7 +301,7 @@ public class CarRentalDetails {
   }
 
   /**
-   * {@code CarRentalDetails} builder static inner class.
+   * Contains information about your car rental. <br>**Note:** This object is only for Car rental Merchants. <br>**Note:** This field has to be passed only in case of card transactions. builder static inner class.
    */
   public static final class Builder {
     private String rentalAgreementNumber;
@@ -312,9 +318,11 @@ public class CarRentalDetails {
     }
 
     /**
-     * Sets the {@code rentalAgreementNumber} and returns a reference to this Builder enabling method chaining.
+     * The rental agreement number for the car rental. Required during settlement
+     * <p>
+     * Sets the rentalAgreementNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param rentalAgreementNumber the {@code rentalAgreementNumber} to set
+     * @param rentalAgreementNumber the rentalAgreementNumber to set
      * @return a reference to this Builder
      */
     public Builder rentalAgreementNumber(String rentalAgreementNumber) {
@@ -323,9 +331,11 @@ public class CarRentalDetails {
     }
 
     /**
-     * Sets the {@code renterName} and returns a reference to this Builder enabling method chaining.
+     * The name of the person renting the car. Required during settlement request with Mastercard or Amex for integration with TSYS processor
+     * <p>
+     * Sets the renterName and returns a reference to this Builder enabling method chaining.
      *
-     * @param renterName the {@code renterName} to set
+     * @param renterName the renterName to set
      * @return a reference to this Builder
      */
     public Builder renterName(String renterName) {
@@ -334,9 +344,11 @@ public class CarRentalDetails {
     }
 
     /**
-     * Sets the {@code rentalDays} and returns a reference to this Builder enabling method chaining.
+     * The total number of days the car is rented for. Required during authorization request for integration with TSYS processor
+     * <p>
+     * Sets the rentalDays and returns a reference to this Builder enabling method chaining.
      *
-     * @param rentalDays the {@code rentalDays} to set
+     * @param rentalDays the rentalDays to set
      * @return a reference to this Builder
      */
     public Builder rentalDays(Integer rentalDays) {
@@ -345,9 +357,11 @@ public class CarRentalDetails {
     }
 
     /**
-     * Sets the {@code noShow} and returns a reference to this Builder enabling method chaining.
+     * Indicates if the customer didn't check in for their booking. true if the customer didn't check in, false if the customer checked in
+     * <p>
+     * Sets the noShow and returns a reference to this Builder enabling method chaining.
      *
-     * @param noShow the {@code noShow} to set
+     * @param noShow the noShow to set
      * @return a reference to this Builder
      */
     public Builder noShow(Boolean noShow) {
@@ -356,9 +370,11 @@ public class CarRentalDetails {
     }
 
     /**
-     * Sets the {@code extraCharges} and returns a reference to this Builder enabling method chaining.
+     * Indicates if the reservation includes additional ancillary charges
+     * <p>
+     * Sets the extraCharges and returns a reference to this Builder enabling method chaining.
      *
-     * @param extraCharges the {@code extraCharges} to set
+     * @param extraCharges the extraCharges to set
      * @return a reference to this Builder
      */
     public Builder extraCharges(List<CarRentalExtraChargeType> extraCharges) {
@@ -367,9 +383,11 @@ public class CarRentalDetails {
     }
 
     /**
-     * Sets the {@code customerServicePhone} and returns a reference to this Builder enabling method chaining.
+     * Customer service phone number
+     * <p>
+     * Sets the customerServicePhone and returns a reference to this Builder enabling method chaining.
      *
-     * @param customerServicePhone the {@code customerServicePhone} to set
+     * @param customerServicePhone the customerServicePhone to set
      * @return a reference to this Builder
      */
     public Builder customerServicePhone(String customerServicePhone) {
@@ -378,9 +396,9 @@ public class CarRentalDetails {
     }
 
     /**
-     * Sets the {@code returnDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the returnDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param returnDetails the {@code returnDetails} to set
+     * @param returnDetails the returnDetails to set
      * @return a reference to this Builder
      */
     public Builder returnDetails(CarRentalReturnDetails returnDetails) {
@@ -389,9 +407,9 @@ public class CarRentalDetails {
     }
 
     /**
-     * Sets the {@code pickupDetails} and returns a reference to this Builder enabling method chaining.
+     * Sets the pickupDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param pickupDetails the {@code pickupDetails} to set
+     * @param pickupDetails the pickupDetails to set
      * @return a reference to this Builder
      */
     public Builder pickupDetails(CarRentalPickupDetails pickupDetails) {
@@ -400,9 +418,9 @@ public class CarRentalDetails {
     }
 
     /**
-     * Sets the {@code vehicleClass} and returns a reference to this Builder enabling method chaining.
+     * Sets the vehicleClass and returns a reference to this Builder enabling method chaining.
      *
-     * @param vehicleClass the {@code vehicleClass} to set
+     * @param vehicleClass the vehicleClass to set
      * @return a reference to this Builder
      */
     public Builder vehicleClass(VehicleClass vehicleClass) {
@@ -411,13 +429,12 @@ public class CarRentalDetails {
     }
 
     /**
-     * Returns a {@code CarRentalDetails} built from the parameters previously set.
+     * Returns a CarRentalDetails built from the parameters previously set.
      *
-     * @return a {@code CarRentalDetails} built with parameters of this {@code CarRentalDetails.Builder}
+     * @return a CarRentalDetails built with parameters of this CarRentalDetails.Builder
      */
     public CarRentalDetails build() {
       return new CarRentalDetails(this);
     }
   }
 }
-

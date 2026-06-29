@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.applepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * ApplePay
+ * Apple Pay payment method information for processing payments through the Paysafe platform. This contains all necessary information to process an Apple Pay transaction, including the payment token from Apple and optional billing information.
  */
 public class ApplePay {
 
@@ -24,10 +32,10 @@ public class ApplePay {
     super();
   }
 
-  private ApplePay(Builder builder) {
+  private ApplePay(final Builder builder) {
     setLabel(builder.label);
     setRequestBillingAddress(builder.requestBillingAddress);
-    setApplePayPaymentToken(builder.token);
+    setApplePayPaymentToken(builder.applePayPaymentToken);
     setBillingContact(builder.billingContact);
   }
 
@@ -35,15 +43,54 @@ public class ApplePay {
     return new Builder();
   }
 
-  public ApplePay token(ApplePayPaymentToken token) {
-    this.applePayPaymentToken = token;
+
+  public ApplePay label(String label) {
+    this.label = label;
     return this;
   }
 
   /**
-   * This object contains the user's payment credentials.
+   * The label displayed on the Apple Pay button. This text influences what users see during the Apple Pay flow. Recommended values: \"Buy with Apple Pay\", \"Pay with Apple Pay\", \"Donate with Apple Pay\"
    *
-   * @return token
+   * @return label
+   */
+  public String getLabel() {
+    return label;
+  }
+
+  public void setLabel(String label) {
+    this.label = label;
+  }
+
+
+  public ApplePay requestBillingAddress(Boolean requestBillingAddress) {
+    this.requestBillingAddress = requestBillingAddress;
+    return this;
+  }
+
+  /**
+   * Whether to request the billing address from the customer. Setting this to true will prompt the user to provide billing details during the Apple Pay checkout process.
+   *
+   * @return requestBillingAddress
+   */
+  public Boolean getRequestBillingAddress() {
+    return requestBillingAddress;
+  }
+
+  public void setRequestBillingAddress(Boolean requestBillingAddress) {
+    this.requestBillingAddress = requestBillingAddress;
+  }
+
+
+  public ApplePay applePayPaymentToken(ApplePayPaymentToken applePayPaymentToken) {
+    this.applePayPaymentToken = applePayPaymentToken;
+    return this;
+  }
+
+  /**
+   * Get applePayPaymentToken
+   *
+   * @return applePayPaymentToken
    */
   public ApplePayPaymentToken getApplePayPaymentToken() {
     return applePayPaymentToken;
@@ -53,13 +100,14 @@ public class ApplePay {
     this.applePayPaymentToken = applePayPaymentToken;
   }
 
+
   public ApplePay billingContact(ApplePayBillingContact billingContact) {
     this.billingContact = billingContact;
     return this;
   }
 
   /**
-   * The billing contact provided by the user for this transaction in Apple Pay wallet
+   * Get billingContact
    *
    * @return billingContact
    */
@@ -71,22 +119,6 @@ public class ApplePay {
     this.billingContact = billingContact;
   }
 
-  public String getLabel() {
-    return label;
-  }
-
-  public void setLabel(String label) {
-    this.label = label;
-  }
-
-  public Boolean getRequestBillingAddress() {
-    return requestBillingAddress;
-  }
-
-  public void setRequestBillingAddress(Boolean requestBillingAddress) {
-    this.requestBillingAddress = requestBillingAddress;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -96,15 +128,15 @@ public class ApplePay {
       return false;
     }
     ApplePay applePay = (ApplePay) o;
-    return Objects.equals(this.applePayPaymentToken, applePay.applePayPaymentToken) &&
-        Objects.equals(this.billingContact, applePay.billingContact)
-        && Objects.equals(this.label, applePay.label)
-        && Objects.equals(this.requestBillingAddress, applePay.requestBillingAddress);
+    return Objects.equals(this.label, applePay.label) &&
+        Objects.equals(this.requestBillingAddress, applePay.requestBillingAddress) &&
+        Objects.equals(this.applePayPaymentToken, applePay.applePayPaymentToken) &&
+        Objects.equals(this.billingContact, applePay.billingContact);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(applePayPaymentToken, billingContact);
+    return Objects.hash(label, requestBillingAddress, applePayPaymentToken, billingContact);
   }
 
   @Override
@@ -130,21 +162,23 @@ public class ApplePay {
   }
 
   /**
-   * {@code ApplePay} builder static inner class.
+   * Apple Pay payment method information for processing payments through the Paysafe platform. This contains all necessary information to process an Apple Pay transaction, including the payment token from Apple and optional billing information. builder static inner class.
    */
   public static final class Builder {
     private String label;
     private Boolean requestBillingAddress;
-    private ApplePayPaymentToken token;
+    private ApplePayPaymentToken applePayPaymentToken;
     private ApplePayBillingContact billingContact;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code label} and returns a reference to this Builder enabling method chaining.
+     * The label displayed on the Apple Pay button. This text influences what users see during the Apple Pay flow. Recommended values: \"Buy with Apple Pay\", \"Pay with Apple Pay\", \"Donate with Apple Pay\"
+     * <p>
+     * Sets the label and returns a reference to this Builder enabling method chaining.
      *
-     * @param label the {@code label} to set
+     * @param label the label to set
      * @return a reference to this Builder
      */
     public Builder label(String label) {
@@ -153,9 +187,11 @@ public class ApplePay {
     }
 
     /**
-     * Sets the {@code requestBillingAddress} and returns a reference to this Builder enabling method chaining.
+     * Whether to request the billing address from the customer. Setting this to true will prompt the user to provide billing details during the Apple Pay checkout process.
+     * <p>
+     * Sets the requestBillingAddress and returns a reference to this Builder enabling method chaining.
      *
-     * @param requestBillingAddress the {@code requestBillingAddress} to set
+     * @param requestBillingAddress the requestBillingAddress to set
      * @return a reference to this Builder
      */
     public Builder requestBillingAddress(Boolean requestBillingAddress) {
@@ -164,20 +200,20 @@ public class ApplePay {
     }
 
     /**
-     * Sets the {@code token} and returns a reference to this Builder enabling method chaining.
+     * Sets the applePayPaymentToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param token the {@code token} to set
+     * @param applePayPaymentToken the applePayPaymentToken to set
      * @return a reference to this Builder
      */
-    public Builder token(ApplePayPaymentToken token) {
-      this.token = token;
+    public Builder applePayPaymentToken(ApplePayPaymentToken applePayPaymentToken) {
+      this.applePayPaymentToken = applePayPaymentToken;
       return this;
     }
 
     /**
-     * Sets the {@code billingContact} and returns a reference to this Builder enabling method chaining.
+     * Sets the billingContact and returns a reference to this Builder enabling method chaining.
      *
-     * @param billingContact the {@code billingContact} to set
+     * @param billingContact the billingContact to set
      * @return a reference to this Builder
      */
     public Builder billingContact(ApplePayBillingContact billingContact) {
@@ -186,13 +222,12 @@ public class ApplePay {
     }
 
     /**
-     * Returns a {@code ApplePay} built from the parameters previously set.
+     * Returns a ApplePay built from the parameters previously set.
      *
-     * @return a {@code ApplePay} built with parameters of this {@code ApplePay.Builder}
+     * @return a ApplePay built with parameters of this ApplePay.Builder
      */
     public ApplePay build() {
       return new ApplePay(this);
     }
   }
 }
-

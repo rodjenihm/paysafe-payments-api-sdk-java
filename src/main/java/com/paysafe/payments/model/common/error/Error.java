@@ -1,18 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.error;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
  * Details of the error.
  */
-@JsonRootName("error")
 public class Error {
 
   @JsonProperty("code")
@@ -20,17 +24,17 @@ public class Error {
   @JsonProperty("message")
   private String message;
   @JsonProperty("details")
-  private List<String> details = null;
+  private List<String> details;
   @JsonProperty("fieldErrors")
-  private List<FieldError> fieldErrors = null;
+  private List<FieldError> fieldErrors;
   @JsonProperty("additionalDetails")
-  private List<AdditionalDetail> additionalDetails = null;
+  private List<AdditionalDetail> additionalDetails;
 
   public Error() {
     super();
   }
 
-  private Error(Builder builder) {
+  private Error(final Builder builder) {
     setCode(builder.code);
     setMessage(builder.message);
     setDetails(builder.details);
@@ -41,6 +45,7 @@ public class Error {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public Error code(String code) {
     this.code = code;
@@ -60,6 +65,7 @@ public class Error {
     this.code = code;
   }
 
+
   public Error message(String message) {
     this.message = message;
     return this;
@@ -77,6 +83,7 @@ public class Error {
   public void setMessage(String message) {
     this.message = message;
   }
+
 
   public Error details(List<String> details) {
     this.details = details;
@@ -100,7 +107,7 @@ public class Error {
   }
 
   /**
-   * Details of any parameter value errors.
+   * Details of any parameter value errors
    *
    * @return details
    */
@@ -111,6 +118,7 @@ public class Error {
   public void setDetails(List<String> details) {
     this.details = details;
   }
+
 
   public Error fieldErrors(List<FieldError> fieldErrors) {
     this.fieldErrors = fieldErrors;
@@ -134,7 +142,7 @@ public class Error {
   }
 
   /**
-   * If applicable, this is a list of fields that have issues.
+   * If applicable, this is a list of fields that have issues
    *
    * @return fieldErrors
    */
@@ -145,6 +153,7 @@ public class Error {
   public void setFieldErrors(List<FieldError> fieldErrors) {
     this.fieldErrors = fieldErrors;
   }
+
 
   public Error additionalDetails(List<AdditionalDetail> additionalDetails) {
     this.additionalDetails = additionalDetails;
@@ -225,7 +234,7 @@ public class Error {
   }
 
   /**
-   * {@code Error} builder static inner class.
+   * Details of the error. builder static inner class.
    */
   public static final class Builder {
     private String code;
@@ -238,9 +247,11 @@ public class Error {
     }
 
     /**
-     * Sets the {@code code} and returns a reference to this Builder enabling method chaining.
+     * The error code. Also shown in the X-Application-Status-Code response header.
+     * <p>
+     * Sets the code and returns a reference to this Builder enabling method chaining.
      *
-     * @param code the {@code code} to set
+     * @param code the code to set
      * @return a reference to this Builder
      */
     public Builder code(String code) {
@@ -249,9 +260,11 @@ public class Error {
     }
 
     /**
-     * Sets the {@code message} and returns a reference to this Builder enabling method chaining.
+     * A description of the error.
+     * <p>
+     * Sets the message and returns a reference to this Builder enabling method chaining.
      *
-     * @param message the {@code message} to set
+     * @param message the message to set
      * @return a reference to this Builder
      */
     public Builder message(String message) {
@@ -260,9 +273,11 @@ public class Error {
     }
 
     /**
-     * Sets the {@code details} and returns a reference to this Builder enabling method chaining.
+     * Details of any parameter value errors
+     * <p>
+     * Sets the details and returns a reference to this Builder enabling method chaining.
      *
-     * @param details the {@code details} to set
+     * @param details the details to set
      * @return a reference to this Builder
      */
     public Builder details(List<String> details) {
@@ -271,9 +286,11 @@ public class Error {
     }
 
     /**
-     * Sets the {@code fieldErrors} and returns a reference to this Builder enabling method chaining.
+     * If applicable, this is a list of fields that have issues
+     * <p>
+     * Sets the fieldErrors and returns a reference to this Builder enabling method chaining.
      *
-     * @param fieldErrors the {@code fieldErrors} to set
+     * @param fieldErrors the fieldErrors to set
      * @return a reference to this Builder
      */
     public Builder fieldErrors(List<FieldError> fieldErrors) {
@@ -282,9 +299,11 @@ public class Error {
     }
 
     /**
-     * Sets the {@code additionalDetails} and returns a reference to this Builder enabling method chaining.
+     * This is an optional field that provides additional data in case of a reject.
+     * <p>
+     * Sets the additionalDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param additionalDetails the {@code additionalDetails} to set
+     * @param additionalDetails the additionalDetails to set
      * @return a reference to this Builder
      */
     public Builder additionalDetails(List<AdditionalDetail> additionalDetails) {
@@ -293,13 +312,12 @@ public class Error {
     }
 
     /**
-     * Returns a {@code Error} built from the parameters previously set.
+     * Returns a Error built from the parameters previously set.
      *
-     * @return a {@code Error} built with parameters of this {@code Error.Builder}
+     * @return a Error built with parameters of this Error.Builder
      */
     public Error build() {
       return new Error(this);
     }
   }
 }
-

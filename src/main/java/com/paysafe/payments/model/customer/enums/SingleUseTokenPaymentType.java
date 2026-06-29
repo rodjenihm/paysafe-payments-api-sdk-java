@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.customer.enums;
 
@@ -6,17 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * List of possible payment types for Single Use Tokens.
- * Possible values:
- * <ul>
- * <li> CARD  </li>
- * <li> EFT  </li>
- * <li> ACH  </li>
- * <li> BACS  </li>
- * <li> SEPA  </li>
- * </ul>
+ * List of possible payment types for Single Use Tokens. Possible values: - CARD - EFT - ACH - BACS - SEPA
  */
 public enum SingleUseTokenPaymentType {
+
   CARD("CARD"),
 
   EFT("EFT"),

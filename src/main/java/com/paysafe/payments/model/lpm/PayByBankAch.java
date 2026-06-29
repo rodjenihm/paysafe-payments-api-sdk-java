@@ -1,15 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.lpm.enums.BankAccountType;
 
+
+
 /**
- * This is an array containing a list of bank accounts that the consumer has linked in order to make Pay by Bank payments, along with additional
- * information about those accounts.
+ * This is an array containing a list of bank accounts that the consumer has linked in order to make Pay by Bank payments, along with additional information about those accounts
  */
 public class PayByBankAch {
 
@@ -26,7 +33,7 @@ public class PayByBankAch {
     super();
   }
 
-  private PayByBankAch(Builder builder) {
+  private PayByBankAch(final Builder builder) {
     setPaymentHandleToken(builder.paymentHandleToken);
     setAccountType(builder.accountType);
     setRoutingNumber(builder.routingNumber);
@@ -37,13 +44,14 @@ public class PayByBankAch {
     return new Builder();
   }
 
+
   public PayByBankAch paymentHandleToken(String paymentHandleToken) {
     this.paymentHandleToken = paymentHandleToken;
     return this;
   }
 
   /**
-   * This is a token representing an individual bank account that the consumer has linked in order to make Pay by Bank payments.
+   * This is a token representing an individual bank account that the consumer has linked in order to make Pay by Bank payments
    *
    * @return paymentHandleToken
    */
@@ -55,13 +63,14 @@ public class PayByBankAch {
     this.paymentHandleToken = paymentHandleToken;
   }
 
+
   public PayByBankAch accountType(BankAccountType accountType) {
     this.accountType = accountType;
     return this;
   }
 
   /**
-   * This provides you with the type of bank account for information purposes.
+   * Get accountType
    *
    * @return accountType
    */
@@ -73,13 +82,14 @@ public class PayByBankAch {
     this.accountType = accountType;
   }
 
+
   public PayByBankAch routingNumber(String routingNumber) {
     this.routingNumber = routingNumber;
     return this;
   }
 
   /**
-   * This is the 9-digit routing number of the bank.
+   * This is the 9-digit routing number of the bank
    *
    * @return routingNumber
    */
@@ -91,13 +101,14 @@ public class PayByBankAch {
     this.routingNumber = routingNumber;
   }
 
+
   public PayByBankAch lastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
     return this;
   }
 
   /**
-   * This is returned in response. It contains only last 2 digits of bank account.
+   * This is returned in response. It contains only last 2 digits of bank account
    *
    * @return lastDigits
    */
@@ -152,7 +163,7 @@ public class PayByBankAch {
   }
 
   /**
-   * {@code PayByBankAch} builder static inner class.
+   * This is an array containing a list of bank accounts that the consumer has linked in order to make Pay by Bank payments, along with additional information about those accounts builder static inner class.
    */
   public static final class Builder {
     private String paymentHandleToken;
@@ -164,9 +175,11 @@ public class PayByBankAch {
     }
 
     /**
-     * Sets the {@code paymentHandleToken} and returns a reference to this Builder enabling method chaining.
+     * This is a token representing an individual bank account that the consumer has linked in order to make Pay by Bank payments
+     * <p>
+     * Sets the paymentHandleToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentHandleToken the {@code paymentHandleToken} to set
+     * @param paymentHandleToken the paymentHandleToken to set
      * @return a reference to this Builder
      */
     public Builder paymentHandleToken(String paymentHandleToken) {
@@ -175,9 +188,9 @@ public class PayByBankAch {
     }
 
     /**
-     * Sets the {@code accountType} and returns a reference to this Builder enabling method chaining.
+     * Sets the accountType and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountType the {@code accountType} to set
+     * @param accountType the accountType to set
      * @return a reference to this Builder
      */
     public Builder accountType(BankAccountType accountType) {
@@ -186,9 +199,11 @@ public class PayByBankAch {
     }
 
     /**
-     * Sets the {@code routingNumber} and returns a reference to this Builder enabling method chaining.
+     * This is the 9-digit routing number of the bank
+     * <p>
+     * Sets the routingNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param routingNumber the {@code routingNumber} to set
+     * @param routingNumber the routingNumber to set
      * @return a reference to this Builder
      */
     public Builder routingNumber(String routingNumber) {
@@ -197,9 +212,11 @@ public class PayByBankAch {
     }
 
     /**
-     * Sets the {@code lastDigits} and returns a reference to this Builder enabling method chaining.
+     * This is returned in response. It contains only last 2 digits of bank account
+     * <p>
+     * Sets the lastDigits and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastDigits the {@code lastDigits} to set
+     * @param lastDigits the lastDigits to set
      * @return a reference to this Builder
      */
     public Builder lastDigits(String lastDigits) {
@@ -208,13 +225,12 @@ public class PayByBankAch {
     }
 
     /**
-     * Returns a {@code PayByBankAch} built from the parameters previously set.
+     * Returns a PayByBankAch built from the parameters previously set.
      *
-     * @return a {@code PayByBankAch} built with parameters of this {@code PayByBankAch.Builder}
+     * @return a PayByBankAch built with parameters of this PayByBankAch.Builder
      */
     public PayByBankAch build() {
       return new PayByBankAch(this);
     }
   }
 }
-

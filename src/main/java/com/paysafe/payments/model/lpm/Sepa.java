@@ -1,11 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.Mandate;
+
+
 
 /**
  * These are the details of the sepa account used for the transaction.
@@ -29,7 +37,7 @@ public class Sepa {
     super();
   }
 
-  private Sepa(Builder builder) {
+  private Sepa(final Builder builder) {
     setNickName(builder.nickName);
     setAccountHolderName(builder.accountHolderName);
     setBic(builder.bic);
@@ -41,6 +49,7 @@ public class Sepa {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public Sepa nickName(String nickName) {
     this.nickName = nickName;
@@ -60,13 +69,14 @@ public class Sepa {
     this.nickName = nickName;
   }
 
+
   public Sepa accountHolderName(String accountHolderName) {
     this.accountHolderName = accountHolderName;
     return this;
   }
 
   /**
-   * This is the name of the customer or company  that owns the bank account.
+   * This is the name of the customer or company that owns the bank account.
    *
    * @return accountHolderName
    */
@@ -77,6 +87,7 @@ public class Sepa {
   public void setAccountHolderName(String accountHolderName) {
     this.accountHolderName = accountHolderName;
   }
+
 
   public Sepa bic(String bic) {
     this.bic = bic;
@@ -96,6 +107,7 @@ public class Sepa {
     this.bic = bic;
   }
 
+
   public Sepa iban(String iban) {
     this.iban = iban;
     return this;
@@ -114,13 +126,14 @@ public class Sepa {
     this.iban = iban;
   }
 
+
   public Sepa mandate(Mandate mandate) {
     this.mandate = mandate;
     return this;
   }
 
   /**
-   * Contains customer bank's mandate details
+   * Get mandate
    *
    * @return mandate
    */
@@ -131,6 +144,7 @@ public class Sepa {
   public void setMandate(Mandate mandate) {
     this.mandate = mandate;
   }
+
 
   public Sepa lastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
@@ -197,7 +211,7 @@ public class Sepa {
   }
 
   /**
-   * {@code Sepa} builder static inner class.
+   * These are the details of the sepa account used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String nickName;
@@ -211,9 +225,11 @@ public class Sepa {
     }
 
     /**
-     * Sets the {@code nickName} and returns a reference to this Builder enabling method chaining.
+     * This is an alias for this bank account.
+     * <p>
+     * Sets the nickName and returns a reference to this Builder enabling method chaining.
      *
-     * @param nickName the {@code nickName} to set
+     * @param nickName the nickName to set
      * @return a reference to this Builder
      */
     public Builder nickName(String nickName) {
@@ -222,9 +238,11 @@ public class Sepa {
     }
 
     /**
-     * Sets the {@code accountHolderName} and returns a reference to this Builder enabling method chaining.
+     * This is the name of the customer or company that owns the bank account.
+     * <p>
+     * Sets the accountHolderName and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountHolderName the {@code accountHolderName} to set
+     * @param accountHolderName the accountHolderName to set
      * @return a reference to this Builder
      */
     public Builder accountHolderName(String accountHolderName) {
@@ -233,9 +251,11 @@ public class Sepa {
     }
 
     /**
-     * Sets the {@code bic} and returns a reference to this Builder enabling method chaining.
+     * This is the Bank Identifier Code for the consumer's bank account.
+     * <p>
+     * Sets the bic and returns a reference to this Builder enabling method chaining.
      *
-     * @param bic the {@code bic} to set
+     * @param bic the bic to set
      * @return a reference to this Builder
      */
     public Builder bic(String bic) {
@@ -244,9 +264,11 @@ public class Sepa {
     }
 
     /**
-     * Sets the {@code iban} and returns a reference to this Builder enabling method chaining.
+     * This is the International Bank Account Number for the costumer's bank account.
+     * <p>
+     * Sets the iban and returns a reference to this Builder enabling method chaining.
      *
-     * @param iban the {@code iban} to set
+     * @param iban the iban to set
      * @return a reference to this Builder
      */
     public Builder iban(String iban) {
@@ -255,9 +277,9 @@ public class Sepa {
     }
 
     /**
-     * Sets the {@code mandate} and returns a reference to this Builder enabling method chaining.
+     * Sets the mandate and returns a reference to this Builder enabling method chaining.
      *
-     * @param mandate the {@code mandate} to set
+     * @param mandate the mandate to set
      * @return a reference to this Builder
      */
     public Builder mandate(Mandate mandate) {
@@ -266,9 +288,11 @@ public class Sepa {
     }
 
     /**
-     * Sets the {@code lastDigits} and returns a reference to this Builder enabling method chaining.
+     * These are the last two digits of the iban.
+     * <p>
+     * Sets the lastDigits and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastDigits the {@code lastDigits} to set
+     * @param lastDigits the lastDigits to set
      * @return a reference to this Builder
      */
     public Builder lastDigits(String lastDigits) {
@@ -277,13 +301,12 @@ public class Sepa {
     }
 
     /**
-     * Returns a {@code Sepa} built from the parameters previously set.
+     * Returns a Sepa built from the parameters previously set.
      *
-     * @return a {@code Sepa} built with parameters of this {@code Sepa.Builder}
+     * @return a Sepa built with parameters of this Sepa.Builder
      */
     public Sepa build() {
       return new Sepa(this);
     }
   }
 }
-

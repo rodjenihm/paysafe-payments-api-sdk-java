@@ -1,16 +1,29 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.card.enums.AvsResponse;
 import com.paysafe.payments.model.common.enums.CvvVerification;
+import com.paysafe.payments.model.common.enums.FirstNameVerification;
+import com.paysafe.payments.model.common.enums.LastNameVerification;
 import com.paysafe.payments.model.common.enums.NameVerification;
+import com.paysafe.payments.model.customer.Customer;
+import com.paysafe.payments.model.lpm.Skrill;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * This is the read-only raw response returned by an acquirer or PSP.
+ * Read only raw response from the acquirer or PSP.
  */
 public class GatewayResponse {
 
@@ -31,9 +44,9 @@ public class GatewayResponse {
   @JsonProperty("nameVerification")
   private NameVerification nameVerification;
   @JsonProperty("firstNameVerification")
-  private NameVerification firstNameVerification;
+  private FirstNameVerification firstNameVerification;
   @JsonProperty("lastNameVerification")
-  private NameVerification lastNameVerification;
+  private LastNameVerification lastNameVerification;
   @JsonProperty("balanceResponse")
   private String balanceResponse;
   @JsonProperty("mid")
@@ -78,12 +91,32 @@ public class GatewayResponse {
   private String orderId;
   @JsonProperty("operationId")
   private String operationId;
+  @JsonProperty("transaction_id")
+  private String transactionId;
+  @JsonProperty("amount")
+  private String amount;
+  @JsonProperty("mb_transaction_id")
+  private String mbTransactionId;
+  @JsonProperty("pay_from_email")
+  private String payFromEmail;
+  @JsonProperty("pay_to_email")
+  private String payToEmail;
+  @JsonProperty("currency")
+  private String currency;
+  @JsonProperty("merchant_id")
+  private String merchantId;
+  @JsonProperty("payerName")
+  private String payerName;
+  @JsonProperty("payerIban")
+  private String payerIban;
+  @JsonProperty("sid")
+  private String sid;
 
   public GatewayResponse() {
     super();
   }
 
-  private GatewayResponse(Builder builder) {
+  private GatewayResponse(final Builder builder) {
     setId(builder.id);
     setProcessor(builder.processor);
     setCode(builder.code);
@@ -116,11 +149,22 @@ public class GatewayResponse {
     setStatus(builder.status);
     setOrderId(builder.orderId);
     setOperationId(builder.operationId);
+    setTransactionId(builder.transactionId);
+    setAmount(builder.amount);
+    setMbTransactionId(builder.mbTransactionId);
+    setPayFromEmail(builder.payFromEmail);
+    setPayToEmail(builder.payToEmail);
+    setCurrency(builder.currency);
+    setMerchantId(builder.merchantId);
+    setPayerName(builder.payerName);
+    setPayerIban(builder.payerIban);
+    setSid(builder.sid);
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public GatewayResponse id(String id) {
     this.id = id;
@@ -128,7 +172,7 @@ public class GatewayResponse {
   }
 
   /**
-   * This is the response id returned by the processor
+   * The response id returned by the processor
    *
    * @return id
    */
@@ -140,13 +184,14 @@ public class GatewayResponse {
     this.id = id;
   }
 
+
   public GatewayResponse processor(String processor) {
     this.processor = processor;
     return this;
   }
 
   /**
-   * This is the processor code of the transaction at Paysafe side
+   * The processor code of the transaction at Paysafe side
    *
    * @return processor
    */
@@ -158,13 +203,14 @@ public class GatewayResponse {
     this.processor = processor;
   }
 
+
   public GatewayResponse code(String code) {
     this.code = code;
     return this;
   }
 
   /**
-   * This is acquirer identification code, such as VPS, GPS, etc.
+   * Acquirer identification code, such as VPS, GPS, etc.
    *
    * @return code
    */
@@ -176,13 +222,14 @@ public class GatewayResponse {
     this.code = code;
   }
 
+
   public GatewayResponse responseCode(String responseCode) {
     this.responseCode = responseCode;
     return this;
   }
 
   /**
-   * This is the raw response returned by the acquirer.
+   * The raw response returned by the acquirer
    *
    * @return responseCode
    */
@@ -194,13 +241,14 @@ public class GatewayResponse {
     this.responseCode = responseCode;
   }
 
+
   public GatewayResponse responseCodeDescription(String responseCodeDescription) {
     this.responseCodeDescription = responseCodeDescription;
     return this;
   }
 
   /**
-   * This is the raw response code description returned by the acquirer.
+   * The raw response code description returned by the acquirer
    *
    * @return responseCodeDescription
    */
@@ -212,13 +260,14 @@ public class GatewayResponse {
     this.responseCodeDescription = responseCodeDescription;
   }
 
+
   public GatewayResponse avsCode(String avsCode) {
     this.avsCode = avsCode;
     return this;
   }
 
   /**
-   * This is the raw AVS code returned by the acquirer.
+   * The raw AVS code returned by the acquirer
    *
    * @return avsCode
    */
@@ -230,13 +279,14 @@ public class GatewayResponse {
     this.avsCode = avsCode;
   }
 
+
   public GatewayResponse avsResponse(AvsResponse avsResponse) {
     this.avsResponse = avsResponse;
     return this;
   }
 
   /**
-   * This is the AVS response returned from the card issuer.
+   * Get avsResponse
    *
    * @return avsResponse
    */
@@ -248,13 +298,14 @@ public class GatewayResponse {
     this.avsResponse = avsResponse;
   }
 
+
   public GatewayResponse nameVerification(NameVerification nameVerification) {
     this.nameVerification = nameVerification;
     return this;
   }
 
   /**
-   * This is the account name inquiry full name set result returned by the acquirer.
+   * Get nameVerification
    *
    * @return nameVerification
    */
@@ -266,41 +317,44 @@ public class GatewayResponse {
     this.nameVerification = nameVerification;
   }
 
-  public GatewayResponse firstNameVerification(NameVerification firstNameVerification) {
+
+  public GatewayResponse firstNameVerification(FirstNameVerification firstNameVerification) {
     this.firstNameVerification = firstNameVerification;
     return this;
   }
 
   /**
-   * This is the account name inquiry first name result returned by the acquirer.
+   * Get firstNameVerification
    *
    * @return firstNameVerification
    */
-  public NameVerification getFirstNameVerification() {
+  public FirstNameVerification getFirstNameVerification() {
     return firstNameVerification;
   }
 
-  public void setFirstNameVerification(NameVerification firstNameVerification) {
+  public void setFirstNameVerification(FirstNameVerification firstNameVerification) {
     this.firstNameVerification = firstNameVerification;
   }
 
-  public GatewayResponse lastNameVerification(NameVerification lastNameVerification) {
+
+  public GatewayResponse lastNameVerification(LastNameVerification lastNameVerification) {
     this.lastNameVerification = lastNameVerification;
     return this;
   }
 
   /**
-   * This is the account name inquiry for the last name returned by the acquirer.
+   * Get lastNameVerification
    *
    * @return lastNameVerification
    */
-  public NameVerification getLastNameVerification() {
+  public LastNameVerification getLastNameVerification() {
     return lastNameVerification;
   }
 
-  public void setLastNameVerification(NameVerification lastNameVerification) {
+  public void setLastNameVerification(LastNameVerification lastNameVerification) {
     this.lastNameVerification = lastNameVerification;
   }
+
 
   public GatewayResponse balanceResponse(String balanceResponse) {
     this.balanceResponse = balanceResponse;
@@ -308,7 +362,7 @@ public class GatewayResponse {
   }
 
   /**
-   * This is the balance remaining on a gift card, if a gift card was used for the original transaction.
+   * The balance response from the acquirer
    *
    * @return balanceResponse
    */
@@ -320,13 +374,14 @@ public class GatewayResponse {
     this.balanceResponse = balanceResponse;
   }
 
+
   public GatewayResponse mid(String mid) {
     this.mid = mid;
     return this;
   }
 
   /**
-   * This is the acquirer MID that was sent to the clearing house.
+   * Acquirer MID that was sent to the clearing house.
    *
    * @return mid
    */
@@ -338,13 +393,14 @@ public class GatewayResponse {
     this.mid = mid;
   }
 
+
   public GatewayResponse terminalId(String terminalId) {
     this.terminalId = terminalId;
     return this;
   }
 
   /**
-   * This is the merchant's terminal ID.
+   * Merchant's Terminal identification number
    *
    * @return terminalId
    */
@@ -356,13 +412,14 @@ public class GatewayResponse {
     this.terminalId = terminalId;
   }
 
+
   public GatewayResponse batchNumber(String batchNumber) {
     this.batchNumber = batchNumber;
     return this;
   }
 
   /**
-   * This is the batch number.
+   * Batch number for the transaction
    *
    * @return batchNumber
    */
@@ -374,13 +431,14 @@ public class GatewayResponse {
     this.batchNumber = batchNumber;
   }
 
+
   public GatewayResponse seqNumber(String seqNumber) {
     this.seqNumber = seqNumber;
     return this;
   }
 
   /**
-   * This is the merchant's sequence number.
+   * Merchant's Sequence number for the transaction
    *
    * @return seqNumber
    */
@@ -392,13 +450,14 @@ public class GatewayResponse {
     this.seqNumber = seqNumber;
   }
 
+
   public GatewayResponse effectiveDate(String effectiveDate) {
     this.effectiveDate = effectiveDate;
     return this;
   }
 
   /**
-   * This is the date of the bank deposit associated  with the transaction.
+   * Date of the bank deposit associated with the transaction.
    *
    * @return effectiveDate
    */
@@ -410,13 +469,14 @@ public class GatewayResponse {
     this.effectiveDate = effectiveDate;
   }
 
+
   public GatewayResponse financingType(String financingType) {
     this.financingType = financingType;
     return this;
   }
 
   /**
-   * This is the type of financing offered.
+   * Type of financing offered
    *
    * @return financingType
    */
@@ -428,13 +488,14 @@ public class GatewayResponse {
     this.financingType = financingType;
   }
 
+
   public GatewayResponse plan(String plan) {
     this.plan = plan;
     return this;
   }
 
   /**
-   * This is the plan number for this financing  transaction.
+   * Plan number for this financing transaction
    *
    * @return plan
    */
@@ -446,13 +507,14 @@ public class GatewayResponse {
     this.plan = plan;
   }
 
+
   public GatewayResponse gracePeriod(String gracePeriod) {
     this.gracePeriod = gracePeriod;
     return this;
   }
 
   /**
-   * This is the grace period, in months, associated  with deferred payment transactions.
+   * Grace period, in months, associated with deferred payment transactions
    *
    * @return gracePeriod
    */
@@ -464,13 +526,14 @@ public class GatewayResponse {
     this.gracePeriod = gracePeriod;
   }
 
+
   public GatewayResponse term(String term) {
     this.term = term;
     return this;
   }
 
   /**
-   * This is the number of payments, in months, for  equal payment transactions.
+   * Number of payments, in months, for equal payment transactions
    *
    * @return term
    */
@@ -482,13 +545,14 @@ public class GatewayResponse {
     this.term = term;
   }
 
+
   public GatewayResponse responseId(String responseId) {
     this.responseId = responseId;
     return this;
   }
 
   /**
-   * This is the response ID assigned by Credorax.
+   * Response ID assigned by Credorax.
    *
    * @return responseId
    */
@@ -500,13 +564,14 @@ public class GatewayResponse {
     this.responseId = responseId;
   }
 
+
   public GatewayResponse requestId(String requestId) {
     this.requestId = requestId;
     return this;
   }
 
   /**
-   * This is the request ID assigned by Paysafe.
+   * Request ID assigned by Paysafe.
    *
    * @return requestId
    */
@@ -518,13 +583,14 @@ public class GatewayResponse {
     this.requestId = requestId;
   }
 
+
   public GatewayResponse description(String description) {
     this.description = description;
     return this;
   }
 
   /**
-   * This is a description of the response.
+   * Description of the response
    *
    * @return description
    */
@@ -536,13 +602,14 @@ public class GatewayResponse {
     this.description = description;
   }
 
+
   public GatewayResponse authCode(String authCode) {
     this.authCode = authCode;
     return this;
   }
 
   /**
-   * This is the authorization code.
+   * Authorization code assigned by the acquirer
    *
    * @return authCode
    */
@@ -554,13 +621,14 @@ public class GatewayResponse {
     this.authCode = authCode;
   }
 
+
   public GatewayResponse txnDateTime(String txnDateTime) {
     this.txnDateTime = txnDateTime;
     return this;
   }
 
   /**
-   * This is the transaction date and time.
+   * Date and time of the transaction
    *
    * @return txnDateTime
    */
@@ -572,13 +640,14 @@ public class GatewayResponse {
     this.txnDateTime = txnDateTime;
   }
 
+
   public GatewayResponse referenceNbr(String referenceNbr) {
     this.referenceNbr = referenceNbr;
     return this;
   }
 
   /**
-   * This is the Bank net transaction ID/Merch Tran Ref
+   * Bank net transaction ID/Merch Tran Ref
    *
    * @return referenceNbr
    */
@@ -590,13 +659,14 @@ public class GatewayResponse {
     this.referenceNbr = referenceNbr;
   }
 
+
   public GatewayResponse responseReasonCode(String responseReasonCode) {
     this.responseReasonCode = responseReasonCode;
     return this;
   }
 
   /**
-   * This is the raw response reason code returned by  Credorax.
+   * raw response reason code returned by Acquirer
    *
    * @return responseReasonCode
    */
@@ -608,13 +678,14 @@ public class GatewayResponse {
     this.responseReasonCode = responseReasonCode;
   }
 
+
   public GatewayResponse cvvVerification(CvvVerification cvvVerification) {
     this.cvvVerification = cvvVerification;
     return this;
   }
 
   /**
-   * This is the response to the cvv submitted with the transaction request.
+   * Get cvvVerification
    *
    * @return cvvVerification
    */
@@ -626,13 +697,14 @@ public class GatewayResponse {
     this.cvvVerification = cvvVerification;
   }
 
+
   public GatewayResponse cvv2Result(String cvv2Result) {
     this.cvv2Result = cvv2Result;
     return this;
   }
 
   /**
-   * This is the raw cvv2 result code.
+   * Raw CVV2 result code
    *
    * @return cvv2Result
    */
@@ -644,13 +716,14 @@ public class GatewayResponse {
     this.cvv2Result = cvv2Result;
   }
 
+
   public GatewayResponse status(String status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the transaction at the processor side.
+   * Status of the transaction at the processor side
    *
    * @return status
    */
@@ -662,13 +735,14 @@ public class GatewayResponse {
     this.status = status;
   }
 
+
   public GatewayResponse orderId(String orderId) {
     this.orderId = orderId;
     return this;
   }
 
   /**
-   * Unique NETELLER reference for the order.
+   * Unique NETELLER reference for the order
    *
    * @return orderId
    */
@@ -680,13 +754,14 @@ public class GatewayResponse {
     this.orderId = orderId;
   }
 
+
   public GatewayResponse operationId(String operationId) {
     this.operationId = operationId;
     return this;
   }
 
   /**
-   * It is a transaction identifier at Safetypay.
+   * Transaction identifier at Safetypay
    *
    * @return operationId
    */
@@ -696,6 +771,196 @@ public class GatewayResponse {
 
   public void setOperationId(String operationId) {
     this.operationId = operationId;
+  }
+
+
+  public GatewayResponse transactionId(String transactionId) {
+    this.transactionId = transactionId;
+    return this;
+  }
+
+  /**
+   * This transaction id is generated by Paysafe Gateway
+   *
+   * @return transactionId
+   */
+  public String getTransactionId() {
+    return transactionId;
+  }
+
+  public void setTransactionId(String transactionId) {
+    this.transactionId = transactionId;
+  }
+
+
+  public GatewayResponse amount(String amount) {
+    this.amount = amount;
+    return this;
+  }
+
+  /**
+   * Transaction amount
+   *
+   * @return amount
+   */
+  public String getAmount() {
+    return amount;
+  }
+
+  public void setAmount(String amount) {
+    this.amount = amount;
+  }
+
+
+  public GatewayResponse mbTransactionId(String mbTransactionId) {
+    this.mbTransactionId = mbTransactionId;
+    return this;
+  }
+
+  /**
+   * Unique transaction id at Skrill end
+   *
+   * @return mbTransactionId
+   */
+  public String getMbTransactionId() {
+    return mbTransactionId;
+  }
+
+  public void setMbTransactionId(String mbTransactionId) {
+    this.mbTransactionId = mbTransactionId;
+  }
+
+
+  public GatewayResponse payFromEmail(String payFromEmail) {
+    this.payFromEmail = payFromEmail;
+    return this;
+  }
+
+  /**
+   * Customer email using which Payment has been completed. This is same as \"skrill.consumerId\" sent in the paymentHandle request.
+   *
+   * @return payFromEmail
+   */
+  public String getPayFromEmail() {
+    return payFromEmail;
+  }
+
+  public void setPayFromEmail(String payFromEmail) {
+    this.payFromEmail = payFromEmail;
+  }
+
+
+  public GatewayResponse payToEmail(String payToEmail) {
+    this.payToEmail = payToEmail;
+    return this;
+  }
+
+  /**
+   * Merchant's email
+   *
+   * @return payToEmail
+   */
+  public String getPayToEmail() {
+    return payToEmail;
+  }
+
+  public void setPayToEmail(String payToEmail) {
+    this.payToEmail = payToEmail;
+  }
+
+
+  public GatewayResponse currency(String currency) {
+    this.currency = currency;
+    return this;
+  }
+
+  /**
+   * Transaction currency
+   *
+   * @return currency
+   */
+  public String getCurrency() {
+    return currency;
+  }
+
+  public void setCurrency(String currency) {
+    this.currency = currency;
+  }
+
+
+  public GatewayResponse merchantId(String merchantId) {
+    this.merchantId = merchantId;
+    return this;
+  }
+
+  /**
+   * Skrill Merchant ID
+   *
+   * @return merchantId
+   */
+  public String getMerchantId() {
+    return merchantId;
+  }
+
+  public void setMerchantId(String merchantId) {
+    this.merchantId = merchantId;
+  }
+
+
+  public GatewayResponse payerName(String payerName) {
+    this.payerName = payerName;
+    return this;
+  }
+
+  /**
+   * The customer's account name after successful payment. **Note:** Supported Payment Method: EPS
+   *
+   * @return payerName
+   */
+  public String getPayerName() {
+    return payerName;
+  }
+
+  public void setPayerName(String payerName) {
+    this.payerName = payerName;
+  }
+
+
+  public GatewayResponse payerIban(String payerIban) {
+    this.payerIban = payerIban;
+    return this;
+  }
+
+  /**
+   * The customer's IBAN after successful payment. **Note:** Supported Payment Method: EPS
+   *
+   * @return payerIban
+   */
+  public String getPayerIban() {
+    return payerIban;
+  }
+
+  public void setPayerIban(String payerIban) {
+    this.payerIban = payerIban;
+  }
+
+
+  public GatewayResponse sid(String sid) {
+    this.sid = sid;
+    return this;
+  }
+
+  /**
+   * Skrll session id during which transaction is completed
+   *
+   * @return sid
+   */
+  public String getSid() {
+    return sid;
+  }
+
+  public void setSid(String sid) {
+    this.sid = sid;
   }
 
   @Override
@@ -738,14 +1003,22 @@ public class GatewayResponse {
         Objects.equals(this.cvv2Result, gatewayResponse.cvv2Result) &&
         Objects.equals(this.status, gatewayResponse.status) &&
         Objects.equals(this.orderId, gatewayResponse.orderId) &&
-        Objects.equals(this.operationId, gatewayResponse.operationId);
+        Objects.equals(this.operationId, gatewayResponse.operationId) &&
+        Objects.equals(this.transactionId, gatewayResponse.transactionId) &&
+        Objects.equals(this.amount, gatewayResponse.amount) &&
+        Objects.equals(this.mbTransactionId, gatewayResponse.mbTransactionId) &&
+        Objects.equals(this.payFromEmail, gatewayResponse.payFromEmail) &&
+        Objects.equals(this.payToEmail, gatewayResponse.payToEmail) &&
+        Objects.equals(this.currency, gatewayResponse.currency) &&
+        Objects.equals(this.merchantId, gatewayResponse.merchantId) &&
+        Objects.equals(this.payerName, gatewayResponse.payerName) &&
+        Objects.equals(this.payerIban, gatewayResponse.payerIban) &&
+        Objects.equals(this.sid, gatewayResponse.sid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, processor, code, responseCode, responseCodeDescription, avsCode, avsResponse, nameVerification, firstNameVerification,
-        lastNameVerification, balanceResponse, mid, terminalId, batchNumber, seqNumber, effectiveDate, financingType, plan, gracePeriod, term, responseId,
-        requestId, description, authCode, txnDateTime, referenceNbr, responseReasonCode, cvvVerification, cvv2Result, status, orderId, operationId);
+    return Objects.hash(id, processor, code, responseCode, responseCodeDescription, avsCode, avsResponse, nameVerification, firstNameVerification, lastNameVerification, balanceResponse, mid, terminalId, batchNumber, seqNumber, effectiveDate, financingType, plan, gracePeriod, term, responseId, requestId, description, authCode, txnDateTime, referenceNbr, responseReasonCode, cvvVerification, cvv2Result, status, orderId, operationId, transactionId, amount, mbTransactionId, payFromEmail, payToEmail, currency, merchantId, payerName, payerIban, sid);
   }
 
   @Override
@@ -784,6 +1057,16 @@ public class GatewayResponse {
         + "    status: " + toIndentedString(status) + "\n"
         + "    orderId: " + toIndentedString(orderId) + "\n"
         + "    operationId: " + toIndentedString(operationId) + "\n"
+        + "    transactionId: " + toIndentedString(transactionId) + "\n"
+        + "    amount: " + toIndentedString(amount) + "\n"
+        + "    mbTransactionId: " + toIndentedString(mbTransactionId) + "\n"
+        + "    payFromEmail: " + toIndentedString(payFromEmail) + "\n"
+        + "    payToEmail: " + toIndentedString(payToEmail) + "\n"
+        + "    currency: " + toIndentedString(currency) + "\n"
+        + "    merchantId: " + toIndentedString(merchantId) + "\n"
+        + "    payerName: " + toIndentedString(payerName) + "\n"
+        + "    payerIban: " + toIndentedString(payerIban) + "\n"
+        + "    sid: " + toIndentedString(sid) + "\n"
         + "}";
   }
 
@@ -799,7 +1082,7 @@ public class GatewayResponse {
   }
 
   /**
-   * {@code GatewayResponse} builder static inner class.
+   * Read only raw response from the acquirer or PSP. builder static inner class.
    */
   public static final class Builder {
     private String id;
@@ -810,8 +1093,8 @@ public class GatewayResponse {
     private String avsCode;
     private AvsResponse avsResponse;
     private NameVerification nameVerification;
-    private NameVerification firstNameVerification;
-    private NameVerification lastNameVerification;
+    private FirstNameVerification firstNameVerification;
+    private LastNameVerification lastNameVerification;
     private String balanceResponse;
     private String mid;
     private String terminalId;
@@ -834,14 +1117,26 @@ public class GatewayResponse {
     private String status;
     private String orderId;
     private String operationId;
+    private String transactionId;
+    private String amount;
+    private String mbTransactionId;
+    private String payFromEmail;
+    private String payToEmail;
+    private String currency;
+    private String merchantId;
+    private String payerName;
+    private String payerIban;
+    private String sid;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
+     * The response id returned by the processor
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -850,9 +1145,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code processor} and returns a reference to this Builder enabling method chaining.
+     * The processor code of the transaction at Paysafe side
+     * <p>
+     * Sets the processor and returns a reference to this Builder enabling method chaining.
      *
-     * @param processor the {@code processor} to set
+     * @param processor the processor to set
      * @return a reference to this Builder
      */
     public Builder processor(String processor) {
@@ -861,9 +1158,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code code} and returns a reference to this Builder enabling method chaining.
+     * Acquirer identification code, such as VPS, GPS, etc.
+     * <p>
+     * Sets the code and returns a reference to this Builder enabling method chaining.
      *
-     * @param code the {@code code} to set
+     * @param code the code to set
      * @return a reference to this Builder
      */
     public Builder code(String code) {
@@ -872,9 +1171,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code responseCode} and returns a reference to this Builder enabling method chaining.
+     * The raw response returned by the acquirer
+     * <p>
+     * Sets the responseCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param responseCode the {@code responseCode} to set
+     * @param responseCode the responseCode to set
      * @return a reference to this Builder
      */
     public Builder responseCode(String responseCode) {
@@ -883,9 +1184,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code responseCodeDescription} and returns a reference to this Builder enabling method chaining.
+     * The raw response code description returned by the acquirer
+     * <p>
+     * Sets the responseCodeDescription and returns a reference to this Builder enabling method chaining.
      *
-     * @param responseCodeDescription the {@code responseCodeDescription} to set
+     * @param responseCodeDescription the responseCodeDescription to set
      * @return a reference to this Builder
      */
     public Builder responseCodeDescription(String responseCodeDescription) {
@@ -894,9 +1197,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code avsCode} and returns a reference to this Builder enabling method chaining.
+     * The raw AVS code returned by the acquirer
+     * <p>
+     * Sets the avsCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param avsCode the {@code avsCode} to set
+     * @param avsCode the avsCode to set
      * @return a reference to this Builder
      */
     public Builder avsCode(String avsCode) {
@@ -905,9 +1210,9 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code avsResponse} and returns a reference to this Builder enabling method chaining.
+     * Sets the avsResponse and returns a reference to this Builder enabling method chaining.
      *
-     * @param avsResponse the {@code avsResponse} to set
+     * @param avsResponse the avsResponse to set
      * @return a reference to this Builder
      */
     public Builder avsResponse(AvsResponse avsResponse) {
@@ -916,9 +1221,9 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code nameVerification} and returns a reference to this Builder enabling method chaining.
+     * Sets the nameVerification and returns a reference to this Builder enabling method chaining.
      *
-     * @param nameVerification the {@code nameVerification} to set
+     * @param nameVerification the nameVerification to set
      * @return a reference to this Builder
      */
     public Builder nameVerification(NameVerification nameVerification) {
@@ -927,31 +1232,33 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code firstNameVerification} and returns a reference to this Builder enabling method chaining.
+     * Sets the firstNameVerification and returns a reference to this Builder enabling method chaining.
      *
-     * @param firstNameVerification the {@code firstNameVerification} to set
+     * @param firstNameVerification the firstNameVerification to set
      * @return a reference to this Builder
      */
-    public Builder firstNameVerification(NameVerification firstNameVerification) {
+    public Builder firstNameVerification(FirstNameVerification firstNameVerification) {
       this.firstNameVerification = firstNameVerification;
       return this;
     }
 
     /**
-     * Sets the {@code lastNameVerification} and returns a reference to this Builder enabling method chaining.
+     * Sets the lastNameVerification and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastNameVerification the {@code lastNameVerification} to set
+     * @param lastNameVerification the lastNameVerification to set
      * @return a reference to this Builder
      */
-    public Builder lastNameVerification(NameVerification lastNameVerification) {
+    public Builder lastNameVerification(LastNameVerification lastNameVerification) {
       this.lastNameVerification = lastNameVerification;
       return this;
     }
 
     /**
-     * Sets the {@code balanceResponse} and returns a reference to this Builder enabling method chaining.
+     * The balance response from the acquirer
+     * <p>
+     * Sets the balanceResponse and returns a reference to this Builder enabling method chaining.
      *
-     * @param balanceResponse the {@code balanceResponse} to set
+     * @param balanceResponse the balanceResponse to set
      * @return a reference to this Builder
      */
     public Builder balanceResponse(String balanceResponse) {
@@ -960,9 +1267,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code mid} and returns a reference to this Builder enabling method chaining.
+     * Acquirer MID that was sent to the clearing house.
+     * <p>
+     * Sets the mid and returns a reference to this Builder enabling method chaining.
      *
-     * @param mid the {@code mid} to set
+     * @param mid the mid to set
      * @return a reference to this Builder
      */
     public Builder mid(String mid) {
@@ -971,9 +1280,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code terminalId} and returns a reference to this Builder enabling method chaining.
+     * Merchant's Terminal identification number
+     * <p>
+     * Sets the terminalId and returns a reference to this Builder enabling method chaining.
      *
-     * @param terminalId the {@code terminalId} to set
+     * @param terminalId the terminalId to set
      * @return a reference to this Builder
      */
     public Builder terminalId(String terminalId) {
@@ -982,9 +1293,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code batchNumber} and returns a reference to this Builder enabling method chaining.
+     * Batch number for the transaction
+     * <p>
+     * Sets the batchNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param batchNumber the {@code batchNumber} to set
+     * @param batchNumber the batchNumber to set
      * @return a reference to this Builder
      */
     public Builder batchNumber(String batchNumber) {
@@ -993,9 +1306,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code seqNumber} and returns a reference to this Builder enabling method chaining.
+     * Merchant's Sequence number for the transaction
+     * <p>
+     * Sets the seqNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param seqNumber the {@code seqNumber} to set
+     * @param seqNumber the seqNumber to set
      * @return a reference to this Builder
      */
     public Builder seqNumber(String seqNumber) {
@@ -1004,9 +1319,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code effectiveDate} and returns a reference to this Builder enabling method chaining.
+     * Date of the bank deposit associated with the transaction.
+     * <p>
+     * Sets the effectiveDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param effectiveDate the {@code effectiveDate} to set
+     * @param effectiveDate the effectiveDate to set
      * @return a reference to this Builder
      */
     public Builder effectiveDate(String effectiveDate) {
@@ -1015,9 +1332,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code financingType} and returns a reference to this Builder enabling method chaining.
+     * Type of financing offered
+     * <p>
+     * Sets the financingType and returns a reference to this Builder enabling method chaining.
      *
-     * @param financingType the {@code financingType} to set
+     * @param financingType the financingType to set
      * @return a reference to this Builder
      */
     public Builder financingType(String financingType) {
@@ -1026,9 +1345,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code plan} and returns a reference to this Builder enabling method chaining.
+     * Plan number for this financing transaction
+     * <p>
+     * Sets the plan and returns a reference to this Builder enabling method chaining.
      *
-     * @param plan the {@code plan} to set
+     * @param plan the plan to set
      * @return a reference to this Builder
      */
     public Builder plan(String plan) {
@@ -1037,9 +1358,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code gracePeriod} and returns a reference to this Builder enabling method chaining.
+     * Grace period, in months, associated with deferred payment transactions
+     * <p>
+     * Sets the gracePeriod and returns a reference to this Builder enabling method chaining.
      *
-     * @param gracePeriod the {@code gracePeriod} to set
+     * @param gracePeriod the gracePeriod to set
      * @return a reference to this Builder
      */
     public Builder gracePeriod(String gracePeriod) {
@@ -1048,9 +1371,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code term} and returns a reference to this Builder enabling method chaining.
+     * Number of payments, in months, for equal payment transactions
+     * <p>
+     * Sets the term and returns a reference to this Builder enabling method chaining.
      *
-     * @param term the {@code term} to set
+     * @param term the term to set
      * @return a reference to this Builder
      */
     public Builder term(String term) {
@@ -1059,9 +1384,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code responseId} and returns a reference to this Builder enabling method chaining.
+     * Response ID assigned by Credorax.
+     * <p>
+     * Sets the responseId and returns a reference to this Builder enabling method chaining.
      *
-     * @param responseId the {@code responseId} to set
+     * @param responseId the responseId to set
      * @return a reference to this Builder
      */
     public Builder responseId(String responseId) {
@@ -1070,9 +1397,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code requestId} and returns a reference to this Builder enabling method chaining.
+     * Request ID assigned by Paysafe.
+     * <p>
+     * Sets the requestId and returns a reference to this Builder enabling method chaining.
      *
-     * @param requestId the {@code requestId} to set
+     * @param requestId the requestId to set
      * @return a reference to this Builder
      */
     public Builder requestId(String requestId) {
@@ -1081,9 +1410,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code description} and returns a reference to this Builder enabling method chaining.
+     * Description of the response
+     * <p>
+     * Sets the description and returns a reference to this Builder enabling method chaining.
      *
-     * @param description the {@code description} to set
+     * @param description the description to set
      * @return a reference to this Builder
      */
     public Builder description(String description) {
@@ -1092,9 +1423,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code authCode} and returns a reference to this Builder enabling method chaining.
+     * Authorization code assigned by the acquirer
+     * <p>
+     * Sets the authCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param authCode the {@code authCode} to set
+     * @param authCode the authCode to set
      * @return a reference to this Builder
      */
     public Builder authCode(String authCode) {
@@ -1103,9 +1436,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code txnDateTime} and returns a reference to this Builder enabling method chaining.
+     * Date and time of the transaction
+     * <p>
+     * Sets the txnDateTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param txnDateTime the {@code txnDateTime} to set
+     * @param txnDateTime the txnDateTime to set
      * @return a reference to this Builder
      */
     public Builder txnDateTime(String txnDateTime) {
@@ -1114,9 +1449,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code referenceNbr} and returns a reference to this Builder enabling method chaining.
+     * Bank net transaction ID/Merch Tran Ref
+     * <p>
+     * Sets the referenceNbr and returns a reference to this Builder enabling method chaining.
      *
-     * @param referenceNbr the {@code referenceNbr} to set
+     * @param referenceNbr the referenceNbr to set
      * @return a reference to this Builder
      */
     public Builder referenceNbr(String referenceNbr) {
@@ -1125,9 +1462,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code responseReasonCode} and returns a reference to this Builder enabling method chaining.
+     * raw response reason code returned by Acquirer
+     * <p>
+     * Sets the responseReasonCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param responseReasonCode the {@code responseReasonCode} to set
+     * @param responseReasonCode the responseReasonCode to set
      * @return a reference to this Builder
      */
     public Builder responseReasonCode(String responseReasonCode) {
@@ -1136,9 +1475,9 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code cvvVerification} and returns a reference to this Builder enabling method chaining.
+     * Sets the cvvVerification and returns a reference to this Builder enabling method chaining.
      *
-     * @param cvvVerification the {@code cvvVerification} to set
+     * @param cvvVerification the cvvVerification to set
      * @return a reference to this Builder
      */
     public Builder cvvVerification(CvvVerification cvvVerification) {
@@ -1147,9 +1486,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code cvv2Result} and returns a reference to this Builder enabling method chaining.
+     * Raw CVV2 result code
+     * <p>
+     * Sets the cvv2Result and returns a reference to this Builder enabling method chaining.
      *
-     * @param cvv2Result the {@code cvv2Result} to set
+     * @param cvv2Result the cvv2Result to set
      * @return a reference to this Builder
      */
     public Builder cvv2Result(String cvv2Result) {
@@ -1158,9 +1499,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Status of the transaction at the processor side
+     * <p>
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
     public Builder status(String status) {
@@ -1169,9 +1512,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code orderId} and returns a reference to this Builder enabling method chaining.
+     * Unique NETELLER reference for the order
+     * <p>
+     * Sets the orderId and returns a reference to this Builder enabling method chaining.
      *
-     * @param orderId the {@code orderId} to set
+     * @param orderId the orderId to set
      * @return a reference to this Builder
      */
     public Builder orderId(String orderId) {
@@ -1180,9 +1525,11 @@ public class GatewayResponse {
     }
 
     /**
-     * Sets the {@code operationId} and returns a reference to this Builder enabling method chaining.
+     * Transaction identifier at Safetypay
+     * <p>
+     * Sets the operationId and returns a reference to this Builder enabling method chaining.
      *
-     * @param operationId the {@code operationId} to set
+     * @param operationId the operationId to set
      * @return a reference to this Builder
      */
     public Builder operationId(String operationId) {
@@ -1191,13 +1538,142 @@ public class GatewayResponse {
     }
 
     /**
-     * Returns a {@code GatewayResponse} built from the parameters previously set.
+     * This transaction id is generated by Paysafe Gateway
+     * <p>
+     * Sets the transactionId and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code GatewayResponse} built with parameters of this {@code GatewayResponse.Builder}
+     * @param transactionId the transactionId to set
+     * @return a reference to this Builder
+     */
+    public Builder transactionId(String transactionId) {
+      this.transactionId = transactionId;
+      return this;
+    }
+
+    /**
+     * Transaction amount
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
+     *
+     * @param amount the amount to set
+     * @return a reference to this Builder
+     */
+    public Builder amount(String amount) {
+      this.amount = amount;
+      return this;
+    }
+
+    /**
+     * Unique transaction id at Skrill end
+     * <p>
+     * Sets the mbTransactionId and returns a reference to this Builder enabling method chaining.
+     *
+     * @param mbTransactionId the mbTransactionId to set
+     * @return a reference to this Builder
+     */
+    public Builder mbTransactionId(String mbTransactionId) {
+      this.mbTransactionId = mbTransactionId;
+      return this;
+    }
+
+    /**
+     * Customer email using which Payment has been completed. This is same as \"skrill.consumerId\" sent in the paymentHandle request.
+     * <p>
+     * Sets the payFromEmail and returns a reference to this Builder enabling method chaining.
+     *
+     * @param payFromEmail the payFromEmail to set
+     * @return a reference to this Builder
+     */
+    public Builder payFromEmail(String payFromEmail) {
+      this.payFromEmail = payFromEmail;
+      return this;
+    }
+
+    /**
+     * Merchant's email
+     * <p>
+     * Sets the payToEmail and returns a reference to this Builder enabling method chaining.
+     *
+     * @param payToEmail the payToEmail to set
+     * @return a reference to this Builder
+     */
+    public Builder payToEmail(String payToEmail) {
+      this.payToEmail = payToEmail;
+      return this;
+    }
+
+    /**
+     * Transaction currency
+     * <p>
+     * Sets the currency and returns a reference to this Builder enabling method chaining.
+     *
+     * @param currency the currency to set
+     * @return a reference to this Builder
+     */
+    public Builder currency(String currency) {
+      this.currency = currency;
+      return this;
+    }
+
+    /**
+     * Skrill Merchant ID
+     * <p>
+     * Sets the merchantId and returns a reference to this Builder enabling method chaining.
+     *
+     * @param merchantId the merchantId to set
+     * @return a reference to this Builder
+     */
+    public Builder merchantId(String merchantId) {
+      this.merchantId = merchantId;
+      return this;
+    }
+
+    /**
+     * The customer's account name after successful payment. **Note:** Supported Payment Method: EPS
+     * <p>
+     * Sets the payerName and returns a reference to this Builder enabling method chaining.
+     *
+     * @param payerName the payerName to set
+     * @return a reference to this Builder
+     */
+    public Builder payerName(String payerName) {
+      this.payerName = payerName;
+      return this;
+    }
+
+    /**
+     * The customer's IBAN after successful payment. **Note:** Supported Payment Method: EPS
+     * <p>
+     * Sets the payerIban and returns a reference to this Builder enabling method chaining.
+     *
+     * @param payerIban the payerIban to set
+     * @return a reference to this Builder
+     */
+    public Builder payerIban(String payerIban) {
+      this.payerIban = payerIban;
+      return this;
+    }
+
+    /**
+     * Skrll session id during which transaction is completed
+     * <p>
+     * Sets the sid and returns a reference to this Builder enabling method chaining.
+     *
+     * @param sid the sid to set
+     * @return a reference to this Builder
+     */
+    public Builder sid(String sid) {
+      this.sid = sid;
+      return this;
+    }
+
+    /**
+     * Returns a GatewayResponse built from the parameters previously set.
+     *
+     * @return a GatewayResponse built with parameters of this GatewayResponse.Builder
      */
     public GatewayResponse build() {
       return new GatewayResponse(this);
     }
   }
 }
-

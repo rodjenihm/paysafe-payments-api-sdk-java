@@ -1,13 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.payment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.Meta;
+
+
 
 /**
  * PaymentList
@@ -15,7 +21,7 @@ import com.paysafe.payments.model.common.Meta;
 public class PaymentList {
 
   @JsonProperty("payments")
-  private List<Payment> payments = null;
+  private List<Payment> payments;
   @JsonProperty("meta")
   private Meta meta;
 
@@ -23,7 +29,7 @@ public class PaymentList {
     super();
   }
 
-  private PaymentList(Builder builder) {
+  private PaymentList(final Builder builder) {
     setPayments(builder.payments);
     setMeta(builder.meta);
   }
@@ -31,6 +37,7 @@ public class PaymentList {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public PaymentList payments(List<Payment> payments) {
     this.payments = payments;
@@ -54,7 +61,7 @@ public class PaymentList {
   }
 
   /**
-   * An array of Payments.
+   * Get payments
    *
    * @return payments
    */
@@ -66,13 +73,14 @@ public class PaymentList {
     this.payments = payments;
   }
 
+
   public PaymentList meta(Meta meta) {
     this.meta = meta;
     return this;
   }
 
   /**
-   * Contains meta info for the pagination APIs
+   * Get meta
    *
    * @return meta
    */
@@ -123,7 +131,7 @@ public class PaymentList {
   }
 
   /**
-   * {@code PaymentList} builder static inner class.
+   * PaymentList builder static inner class.
    */
   public static final class Builder {
     private List<Payment> payments;
@@ -133,9 +141,9 @@ public class PaymentList {
     }
 
     /**
-     * Sets the {@code payments} and returns a reference to this Builder enabling method chaining.
+     * Sets the payments and returns a reference to this Builder enabling method chaining.
      *
-     * @param payments the {@code payments} to set
+     * @param payments the payments to set
      * @return a reference to this Builder
      */
     public Builder payments(List<Payment> payments) {
@@ -144,9 +152,9 @@ public class PaymentList {
     }
 
     /**
-     * Sets the {@code meta} and returns a reference to this Builder enabling method chaining.
+     * Sets the meta and returns a reference to this Builder enabling method chaining.
      *
-     * @param meta the {@code meta} to set
+     * @param meta the meta to set
      * @return a reference to this Builder
      */
     public Builder meta(Meta meta) {
@@ -155,13 +163,12 @@ public class PaymentList {
     }
 
     /**
-     * Returns a {@code PaymentList} built from the parameters previously set.
+     * Returns a PaymentList built from the parameters previously set.
      *
-     * @return a {@code PaymentList} built with parameters of this {@code PaymentList.Builder}
+     * @return a PaymentList built with parameters of this PaymentList.Builder
      */
     public PaymentList build() {
       return new PaymentList(this);
     }
   }
 }
-

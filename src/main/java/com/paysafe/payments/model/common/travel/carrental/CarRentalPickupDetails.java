@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.carrental;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Contains pickup details information for car rental  <b>Note:</b> This object is only for Car Rental Merchants.
+ * Contains pickup details information for car rental. <br>**Note:** This object is only for Car Rental Merchants.
  */
 public class CarRentalPickupDetails {
 
@@ -28,7 +36,7 @@ public class CarRentalPickupDetails {
     super();
   }
 
-  private CarRentalPickupDetails(Builder builder) {
+  private CarRentalPickupDetails(final Builder builder) {
     setDate(builder.date);
     setTime(builder.time);
     setLocation(builder.location);
@@ -41,15 +49,14 @@ public class CarRentalPickupDetails {
     return new Builder();
   }
 
+
   public CarRentalPickupDetails date(String date) {
     this.date = date;
     return this;
   }
 
   /**
-   * The local date when the vehicle was rented and/or picked up. Date format = YYYY-MM-DD, ISO 8601 expected.
-   * Required during authorization request with Visa for integration with TSYS processor.  <br>
-   * Required during settlement request for integration with TSYS processor.
+   * The local date when the vehicle was rented and/or picked up. Date format YYYY-MM-DD, ISO 8601 expected. Required during authorization request with Visa for integration with TSYS processor. Required during settlement request for integration with TSYS processor
    *
    * @return date
    */
@@ -61,14 +68,14 @@ public class CarRentalPickupDetails {
     this.date = date;
   }
 
+
   public CarRentalPickupDetails time(String time) {
     this.time = time;
     return this;
   }
 
   /**
-   * The local date and time when the vehicle was rented and/or picked up. Date format = YYYY-MM-DDTHH:MM:SSZ, ISO 8601 expected.
-   * Required during settlement request with Amex for integration with TSYS processor.
+   * The local date and time when the vehicle was rented and/or picked up. Date format YYYY-MM-DDTHH:MM:SSZ, ISO 8601 expected. Required during settlement request with Amex for integration with TSYS processor
    *
    * @return time
    */
@@ -80,18 +87,14 @@ public class CarRentalPickupDetails {
     this.time = time;
   }
 
+
   public CarRentalPickupDetails location(String location) {
     this.location = location;
     return this;
   }
 
   /**
-   * This field contains the name of the business location where the rented vehicle was picked up.
-   * In most cases, this is the rental agency's business name that appears on the storefront and/or customer receipts,
-   * commonly referred to as the DBA (Doing Business As) name. However, if the vehicle was picked up at another location
-   * (e.g. a hotel, auto dealership, repair shop, etc.), the name of that location should be used.  <br>
-   * If the name is more than 38 characters, use proper and meaningful abbreviation, when possible. Do not truncate.  <br>
-   * Required during settlement request with Amex for integration with TSYS processor.
+   * This field contains the name of the business location where the rented vehicle was picked up. Required during settlement request with Amex for integration with TSYS processor
    *
    * @return location
    */
@@ -103,14 +106,14 @@ public class CarRentalPickupDetails {
     this.location = location;
   }
 
+
   public CarRentalPickupDetails country(String country) {
     this.country = country;
     return this;
   }
 
   /**
-   * The country of the location where the vehicle was rented and/or picked up.
-   * Required during settlement request with Amex for integration with TSYS processor.
+   * The country of the location where the vehicle was rented and/or picked up. Required during settlement request with Amex for integration with TSYS processor
    *
    * @return country
    */
@@ -122,14 +125,14 @@ public class CarRentalPickupDetails {
     this.country = country;
   }
 
+
   public CarRentalPickupDetails city(String city) {
     this.city = city;
     return this;
   }
 
   /**
-   * The name of the city, town, or village where the vehicle was rented and/or picked up.
-   * Required during settlement request with Amex for integration with TSYS processor.
+   * The name of the city, town, or village where the vehicle was rented and/or picked up. Required during settlement request with Amex for integration with TSYS processor
    *
    * @return city
    */
@@ -141,17 +144,14 @@ public class CarRentalPickupDetails {
     this.city = city;
   }
 
+
   public CarRentalPickupDetails state(String state) {
     this.state = state;
     return this;
   }
 
   /**
-   * The region code that corresponds to the state, province, or other country subdivision where the vehicle was rented and/or picked up.
-   * See <a href="https://developer.paysafe.com/en/support/reference-information/codes/#province-codes">Province Codes</a>
-   * or <a href="https://developer.paysafe.com/en/support/reference-information/codes/#state-codes">State Codes</a> for Canada or the United States.
-   *  <br>
-   * Required during settlement request with Amex for integration with TSYS processor.
+   * The region code that corresponds to the state, province, or other country subdivision where the vehicle was rented and/or picked up. Required during settlement request with Amex for integration with TSYS processor
    *
    * @return state
    */
@@ -210,7 +210,7 @@ public class CarRentalPickupDetails {
   }
 
   /**
-   * {@code CarRentalPickupDetails} builder static inner class.
+   * Contains pickup details information for car rental. <br>**Note:** This object is only for Car Rental Merchants. builder static inner class.
    */
   public static final class Builder {
     private String date;
@@ -224,9 +224,11 @@ public class CarRentalPickupDetails {
     }
 
     /**
-     * Sets the {@code date} and returns a reference to this Builder enabling method chaining.
+     * The local date when the vehicle was rented and/or picked up. Date format YYYY-MM-DD, ISO 8601 expected. Required during authorization request with Visa for integration with TSYS processor. Required during settlement request for integration with TSYS processor
+     * <p>
+     * Sets the date and returns a reference to this Builder enabling method chaining.
      *
-     * @param date the {@code date} to set
+     * @param date the date to set
      * @return a reference to this Builder
      */
     public Builder date(String date) {
@@ -235,9 +237,11 @@ public class CarRentalPickupDetails {
     }
 
     /**
-     * Sets the {@code time} and returns a reference to this Builder enabling method chaining.
+     * The local date and time when the vehicle was rented and/or picked up. Date format YYYY-MM-DDTHH:MM:SSZ, ISO 8601 expected. Required during settlement request with Amex for integration with TSYS processor
+     * <p>
+     * Sets the time and returns a reference to this Builder enabling method chaining.
      *
-     * @param time the {@code time} to set
+     * @param time the time to set
      * @return a reference to this Builder
      */
     public Builder time(String time) {
@@ -246,9 +250,11 @@ public class CarRentalPickupDetails {
     }
 
     /**
-     * Sets the {@code location} and returns a reference to this Builder enabling method chaining.
+     * This field contains the name of the business location where the rented vehicle was picked up. Required during settlement request with Amex for integration with TSYS processor
+     * <p>
+     * Sets the location and returns a reference to this Builder enabling method chaining.
      *
-     * @param location the {@code location} to set
+     * @param location the location to set
      * @return a reference to this Builder
      */
     public Builder location(String location) {
@@ -257,9 +263,11 @@ public class CarRentalPickupDetails {
     }
 
     /**
-     * Sets the {@code country} and returns a reference to this Builder enabling method chaining.
+     * The country of the location where the vehicle was rented and/or picked up. Required during settlement request with Amex for integration with TSYS processor
+     * <p>
+     * Sets the country and returns a reference to this Builder enabling method chaining.
      *
-     * @param country the {@code country} to set
+     * @param country the country to set
      * @return a reference to this Builder
      */
     public Builder country(String country) {
@@ -268,9 +276,11 @@ public class CarRentalPickupDetails {
     }
 
     /**
-     * Sets the {@code city} and returns a reference to this Builder enabling method chaining.
+     * The name of the city, town, or village where the vehicle was rented and/or picked up. Required during settlement request with Amex for integration with TSYS processor
+     * <p>
+     * Sets the city and returns a reference to this Builder enabling method chaining.
      *
-     * @param city the {@code city} to set
+     * @param city the city to set
      * @return a reference to this Builder
      */
     public Builder city(String city) {
@@ -279,9 +289,11 @@ public class CarRentalPickupDetails {
     }
 
     /**
-     * Sets the {@code state} and returns a reference to this Builder enabling method chaining.
+     * The region code that corresponds to the state, province, or other country subdivision where the vehicle was rented and/or picked up. Required during settlement request with Amex for integration with TSYS processor
+     * <p>
+     * Sets the state and returns a reference to this Builder enabling method chaining.
      *
-     * @param state the {@code state} to set
+     * @param state the state to set
      * @return a reference to this Builder
      */
     public Builder state(String state) {
@@ -290,13 +302,12 @@ public class CarRentalPickupDetails {
     }
 
     /**
-     * Returns a {@code CarRentalPickupDetails} built from the parameters previously set.
+     * Returns a CarRentalPickupDetails built from the parameters previously set.
      *
-     * @return a {@code CarRentalPickupDetails} built with parameters of this {@code CarRentalPickupDetails.Builder}
+     * @return a CarRentalPickupDetails built with parameters of this CarRentalPickupDetails.Builder
      */
     public CarRentalPickupDetails build() {
       return new CarRentalPickupDetails(this);
     }
   }
 }
-

@@ -1,31 +1,27 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.card.enums.FinancingType;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.card.enums.AccordDFinancingType;
+
+
 
 /**
- * These are parameters for financing plans supported for certain merchant configurations.
- * Include this element only when instructed to do so by your account manager.
- * <b>Note:</b> Not all processing gateways support this parameter. Contact your account manager for more information.
- *
- * <p>Key Fields:</p>
- * <ul>
- *   <li><strong>financingType:</strong> Specifies the type of financing applied (e.g., installment financing).</li>
- *   <li><strong>plan:</strong> Represents the financing plan, typically defined by a unique identifier or name.</li>
- *   <li><strong>gracePeriod:</strong> Defines the number of months or days before payments are required.</li>
- *   <li><strong>term:</strong> Specifies the duration of the financing agreement, typically in months.</li>
- * </ul>
- *
- * <p>This class is commonly used when detailed financing agreements need to be processed or displayed.</p>
+ * Parameters for financing plans supported for certain merchant configurations. Include this element only when instructed to do so by your account manager.  **Note:** Not all processing gateways support this parameter.
  */
 public class AccordD {
 
   @JsonProperty("financingType")
-  private FinancingType financingType;
+  private AccordDFinancingType financingType;
   @JsonProperty("plan")
   private String plan;
   @JsonProperty("gracePeriod")
@@ -37,7 +33,7 @@ public class AccordD {
     super();
   }
 
-  private AccordD(Builder builder) {
+  private AccordD(final Builder builder) {
     setFinancingType(builder.financingType);
     setPlan(builder.plan);
     setGracePeriod(builder.gracePeriod);
@@ -48,23 +44,25 @@ public class AccordD {
     return new Builder();
   }
 
-  public AccordD financingType(FinancingType financingType) {
+
+  public AccordD financingType(AccordDFinancingType financingType) {
     this.financingType = financingType;
     return this;
   }
 
   /**
-   * This is the type of financing offered.  - DEFERRED_PAYMENT – Deferred payment financing. - EQUAL_PAYMENT – Equal payment financing
+   * Get financingType
    *
    * @return financingType
    */
-  public FinancingType getFinancingType() {
+  public AccordDFinancingType getFinancingType() {
     return financingType;
   }
 
-  public void setFinancingType(FinancingType financingType) {
+  public void setFinancingType(AccordDFinancingType financingType) {
     this.financingType = financingType;
   }
+
 
   public AccordD plan(String plan) {
     this.plan = plan;
@@ -84,14 +82,14 @@ public class AccordD {
     this.plan = plan;
   }
 
+
   public AccordD gracePeriod(Integer gracePeriod) {
     this.gracePeriod = gracePeriod;
     return this;
   }
 
   /**
-   * This is the grace period, in months, associated with deferred payment transactions.  <br>
-   * Maximum: 99
+   * This is the grace period, in months, associated with deferred payment transactions.
    *
    * @return gracePeriod
    */
@@ -103,14 +101,14 @@ public class AccordD {
     this.gracePeriod = gracePeriod;
   }
 
+
   public AccordD term(Integer term) {
     this.term = term;
     return this;
   }
 
   /**
-   * This is the number of payments, in months, for equal payment transactions.  <br>
-   * Maximum: 99
+   * This is the number of payments, in months, for equal payment transactions.
    *
    * @return term
    */
@@ -165,10 +163,10 @@ public class AccordD {
   }
 
   /**
-   * {@code AccordD} builder static inner class.
+   * Parameters for financing plans supported for certain merchant configurations. Include this element only when instructed to do so by your account manager.  **Note:** Not all processing gateways support this parameter. builder static inner class.
    */
   public static final class Builder {
-    private FinancingType financingType;
+    private AccordDFinancingType financingType;
     private String plan;
     private Integer gracePeriod;
     private Integer term;
@@ -177,20 +175,22 @@ public class AccordD {
     }
 
     /**
-     * Sets the {@code financingType} and returns a reference to this Builder enabling method chaining.
+     * Sets the financingType and returns a reference to this Builder enabling method chaining.
      *
-     * @param financingType the {@code financingType} to set
+     * @param financingType the financingType to set
      * @return a reference to this Builder
      */
-    public Builder financingType(FinancingType financingType) {
+    public Builder financingType(AccordDFinancingType financingType) {
       this.financingType = financingType;
       return this;
     }
 
     /**
-     * Sets the {@code plan} and returns a reference to this Builder enabling method chaining.
+     * This is the plan number for this financing transaction.
+     * <p>
+     * Sets the plan and returns a reference to this Builder enabling method chaining.
      *
-     * @param plan the {@code plan} to set
+     * @param plan the plan to set
      * @return a reference to this Builder
      */
     public Builder plan(String plan) {
@@ -199,9 +199,11 @@ public class AccordD {
     }
 
     /**
-     * Sets the {@code gracePeriod} and returns a reference to this Builder enabling method chaining.
+     * This is the grace period, in months, associated with deferred payment transactions.
+     * <p>
+     * Sets the gracePeriod and returns a reference to this Builder enabling method chaining.
      *
-     * @param gracePeriod the {@code gracePeriod} to set
+     * @param gracePeriod the gracePeriod to set
      * @return a reference to this Builder
      */
     public Builder gracePeriod(Integer gracePeriod) {
@@ -210,9 +212,11 @@ public class AccordD {
     }
 
     /**
-     * Sets the {@code term} and returns a reference to this Builder enabling method chaining.
+     * This is the number of payments, in months, for equal payment transactions.
+     * <p>
+     * Sets the term and returns a reference to this Builder enabling method chaining.
      *
-     * @param term the {@code term} to set
+     * @param term the term to set
      * @return a reference to this Builder
      */
     public Builder term(Integer term) {
@@ -221,13 +225,12 @@ public class AccordD {
     }
 
     /**
-     * Returns a {@code AccordD} built from the parameters previously set.
+     * Returns a AccordD built from the parameters previously set.
      *
-     * @return a {@code AccordD} built with parameters of this {@code AccordD.Builder}
+     * @return a AccordD built with parameters of this AccordD.Builder
      */
     public AccordD build() {
       return new AccordD(this);
     }
   }
 }
-

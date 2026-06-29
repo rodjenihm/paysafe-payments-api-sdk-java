@@ -1,19 +1,27 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.standalonecredit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.card.MerchantDescriptor;
 import com.paysafe.payments.model.common.enums.CurrencyCode;
 import com.paysafe.payments.model.common.paymentfacilitator.PaymentFacilitator;
+import com.paysafe.payments.model.payment.Payment;
+import com.paysafe.payments.model.settlement.Settlement;
+import com.paysafe.payments.model.standalonecredit.enums.SourceOfFunds;
+
+
 
 /**
- * StandaloneCreditRequest
+ * Standalone Credits allow merchants to issue credits to cardholders without requiring a previous Payment/Settlement.
  */
 public class StandaloneCreditRequest {
 
@@ -40,8 +48,7 @@ public class StandaloneCreditRequest {
   @JsonProperty("sender")
   private Sender sender;
   @JsonProperty("sourceOfFunds")
-  private String sourceOfFunds;
-
+  private SourceOfFunds sourceOfFunds;
   private Map<String, Object> additionalParameters;
 
   public StandaloneCreditRequest() {
@@ -61,12 +68,13 @@ public class StandaloneCreditRequest {
     setPaymentFacilitator(builder.paymentFacilitator);
     setSender(builder.sender);
     setSourceOfFunds(builder.sourceOfFunds);
-    setAdditionalParameters(builder.additionalParameters);
+    this.additionalParameters = builder.additionalParameters;
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public StandaloneCreditRequest merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
@@ -74,7 +82,7 @@ public class StandaloneCreditRequest {
   }
 
   /**
-   * This is the merchant reference number created by  the merchant and submitted as part of the request. It must be unique for each request.
+   * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
    *
    * @return merchantRefNum
    */
@@ -85,6 +93,7 @@ public class StandaloneCreditRequest {
   public void setMerchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
   }
+
 
   public StandaloneCreditRequest paymentHandleToken(String paymentHandleToken) {
     this.paymentHandleToken = paymentHandleToken;
@@ -104,15 +113,14 @@ public class StandaloneCreditRequest {
     this.paymentHandleToken = paymentHandleToken;
   }
 
+
   public StandaloneCreditRequest amount(Integer amount) {
     this.amount = amount;
     return this;
   }
 
   /**
-   * This is the amount of the request, in minor units. For example, to process US $10.99, this value  should be 1099.
-   * <b>Note:</b> The amount specified in the Credit request
-   * must match the amount specified in the Payment  Handle request from which the paymentHandleToken is taken.
+   * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099. **Note:** The amount specified in the Credit request must match the amount specified in the Payment Handle request from which the paymentHandleToken is taken.
    *
    * @return amount
    */
@@ -124,17 +132,14 @@ public class StandaloneCreditRequest {
     this.amount = amount;
   }
 
+
   public StandaloneCreditRequest currencyCode(CurrencyCode currencyCode) {
     this.currencyCode = currencyCode;
     return this;
   }
 
   /**
-   * This is the currency of the merchant account, for example, USD or CAD.
-   * See <a href="https://developer.paysafe.com/en/support/reference-information/codes/#currency-codes">Currency Codes.</a>
-   *  <br>
-   * <b>Note:</b> The currencyCode specified in the Credit request must match the currencyCode specified in the Payment Handle request
-   * from which the paymentHandleToken is taken.
+   * Get currencyCode
    *
    * @return currencyCode
    */
@@ -145,6 +150,7 @@ public class StandaloneCreditRequest {
   public void setCurrencyCode(CurrencyCode currencyCode) {
     this.currencyCode = currencyCode;
   }
+
 
   public StandaloneCreditRequest customerIp(String customerIp) {
     this.customerIp = customerIp;
@@ -164,6 +170,7 @@ public class StandaloneCreditRequest {
     this.customerIp = customerIp;
   }
 
+
   public StandaloneCreditRequest onHold(Boolean onHold) {
     this.onHold = onHold;
     return this;
@@ -181,6 +188,7 @@ public class StandaloneCreditRequest {
   public void setOnHold(Boolean onHold) {
     this.onHold = onHold;
   }
+
 
   public StandaloneCreditRequest description(String description) {
     this.description = description;
@@ -200,14 +208,14 @@ public class StandaloneCreditRequest {
     this.description = description;
   }
 
+
   public StandaloneCreditRequest dupCheck(Boolean dupCheck) {
     this.dupCheck = dupCheck;
     return this;
   }
 
   /**
-   * This validates that this request is not a duplicate.
-   * A duplicate request is when the merchantRefNum has already been used in a previous request within the past 90 days.
+   * This validates that this request is not a duplicate. A duplicate request is when the merchantRefNum has already been used in a previous request within the past 90 days.
    *
    * @return dupCheck
    */
@@ -219,13 +227,14 @@ public class StandaloneCreditRequest {
     this.dupCheck = dupCheck;
   }
 
+
   public StandaloneCreditRequest merchantDescriptor(MerchantDescriptor merchantDescriptor) {
     this.merchantDescriptor = merchantDescriptor;
     return this;
   }
 
   /**
-   * For Card payment method only. This is the merchant descriptor that will be displayed on the customer's card or bank statement.
+   * Get merchantDescriptor
    *
    * @return merchantDescriptor
    */
@@ -237,13 +246,14 @@ public class StandaloneCreditRequest {
     this.merchantDescriptor = merchantDescriptor;
   }
 
+
   public StandaloneCreditRequest paymentFacilitator(PaymentFacilitator paymentFacilitator) {
     this.paymentFacilitator = paymentFacilitator;
     return this;
   }
 
   /**
-   * Contains information about Payment facilitator.  <b>Note:</b> This object is only for Payment facilitator merchants.
+   * Get paymentFacilitator
    *
    * @return paymentFacilitator
    */
@@ -255,14 +265,14 @@ public class StandaloneCreditRequest {
     this.paymentFacilitator = paymentFacilitator;
   }
 
+
   public StandaloneCreditRequest sender(Sender sender) {
     this.sender = sender;
     return this;
   }
 
   /**
-   * The sender is deemed to be the person or party who has the contractual relationship with the the end customer. <br>
-   * In case of Visa Direct with use cases Account to Account, Wallet transfer or Funds Transfer, the sender name should be the same as the recipient name.
+   * Get sender
    *
    * @return sender
    */
@@ -274,34 +284,35 @@ public class StandaloneCreditRequest {
     this.sender = sender;
   }
 
-  public StandaloneCreditRequest sourceOfFunds(String sourceOfFunds) {
+
+  public StandaloneCreditRequest sourceOfFunds(SourceOfFunds sourceOfFunds) {
     this.sourceOfFunds = sourceOfFunds;
     return this;
   }
 
   /**
-   * This field contains the information representing the payment transaction funding source.
+   * Get sourceOfFunds
    *
    * @return sourceOfFunds
    */
-  public String getSourceOfFunds() {
+  public SourceOfFunds getSourceOfFunds() {
     return sourceOfFunds;
   }
 
-  public void setSourceOfFunds(String sourceOfFunds) {
+  public void setSourceOfFunds(SourceOfFunds sourceOfFunds) {
     this.sourceOfFunds = sourceOfFunds;
   }
 
   /**
    * This map holds additional parameters that can be used for features not available in this client library.
    * During serialization, each key-value pair is treated as if the key were a top-level field in the serialized object,
-   * i.e. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
+   * e.g. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
    *
    * @return additionalParameters
    */
   @JsonAnyGetter
   public Map<String, Object> getAdditionalParameters() {
-    return additionalParameters;
+    return this.additionalParameters;
   }
 
   public void setAdditionalParameters(Map<String, Object> additionalParameters) {
@@ -309,10 +320,10 @@ public class StandaloneCreditRequest {
   }
 
   public void addAdditionalParameter(String key, Object value) {
-    if (additionalParameters == null) {
-      additionalParameters = new HashMap<>();
+    if (this.additionalParameters == null) {
+      this.additionalParameters = new HashMap<>();
     }
-    additionalParameters.put(key, value);
+    this.additionalParameters.put(key, value);
   }
 
   @Override
@@ -340,8 +351,7 @@ public class StandaloneCreditRequest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, paymentHandleToken, amount, currencyCode, customerIp, onHold, description, dupCheck, merchantDescriptor,
-        paymentFacilitator, sender, sourceOfFunds);
+    return Objects.hash(merchantRefNum, paymentHandleToken, amount, currencyCode, customerIp, onHold, description, dupCheck, merchantDescriptor, paymentFacilitator, sender, sourceOfFunds);
   }
 
   @Override
@@ -375,7 +385,7 @@ public class StandaloneCreditRequest {
   }
 
   /**
-   * {@code StandaloneCreditRequest} builder static inner class.
+   * Standalone Credits allow merchants to issue credits to cardholders without requiring a previous Payment/Settlement. builder static inner class.
    */
   public static final class Builder {
     private String merchantRefNum;
@@ -389,16 +399,18 @@ public class StandaloneCreditRequest {
     private MerchantDescriptor merchantDescriptor;
     private PaymentFacilitator paymentFacilitator;
     private Sender sender;
-    private String sourceOfFunds;
+    private SourceOfFunds sourceOfFunds;
     private Map<String, Object> additionalParameters;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
+     * @param merchantRefNum the merchantRefNum to set
      * @return a reference to this Builder
      */
     public Builder merchantRefNum(String merchantRefNum) {
@@ -407,9 +419,11 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Sets the {@code paymentHandleToken} and returns a reference to this Builder enabling method chaining.
+     * This is the payment token generated by Paysafe that will be used for the request.
+     * <p>
+     * Sets the paymentHandleToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentHandleToken the {@code paymentHandleToken} to set
+     * @param paymentHandleToken the paymentHandleToken to set
      * @return a reference to this Builder
      */
     public Builder paymentHandleToken(String paymentHandleToken) {
@@ -418,9 +432,11 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Sets the {@code amount} and returns a reference to this Builder enabling method chaining.
+     * This is the amount of the request, in minor units. For example, to process US $10.99, this value should be 1099. **Note:** The amount specified in the Credit request must match the amount specified in the Payment Handle request from which the paymentHandleToken is taken.
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
      *
-     * @param amount the {@code amount} to set
+     * @param amount the amount to set
      * @return a reference to this Builder
      */
     public Builder amount(Integer amount) {
@@ -429,9 +445,9 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Sets the {@code currencyCode} and returns a reference to this Builder enabling method chaining.
+     * Sets the currencyCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param currencyCode the {@code currencyCode} to set
+     * @param currencyCode the currencyCode to set
      * @return a reference to this Builder
      */
     public Builder currencyCode(CurrencyCode currencyCode) {
@@ -440,20 +456,24 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Sets the {@code customerIp} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's IP address.
+     * <p>
+     * Sets the customerIp and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code customerIp} to set
+     * @param customerIp the customerIp to set
      * @return a reference to this Builder
      */
-    public Builder customerIp(final String val) {
-      customerIp = val;
+    public Builder customerIp(String customerIp) {
+      this.customerIp = customerIp;
       return this;
     }
 
     /**
-     * Sets the {@code onHold} and returns a reference to this Builder enabling method chaining.
+     * This parameter can be used by merchants to hold the SCT for additional checks on their end.
+     * <p>
+     * Sets the onHold and returns a reference to this Builder enabling method chaining.
      *
-     * @param onHold the {@code onHold} to set
+     * @param onHold the onHold to set
      * @return a reference to this Builder
      */
     public Builder onHold(Boolean onHold) {
@@ -462,9 +482,11 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Sets the {@code description} and returns a reference to this Builder enabling method chaining.
+     * This is a description of the transaction, provided by the merchant.
+     * <p>
+     * Sets the description and returns a reference to this Builder enabling method chaining.
      *
-     * @param description the {@code description} to set
+     * @param description the description to set
      * @return a reference to this Builder
      */
     public Builder description(String description) {
@@ -473,9 +495,11 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Sets the {@code dupCheck} and returns a reference to this Builder enabling method chaining.
+     * This validates that this request is not a duplicate. A duplicate request is when the merchantRefNum has already been used in a previous request within the past 90 days.
+     * <p>
+     * Sets the dupCheck and returns a reference to this Builder enabling method chaining.
      *
-     * @param dupCheck the {@code dupCheck} to set
+     * @param dupCheck the dupCheck to set
      * @return a reference to this Builder
      */
     public Builder dupCheck(Boolean dupCheck) {
@@ -484,9 +508,9 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Sets the {@code merchantDescriptor} and returns a reference to this Builder enabling method chaining.
+     * Sets the merchantDescriptor and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantDescriptor the {@code merchantDescriptor} to set
+     * @param merchantDescriptor the merchantDescriptor to set
      * @return a reference to this Builder
      */
     public Builder merchantDescriptor(MerchantDescriptor merchantDescriptor) {
@@ -495,9 +519,9 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Sets the {@code paymentFacilitator} and returns a reference to this Builder enabling method chaining.
+     * Sets the paymentFacilitator and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentFacilitator the {@code paymentFacilitator} to set
+     * @param paymentFacilitator the paymentFacilitator to set
      * @return a reference to this Builder
      */
     public Builder paymentFacilitator(PaymentFacilitator paymentFacilitator) {
@@ -506,9 +530,9 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Sets the {@code sender} and returns a reference to this Builder enabling method chaining.
+     * Sets the sender and returns a reference to this Builder enabling method chaining.
      *
-     * @param sender the {@code sender} to set
+     * @param sender the sender to set
      * @return a reference to this Builder
      */
     public Builder sender(Sender sender) {
@@ -517,39 +541,13 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Sets the {@code sourceOfFunds} and returns a reference to this Builder enabling method chaining.
+     * Sets the sourceOfFunds and returns a reference to this Builder enabling method chaining.
      *
-     * @param sourceOfFunds the {@code sourceOfFunds} to set
+     * @param sourceOfFunds the sourceOfFunds to set
      * @return a reference to this Builder
      */
-    public Builder sourceOfFunds(String sourceOfFunds) {
+    public Builder sourceOfFunds(SourceOfFunds sourceOfFunds) {
       this.sourceOfFunds = sourceOfFunds;
-      return this;
-    }
-
-    /**
-     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAdditionalParameter(String key, Object value) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.put(key, value);
-      return this;
-    }
-
-    /**
-     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAllAdditionalParameters(Map<String, Object> additionalParameters) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.putAll(additionalParameters);
       return this;
     }
 
@@ -565,13 +563,41 @@ public class StandaloneCreditRequest {
     }
 
     /**
-     * Returns a {@code StandaloneCreditRequest} built from the parameters previously set.
+     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code StandaloneCreditRequest} built with parameters of this {@code StandaloneCreditRequest.Builder}
+     * @param key the key to insert
+     * @param value the value to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAdditionalParameter(String key, Object value) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.put(key, value);
+      return this;
+    }
+
+    /**
+     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
+     *
+     * @param additionalParameters the key/value pairs to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAllAdditionalParameters(Map<String, Object> additionalParameters) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.putAll(additionalParameters);
+      return this;
+    }
+
+    /**
+     * Returns a StandaloneCreditRequest built from the parameters previously set.
+     *
+     * @return a StandaloneCreditRequest built with parameters of this StandaloneCreditRequest.Builder
      */
     public StandaloneCreditRequest build() {
       return new StandaloneCreditRequest(this);
     }
   }
 }
-

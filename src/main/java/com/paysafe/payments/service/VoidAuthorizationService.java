@@ -22,9 +22,9 @@ public interface VoidAuthorizationService {
    * <p>Endpoint:
    * <strong>POST /v1/payments/{paymentId}/voidauths</strong></p>
    *
-   * @param paymentId                The ID of the payment for which the authorization is being voided.
-   * @param voidAuthorizationRequest The request body containing the details for the void authorization.
-   * @return A {@link VoidAuthorization} object containing the result of the void authorization request.
+   * @param paymentId                the ID of the payment for which the authorization is being voided
+   * @param voidAuthorizationRequest the request body containing the details for the void authorization
+   * @return a {@link VoidAuthorization} object containing the result of the void authorization request
    * @throws PaysafeSdkException if an error occurs
    */
   VoidAuthorization voidAuthorization(String paymentId, VoidAuthorizationRequest voidAuthorizationRequest)
@@ -43,10 +43,10 @@ public interface VoidAuthorizationService {
    * <p>Endpoint:
    * <strong>POST /v1/payments/{paymentId}/voidauths</strong></p>
    *
-   * @param paymentId                The ID of the payment for which the authorization is being voided.
-   * @param voidAuthorizationRequest The request body containing the details for the void authorization.
-   * @param requestOptions           Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return A {@link VoidAuthorization} object containing the result of the void authorization request.
+   * @param paymentId                the ID of the payment for which the authorization is being voided
+   * @param voidAuthorizationRequest the request body containing the details for the void authorization
+   * @param requestOptions           custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return a {@link VoidAuthorization} object containing the result of the void authorization request
    * @throws PaysafeSdkException if an error occurs
    */
   VoidAuthorization voidAuthorization(String paymentId, VoidAuthorizationRequest voidAuthorizationRequest, RequestOptions requestOptions)
@@ -59,8 +59,8 @@ public interface VoidAuthorizationService {
    * <p>Endpoint:
    * <strong>GET /v1/payments/{paymentId}/voidauths/{voidAuthId}</strong></p>
    *
-   * @param voidAuthId The ID of the Void Authorization to retrieve.
-   * @return A {@link VoidAuthorization} object containing the details of the Void Authorization.
+   * @param voidAuthId the ID of the Void Authorization to retrieve
+   * @return a {@link VoidAuthorization} object containing the details of the Void Authorization
    * @throws PaysafeSdkException if an error occurs
    */
   VoidAuthorization getVoidAuthorizationById(String voidAuthId) throws PaysafeSdkException;
@@ -73,9 +73,9 @@ public interface VoidAuthorizationService {
    * <p>Endpoint:
    * <strong>GET /v1/payments/{paymentId}/voidauths/{voidAuthId}</strong></p>
    *
-   * @param voidAuthId     The ID of the Void Authorization to retrieve.
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return A {@link VoidAuthorization} object containing the details of the Void Authorization.
+   * @param voidAuthId     the ID of the Void Authorization to retrieve
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return a {@link VoidAuthorization} object containing the details of the Void Authorization
    * @throws PaysafeSdkException if an error occurs
    */
   VoidAuthorization getVoidAuthorizationById(String voidAuthId, RequestOptions requestOptions) throws PaysafeSdkException;
@@ -87,12 +87,12 @@ public interface VoidAuthorizationService {
    * <p>Endpoint:
    * <strong>GET /v1/payments/{paymentId}/voidauths</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the
-   *                       request when creating void authorization.
-   * @param endDate        This is the end date in UTC. If null is provided, current date will be used.
-   * @param limit          This is the total number of records to return. If null is provided, default value (10) will be used.
-   * @param offset         This is the starting position, where 0 is the first record. If null is provided, default value (0) will be used.
-   * @param startDate      This is the start date in UTC. If null is provided, default value (30 days before the end date) will be used.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the
+   *                       request when creating void authorization
+   * @param endDate        the end date in UTC; if null is provided, current date will be used
+   * @param limit          the total number of records to return; if null is provided, default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, default value (30 days before the end date) will be used
    * @return VoidAuthorizationsList object containing a list of verifications and meta information for pagination APIs
    * @throws PaysafeSdkException if an error occurs
    */
@@ -107,13 +107,13 @@ public interface VoidAuthorizationService {
    * <p>Endpoint:
    * <strong>GET /v1/payments/{paymentId}/voidauths</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the
-   *                       request when creating void authorization.
-   * @param endDate        This is the end date in UTC. If null is provided, current date will be used.
-   * @param limit          This is the total number of records to return. If null is provided, default value (10) will be used.
-   * @param offset         This is the starting position, where 0 is the first record. If null is provided, default value (0) will be used.
-   * @param startDate      This is the start date in UTC. If null is provided, default value (30 days before the end date) will be used.
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the
+   *                       request when creating void authorization
+   * @param endDate        the end date in UTC; if null is provided, current date will be used
+   * @param limit          the total number of records to return; if null is provided, default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, default value (30 days before the end date) will be used
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return VoidAuthorizationsList object containing a list of verifications and meta information for pagination APIs
    * @throws PaysafeSdkException if an error occurs
    */

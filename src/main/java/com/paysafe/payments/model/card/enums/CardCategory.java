@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.enums;
 
@@ -6,12 +6,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * The type of card being used. CREDIT or DEBIT
+ * The category of card used for the request.
  */
 public enum CardCategory {
+
   CREDIT("CREDIT"),
 
-  DEBIT("DEBIT");
+  DEBIT("DEBIT"),
+
+  PREPAID("PREPAID");
 
   private final String value;
 

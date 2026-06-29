@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.enums;
 
@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This is the mechanism used previously by the cardholder to authenticate to the 3DS Requester.
+ * Mechanism used previously by the cardholder to authenticate to the 3DS Requestor.
  */
 public enum PriorThreeDsAuthenticationMethod {
+
   FRICTIONLESS_AUTHENTICATION("FRICTIONLESS_AUTHENTICATION"),
 
   ACS_CHALLENGE("ACS_CHALLENGE"),

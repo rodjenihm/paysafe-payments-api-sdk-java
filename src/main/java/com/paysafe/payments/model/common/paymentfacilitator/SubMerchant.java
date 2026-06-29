@@ -1,36 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.paymentfacilitator;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * Contains information for Payment facilitator sub-merchant. <b>Note:</b> This object is only for Payment facilitator merchants.
- * <ul>
- *   <li>
- *     <b>id:</b> This field contains an identifier of the actual merchant. <br>
- *     Example: 123456789
- *   </li>
- *   <li>
- *     <b>name:</b> This field must contain the name of the actual merchant.
- *   </li>
- *   <li>
- *     <b>phone</b>: This field must contain the phone number of the actual merchant.
- *   </li>
- *   <li>
- *     <b>email:</b> This field must contain the email address of the actual merchant.
- *   </li>
- *   <li>
- *     <b>url:</b> This field must contain the url address of the actual merchant.  <br>
- *     Example: www.paysafe.com
- *   </li>
- *   <li>
- *     <b>address:</b> Contains information for Payment facilitator sub-merchant address.  <br>
- *     <b>Note</b>: This object is only for Payment facilitator merchants.
- *   </li>
- * </ul>
+ * Contains information for Payment facilitator sub-merchant.
  */
 public class SubMerchant {
 
@@ -48,6 +34,7 @@ public class SubMerchant {
   private SubMerchantAddress address;
 
   public SubMerchant() {
+    super();
   }
 
   private SubMerchant(final Builder builder) {
@@ -63,13 +50,14 @@ public class SubMerchant {
     return new Builder();
   }
 
+
   public SubMerchant id(String id) {
     this.id = id;
     return this;
   }
 
   /**
-   * This field contains an identifier of the actual merchant.
+   * Field contains an identifier of the actual merchant
    *
    * @return id
    */
@@ -81,13 +69,14 @@ public class SubMerchant {
     this.id = id;
   }
 
+
   public SubMerchant name(String name) {
     this.name = name;
     return this;
   }
 
   /**
-   * This field must contain the name of the actual merchant.
+   * Field contains the name of the actual merchant
    *
    * @return name
    */
@@ -99,13 +88,14 @@ public class SubMerchant {
     this.name = name;
   }
 
+
   public SubMerchant phone(String phone) {
     this.phone = phone;
     return this;
   }
 
   /**
-   * This field must contain the phone number of the actual merchant.
+   * Field contains the phone number of the actual merchant
    *
    * @return phone
    */
@@ -117,13 +107,14 @@ public class SubMerchant {
     this.phone = phone;
   }
 
+
   public SubMerchant email(String email) {
     this.email = email;
     return this;
   }
 
   /**
-   * This field must contain the email address of the actual merchant.
+   * Field contains the email address of the actual merchant
    *
    * @return email
    */
@@ -135,13 +126,14 @@ public class SubMerchant {
     this.email = email;
   }
 
+
   public SubMerchant url(String url) {
     this.url = url;
     return this;
   }
 
   /**
-   * This field must contain the url address of the actual merchant.
+   * Field contains the url address of the actual merchant
    *
    * @return url
    */
@@ -153,13 +145,14 @@ public class SubMerchant {
     this.url = url;
   }
 
+
   public SubMerchant address(SubMerchantAddress address) {
     this.address = address;
     return this;
   }
 
   /**
-   * Contains information for Payment facilitator sub-merchant address.  <b>Note:</b> This object is only for Payment facilitator merchants.
+   * Get address
    *
    * @return address
    */
@@ -179,13 +172,13 @@ public class SubMerchant {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SubMerchant SubMerchant = (SubMerchant) o;
-    return Objects.equals(this.id, SubMerchant.id) &&
-        Objects.equals(this.name, SubMerchant.name) &&
-        Objects.equals(this.phone, SubMerchant.phone) &&
-        Objects.equals(this.email, SubMerchant.email) &&
-        Objects.equals(this.url, SubMerchant.url) &&
-        Objects.equals(this.address, SubMerchant.address);
+    SubMerchant subMerchant = (SubMerchant) o;
+    return Objects.equals(this.id, subMerchant.id) &&
+        Objects.equals(this.name, subMerchant.name) &&
+        Objects.equals(this.phone, subMerchant.phone) &&
+        Objects.equals(this.email, subMerchant.email) &&
+        Objects.equals(this.url, subMerchant.url) &&
+        Objects.equals(this.address, subMerchant.address);
   }
 
   @Override
@@ -218,7 +211,7 @@ public class SubMerchant {
   }
 
   /**
-   * {@code SubMerchant} builder static inner class.
+   * Contains information for Payment facilitator sub-merchant. builder static inner class.
    */
   public static final class Builder {
     private String id;
@@ -232,9 +225,11 @@ public class SubMerchant {
     }
 
     /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
+     * Field contains an identifier of the actual merchant
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -243,9 +238,11 @@ public class SubMerchant {
     }
 
     /**
-     * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
+     * Field contains the name of the actual merchant
+     * <p>
+     * Sets the name and returns a reference to this Builder enabling method chaining.
      *
-     * @param name the {@code name} to set
+     * @param name the name to set
      * @return a reference to this Builder
      */
     public Builder name(String name) {
@@ -254,9 +251,11 @@ public class SubMerchant {
     }
 
     /**
-     * Sets the {@code phone} and returns a reference to this Builder enabling method chaining.
+     * Field contains the phone number of the actual merchant
+     * <p>
+     * Sets the phone and returns a reference to this Builder enabling method chaining.
      *
-     * @param phone the {@code phone} to set
+     * @param phone the phone to set
      * @return a reference to this Builder
      */
     public Builder phone(String phone) {
@@ -265,9 +264,11 @@ public class SubMerchant {
     }
 
     /**
-     * Sets the {@code email} and returns a reference to this Builder enabling method chaining.
+     * Field contains the email address of the actual merchant
+     * <p>
+     * Sets the email and returns a reference to this Builder enabling method chaining.
      *
-     * @param email the {@code email} to set
+     * @param email the email to set
      * @return a reference to this Builder
      */
     public Builder email(String email) {
@@ -276,9 +277,11 @@ public class SubMerchant {
     }
 
     /**
-     * Sets the {@code url} and returns a reference to this Builder enabling method chaining.
+     * Field contains the url address of the actual merchant
+     * <p>
+     * Sets the url and returns a reference to this Builder enabling method chaining.
      *
-     * @param url the {@code url} to set
+     * @param url the url to set
      * @return a reference to this Builder
      */
     public Builder url(String url) {
@@ -287,9 +290,9 @@ public class SubMerchant {
     }
 
     /**
-     * Sets the {@code address} and returns a reference to this Builder enabling method chaining.
+     * Sets the address and returns a reference to this Builder enabling method chaining.
      *
-     * @param address the {@code address} to set
+     * @param address the address to set
      * @return a reference to this Builder
      */
     public Builder address(SubMerchantAddress address) {
@@ -298,9 +301,9 @@ public class SubMerchant {
     }
 
     /**
-     * Returns a {@code SubMerchant} built from the parameters previously set.
+     * Returns a SubMerchant built from the parameters previously set.
      *
-     * @return a {@code SubMerchant} built with parameters of this {@code SubMerchant.Builder}
+     * @return a SubMerchant built with parameters of this SubMerchant.Builder
      */
     public SubMerchant build() {
       return new SubMerchant(this);

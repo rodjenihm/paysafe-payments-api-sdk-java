@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Details of the EFT account to be used for the transaction
+ * Details of the EFT account to be used for the transaction.
  */
 public class Eft {
 
@@ -26,7 +34,7 @@ public class Eft {
     super();
   }
 
-  private Eft(Builder builder) {
+  private Eft(final Builder builder) {
     setAccountHolderName(builder.accountHolderName);
     setAccountNumber(builder.accountNumber);
     setTransitNumber(builder.transitNumber);
@@ -37,6 +45,7 @@ public class Eft {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public Eft accountHolderName(String accountHolderName) {
     this.accountHolderName = accountHolderName;
@@ -56,6 +65,7 @@ public class Eft {
     this.accountHolderName = accountHolderName;
   }
 
+
   public Eft accountNumber(String accountNumber) {
     this.accountNumber = accountNumber;
     return this;
@@ -73,6 +83,7 @@ public class Eft {
   public void setAccountNumber(String accountNumber) {
     this.accountNumber = accountNumber;
   }
+
 
   public Eft transitNumber(String transitNumber) {
     this.transitNumber = transitNumber;
@@ -92,13 +103,14 @@ public class Eft {
     this.transitNumber = transitNumber;
   }
 
+
   public Eft institutionId(String institutionId) {
     this.institutionId = institutionId;
     return this;
   }
 
   /**
-   * This is the 3-digit institution ID of the customer’s bank branch.
+   * This is the 3-digit institution ID of the customer's bank branch.
    *
    * @return institutionId
    */
@@ -109,6 +121,7 @@ public class Eft {
   public void setInstitutionId(String institutionId) {
     this.institutionId = institutionId;
   }
+
 
   public Eft lastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
@@ -173,7 +186,7 @@ public class Eft {
   }
 
   /**
-   * {@code Eft} builder static inner class.
+   * Details of the EFT account to be used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String accountHolderName;
@@ -186,9 +199,11 @@ public class Eft {
     }
 
     /**
-     * Sets the {@code accountHolderName} and returns a reference to this Builder enabling method chaining.
+     * This is the name of the customer or company.
+     * <p>
+     * Sets the accountHolderName and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountHolderName the {@code accountHolderName} to set
+     * @param accountHolderName the accountHolderName to set
      * @return a reference to this Builder
      */
     public Builder accountHolderName(String accountHolderName) {
@@ -197,9 +212,11 @@ public class Eft {
     }
 
     /**
-     * Sets the {@code accountNumber} and returns a reference to this Builder enabling method chaining.
+     * This is the bank account number.
+     * <p>
+     * Sets the accountNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountNumber the {@code accountNumber} to set
+     * @param accountNumber the accountNumber to set
      * @return a reference to this Builder
      */
     public Builder accountNumber(String accountNumber) {
@@ -208,9 +225,11 @@ public class Eft {
     }
 
     /**
-     * Sets the {@code transitNumber} and returns a reference to this Builder enabling method chaining.
+     * This is the 5-digit transit number of the customer's bank branch.
+     * <p>
+     * Sets the transitNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param transitNumber the {@code transitNumber} to set
+     * @param transitNumber the transitNumber to set
      * @return a reference to this Builder
      */
     public Builder transitNumber(String transitNumber) {
@@ -219,9 +238,11 @@ public class Eft {
     }
 
     /**
-     * Sets the {@code institutionId} and returns a reference to this Builder enabling method chaining.
+     * This is the 3-digit institution ID of the customer's bank branch.
+     * <p>
+     * Sets the institutionId and returns a reference to this Builder enabling method chaining.
      *
-     * @param institutionId the {@code institutionId} to set
+     * @param institutionId the institutionId to set
      * @return a reference to this Builder
      */
     public Builder institutionId(String institutionId) {
@@ -230,9 +251,11 @@ public class Eft {
     }
 
     /**
-     * Sets the {@code lastDigits} and returns a reference to this Builder enabling method chaining.
+     * It contains only last 2 digits of bank account.
+     * <p>
+     * Sets the lastDigits and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastDigits the {@code lastDigits} to set
+     * @param lastDigits the lastDigits to set
      * @return a reference to this Builder
      */
     public Builder lastDigits(String lastDigits) {
@@ -241,13 +264,12 @@ public class Eft {
     }
 
     /**
-     * Returns a {@code Eft} built from the parameters previously set.
+     * Returns a Eft built from the parameters previously set.
      *
-     * @return a {@code Eft} built with parameters of this {@code Eft.Builder}
+     * @return a Eft built with parameters of this Eft.Builder
      */
     public Eft build() {
       return new Eft(this);
     }
   }
 }
-

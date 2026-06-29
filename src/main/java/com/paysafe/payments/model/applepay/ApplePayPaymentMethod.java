@@ -1,10 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.applepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
  * Payment method parameter returned by Apple Pay JS
@@ -22,7 +31,7 @@ public class ApplePayPaymentMethod {
     super();
   }
 
-  private ApplePayPaymentMethod(Builder builder) {
+  private ApplePayPaymentMethod(final Builder builder) {
     setDisplayName(builder.displayName);
     setNetwork(builder.network);
     setType(builder.type);
@@ -31,6 +40,7 @@ public class ApplePayPaymentMethod {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public ApplePayPaymentMethod displayName(String displayName) {
     this.displayName = displayName;
@@ -50,6 +60,7 @@ public class ApplePayPaymentMethod {
     this.displayName = displayName;
   }
 
+
   public ApplePayPaymentMethod network(String network) {
     this.network = network;
     return this;
@@ -67,6 +78,7 @@ public class ApplePayPaymentMethod {
   public void setNetwork(String network) {
     this.network = network;
   }
+
 
   public ApplePayPaymentMethod type(String type) {
     this.type = type;
@@ -127,7 +139,7 @@ public class ApplePayPaymentMethod {
   }
 
   /**
-   * {@code ApplePayPaymentMethod} builder static inner class.
+   * Payment method parameter returned by Apple Pay JS builder static inner class.
    */
   public static final class Builder {
     private String displayName;
@@ -138,9 +150,11 @@ public class ApplePayPaymentMethod {
     }
 
     /**
-     * Sets the {@code displayName} and returns a reference to this Builder enabling method chaining.
+     * Display name property returned by Apple Pay JS
+     * <p>
+     * Sets the displayName and returns a reference to this Builder enabling method chaining.
      *
-     * @param displayName the {@code displayName} to set
+     * @param displayName the displayName to set
      * @return a reference to this Builder
      */
     public Builder displayName(String displayName) {
@@ -149,9 +163,11 @@ public class ApplePayPaymentMethod {
     }
 
     /**
-     * Sets the {@code network} and returns a reference to this Builder enabling method chaining.
+     * Network property returned by Apple Pay JS
+     * <p>
+     * Sets the network and returns a reference to this Builder enabling method chaining.
      *
-     * @param network the {@code network} to set
+     * @param network the network to set
      * @return a reference to this Builder
      */
     public Builder network(String network) {
@@ -160,9 +176,11 @@ public class ApplePayPaymentMethod {
     }
 
     /**
-     * Sets the {@code type} and returns a reference to this Builder enabling method chaining.
+     * Type property returned by Apple Pay JS
+     * <p>
+     * Sets the type and returns a reference to this Builder enabling method chaining.
      *
-     * @param type the {@code type} to set
+     * @param type the type to set
      * @return a reference to this Builder
      */
     public Builder type(String type) {
@@ -171,14 +189,12 @@ public class ApplePayPaymentMethod {
     }
 
     /**
-     * Returns a {@code ApplePayPaymentMethod} built from the parameters previously set.
+     * Returns a ApplePayPaymentMethod built from the parameters previously set.
      *
-     * @return a {@code ApplePayPaymentMethod} built with parameters of this
-     * {@code ApplePayPaymentMethod.Builder}
+     * @return a ApplePayPaymentMethod built with parameters of this ApplePayPaymentMethod.Builder
      */
     public ApplePayPaymentMethod build() {
       return new ApplePayPaymentMethod(this);
     }
   }
 }
-

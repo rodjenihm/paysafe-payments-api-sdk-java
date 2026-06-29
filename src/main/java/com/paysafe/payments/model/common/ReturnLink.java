@@ -1,29 +1,23 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.common.enums.HttpMethod;
 import com.paysafe.payments.model.paymenthandle.enums.ReturnLinkRel;
 
+
+
 /**
- * The URL endpoints to redirect the customer to after a redirection to an alternative payment or 3D Secure site.
- * You can customize the return URL based on the transaction status.
- * <ul>
- *   <li>
- *     <b>rel:</b> This is the link type that allows different endpoints to be targeted depending on the end state of the transaction.  <br>
- *     <i>Allowed values: default, on_completed, on_failed, on_cancelled</i>
- *   </li>
- *   <li>
- *     <b>href:</b> This is the URI of the resource.  <br>
- *     Example: https://US_commerce_site/payment/return/success
- *   </li>
- *   <li>
- *     <b>method:</b> This is the HTTP method.  <br>
- *     Example: GET
- *   </li>
- * </ul>
+ * Link for returning from external payment flows.
  */
 public class ReturnLink {
 
@@ -32,13 +26,13 @@ public class ReturnLink {
   @JsonProperty("href")
   private String href;
   @JsonProperty("method")
-  private String method;
+  private HttpMethod method;
 
   public ReturnLink() {
     super();
   }
 
-  private ReturnLink(Builder builder) {
+  private ReturnLink(final Builder builder) {
     setRel(builder.rel);
     setHref(builder.href);
     setMethod(builder.method);
@@ -48,20 +42,15 @@ public class ReturnLink {
     return new Builder();
   }
 
+
   public ReturnLink rel(ReturnLinkRel rel) {
     this.rel = rel;
     return this;
   }
 
   /**
-   * This is the link type that allows different endpoints to be targeted depending on the end state of the transaction.  <br>
-   * <b>Note: </b> It is mandatory to provide <b>default</b> return url.
-   * <ul>
-   * <li>on_completed - Paysafe will return to this merchant url post successful payment</li>
-   * <li>on_failed - Paysafe will return to this merchant url post if payment is failed.</li>
-   * <li>on_cancelled - Paysafe will return to this merchant url post if payment is cancelled.</li>
-   * <li>default - The default return URL that will be used if specific status return URL is not defined.</li>
-   * </ul>
+   * Get rel
+   *
    * @return rel
    */
   public ReturnLinkRel getRel() {
@@ -72,13 +61,14 @@ public class ReturnLink {
     this.rel = rel;
   }
 
+
   public ReturnLink href(String href) {
     this.href = href;
     return this;
   }
 
   /**
-   * This is the URI of the resource. <br>Supported protocols: http and https
+   * URL to redirect the user
    *
    * @return href
    */
@@ -90,21 +80,22 @@ public class ReturnLink {
     this.href = href;
   }
 
-  public ReturnLink method(String method) {
+
+  public ReturnLink method(HttpMethod method) {
     this.method = method;
     return this;
   }
 
   /**
-   * This is the HTTP method.
+   * Get method
    *
    * @return method
    */
-  public String getMethod() {
+  public HttpMethod getMethod() {
     return method;
   }
 
-  public void setMethod(String method) {
+  public void setMethod(HttpMethod method) {
     this.method = method;
   }
 
@@ -116,10 +107,10 @@ public class ReturnLink {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ReturnLink returnLinks = (ReturnLink) o;
-    return Objects.equals(this.rel, returnLinks.rel) &&
-        Objects.equals(this.href, returnLinks.href) &&
-        Objects.equals(this.method, returnLinks.method);
+    ReturnLink returnLink = (ReturnLink) o;
+    return Objects.equals(this.rel, returnLink.rel) &&
+        Objects.equals(this.href, returnLink.href) &&
+        Objects.equals(this.method, returnLink.method);
   }
 
   @Override
@@ -149,20 +140,20 @@ public class ReturnLink {
   }
 
   /**
-   * {@code ReturnLink} builder static inner class.
+   * Link for returning from external payment flows. builder static inner class.
    */
   public static final class Builder {
     private ReturnLinkRel rel;
     private String href;
-    private String method;
+    private HttpMethod method;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code rel} and returns a reference to this Builder enabling method chaining.
+     * Sets the rel and returns a reference to this Builder enabling method chaining.
      *
-     * @param rel the {@code rel} to set
+     * @param rel the rel to set
      * @return a reference to this Builder
      */
     public Builder rel(ReturnLinkRel rel) {
@@ -171,9 +162,11 @@ public class ReturnLink {
     }
 
     /**
-     * Sets the {@code href} and returns a reference to this Builder enabling method chaining.
+     * URL to redirect the user
+     * <p>
+     * Sets the href and returns a reference to this Builder enabling method chaining.
      *
-     * @param href the {@code href} to set
+     * @param href the href to set
      * @return a reference to this Builder
      */
     public Builder href(String href) {
@@ -182,24 +175,23 @@ public class ReturnLink {
     }
 
     /**
-     * Sets the {@code method} and returns a reference to this Builder enabling method chaining.
+     * Sets the method and returns a reference to this Builder enabling method chaining.
      *
-     * @param method the {@code method} to set
+     * @param method the method to set
      * @return a reference to this Builder
      */
-    public Builder method(String method) {
+    public Builder method(HttpMethod method) {
       this.method = method;
       return this;
     }
 
     /**
-     * Returns a {@code ReturnLink} built from the parameters previously set.
+     * Returns a ReturnLink built from the parameters previously set.
      *
-     * @return a {@code ReturnLink} built with parameters of this {@code ReturnLink.Builder}
+     * @return a ReturnLink built with parameters of this ReturnLink.Builder
      */
     public ReturnLink build() {
       return new ReturnLink(this);
     }
   }
 }
-

@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.googlepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * It has GooglePay details.
+ * Google Pay payment details
  */
 public class GooglePay {
 
@@ -18,13 +26,14 @@ public class GooglePay {
     super();
   }
 
-  private GooglePay(Builder builder) {
+  private GooglePay(final Builder builder) {
     setGooglePayPaymentToken(builder.googlePayPaymentToken);
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public GooglePay googlePayPaymentToken(GooglePayPaymentToken googlePayPaymentToken) {
     this.googlePayPaymentToken = googlePayPaymentToken;
@@ -81,7 +90,7 @@ public class GooglePay {
   }
 
   /**
-   * {@code GooglePay} builder static inner class.
+   * Google Pay payment details builder static inner class.
    */
   public static final class Builder {
     private GooglePayPaymentToken googlePayPaymentToken;
@@ -90,9 +99,9 @@ public class GooglePay {
     }
 
     /**
-     * Sets the {@code googlePayPaymentToken} and returns a reference to this Builder enabling method chaining.
+     * Sets the googlePayPaymentToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param googlePayPaymentToken the {@code googlePayPaymentToken} to set
+     * @param googlePayPaymentToken the googlePayPaymentToken to set
      * @return a reference to this Builder
      */
     public Builder googlePayPaymentToken(GooglePayPaymentToken googlePayPaymentToken) {
@@ -101,13 +110,12 @@ public class GooglePay {
     }
 
     /**
-     * Returns a {@code GooglePay} built from the parameters previously set.
+     * Returns a GooglePay built from the parameters previously set.
      *
-     * @return a {@code GooglePay} built with parameters of this {@code GooglePay.Builder}
+     * @return a GooglePay built with parameters of this GooglePay.Builder
      */
     public GooglePay build() {
       return new GooglePay(this);
     }
   }
 }
-

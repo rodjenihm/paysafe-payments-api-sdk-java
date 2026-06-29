@@ -1,18 +1,17 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.settlement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.BaseApiResponse;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.GatewayResponse;
-import com.paysafe.payments.model.common.enums.TransactionRequestStatus;
 import com.paysafe.payments.model.common.error.Error;
 import com.paysafe.payments.model.common.travel.airline.AirlineTravelDetails;
 import com.paysafe.payments.model.common.travel.carrental.CarRentalDetails;
@@ -20,22 +19,25 @@ import com.paysafe.payments.model.common.travel.cruise.CruiselineTravelDetails;
 import com.paysafe.payments.model.common.travel.lodging.LodgingDetails;
 import com.paysafe.payments.model.lpm.Splitpay;
 import com.paysafe.payments.model.settlement.enums.SettlementPaymentType;
+import com.paysafe.payments.model.settlement.enums.SettlementStatus;
+
+
 
 /**
  * Represents the details of a settlement transaction, including payment type, amount available for refund, transaction time, status and other related fields.
  */
-@JsonInclude(Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Settlement extends BaseApiResponse {
+public class Settlement {
 
+  @JsonProperty("id")
+  private String id;
   @JsonProperty("merchantRefNum")
   private String merchantRefNum;
   @JsonProperty("amount")
   private Integer amount;
   @JsonProperty("dupCheck")
-  private Boolean dupCheck = true;
+  private Boolean dupCheck;
   @JsonProperty("splitpay")
-  private List<Splitpay> splitpay = null;
+  private List<Splitpay> splitpay;
   @JsonProperty("airlineTravelDetails")
   private AirlineTravelDetails airlineTravelDetails;
   @JsonProperty("cruiselineTravelDetails")
@@ -44,8 +46,6 @@ public class Settlement extends BaseApiResponse {
   private LodgingDetails lodgingDetails;
   @JsonProperty("carRentalDetails")
   private CarRentalDetails carRentalDetails;
-  @JsonProperty("id")
-  private String id;
   @JsonProperty("paymentType")
   private SettlementPaymentType paymentType;
   @JsonProperty("availableToRefund")
@@ -55,9 +55,9 @@ public class Settlement extends BaseApiResponse {
   @JsonProperty("txnTime")
   private String txnTime;
   @JsonProperty("status")
-  private TransactionRequestStatus status;
+  private SettlementStatus status;
   @JsonProperty("riskReasonCode")
-  private List<Integer> riskReasonCode = null;
+  private List<Integer> riskReasonCode;
   @JsonProperty("gatewayResponse")
   private GatewayResponse gatewayResponse;
   @JsonProperty("gatewayReconciliationId")
@@ -68,13 +68,15 @@ public class Settlement extends BaseApiResponse {
   private String updatedTime;
   @JsonProperty("statusTime")
   private String statusTime;
+  @JsonProperty("error")
+  private Error error;
 
   public Settlement() {
     super();
   }
 
   private Settlement(final Builder builder) {
-    setError(builder.error);
+    setId(builder.id);
     setMerchantRefNum(builder.merchantRefNum);
     setAmount(builder.amount);
     setDupCheck(builder.dupCheck);
@@ -83,7 +85,6 @@ public class Settlement extends BaseApiResponse {
     setCruiselineTravelDetails(builder.cruiselineTravelDetails);
     setLodgingDetails(builder.lodgingDetails);
     setCarRentalDetails(builder.carRentalDetails);
-    setId(builder.id);
     setPaymentType(builder.paymentType);
     setAvailableToRefund(builder.availableToRefund);
     setChildAccountNum(builder.childAccountNum);
@@ -95,11 +96,32 @@ public class Settlement extends BaseApiResponse {
     setLiveMode(builder.liveMode);
     setUpdatedTime(builder.updatedTime);
     setStatusTime(builder.statusTime);
+    setError(builder.error);
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
+
+  public Settlement id(String id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * This is the ID returned in the response. This ID can be used for future associated request.
+   *
+   * @return id
+   */
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
 
   public Settlement merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
@@ -119,14 +141,14 @@ public class Settlement extends BaseApiResponse {
     this.merchantRefNum = merchantRefNum;
   }
 
+
   public Settlement amount(Integer amount) {
     this.amount = amount;
     return this;
   }
 
   /**
-   * This is the amount of the request, in minor units.For example, to process US $10.99, this value should be 1099.  <br>
-   * Maximum: 99999999999
+   * This is the amount of the request, in minor units.For example, to process US $10.99, this value should be 1099. Maximum: 99999999999
    *
    * @return amount
    */
@@ -138,14 +160,14 @@ public class Settlement extends BaseApiResponse {
     this.amount = amount;
   }
 
+
   public Settlement dupCheck(Boolean dupCheck) {
     this.dupCheck = dupCheck;
     return this;
   }
 
   /**
-   * This validates that this request is not a duplicate. A request is considered a duplicate if the merchantRefNum has already been used in a previous
-   * request within the past 90 days. <b>Note:</b> This value defaults to true
+   * This validates that this request is not a duplicate. A request is considered a duplicate if the merchantRefNum has already been used in a previous request within the past 90 days. **Note:** This value defaults to true
    *
    * @return dupCheck
    */
@@ -156,6 +178,7 @@ public class Settlement extends BaseApiResponse {
   public void setDupCheck(Boolean dupCheck) {
     this.dupCheck = dupCheck;
   }
+
 
   public Settlement splitpay(List<Splitpay> splitpay) {
     this.splitpay = splitpay;
@@ -191,14 +214,14 @@ public class Settlement extends BaseApiResponse {
     this.splitpay = splitpay;
   }
 
+
   public Settlement airlineTravelDetails(AirlineTravelDetails airlineTravelDetails) {
     this.airlineTravelDetails = airlineTravelDetails;
     return this;
   }
 
   /**
-   * Contains information about your airline travel.  <br> <b>Note:</b> This object is only for Airline Merchants.
-   * This field has to be passed only in case of card transactions.
+   * Get airlineTravelDetails
    *
    * @return airlineTravelDetails
    */
@@ -210,14 +233,14 @@ public class Settlement extends BaseApiResponse {
     this.airlineTravelDetails = airlineTravelDetails;
   }
 
+
   public Settlement cruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
     this.cruiselineTravelDetails = cruiselineTravelDetails;
     return this;
   }
 
   /**
-   * Contains information about your cruise line travel.  <br> <b>Note:</b> This object is only for Cruise line Merchants.
-   * This field has to be passed only in case of card transactions.
+   * Get cruiselineTravelDetails
    *
    * @return cruiselineTravelDetails
    */
@@ -229,14 +252,14 @@ public class Settlement extends BaseApiResponse {
     this.cruiselineTravelDetails = cruiselineTravelDetails;
   }
 
+
   public Settlement lodgingDetails(LodgingDetails lodgingDetails) {
     this.lodgingDetails = lodgingDetails;
     return this;
   }
 
   /**
-   * Contains information about lodging details.   <br> <b>Note:</b> This object is only for Airline Merchants.
-   * This field has to be passed only in case of card transactions.
+   * Get lodgingDetails
    *
    * @return lodgingDetails
    */
@@ -248,15 +271,14 @@ public class Settlement extends BaseApiResponse {
     this.lodgingDetails = lodgingDetails;
   }
 
+
   public Settlement carRentalDetails(CarRentalDetails carRentalDetails) {
     this.carRentalDetails = carRentalDetails;
     return this;
   }
 
   /**
-   * Contains information about your car rental.  <br>
-   * <b>Note:</b> This object is only for Car rental Merchants. <br>
-   * <b>Note:</b> This field has to be passed only in case of card transactions.
+   * Get carRentalDetails
    *
    * @return carRentalDetails
    */
@@ -268,23 +290,6 @@ public class Settlement extends BaseApiResponse {
     this.carRentalDetails = carRentalDetails;
   }
 
-  public Settlement id(String id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * This is the ID returned in the response. This ID can be used for future associated request.
-   *
-   * @return id
-   */
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
 
   public Settlement paymentType(SettlementPaymentType paymentType) {
     this.paymentType = paymentType;
@@ -292,7 +297,7 @@ public class Settlement extends BaseApiResponse {
   }
 
   /**
-   * This is the payment type associated with the settlement used for this request.
+   * Get paymentType
    *
    * @return paymentType
    */
@@ -304,14 +309,14 @@ public class Settlement extends BaseApiResponse {
     this.paymentType = paymentType;
   }
 
+
   public Settlement availableToRefund(Integer availableToRefund) {
     this.availableToRefund = availableToRefund;
     return this;
   }
 
   /**
-   * This is the remaining amount of the refund, in minor units.99.  <br>
-   * Maximum: 99999999999
+   * This is the remaining amount of the refund, in minor units.99. Maximum: 99999999999
    *
    * @return availableToRefund
    */
@@ -322,6 +327,7 @@ public class Settlement extends BaseApiResponse {
   public void setAvailableToRefund(Integer availableToRefund) {
     this.availableToRefund = availableToRefund;
   }
+
 
   public Settlement childAccountNum(String childAccountNum) {
     this.childAccountNum = childAccountNum;
@@ -341,6 +347,7 @@ public class Settlement extends BaseApiResponse {
     this.childAccountNum = childAccountNum;
   }
 
+
   public Settlement txnTime(String txnTime) {
     this.txnTime = txnTime;
     return this;
@@ -359,23 +366,25 @@ public class Settlement extends BaseApiResponse {
     this.txnTime = txnTime;
   }
 
-  public Settlement status(TransactionRequestStatus status) {
+
+  public Settlement status(SettlementStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the transaction request.
+   * Get status
    *
    * @return status
    */
-  public TransactionRequestStatus getStatus() {
+  public SettlementStatus getStatus() {
     return status;
   }
 
-  public void setStatus(TransactionRequestStatus status) {
+  public void setStatus(SettlementStatus status) {
     this.status = status;
   }
+
 
   public Settlement riskReasonCode(List<Integer> riskReasonCode) {
     this.riskReasonCode = riskReasonCode;
@@ -399,8 +408,7 @@ public class Settlement extends BaseApiResponse {
   }
 
   /**
-   * An array of integers is returned, displaying the detailed Risk reason codes if your transaction was declined.
-   * It is returned only if your account is configured accordingly.
+   * An array of integers is returned, displaying the detailed Risk reason codes if your transaction was declined. It is returned only if your account is configured accordingly.
    *
    * @return riskReasonCode
    */
@@ -412,13 +420,14 @@ public class Settlement extends BaseApiResponse {
     this.riskReasonCode = riskReasonCode;
   }
 
+
   public Settlement gatewayResponse(GatewayResponse gatewayResponse) {
     this.gatewayResponse = gatewayResponse;
     return this;
   }
 
   /**
-   * This is the read-only raw response returned by an acquirer or PSP.
+   * Get gatewayResponse
    *
    * @return gatewayResponse
    */
@@ -429,6 +438,7 @@ public class Settlement extends BaseApiResponse {
   public void setGatewayResponse(GatewayResponse gatewayResponse) {
     this.gatewayResponse = gatewayResponse;
   }
+
 
   public Settlement gatewayReconciliationId(String gatewayReconciliationId) {
     this.gatewayReconciliationId = gatewayReconciliationId;
@@ -448,6 +458,7 @@ public class Settlement extends BaseApiResponse {
     this.gatewayReconciliationId = gatewayReconciliationId;
   }
 
+
   public Settlement liveMode(Boolean liveMode) {
     this.liveMode = liveMode;
     return this;
@@ -466,13 +477,14 @@ public class Settlement extends BaseApiResponse {
     this.liveMode = liveMode;
   }
 
+
   public Settlement updatedTime(String updatedTime) {
     this.updatedTime = updatedTime;
     return this;
   }
 
   /**
-   * Indicates the last updated time for the resource.
+   * ISO 8601 format (UTC). This is the date and time the resource was last updated.
    *
    * @return updatedTime
    */
@@ -484,13 +496,14 @@ public class Settlement extends BaseApiResponse {
     this.updatedTime = updatedTime;
   }
 
+
   public Settlement statusTime(String statusTime) {
     this.statusTime = statusTime;
     return this;
   }
 
   /**
-   * Indicates the last updated time for the resource.
+   * ISO 8601 format (UTC). This is the date and time the resource was last updated.
    *
    * @return statusTime
    */
@@ -502,6 +515,25 @@ public class Settlement extends BaseApiResponse {
     this.statusTime = statusTime;
   }
 
+
+  public Settlement error(Error error) {
+    this.error = error;
+    return this;
+  }
+
+  /**
+   * Get error
+   *
+   * @return error
+   */
+  public Error getError() {
+    return error;
+  }
+
+  public void setError(Error error) {
+    this.error = error;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -511,7 +543,8 @@ public class Settlement extends BaseApiResponse {
       return false;
     }
     Settlement settlement = (Settlement) o;
-    return Objects.equals(this.merchantRefNum, settlement.merchantRefNum) &&
+    return Objects.equals(this.id, settlement.id) &&
+        Objects.equals(this.merchantRefNum, settlement.merchantRefNum) &&
         Objects.equals(this.amount, settlement.amount) &&
         Objects.equals(this.dupCheck, settlement.dupCheck) &&
         Objects.equals(this.splitpay, settlement.splitpay) &&
@@ -519,32 +552,30 @@ public class Settlement extends BaseApiResponse {
         Objects.equals(this.cruiselineTravelDetails, settlement.cruiselineTravelDetails) &&
         Objects.equals(this.lodgingDetails, settlement.lodgingDetails) &&
         Objects.equals(this.carRentalDetails, settlement.carRentalDetails) &&
-        Objects.equals(this.id, settlement.id) &&
         Objects.equals(this.paymentType, settlement.paymentType) &&
         Objects.equals(this.availableToRefund, settlement.availableToRefund) &&
         Objects.equals(this.childAccountNum, settlement.childAccountNum) &&
         Objects.equals(this.txnTime, settlement.txnTime) &&
         Objects.equals(this.status, settlement.status) &&
-        Objects.equals(getError(), settlement.getError()) &&
         Objects.equals(this.riskReasonCode, settlement.riskReasonCode) &&
         Objects.equals(this.gatewayResponse, settlement.gatewayResponse) &&
         Objects.equals(this.gatewayReconciliationId, settlement.gatewayReconciliationId) &&
         Objects.equals(this.liveMode, settlement.liveMode) &&
         Objects.equals(this.updatedTime, settlement.updatedTime) &&
-        Objects.equals(this.statusTime, settlement.statusTime);
+        Objects.equals(this.statusTime, settlement.statusTime) &&
+        Objects.equals(this.error, settlement.error);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, amount, dupCheck, splitpay, airlineTravelDetails, cruiselineTravelDetails, lodgingDetails, carRentalDetails,
-        id, paymentType, availableToRefund, childAccountNum, txnTime, status, getError(), riskReasonCode, gatewayResponse, gatewayReconciliationId, liveMode,
-        updatedTime, statusTime);
+    return Objects.hash(id, merchantRefNum, amount, dupCheck, splitpay, airlineTravelDetails, cruiselineTravelDetails, lodgingDetails, carRentalDetails, paymentType, availableToRefund, childAccountNum, txnTime, status, riskReasonCode, gatewayResponse, gatewayReconciliationId, liveMode, updatedTime, statusTime, error);
   }
 
   @Override
   public String toString() {
 
     return "class Settlement {\n"
+        + "    id: " + toIndentedString(id) + "\n"
         + "    merchantRefNum: " + toIndentedString(merchantRefNum) + "\n"
         + "    amount: " + toIndentedString(amount) + "\n"
         + "    dupCheck: " + toIndentedString(dupCheck) + "\n"
@@ -553,19 +584,18 @@ public class Settlement extends BaseApiResponse {
         + "    cruiselineTravelDetails: " + toIndentedString(cruiselineTravelDetails) + "\n"
         + "    lodgingDetails: " + toIndentedString(lodgingDetails) + "\n"
         + "    carRentalDetails: " + toIndentedString(carRentalDetails) + "\n"
-        + "    id: " + toIndentedString(id) + "\n"
         + "    paymentType: " + toIndentedString(paymentType) + "\n"
         + "    availableToRefund: " + toIndentedString(availableToRefund) + "\n"
         + "    childAccountNum: " + toIndentedString(childAccountNum) + "\n"
         + "    txnTime: " + toIndentedString(txnTime) + "\n"
         + "    status: " + toIndentedString(status) + "\n"
-        + "    error: " + toIndentedString(getError()) + "\n"
         + "    riskReasonCode: " + toIndentedString(riskReasonCode) + "\n"
         + "    gatewayResponse: " + toIndentedString(gatewayResponse) + "\n"
         + "    gatewayReconciliationId: " + toIndentedString(gatewayReconciliationId) + "\n"
         + "    liveMode: " + toIndentedString(liveMode) + "\n"
         + "    updatedTime: " + toIndentedString(updatedTime) + "\n"
         + "    statusTime: " + toIndentedString(statusTime) + "\n"
+        + "    error: " + toIndentedString(error) + "\n"
         + "}";
   }
 
@@ -581,127 +611,41 @@ public class Settlement extends BaseApiResponse {
   }
 
   /**
-   * {@code Settlement} builder static inner class.
+   * Represents the details of a settlement transaction, including payment type, amount available for refund, transaction time, status and other related fields. builder static inner class.
    */
   public static final class Builder {
+    private String id;
     private String merchantRefNum;
     private Integer amount;
-    private Boolean dupCheck = true;
+    private Boolean dupCheck;
     private List<Splitpay> splitpay;
     private AirlineTravelDetails airlineTravelDetails;
     private CruiselineTravelDetails cruiselineTravelDetails;
     private LodgingDetails lodgingDetails;
     private CarRentalDetails carRentalDetails;
-    private String id;
     private SettlementPaymentType paymentType;
     private Integer availableToRefund;
     private String childAccountNum;
     private String txnTime;
-    private TransactionRequestStatus status;
-    private Error error;
+    private SettlementStatus status;
     private List<Integer> riskReasonCode;
     private GatewayResponse gatewayResponse;
     private String gatewayReconciliationId;
     private Boolean liveMode;
     private String updatedTime;
     private String statusTime;
+    private Error error;
 
     private Builder() {
     }
 
     /**
-     * Sets the merchant reference number.
+     * This is the ID returned in the response. This ID can be used for future associated request.
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum Merchant reference number.
-     * @return Builder instance.
-     */
-    public Builder merchantRefNum(String merchantRefNum) {
-      this.merchantRefNum = merchantRefNum;
-      return this;
-    }
-
-    /**
-     * Sets the amount.
-     *
-     * @param amount Amount value.
-     * @return Builder instance.
-     */
-    public Builder amount(Integer amount) {
-      this.amount = amount;
-      return this;
-    }
-
-    /**
-     * Sets the duplicate check flag.
-     *
-     * @param dupCheck Duplicate check flag.
-     * @return Builder instance.
-     */
-    public Builder dupCheck(Boolean dupCheck) {
-      this.dupCheck = dupCheck;
-      return this;
-    }
-
-    /**
-     * Sets the split pay details.
-     *
-     * @param splitpay List of split pay details.
-     * @return Builder instance.
-     */
-    public Builder splitpay(List<Splitpay> splitpay) {
-      this.splitpay = splitpay;
-      return this;
-    }
-
-    /**
-     * Sets airline travel details.
-     *
-     * @param airlineTravelDetails Airline travel details.
-     * @return Builder instance.
-     */
-    public Builder airlineTravelDetails(AirlineTravelDetails airlineTravelDetails) {
-      this.airlineTravelDetails = airlineTravelDetails;
-      return this;
-    }
-
-    /**
-     * Sets cruise line travel details.
-     *
-     * @param cruiselineTravelDetails Cruise line travel details.
-     * @return Builder instance.
-     */
-    public Builder cruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
-      this.cruiselineTravelDetails = cruiselineTravelDetails;
-      return this;
-    }
-
-    /**
-     * Sets lodging details.
-     *
-     * @param lodgingDetails Lodging details.
-     * @return Builder instance.
-     */
-    public Builder lodgingDetails(LodgingDetails lodgingDetails) {
-      this.lodgingDetails = lodgingDetails;
-      return this;
-    }
-
-    /**
-     * Sets car rental details.
-     *
-     * @param carRentalDetails Car rental details.
-     * @return Builder instance.
-     */
-    public Builder carRentalDetails(CarRentalDetails carRentalDetails) {
-      this.carRentalDetails = carRentalDetails;
-      return this;
-    }
-
-    /**
-     * Sets the settlement ID.
-     *
-     * @param id Settlement ID.
-     * @return Builder instance.
+     * @param id the id to set
+     * @return a reference to this Builder
      */
     public Builder id(String id) {
       this.id = id;
@@ -709,10 +653,106 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Sets the payment type.
+     * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentType Payment type.
-     * @return Builder instance.
+     * @param merchantRefNum the merchantRefNum to set
+     * @return a reference to this Builder
+     */
+    public Builder merchantRefNum(String merchantRefNum) {
+      this.merchantRefNum = merchantRefNum;
+      return this;
+    }
+
+    /**
+     * This is the amount of the request, in minor units.For example, to process US $10.99, this value should be 1099. Maximum: 99999999999
+     * <p>
+     * Sets the amount and returns a reference to this Builder enabling method chaining.
+     *
+     * @param amount the amount to set
+     * @return a reference to this Builder
+     */
+    public Builder amount(Integer amount) {
+      this.amount = amount;
+      return this;
+    }
+
+    /**
+     * This validates that this request is not a duplicate. A request is considered a duplicate if the merchantRefNum has already been used in a previous request within the past 90 days. **Note:** This value defaults to true
+     * <p>
+     * Sets the dupCheck and returns a reference to this Builder enabling method chaining.
+     *
+     * @param dupCheck the dupCheck to set
+     * @return a reference to this Builder
+     */
+    public Builder dupCheck(Boolean dupCheck) {
+      this.dupCheck = dupCheck;
+      return this;
+    }
+
+    /**
+     * Get splitpay
+     * <p>
+     * Sets the splitpay and returns a reference to this Builder enabling method chaining.
+     *
+     * @param splitpay the splitpay to set
+     * @return a reference to this Builder
+     */
+    public Builder splitpay(List<Splitpay> splitpay) {
+      this.splitpay = splitpay;
+      return this;
+    }
+
+    /**
+     * Sets the airlineTravelDetails and returns a reference to this Builder enabling method chaining.
+     *
+     * @param airlineTravelDetails the airlineTravelDetails to set
+     * @return a reference to this Builder
+     */
+    public Builder airlineTravelDetails(AirlineTravelDetails airlineTravelDetails) {
+      this.airlineTravelDetails = airlineTravelDetails;
+      return this;
+    }
+
+    /**
+     * Sets the cruiselineTravelDetails and returns a reference to this Builder enabling method chaining.
+     *
+     * @param cruiselineTravelDetails the cruiselineTravelDetails to set
+     * @return a reference to this Builder
+     */
+    public Builder cruiselineTravelDetails(CruiselineTravelDetails cruiselineTravelDetails) {
+      this.cruiselineTravelDetails = cruiselineTravelDetails;
+      return this;
+    }
+
+    /**
+     * Sets the lodgingDetails and returns a reference to this Builder enabling method chaining.
+     *
+     * @param lodgingDetails the lodgingDetails to set
+     * @return a reference to this Builder
+     */
+    public Builder lodgingDetails(LodgingDetails lodgingDetails) {
+      this.lodgingDetails = lodgingDetails;
+      return this;
+    }
+
+    /**
+     * Sets the carRentalDetails and returns a reference to this Builder enabling method chaining.
+     *
+     * @param carRentalDetails the carRentalDetails to set
+     * @return a reference to this Builder
+     */
+    public Builder carRentalDetails(CarRentalDetails carRentalDetails) {
+      this.carRentalDetails = carRentalDetails;
+      return this;
+    }
+
+    /**
+     * Sets the paymentType and returns a reference to this Builder enabling method chaining.
+     *
+     * @param paymentType the paymentType to set
+     * @return a reference to this Builder
      */
     public Builder paymentType(SettlementPaymentType paymentType) {
       this.paymentType = paymentType;
@@ -720,10 +760,12 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Sets the available refund amount.
+     * This is the remaining amount of the refund, in minor units.99. Maximum: 99999999999
+     * <p>
+     * Sets the availableToRefund and returns a reference to this Builder enabling method chaining.
      *
-     * @param availableToRefund Refund amount available.
-     * @return Builder instance.
+     * @param availableToRefund the availableToRefund to set
+     * @return a reference to this Builder
      */
     public Builder availableToRefund(Integer availableToRefund) {
       this.availableToRefund = availableToRefund;
@@ -731,10 +773,12 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Sets the child account number.
+     * This is the child merchant account number. It is returned only if the transaction was processed via a master account.
+     * <p>
+     * Sets the childAccountNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param childAccountNum Child account number.
-     * @return Builder instance.
+     * @param childAccountNum the childAccountNum to set
+     * @return a reference to this Builder
      */
     public Builder childAccountNum(String childAccountNum) {
       this.childAccountNum = childAccountNum;
@@ -742,10 +786,12 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Sets transaction time.
+     * This is the date and time the request was processed. For example: 2014-01-26T10:32:28Z
+     * <p>
+     * Sets the txnTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param txnTime Transaction time.
-     * @return Builder instance.
+     * @param txnTime the txnTime to set
+     * @return a reference to this Builder
      */
     public Builder txnTime(String txnTime) {
       this.txnTime = txnTime;
@@ -753,32 +799,23 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Sets the settlement status.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status Settlement status.
-     * @return Builder instance.
+     * @param status the status to set
+     * @return a reference to this Builder
      */
-    public Builder status(TransactionRequestStatus status) {
+    public Builder status(SettlementStatus status) {
       this.status = status;
       return this;
     }
 
     /**
-     * Sets error details.
+     * An array of integers is returned, displaying the detailed Risk reason codes if your transaction was declined. It is returned only if your account is configured accordingly.
+     * <p>
+     * Sets the riskReasonCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param error Error details.
-     * @return Builder instance.
-     */
-    public Builder error(Error error) {
-      this.error = error;
-      return this;
-    }
-
-    /**
-     * Sets risk reason codes.
-     *
-     * @param riskReasonCode List of risk reason codes.
-     * @return Builder instance.
+     * @param riskReasonCode the riskReasonCode to set
+     * @return a reference to this Builder
      */
     public Builder riskReasonCode(List<Integer> riskReasonCode) {
       this.riskReasonCode = riskReasonCode;
@@ -786,9 +823,9 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code gatewayResponse} and returns a reference to this Builder enabling method chaining.
+     * Sets the gatewayResponse and returns a reference to this Builder enabling method chaining.
      *
-     * @param gatewayResponse the {@code gatewayResponse} to set
+     * @param gatewayResponse the gatewayResponse to set
      * @return a reference to this Builder
      */
     public Builder gatewayResponse(GatewayResponse gatewayResponse) {
@@ -797,9 +834,11 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code gatewayReconciliationId} and returns a reference to this Builder enabling method chaining.
+     * It is the id which is common between paysafe and payment serivce provider.
+     * <p>
+     * Sets the gatewayReconciliationId and returns a reference to this Builder enabling method chaining.
      *
-     * @param gatewayReconciliationId the {@code gatewayReconciliationId} to set
+     * @param gatewayReconciliationId the gatewayReconciliationId to set
      * @return a reference to this Builder
      */
     public Builder gatewayReconciliationId(String gatewayReconciliationId) {
@@ -808,9 +847,11 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code liveMode} and returns a reference to this Builder enabling method chaining.
+     * This flag indicates the envrionment.  - true - Production - false - Non-Production
+     * <p>
+     * Sets the liveMode and returns a reference to this Builder enabling method chaining.
      *
-     * @param liveMode the {@code liveMode} to set
+     * @param liveMode the liveMode to set
      * @return a reference to this Builder
      */
     public Builder liveMode(Boolean liveMode) {
@@ -819,9 +860,11 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code updatedTime} and returns a reference to this Builder enabling method chaining.
+     * ISO 8601 format (UTC). This is the date and time the resource was last updated.
+     * <p>
+     * Sets the updatedTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param updatedTime the {@code updatedTime} to set
+     * @param updatedTime the updatedTime to set
      * @return a reference to this Builder
      */
     public Builder updatedTime(String updatedTime) {
@@ -830,9 +873,11 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Sets the {@code statusTime} and returns a reference to this Builder enabling method chaining.
+     * ISO 8601 format (UTC). This is the date and time the resource was last updated.
+     * <p>
+     * Sets the statusTime and returns a reference to this Builder enabling method chaining.
      *
-     * @param statusTime the {@code statusTime} to set
+     * @param statusTime the statusTime to set
      * @return a reference to this Builder
      */
     public Builder statusTime(String statusTime) {
@@ -841,13 +886,23 @@ public class Settlement extends BaseApiResponse {
     }
 
     /**
-     * Builds a new {@code Settlement} instance using the configured values.
+     * Sets the error and returns a reference to this Builder enabling method chaining.
      *
-     * @return A new Settlement instance.
+     * @param error the error to set
+     * @return a reference to this Builder
+     */
+    public Builder error(Error error) {
+      this.error = error;
+      return this;
+    }
+
+    /**
+     * Returns a Settlement built from the parameters previously set.
+     *
+     * @return a Settlement built with parameters of this Settlement.Builder
      */
     public Settlement build() {
       return new Settlement(this);
     }
   }
 }
-

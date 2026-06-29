@@ -18,7 +18,7 @@ public interface VerificationService {
    * <strong>POST /v1/verifications</strong></p>
    *
    * @param verificationRequest request body
-   * @return details of a verification for a specific payment type.
+   * @return details of a verification for a specific payment type
    * @throws PaysafeSdkException if an error occurs
    */
   Verification createVerification(final VerificationRequest verificationRequest) throws PaysafeSdkException;
@@ -32,8 +32,8 @@ public interface VerificationService {
    * <strong>POST /v1/verifications</strong></p>
    *
    * @param verificationRequest request body
-   * @param requestOptions      Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return details of a verification for a specific payment type.
+   * @param requestOptions      custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return details of a verification for a specific payment type
    * @throws PaysafeSdkException if an error occurs
    */
   Verification createVerification(final VerificationRequest verificationRequest, final RequestOptions requestOptions) throws PaysafeSdkException;
@@ -60,7 +60,7 @@ public interface VerificationService {
    * <strong>GET /v1/verifications/{verificationId}</strong></p>
    *
    * @param verificationId the id of the verification
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return Verification containing the verification details for a specific payment type
    * @throws PaysafeSdkException if an error occurs
    */
@@ -73,11 +73,11 @@ public interface VerificationService {
    * <p>Endpoint:
    * <strong>GET /v1/verifications</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the request when creating verification.
-   * @param endDate        This is the end date in UTC. If null is provided, current date will be used.
-   * @param limit          This is the total number of records to return. If null is provided, default value (10) will be used.
-   * @param offset         This is the starting position, where 0 is the first record. If null is provided, default value (0) will be used.
-   * @param startDate      This is the start date in UTC. If null is provided, default value (30 days before the end date) will be used.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the request when creating verification
+   * @param endDate        the end date in UTC; if null is provided, current date will be used
+   * @param limit          the total number of records to return; if null is provided, default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, default value (30 days before the end date) will be used
    * @return VerificationList object containing a list of verifications and meta information for pagination APIs
    * @throws PaysafeSdkException if an error occurs
    */
@@ -92,12 +92,12 @@ public interface VerificationService {
    * <p>Endpoint:
    * <strong>GET /v1/verifications/{verificationId}</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the request when creating verification.
-   * @param endDate        This is the end date in UTC. If null is provided, current date will be used.
-   * @param limit          This is the total number of records to return. If null is provided, default value (10) will be used.
-   * @param offset         This is the starting position, where 0 is the first record. If null is provided, default value (0) will be used.
-   * @param startDate      This is the start date in UTC. If null is provided, default value (30 days before the end date) will be used.
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the request when creating verification
+   * @param endDate        the end date in UTC; if null is provided, current date will be used
+   * @param limit          the total number of records to return; if null is provided, default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, default value (30 days before the end date) will be used
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return VerificationList object containing a list of verifications and meta information for pagination APIs
    * @throws PaysafeSdkException if an error occurs
    */

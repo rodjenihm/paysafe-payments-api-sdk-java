@@ -1,15 +1,24 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.common.enums.MandateRequestResponseStatusReason;
-import com.paysafe.payments.model.common.enums.MandateRequestStatus;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.common.enums.MandateStatus;
+import com.paysafe.payments.model.common.enums.MandateStatusReason;
+import com.paysafe.payments.model.customer.Customer;
+
+
 
 /**
- * Contains customer bank's mandate details
+ * Customer bank's mandate details for recurring payments
  */
 public class Mandate {
 
@@ -18,15 +27,15 @@ public class Mandate {
   @JsonProperty("reference")
   private String reference;
   @JsonProperty("status")
-  private MandateRequestStatus status;
+  private MandateStatus status;
   @JsonProperty("statusReason")
-  private MandateRequestResponseStatusReason statusReason;
+  private MandateStatusReason statusReason;
 
   public Mandate() {
     super();
   }
 
-  private Mandate(Builder builder) {
+  private Mandate(final Builder builder) {
     setId(builder.id);
     setReference(builder.reference);
     setStatus(builder.status);
@@ -37,13 +46,14 @@ public class Mandate {
     return new Builder();
   }
 
+
   public Mandate id(String id) {
     this.id = id;
     return this;
   }
 
   /**
-   * This is the id of the mandate that got created.
+   * The id of the mandate that got created
    *
    * @return id
    */
@@ -55,13 +65,14 @@ public class Mandate {
     this.id = id;
   }
 
+
   public Mandate reference(String reference) {
     this.reference = reference;
     return this;
   }
 
   /**
-   * This is the identifier of the mandate in the  banking system.
+   * The identifier of the mandate in the banking system
    *
    * @return reference
    */
@@ -73,39 +84,41 @@ public class Mandate {
     this.reference = reference;
   }
 
-  public Mandate status(MandateRequestStatus status) {
+
+  public Mandate status(MandateStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the mandate request response.
+   * Get status
    *
    * @return status
    */
-  public MandateRequestStatus getStatus() {
+  public MandateStatus getStatus() {
     return status;
   }
 
-  public void setStatus(MandateRequestStatus status) {
+  public void setStatus(MandateStatus status) {
     this.status = status;
   }
 
-  public Mandate statusReason(MandateRequestResponseStatusReason statusReason) {
+
+  public Mandate statusReason(MandateStatusReason statusReason) {
     this.statusReason = statusReason;
     return this;
   }
 
   /**
-   * This is the status reason of the mandate request response.
+   * Get statusReason
    *
    * @return statusReason
    */
-  public MandateRequestResponseStatusReason getStatusReason() {
+  public MandateStatusReason getStatusReason() {
     return statusReason;
   }
 
-  public void setStatusReason(MandateRequestResponseStatusReason statusReason) {
+  public void setStatusReason(MandateStatusReason statusReason) {
     this.statusReason = statusReason;
   }
 
@@ -152,21 +165,23 @@ public class Mandate {
   }
 
   /**
-   * {@code Mandate} builder static inner class.
+   * Customer bank's mandate details for recurring payments builder static inner class.
    */
   public static final class Builder {
     private String id;
     private String reference;
-    private MandateRequestStatus status;
-    private MandateRequestResponseStatusReason statusReason;
+    private MandateStatus status;
+    private MandateStatusReason statusReason;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
+     * The id of the mandate that got created
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -175,9 +190,11 @@ public class Mandate {
     }
 
     /**
-     * Sets the {@code reference} and returns a reference to this Builder enabling method chaining.
+     * The identifier of the mandate in the banking system
+     * <p>
+     * Sets the reference and returns a reference to this Builder enabling method chaining.
      *
-     * @param reference the {@code reference} to set
+     * @param reference the reference to set
      * @return a reference to this Builder
      */
     public Builder reference(String reference) {
@@ -186,35 +203,34 @@ public class Mandate {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
-    public Builder status(MandateRequestStatus status) {
+    public Builder status(MandateStatus status) {
       this.status = status;
       return this;
     }
 
     /**
-     * Sets the {@code statusReason} and returns a reference to this Builder enabling method chaining.
+     * Sets the statusReason and returns a reference to this Builder enabling method chaining.
      *
-     * @param statusReason the {@code statusReason} to set
+     * @param statusReason the statusReason to set
      * @return a reference to this Builder
      */
-    public Builder statusReason(MandateRequestResponseStatusReason statusReason) {
+    public Builder statusReason(MandateStatusReason statusReason) {
       this.statusReason = statusReason;
       return this;
     }
 
     /**
-     * Returns a {@code Mandate} built from the parameters previously set.
+     * Returns a Mandate built from the parameters previously set.
      *
-     * @return a {@code Mandate} built with parameters of this {@code Mandate.Builder}
+     * @return a Mandate built with parameters of this Mandate.Builder
      */
     public Mandate build() {
       return new Mandate(this);
     }
   }
 }
-

@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.applepay.enums;
 
@@ -6,12 +6,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This is the account status.
+ * The payment data type
  */
 public enum PaymentDataType {
+
   EMV("EMV"),
 
-  THREED_SECURE("3DSecure");
+  _3_D_SECURE("3DSecure");
 
   private final String value;
 

@@ -1,0 +1,42 @@
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
+
+package com.paysafe.payments.model.lpm.enums;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+/**
+ * Identifies whether the transaction was processed via ACH or RTP network.
+ */
+public enum PayByBankScheme {
+
+  ACH("ACH"),
+
+  RTP("RTP");
+
+  private final String value;
+
+  PayByBankScheme(String value) {
+    this.value = value;
+  }
+
+  @JsonCreator
+  public static PayByBankScheme fromValue(String value) {
+    for (PayByBankScheme b : PayByBankScheme.values()) {
+      if (b.value.equalsIgnoreCase(value)) {
+        return b;
+      }
+    }
+    return null;
+  }
+
+  @JsonValue
+  public String getValue() {
+    return value;
+  }
+
+  @Override
+  public String toString() {
+    return String.valueOf(value);
+  }
+}

@@ -1,13 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.verification;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.Meta;
+
+
 
 /**
  * VerificationList
@@ -15,7 +21,7 @@ import com.paysafe.payments.model.common.Meta;
 public class VerificationList {
 
   @JsonProperty("verifications")
-  private List<Verification> verifications = null;
+  private List<Verification> verifications;
   @JsonProperty("meta")
   private Meta meta;
 
@@ -23,7 +29,7 @@ public class VerificationList {
     super();
   }
 
-  private VerificationList(Builder builder) {
+  private VerificationList(final Builder builder) {
     setVerifications(builder.verifications);
     setMeta(builder.meta);
   }
@@ -31,6 +37,7 @@ public class VerificationList {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public VerificationList verifications(List<Verification> verifications) {
     this.verifications = verifications;
@@ -54,7 +61,7 @@ public class VerificationList {
   }
 
   /**
-   * An array of Verifications.
+   * Get verifications
    *
    * @return verifications
    */
@@ -66,13 +73,14 @@ public class VerificationList {
     this.verifications = verifications;
   }
 
+
   public VerificationList meta(Meta meta) {
     this.meta = meta;
     return this;
   }
 
   /**
-   * Contains meta info for the pagination APIs
+   * Get meta
    *
    * @return meta
    */
@@ -123,7 +131,7 @@ public class VerificationList {
   }
 
   /**
-   * {@code VerificationList} builder static inner class.
+   * VerificationList builder static inner class.
    */
   public static final class Builder {
     private List<Verification> verifications;
@@ -133,9 +141,9 @@ public class VerificationList {
     }
 
     /**
-     * Sets the {@code verifications} and returns a reference to this Builder enabling method chaining.
+     * Sets the verifications and returns a reference to this Builder enabling method chaining.
      *
-     * @param verifications the {@code verifications} to set
+     * @param verifications the verifications to set
      * @return a reference to this Builder
      */
     public Builder verifications(List<Verification> verifications) {
@@ -144,9 +152,9 @@ public class VerificationList {
     }
 
     /**
-     * Sets the {@code meta} and returns a reference to this Builder enabling method chaining.
+     * Sets the meta and returns a reference to this Builder enabling method chaining.
      *
-     * @param meta the {@code meta} to set
+     * @param meta the meta to set
      * @return a reference to this Builder
      */
     public Builder meta(Meta meta) {
@@ -155,13 +163,12 @@ public class VerificationList {
     }
 
     /**
-     * Returns a {@code VerificationList} built from the parameters previously set.
+     * Returns a VerificationList built from the parameters previously set.
      *
-     * @return a {@code VerificationList} built with parameters of this {@code VerificationList.Builder}
+     * @return a VerificationList built with parameters of this VerificationList.Builder
      */
     public VerificationList build() {
       return new VerificationList(this);
     }
   }
 }
-

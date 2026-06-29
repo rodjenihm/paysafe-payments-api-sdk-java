@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSEl
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm.enums;
 
@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets bankNameCodes
+ * Gets or Sets bankNameCodes.
  */
 public enum BankNameCode {
+
   ACERTEMOS("ACERTEMOS"),
 
   ACCIONES_Y_VALORES("ACCIONES_Y_VALORES"),

@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm.enums;
 
@@ -6,25 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This is the type of fraudulent transaction that was carried out with the intention of financial gain. Possible values for the fraud type:
- * <ul>
- * <li> ACCOUNT_TAKEOVER - Account Takeover   </li>
- * <li> BAD_DEPOSIT - Proceeds of Bad Deposit   </li>
- * <li> FIRST_PARTY_FRAUD  </li>
- * <li> First Party Fraud  </li>
- * <li> INTERCEPTED_PAYMENT  </li>
- * <li> Intercepted Transfer   </li>
- * <li> MERCHANT_DISPUTE - Merchant Dispute  </li>
- * <li> FAMILY_FRIEND_FRAUD - Family/Friendly Fraud  </li>
- * <li> BUSINESS_EMAIL_COMPROMISE - Business Email Compromise  </li>
- * <li> VENDOR_EMAIL_COMPROMISE - Vendor Email Compromise  </li>
- * <li> MALWARE - Malware  </li>
- * <li> APPLICATION_FRAUD - Application Fraud  </li>
- * <li> FRAUD_BUSINESS - Fraudulent Business  </li>
- * <li> OTHER - Other fraud type </li>
- * </ul>
+ * This is the type of fraudulent transaction that was carried out with the intention of financial gain. Possible values for the fraud type: - ACCOUNT_TAKEOVER - Account Takeover - BAD_DEPOSIT - Proceeds of Bad Deposit - FIRST_PARTY_FRAUD - First Party Fraud - INTERCEPTED_PAYMENT - Intercepted Transfer - MERCHANT_DISPUTE - Merchant Dispute - FAMILY_FRIEND_FRAUD - Family/Friendly Fraud - BUSINESS_EMAIL_COMPROMISE - Business Email Compromise - VENDOR_EMAIL_COMPROMISE - Vendor Email Compromise - MALWARE - Malware - APPLICATION_FRAUD - Application Fraud - FRAUD_BUSINESS - Fraudulent Business - OTHER - Other fraud type
  */
 public enum InteracFraudType {
+
   ACCOUNT_TAKEOVER("ACCOUNT_TAKEOVER"),
 
   BAD_DEPOSIT("BAD_DEPOSIT"),

@@ -1,69 +1,41 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.threeds;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.card.enums.ColorDepthBits;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.card.enums.BrowserColorDepth;
+
+
 
 /**
- * These are the browser details
- * <ul>
- *   <li>
- *     <b>acceptHeader:</b> This is the exact content of the HTTP accept header as sent to the 3DS Requestor from the cardholder’s browser.
- *   </li>
- *   <li>
- *     <b>colorDepthBits:</b> TThis is the bit depth of the color palette for displaying images, in bits per pixel.  <br>
- *     <i>Allowed values: 1, 4, 5, 15, 24, 32, 48</i>
- *   </li>
- *   <li>
- *     <b>customerIp:</b> This is the customer's IP address. Valid Ip address format are IPv4 / IPv6.
- *   </li>
- *   <li>
- *     <b>javaEnabled:</b> This indicates whether the cardholder's browser is able to execute Java.
- *   </li>
- *   <li>
- *     <b>javascriptEnabled:</b> This indicates whether the cardholder's browser is able to execute JavaScript.
- *   </li>
- *   <li>
- *     <b>language:</b> This is the language in the browser.
- *   </li>
- *   <li>
- *     <b>screenHeight:</b> This is the total height of the cardholder’s screen in pixels.
- *   </li>
- *   <li>
- *     <b>screenWidth:</b> This is the total width of the cardholder’s screen in pixels.
- *   </li>
- *   <li>
- *     <b>timezoneOffset:</b> This is the time-zone offset in minutes between UTC and the local time of the cardholder's browser.
- *   </li>
- *   <li>
- *     <b>userAgent:</b> This is the User-Agent header from the customer's browser.  <br>
- *     For example: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36
- *   </li>
- * </ul>
+ * Details about the customer's browser.
  */
 public class BrowserDetails {
 
   @JsonProperty("acceptHeader")
   private String acceptHeader;
   @JsonProperty("colorDepthBits")
-  private ColorDepthBits colorDepthBits;
-  @JsonProperty("customerIp")
-  private String customerIp;
+  private BrowserColorDepth colorDepthBits;
   @JsonProperty("javaEnabled")
   private Boolean javaEnabled;
-  @JsonProperty("javascriptEnabled")
-  private Boolean javascriptEnabled;
+  @JsonProperty("javaScriptEnabled")
+  private Boolean javaScriptEnabled;
   @JsonProperty("language")
   private String language;
   @JsonProperty("screenHeight")
   private Integer screenHeight;
   @JsonProperty("screenWidth")
   private Integer screenWidth;
-  @JsonProperty("timezoneOffset")
-  private Integer timezoneOffset;
+  @JsonProperty("timeZoneOffset")
+  private Integer timeZoneOffset;
   @JsonProperty("userAgent")
   private String userAgent;
 
@@ -71,22 +43,22 @@ public class BrowserDetails {
     super();
   }
 
-  private BrowserDetails(Builder builder) {
+  private BrowserDetails(final Builder builder) {
     setAcceptHeader(builder.acceptHeader);
     setColorDepthBits(builder.colorDepthBits);
-    setCustomerIp(builder.customerIp);
     setJavaEnabled(builder.javaEnabled);
-    setJavascriptEnabled(builder.javascriptEnabled);
+    setJavaScriptEnabled(builder.javaScriptEnabled);
     setLanguage(builder.language);
     setScreenHeight(builder.screenHeight);
     setScreenWidth(builder.screenWidth);
-    setTimezoneOffset(builder.timezoneOffset);
+    setTimeZoneOffset(builder.timeZoneOffset);
     setUserAgent(builder.userAgent);
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public BrowserDetails acceptHeader(String acceptHeader) {
     this.acceptHeader = acceptHeader;
@@ -106,41 +78,25 @@ public class BrowserDetails {
     this.acceptHeader = acceptHeader;
   }
 
-  public BrowserDetails colorDepthBits(ColorDepthBits colorDepthBits) {
+
+  public BrowserDetails colorDepthBits(BrowserColorDepth colorDepthBits) {
     this.colorDepthBits = colorDepthBits;
     return this;
   }
 
   /**
-   * This is the bit depth of the color palette for displaying images, in bits per pixel.
+   * Get colorDepthBits
    *
    * @return colorDepthBits
    */
-  public ColorDepthBits getColorDepthBits() {
+  public BrowserColorDepth getColorDepthBits() {
     return colorDepthBits;
   }
 
-  public void setColorDepthBits(ColorDepthBits colorDepthBits) {
+  public void setColorDepthBits(BrowserColorDepth colorDepthBits) {
     this.colorDepthBits = colorDepthBits;
   }
 
-  public BrowserDetails customerIp(String customerIp) {
-    this.customerIp = customerIp;
-    return this;
-  }
-
-  /**
-   * This is the customer's IP address. Valid Ip address format are IPv4 / IPv6.
-   *
-   * @return customerIp
-   */
-  public String getCustomerIp() {
-    return customerIp;
-  }
-
-  public void setCustomerIp(String customerIp) {
-    this.customerIp = customerIp;
-  }
 
   public BrowserDetails javaEnabled(Boolean javaEnabled) {
     this.javaEnabled = javaEnabled;
@@ -148,7 +104,7 @@ public class BrowserDetails {
   }
 
   /**
-   * This indicates whether the cardholder's browser is able to execute Java.
+   * Indicates if Java is enabled in the browser
    *
    * @return javaEnabled
    */
@@ -160,23 +116,25 @@ public class BrowserDetails {
     this.javaEnabled = javaEnabled;
   }
 
-  public BrowserDetails javascriptEnabled(Boolean javascriptEnabled) {
-    this.javascriptEnabled = javascriptEnabled;
+
+  public BrowserDetails javaScriptEnabled(Boolean javaScriptEnabled) {
+    this.javaScriptEnabled = javaScriptEnabled;
     return this;
   }
 
   /**
-   * This indicates whether the cardholder's browser is able to execute JavaScript.
+   * Indicates if JavaScript is enabled in the browser
    *
-   * @return javascriptEnabled
+   * @return javaScriptEnabled
    */
-  public Boolean getJavascriptEnabled() {
-    return javascriptEnabled;
+  public Boolean getJavaScriptEnabled() {
+    return javaScriptEnabled;
   }
 
-  public void setJavascriptEnabled(Boolean javascriptEnabled) {
-    this.javascriptEnabled = javascriptEnabled;
+  public void setJavaScriptEnabled(Boolean javaScriptEnabled) {
+    this.javaScriptEnabled = javaScriptEnabled;
   }
+
 
   public BrowserDetails language(String language) {
     this.language = language;
@@ -184,7 +142,7 @@ public class BrowserDetails {
   }
 
   /**
-   * This is the language in the browser.
+   * The browser language
    *
    * @return language
    */
@@ -196,14 +154,14 @@ public class BrowserDetails {
     this.language = language;
   }
 
+
   public BrowserDetails screenHeight(Integer screenHeight) {
     this.screenHeight = screenHeight;
     return this;
   }
 
   /**
-   * This is the total height of the cardholder’s screen in pixels.  <br>
-   * Maximum: 999999
+   * The screen height in pixels
    *
    * @return screenHeight
    */
@@ -215,14 +173,14 @@ public class BrowserDetails {
     this.screenHeight = screenHeight;
   }
 
+
   public BrowserDetails screenWidth(Integer screenWidth) {
     this.screenWidth = screenWidth;
     return this;
   }
 
   /**
-   * This is the total width of the cardholder’s screen in pixels.  <br>
-   * Maximum: 999999
+   * The screen width in pixels
    *
    * @return screenWidth
    */
@@ -234,24 +192,25 @@ public class BrowserDetails {
     this.screenWidth = screenWidth;
   }
 
-  public BrowserDetails timezoneOffset(Integer timezoneOffset) {
-    this.timezoneOffset = timezoneOffset;
+
+  public BrowserDetails timeZoneOffset(Integer timeZoneOffset) {
+    this.timeZoneOffset = timeZoneOffset;
     return this;
   }
 
   /**
-   * This is the time-zone offset in minutes between UTC and the local time of the cardholder's browser.  <br>
-   * Maximum: 99999
+   * This is the date and time the request was processed. The ISO 8601 date format is expected, i.e., YYYY-MM-DD-THH:MM:SSZ.
    *
-   * @return timezoneOffset
+   * @return timeZoneOffset
    */
-  public Integer getTimezoneOffset() {
-    return timezoneOffset;
+  public Integer getTimeZoneOffset() {
+    return timeZoneOffset;
   }
 
-  public void setTimezoneOffset(Integer timezoneOffset) {
-    this.timezoneOffset = timezoneOffset;
+  public void setTimeZoneOffset(Integer timeZoneOffset) {
+    this.timeZoneOffset = timeZoneOffset;
   }
+
 
   public BrowserDetails userAgent(String userAgent) {
     this.userAgent = userAgent;
@@ -259,9 +218,7 @@ public class BrowserDetails {
   }
 
   /**
-   * This is the User-Agent header from the customer's browser. For example: <br>
-   * Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125
-   * Safari/537.36
+   * The browser user agent string
    *
    * @return userAgent
    */
@@ -284,20 +241,18 @@ public class BrowserDetails {
     BrowserDetails browserDetails = (BrowserDetails) o;
     return Objects.equals(this.acceptHeader, browserDetails.acceptHeader) &&
         Objects.equals(this.colorDepthBits, browserDetails.colorDepthBits) &&
-        Objects.equals(this.customerIp, browserDetails.customerIp) &&
         Objects.equals(this.javaEnabled, browserDetails.javaEnabled) &&
-        Objects.equals(this.javascriptEnabled, browserDetails.javascriptEnabled) &&
+        Objects.equals(this.javaScriptEnabled, browserDetails.javaScriptEnabled) &&
         Objects.equals(this.language, browserDetails.language) &&
         Objects.equals(this.screenHeight, browserDetails.screenHeight) &&
         Objects.equals(this.screenWidth, browserDetails.screenWidth) &&
-        Objects.equals(this.timezoneOffset, browserDetails.timezoneOffset) &&
+        Objects.equals(this.timeZoneOffset, browserDetails.timeZoneOffset) &&
         Objects.equals(this.userAgent, browserDetails.userAgent);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(acceptHeader, colorDepthBits, customerIp, javaEnabled, javascriptEnabled, language,
-        screenHeight, screenWidth, timezoneOffset, userAgent);
+    return Objects.hash(acceptHeader, colorDepthBits, javaEnabled, javaScriptEnabled, language, screenHeight, screenWidth, timeZoneOffset, userAgent);
   }
 
   @Override
@@ -306,13 +261,12 @@ public class BrowserDetails {
     return "class BrowserDetails {\n"
         + "    acceptHeader: " + toIndentedString(acceptHeader) + "\n"
         + "    colorDepthBits: " + toIndentedString(colorDepthBits) + "\n"
-        + "    customerIp: " + toIndentedString(customerIp) + "\n"
         + "    javaEnabled: " + toIndentedString(javaEnabled) + "\n"
-        + "    javascriptEnabled: " + toIndentedString(javascriptEnabled) + "\n"
+        + "    javaScriptEnabled: " + toIndentedString(javaScriptEnabled) + "\n"
         + "    language: " + toIndentedString(language) + "\n"
         + "    screenHeight: " + toIndentedString(screenHeight) + "\n"
         + "    screenWidth: " + toIndentedString(screenWidth) + "\n"
-        + "    timezoneOffset: " + toIndentedString(timezoneOffset) + "\n"
+        + "    timeZoneOffset: " + toIndentedString(timeZoneOffset) + "\n"
         + "    userAgent: " + toIndentedString(userAgent) + "\n"
         + "}";
   }
@@ -329,27 +283,28 @@ public class BrowserDetails {
   }
 
   /**
-   * {@code BrowserDetails} builder static inner class.
+   * Details about the customer's browser. builder static inner class.
    */
   public static final class Builder {
     private String acceptHeader;
-    private ColorDepthBits colorDepthBits;
-    private String customerIp;
+    private BrowserColorDepth colorDepthBits;
     private Boolean javaEnabled;
-    private Boolean javascriptEnabled;
+    private Boolean javaScriptEnabled;
     private String language;
     private Integer screenHeight;
     private Integer screenWidth;
-    private Integer timezoneOffset;
+    private Integer timeZoneOffset;
     private String userAgent;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code acceptHeader} and returns a reference to this Builder enabling method chaining.
+     * This is the exact content of the HTTP accept header as sent to the 3DS Requestor from the cardholder’s browser.
+     * <p>
+     * Sets the acceptHeader and returns a reference to this Builder enabling method chaining.
      *
-     * @param acceptHeader the {@code acceptHeader} to set
+     * @param acceptHeader the acceptHeader to set
      * @return a reference to this Builder
      */
     public Builder acceptHeader(String acceptHeader) {
@@ -358,31 +313,22 @@ public class BrowserDetails {
     }
 
     /**
-     * Sets the {@code colorDepthBits} and returns a reference to this Builder enabling method chaining.
+     * Sets the colorDepthBits and returns a reference to this Builder enabling method chaining.
      *
-     * @param colorDepthBits the {@code colorDepthBits} to set
+     * @param colorDepthBits the colorDepthBits to set
      * @return a reference to this Builder
      */
-    public Builder colorDepthBits(ColorDepthBits colorDepthBits) {
+    public Builder colorDepthBits(BrowserColorDepth colorDepthBits) {
       this.colorDepthBits = colorDepthBits;
       return this;
     }
 
     /**
-     * Sets the {@code customerIp} and returns a reference to this Builder enabling method chaining.
+     * Indicates if Java is enabled in the browser
+     * <p>
+     * Sets the javaEnabled and returns a reference to this Builder enabling method chaining.
      *
-     * @param customerIp the {@code customerIp} to set
-     * @return a reference to this Builder
-     */
-    public Builder customerIp(String customerIp) {
-      this.customerIp = customerIp;
-      return this;
-    }
-
-    /**
-     * Sets the {@code javaEnabled} and returns a reference to this Builder enabling method chaining.
-     *
-     * @param javaEnabled the {@code javaEnabled} to set
+     * @param javaEnabled the javaEnabled to set
      * @return a reference to this Builder
      */
     public Builder javaEnabled(Boolean javaEnabled) {
@@ -391,20 +337,24 @@ public class BrowserDetails {
     }
 
     /**
-     * Sets the {@code javascriptEnabled} and returns a reference to this Builder enabling method chaining.
+     * Indicates if JavaScript is enabled in the browser
+     * <p>
+     * Sets the javaScriptEnabled and returns a reference to this Builder enabling method chaining.
      *
-     * @param javascriptEnabled the {@code javascriptEnabled} to set
+     * @param javaScriptEnabled the javaScriptEnabled to set
      * @return a reference to this Builder
      */
-    public Builder javascriptEnabled(Boolean javascriptEnabled) {
-      this.javascriptEnabled = javascriptEnabled;
+    public Builder javaScriptEnabled(Boolean javaScriptEnabled) {
+      this.javaScriptEnabled = javaScriptEnabled;
       return this;
     }
 
     /**
-     * Sets the {@code language} and returns a reference to this Builder enabling method chaining.
+     * The browser language
+     * <p>
+     * Sets the language and returns a reference to this Builder enabling method chaining.
      *
-     * @param language the {@code language} to set
+     * @param language the language to set
      * @return a reference to this Builder
      */
     public Builder language(String language) {
@@ -413,9 +363,11 @@ public class BrowserDetails {
     }
 
     /**
-     * Sets the {@code screenHeight} and returns a reference to this Builder enabling method chaining.
+     * The screen height in pixels
+     * <p>
+     * Sets the screenHeight and returns a reference to this Builder enabling method chaining.
      *
-     * @param screenHeight the {@code screenHeight} to set
+     * @param screenHeight the screenHeight to set
      * @return a reference to this Builder
      */
     public Builder screenHeight(Integer screenHeight) {
@@ -424,9 +376,11 @@ public class BrowserDetails {
     }
 
     /**
-     * Sets the {@code screenWidth} and returns a reference to this Builder enabling method chaining.
+     * The screen width in pixels
+     * <p>
+     * Sets the screenWidth and returns a reference to this Builder enabling method chaining.
      *
-     * @param screenWidth the {@code screenWidth} to set
+     * @param screenWidth the screenWidth to set
      * @return a reference to this Builder
      */
     public Builder screenWidth(Integer screenWidth) {
@@ -435,20 +389,24 @@ public class BrowserDetails {
     }
 
     /**
-     * Sets the {@code timezoneOffset} and returns a reference to this Builder enabling method chaining.
+     * This is the date and time the request was processed. The ISO 8601 date format is expected, i.e., YYYY-MM-DD-THH:MM:SSZ.
+     * <p>
+     * Sets the timeZoneOffset and returns a reference to this Builder enabling method chaining.
      *
-     * @param timezoneOffset the {@code timezoneOffset} to set
+     * @param timeZoneOffset the timeZoneOffset to set
      * @return a reference to this Builder
      */
-    public Builder timezoneOffset(Integer timezoneOffset) {
-      this.timezoneOffset = timezoneOffset;
+    public Builder timeZoneOffset(Integer timeZoneOffset) {
+      this.timeZoneOffset = timeZoneOffset;
       return this;
     }
 
     /**
-     * Sets the {@code userAgent} and returns a reference to this Builder enabling method chaining.
+     * The browser user agent string
+     * <p>
+     * Sets the userAgent and returns a reference to this Builder enabling method chaining.
      *
-     * @param userAgent the {@code userAgent} to set
+     * @param userAgent the userAgent to set
      * @return a reference to this Builder
      */
     public Builder userAgent(String userAgent) {
@@ -457,13 +415,12 @@ public class BrowserDetails {
     }
 
     /**
-     * Returns a {@code BrowserDetails} built from the parameters previously set.
+     * Returns a BrowserDetails built from the parameters previously set.
      *
-     * @return a {@code BrowserDetails} built with parameters of this {@code BrowserDetails.Builder}
+     * @return a BrowserDetails built with parameters of this BrowserDetails.Builder
      */
     public BrowserDetails build() {
       return new BrowserDetails(this);
     }
   }
 }
-

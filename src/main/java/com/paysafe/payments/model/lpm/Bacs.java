@@ -1,11 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.Mandate;
+
+
 
 /**
  * Details of the bacs account to be used for the transaction.
@@ -29,7 +37,7 @@ public class Bacs {
     super();
   }
 
-  private Bacs(Builder builder) {
+  private Bacs(final Builder builder) {
     setNickName(builder.nickName);
     setAccountHolderName(builder.accountHolderName);
     setAccountNumber(builder.accountNumber);
@@ -41,6 +49,7 @@ public class Bacs {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public Bacs nickName(String nickName) {
     this.nickName = nickName;
@@ -60,6 +69,7 @@ public class Bacs {
     this.nickName = nickName;
   }
 
+
   public Bacs accountHolderName(String accountHolderName) {
     this.accountHolderName = accountHolderName;
     return this;
@@ -77,6 +87,7 @@ public class Bacs {
   public void setAccountHolderName(String accountHolderName) {
     this.accountHolderName = accountHolderName;
   }
+
 
   public Bacs accountNumber(String accountNumber) {
     this.accountNumber = accountNumber;
@@ -96,13 +107,14 @@ public class Bacs {
     this.accountNumber = accountNumber;
   }
 
+
   public Bacs sortCode(String sortCode) {
     this.sortCode = sortCode;
     return this;
   }
 
   /**
-   * This is the 6-digit sort code that identifies the financial institution and branch of the customer’s bank.
+   * This is the 6-digit sort code that identifies the financial institution and branch of the customer's bank.
    *
    * @return sortCode
    */
@@ -114,13 +126,14 @@ public class Bacs {
     this.sortCode = sortCode;
   }
 
+
   public Bacs mandate(Mandate mandate) {
     this.mandate = mandate;
     return this;
   }
 
   /**
-   * Contains customer bank's mandate details
+   * Get mandate
    *
    * @return mandate
    */
@@ -132,13 +145,14 @@ public class Bacs {
     this.mandate = mandate;
   }
 
+
   public Bacs lastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
     return this;
   }
 
   /**
-   * These are the last two digits of the account  number.
+   * These are the last two digits of the account number.
    *
    * @return lastDigits
    */
@@ -197,7 +211,7 @@ public class Bacs {
   }
 
   /**
-   * {@code Bacs} builder static inner class.
+   * Details of the bacs account to be used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String nickName;
@@ -211,9 +225,11 @@ public class Bacs {
     }
 
     /**
-     * Sets the {@code nickName} and returns a reference to this Builder enabling method chaining.
+     * This is an alias for this bank account.
+     * <p>
+     * Sets the nickName and returns a reference to this Builder enabling method chaining.
      *
-     * @param nickName the {@code nickName} to set
+     * @param nickName the nickName to set
      * @return a reference to this Builder
      */
     public Builder nickName(String nickName) {
@@ -222,9 +238,11 @@ public class Bacs {
     }
 
     /**
-     * Sets the {@code accountHolderName} and returns a reference to this Builder enabling method chaining.
+     * This is the name of the customer or company that owns the bank account.
+     * <p>
+     * Sets the accountHolderName and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountHolderName the {@code accountHolderName} to set
+     * @param accountHolderName the accountHolderName to set
      * @return a reference to this Builder
      */
     public Builder accountHolderName(String accountHolderName) {
@@ -233,9 +251,11 @@ public class Bacs {
     }
 
     /**
-     * Sets the {@code accountNumber} and returns a reference to this Builder enabling method chaining.
+     * This is the bank account number.
+     * <p>
+     * Sets the accountNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountNumber the {@code accountNumber} to set
+     * @param accountNumber the accountNumber to set
      * @return a reference to this Builder
      */
     public Builder accountNumber(String accountNumber) {
@@ -244,9 +264,11 @@ public class Bacs {
     }
 
     /**
-     * Sets the {@code sortCode} and returns a reference to this Builder enabling method chaining.
+     * This is the 6-digit sort code that identifies the financial institution and branch of the customer's bank.
+     * <p>
+     * Sets the sortCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param sortCode the {@code sortCode} to set
+     * @param sortCode the sortCode to set
      * @return a reference to this Builder
      */
     public Builder sortCode(String sortCode) {
@@ -255,9 +277,9 @@ public class Bacs {
     }
 
     /**
-     * Sets the {@code mandate} and returns a reference to this Builder enabling method chaining.
+     * Sets the mandate and returns a reference to this Builder enabling method chaining.
      *
-     * @param mandate the {@code mandate} to set
+     * @param mandate the mandate to set
      * @return a reference to this Builder
      */
     public Builder mandate(Mandate mandate) {
@@ -266,9 +288,11 @@ public class Bacs {
     }
 
     /**
-     * Sets the {@code lastDigits} and returns a reference to this Builder enabling method chaining.
+     * These are the last two digits of the account number.
+     * <p>
+     * Sets the lastDigits and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastDigits the {@code lastDigits} to set
+     * @param lastDigits the lastDigits to set
      * @return a reference to this Builder
      */
     public Builder lastDigits(String lastDigits) {
@@ -277,13 +301,12 @@ public class Bacs {
     }
 
     /**
-     * Returns a {@code Bacs} built from the parameters previously set.
+     * Returns a Bacs built from the parameters previously set.
      *
-     * @return a {@code Bacs} built with parameters of this {@code Bacs.Builder}
+     * @return a Bacs built with parameters of this Bacs.Builder
      */
     public Bacs build() {
       return new Bacs(this);
     }
   }
 }
-

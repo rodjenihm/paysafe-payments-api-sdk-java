@@ -3,7 +3,6 @@
 package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.buildQueryParameters;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
@@ -44,7 +43,7 @@ public class SettlementServiceImpl implements SettlementService {
       throws PaysafeSdkException {
     final String path = String.format(PAYMENT_SETTLEMENT_ENDPOINT, paymentId);
     PaysafeApiResponse response = paysafeApiClient.executePost(path, settlementRequest, requestOptions);
-    return processResponse(response, Settlement.class);
+    return paysafeApiClient.processResponse(response, Settlement.class);
   }
 
   /**
@@ -62,7 +61,7 @@ public class SettlementServiceImpl implements SettlementService {
   public Settlement getSettlementById(final String settlementId, final RequestOptions requestOptions) throws PaysafeSdkException {
     final String endpoint = String.format("%s/%s", SETTLEMENT_ENDPOINT, settlementId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(endpoint, requestOptions);
-    return processResponse(response, Settlement.class);
+    return paysafeApiClient.processResponse(response, Settlement.class);
   }
 
   /**
@@ -85,7 +84,7 @@ public class SettlementServiceImpl implements SettlementService {
     final String path = String.format("%s%s", SETTLEMENT_ENDPOINT, buildQueryParameters(merchantRefNum, endDate,
         limit, offset, startDate, null, null));
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, SettlementList.class);
+    return paysafeApiClient.processResponse(response, SettlementList.class);
   }
 
   /**
@@ -104,6 +103,6 @@ public class SettlementServiceImpl implements SettlementService {
       throws PaysafeSdkException {
     final String path = String.format("%s/%s", SETTLEMENT_ENDPOINT, settlementId);
     PaysafeApiResponse response = paysafeApiClient.executePut(path, cancelRequest, requestOptions);
-    return processResponse(response, CancelResponse.class);
+    return paysafeApiClient.processResponse(response, CancelResponse.class);
   }
 }

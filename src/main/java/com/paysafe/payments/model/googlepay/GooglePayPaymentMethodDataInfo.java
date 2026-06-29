@@ -1,13 +1,23 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.googlepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.card.Card;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * GooglePayPaymentMethodDataInfo
+ * Payment method information for Google Pay
  */
 public class GooglePayPaymentMethodDataInfo {
 
@@ -22,7 +32,7 @@ public class GooglePayPaymentMethodDataInfo {
     super();
   }
 
-  private GooglePayPaymentMethodDataInfo(Builder builder) {
+  private GooglePayPaymentMethodDataInfo(final Builder builder) {
     setBillingAddress(builder.billingAddress);
     setCardDetails(builder.cardDetails);
     setCardNetwork(builder.cardNetwork);
@@ -31,6 +41,7 @@ public class GooglePayPaymentMethodDataInfo {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public GooglePayPaymentMethodDataInfo billingAddress(GooglePayBillingAddress billingAddress) {
     this.billingAddress = billingAddress;
@@ -50,13 +61,14 @@ public class GooglePayPaymentMethodDataInfo {
     this.billingAddress = billingAddress;
   }
 
+
   public GooglePayPaymentMethodDataInfo cardDetails(Integer cardDetails) {
     this.cardDetails = cardDetails;
     return this;
   }
 
   /**
-   * Get cardDetails
+   * Card details
    *
    * @return cardDetails
    */
@@ -68,13 +80,14 @@ public class GooglePayPaymentMethodDataInfo {
     this.cardDetails = cardDetails;
   }
 
+
   public GooglePayPaymentMethodDataInfo cardNetwork(String cardNetwork) {
     this.cardNetwork = cardNetwork;
     return this;
   }
 
   /**
-   * This describes the type of card used for the request.
+   * This describes the type of card used for the request
    *
    * @return cardNetwork
    */
@@ -127,7 +140,7 @@ public class GooglePayPaymentMethodDataInfo {
   }
 
   /**
-   * {@code GooglePayPaymentMethodDataInfo} builder static inner class.
+   * Payment method information for Google Pay builder static inner class.
    */
   public static final class Builder {
     private GooglePayBillingAddress billingAddress;
@@ -138,9 +151,9 @@ public class GooglePayPaymentMethodDataInfo {
     }
 
     /**
-     * Sets the {@code billingAddress} and returns a reference to this Builder enabling method chaining.
+     * Sets the billingAddress and returns a reference to this Builder enabling method chaining.
      *
-     * @param billingAddress the {@code billingAddress} to set
+     * @param billingAddress the billingAddress to set
      * @return a reference to this Builder
      */
     public Builder billingAddress(GooglePayBillingAddress billingAddress) {
@@ -149,9 +162,11 @@ public class GooglePayPaymentMethodDataInfo {
     }
 
     /**
-     * Sets the {@code cardDetails} and returns a reference to this Builder enabling method chaining.
+     * Card details
+     * <p>
+     * Sets the cardDetails and returns a reference to this Builder enabling method chaining.
      *
-     * @param cardDetails the {@code cardDetails} to set
+     * @param cardDetails the cardDetails to set
      * @return a reference to this Builder
      */
     public Builder cardDetails(Integer cardDetails) {
@@ -160,9 +175,11 @@ public class GooglePayPaymentMethodDataInfo {
     }
 
     /**
-     * Sets the {@code cardNetwork} and returns a reference to this Builder enabling method chaining.
+     * This describes the type of card used for the request
+     * <p>
+     * Sets the cardNetwork and returns a reference to this Builder enabling method chaining.
      *
-     * @param cardNetwork the {@code cardNetwork} to set
+     * @param cardNetwork the cardNetwork to set
      * @return a reference to this Builder
      */
     public Builder cardNetwork(String cardNetwork) {
@@ -171,13 +188,12 @@ public class GooglePayPaymentMethodDataInfo {
     }
 
     /**
-     * Returns a {@code GooglePayPaymentMethodDataInfo} built from the parameters previously set.
+     * Returns a GooglePayPaymentMethodDataInfo built from the parameters previously set.
      *
-     * @return a {@code GooglePayPaymentMethodDataInfo} built with parameters of this {@code GooglePayPaymentMethodDataInfo.Builder}
+     * @return a GooglePayPaymentMethodDataInfo built with parameters of this GooglePayPaymentMethodDataInfo.Builder
      */
     public GooglePayPaymentMethodDataInfo build() {
       return new GooglePayPaymentMethodDataInfo(this);
     }
   }
 }
-

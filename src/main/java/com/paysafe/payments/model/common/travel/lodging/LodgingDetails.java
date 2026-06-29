@@ -1,19 +1,23 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.lodging;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.travel.lodging.enums.ExtraChargesType;
-import com.paysafe.payments.model.common.travel.lodging.enums.ProgramCode;
+import com.paysafe.payments.model.common.travel.lodging.enums.LodgingProgramCode;
+
+
 
 /**
- * Contains information about lodging details. <br>
- * <b>Note:</b> This object is only for Lodging Merchants.. <br>
- * <b>Note:</b> This field has to be passed only in case of card transactions.
+ * Contains information about lodging details. <br>**Note:** This object is only for Lodging Merchants. <br>**Note:** This field has to be passed only in case of card transactions.
  */
 public class LodgingDetails {
 
@@ -28,11 +32,11 @@ public class LodgingDetails {
   @JsonProperty("propertyLocalPhone")
   private String propertyLocalPhone;
   @JsonProperty("extraCharges")
-  private List<ExtraChargesType> extraCharges = null;
+  private List<ExtraChargesType> extraCharges;
   @JsonProperty("roomRate")
   private Integer roomRate;
   @JsonProperty("programCode")
-  private ProgramCode programCode = ProgramCode.LODGING;
+  private LodgingProgramCode programCode = LodgingProgramCode.LODGING;
   @JsonProperty("numberOfNights")
   private Integer numberOfNights;
   @JsonProperty("isFireSafetyActCompliant")
@@ -42,7 +46,7 @@ public class LodgingDetails {
     super();
   }
 
-  private LodgingDetails(Builder builder) {
+  private LodgingDetails(final Builder builder) {
     setHotelFolioNumber(builder.hotelFolioNumber);
     setCheckInDate(builder.checkInDate);
     setCheckOutDate(builder.checkOutDate);
@@ -58,6 +62,7 @@ public class LodgingDetails {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public LodgingDetails hotelFolioNumber(String hotelFolioNumber) {
     this.hotelFolioNumber = hotelFolioNumber;
@@ -77,13 +82,14 @@ public class LodgingDetails {
     this.hotelFolioNumber = hotelFolioNumber;
   }
 
+
   public LodgingDetails checkInDate(String checkInDate) {
     this.checkInDate = checkInDate;
     return this;
   }
 
   /**
-   * The arrival date. Date format = YYYY-MM-DD, ISO 8601 expected. For example 2023-12-20. Required during settlement.
+   * The arrival date. Date format = YYYY-MM-DD, ISO 8601 expected. For example 2023-12-20. * Required during settlement.
    *
    * @return checkInDate
    */
@@ -95,13 +101,14 @@ public class LodgingDetails {
     this.checkInDate = checkInDate;
   }
 
+
   public LodgingDetails checkOutDate(String checkOutDate) {
     this.checkOutDate = checkOutDate;
     return this;
   }
 
   /**
-   * The departure date. Date format = YYYY-MM-DD, ISO 8601 expected. For example 2023-12-20. Required during settlement.
+   * The departure date. Date format = YYYY-MM-DD, ISO 8601 expected. For example 2023-12-20. * Required during settlement.
    *
    * @return checkOutDate
    */
@@ -113,14 +120,14 @@ public class LodgingDetails {
     this.checkOutDate = checkOutDate;
   }
 
+
   public LodgingDetails customerServicePhone(String customerServicePhone) {
     this.customerServicePhone = customerServicePhone;
     return this;
   }
 
   /**
-   * Merchant phone number that the cardholder may call for service. Allowed numeric characters only.
-   * Required during settlement request with Visa or Mastercard for integration with TSYS processor.
+   * Merchant phone number that the cardholder may call for service. Allowed numeric characters only. * Required during settlement request with Visa or Mastercard for integration with TSYS processor
    *
    * @return customerServicePhone
    */
@@ -132,14 +139,14 @@ public class LodgingDetails {
     this.customerServicePhone = customerServicePhone;
   }
 
+
   public LodgingDetails propertyLocalPhone(String propertyLocalPhone) {
     this.propertyLocalPhone = propertyLocalPhone;
     return this;
   }
 
   /**
-   * The lodging property location's phone number. Allowed numeric characters only.
-   * Required during settlement requests with Mastercard for integration with TSYS processor.
+   * The lodging property location's phone number. Allowed numeric characters only. * Required during settlement requests with Mastercard for integration with TSYS processor
    *
    * @return propertyLocalPhone
    */
@@ -150,6 +157,7 @@ public class LodgingDetails {
   public void setPropertyLocalPhone(String propertyLocalPhone) {
     this.propertyLocalPhone = propertyLocalPhone;
   }
+
 
   public LodgingDetails extraCharges(List<ExtraChargesType> extraCharges) {
     this.extraCharges = extraCharges;
@@ -185,14 +193,14 @@ public class LodgingDetails {
     this.extraCharges = extraCharges;
   }
 
+
   public LodgingDetails roomRate(Integer roomRate) {
     this.roomRate = roomRate;
     return this;
   }
 
   /**
-   * The nightly rate for one room at the lodging property. Required during settlement request with Amex for integration with TSYS processor.  <br>
-   * Maximum: 999999999999
+   * The nightly rate for one room at the lodging property. * Required during settlement request with Amex for integration with TSYS processor
    *
    * @return roomRate
    */
@@ -204,29 +212,25 @@ public class LodgingDetails {
     this.roomRate = roomRate;
   }
 
-  public LodgingDetails programCode(ProgramCode programCode) {
+
+  public LodgingDetails programCode(LodgingProgramCode programCode) {
     this.programCode = programCode;
     return this;
   }
 
   /**
-   * Code that corresponds to the category of lodging charges detailed in this message. Allowed values:
-   * <ul>
-   * <li> LODGING - (Default) Submitted charges are for lodging.</li>
-   * <li> NO_SHOW - Submitted charges are for the failure of the guest(s) to check in for reserved room.</li>
-   * <li> ADVANCED_DEPOSIT - Submitted charges are for an Advanced Deposit to reserve one or more rooms. In this case,
-   * the settlement date will be sent to the schemes for both the check-in and check-out dates.</li>
-   * </ul>
-   * If no value is submitted the default value 'LODGING' is used.
+   * Get programCode
+   *
    * @return programCode
    */
-  public ProgramCode getProgramCode() {
+  public LodgingProgramCode getProgramCode() {
     return programCode;
   }
 
-  public void setProgramCode(ProgramCode programCode) {
+  public void setProgramCode(LodgingProgramCode programCode) {
     this.programCode = programCode;
   }
+
 
   public LodgingDetails numberOfNights(Integer numberOfNights) {
     this.numberOfNights = numberOfNights;
@@ -234,10 +238,7 @@ public class LodgingDetails {
   }
 
   /**
-   * The total number of nights the room is booked for.
-   * Required during authorization request with Visa for integration with TSYS processor. <br>
-   * Required during settlement request with Amex for integration with TSYS processor.  <br>
-   * Maximum: 99
+   * The total number of nights the room is booked for. * Required during authorization request with Visa for integration with TSYS processor * Required during settlement request with Amex for integration with TSYS processor
    *
    * @return numberOfNights
    */
@@ -249,13 +250,14 @@ public class LodgingDetails {
     this.numberOfNights = numberOfNights;
   }
 
+
   public LodgingDetails isFireSafetyActCompliant(Boolean isFireSafetyActCompliant) {
     this.isFireSafetyActCompliant = isFireSafetyActCompliant;
     return this;
   }
 
   /**
-   * Identifies that the facility complies with the Hotel and Motel Fire Safety Act of 1990. Possible values: true, false.
+   * Identifies that the facility complies with the Hotel and Motel Fire Safety Act of 1990. Possible values: - true - false
    *
    * @return isFireSafetyActCompliant
    */
@@ -290,8 +292,7 @@ public class LodgingDetails {
 
   @Override
   public int hashCode() {
-    return Objects.hash(hotelFolioNumber, checkInDate, checkOutDate, customerServicePhone, propertyLocalPhone, extraCharges,
-        roomRate, programCode, numberOfNights, isFireSafetyActCompliant);
+    return Objects.hash(hotelFolioNumber, checkInDate, checkOutDate, customerServicePhone, propertyLocalPhone, extraCharges, roomRate, programCode, numberOfNights, isFireSafetyActCompliant);
   }
 
   @Override
@@ -323,7 +324,7 @@ public class LodgingDetails {
   }
 
   /**
-   * {@code LodgingDetails} builder static inner class.
+   * Contains information about lodging details. <br>**Note:** This object is only for Lodging Merchants. <br>**Note:** This field has to be passed only in case of card transactions. builder static inner class.
    */
   public static final class Builder {
     private String hotelFolioNumber;
@@ -333,7 +334,7 @@ public class LodgingDetails {
     private String propertyLocalPhone;
     private List<ExtraChargesType> extraCharges;
     private Integer roomRate;
-    private ProgramCode programCode;
+    private LodgingProgramCode programCode;
     private Integer numberOfNights;
     private Boolean isFireSafetyActCompliant;
 
@@ -341,9 +342,11 @@ public class LodgingDetails {
     }
 
     /**
-     * Sets the {@code hotelFolioNumber} and returns a reference to this Builder enabling method chaining.
+     * The card acceptor’s internal invoice or billing ID reference number. Required during settlement
+     * <p>
+     * Sets the hotelFolioNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param hotelFolioNumber the {@code hotelFolioNumber} to set
+     * @param hotelFolioNumber the hotelFolioNumber to set
      * @return a reference to this Builder
      */
     public Builder hotelFolioNumber(String hotelFolioNumber) {
@@ -352,9 +355,11 @@ public class LodgingDetails {
     }
 
     /**
-     * Sets the {@code checkInDate} and returns a reference to this Builder enabling method chaining.
+     * The arrival date. Date format = YYYY-MM-DD, ISO 8601 expected. For example 2023-12-20. * Required during settlement.
+     * <p>
+     * Sets the checkInDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param checkInDate the {@code checkInDate} to set
+     * @param checkInDate the checkInDate to set
      * @return a reference to this Builder
      */
     public Builder checkInDate(String checkInDate) {
@@ -363,9 +368,11 @@ public class LodgingDetails {
     }
 
     /**
-     * Sets the {@code checkOutDate} and returns a reference to this Builder enabling method chaining.
+     * The departure date. Date format = YYYY-MM-DD, ISO 8601 expected. For example 2023-12-20. * Required during settlement.
+     * <p>
+     * Sets the checkOutDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param checkOutDate the {@code checkOutDate} to set
+     * @param checkOutDate the checkOutDate to set
      * @return a reference to this Builder
      */
     public Builder checkOutDate(String checkOutDate) {
@@ -374,9 +381,11 @@ public class LodgingDetails {
     }
 
     /**
-     * Sets the {@code customerServicePhone} and returns a reference to this Builder enabling method chaining.
+     * Merchant phone number that the cardholder may call for service. Allowed numeric characters only. * Required during settlement request with Visa or Mastercard for integration with TSYS processor
+     * <p>
+     * Sets the customerServicePhone and returns a reference to this Builder enabling method chaining.
      *
-     * @param customerServicePhone the {@code customerServicePhone} to set
+     * @param customerServicePhone the customerServicePhone to set
      * @return a reference to this Builder
      */
     public Builder customerServicePhone(String customerServicePhone) {
@@ -385,9 +394,11 @@ public class LodgingDetails {
     }
 
     /**
-     * Sets the {@code propertyLocalPhone} and returns a reference to this Builder enabling method chaining.
+     * The lodging property location's phone number. Allowed numeric characters only. * Required during settlement requests with Mastercard for integration with TSYS processor
+     * <p>
+     * Sets the propertyLocalPhone and returns a reference to this Builder enabling method chaining.
      *
-     * @param propertyLocalPhone the {@code propertyLocalPhone} to set
+     * @param propertyLocalPhone the propertyLocalPhone to set
      * @return a reference to this Builder
      */
     public Builder propertyLocalPhone(String propertyLocalPhone) {
@@ -396,9 +407,11 @@ public class LodgingDetails {
     }
 
     /**
-     * Sets the {@code extraCharges} and returns a reference to this Builder enabling method chaining.
+     * Indicates if the reservation includes additional ancillary charges.
+     * <p>
+     * Sets the extraCharges and returns a reference to this Builder enabling method chaining.
      *
-     * @param extraCharges the {@code extraCharges} to set
+     * @param extraCharges the extraCharges to set
      * @return a reference to this Builder
      */
     public Builder extraCharges(List<ExtraChargesType> extraCharges) {
@@ -407,9 +420,11 @@ public class LodgingDetails {
     }
 
     /**
-     * Sets the {@code roomRate} and returns a reference to this Builder enabling method chaining.
+     * The nightly rate for one room at the lodging property. * Required during settlement request with Amex for integration with TSYS processor
+     * <p>
+     * Sets the roomRate and returns a reference to this Builder enabling method chaining.
      *
-     * @param roomRate the {@code roomRate} to set
+     * @param roomRate the roomRate to set
      * @return a reference to this Builder
      */
     public Builder roomRate(Integer roomRate) {
@@ -418,20 +433,22 @@ public class LodgingDetails {
     }
 
     /**
-     * Sets the {@code programCode} and returns a reference to this Builder enabling method chaining.
+     * Sets the programCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param programCode the {@code programCode} to set
+     * @param programCode the programCode to set
      * @return a reference to this Builder
      */
-    public Builder programCode(ProgramCode programCode) {
+    public Builder programCode(LodgingProgramCode programCode) {
       this.programCode = programCode;
       return this;
     }
 
     /**
-     * Sets the {@code numberOfNights} and returns a reference to this Builder enabling method chaining.
+     * The total number of nights the room is booked for. * Required during authorization request with Visa for integration with TSYS processor * Required during settlement request with Amex for integration with TSYS processor
+     * <p>
+     * Sets the numberOfNights and returns a reference to this Builder enabling method chaining.
      *
-     * @param numberOfNights the {@code numberOfNights} to set
+     * @param numberOfNights the numberOfNights to set
      * @return a reference to this Builder
      */
     public Builder numberOfNights(Integer numberOfNights) {
@@ -440,9 +457,11 @@ public class LodgingDetails {
     }
 
     /**
-     * Sets the {@code isFireSafetyActCompliant} and returns a reference to this Builder enabling method chaining.
+     * Identifies that the facility complies with the Hotel and Motel Fire Safety Act of 1990. Possible values: - true - false
+     * <p>
+     * Sets the isFireSafetyActCompliant and returns a reference to this Builder enabling method chaining.
      *
-     * @param isFireSafetyActCompliant the {@code isFireSafetyActCompliant} to set
+     * @param isFireSafetyActCompliant the isFireSafetyActCompliant to set
      * @return a reference to this Builder
      */
     public Builder isFireSafetyActCompliant(Boolean isFireSafetyActCompliant) {
@@ -451,13 +470,12 @@ public class LodgingDetails {
     }
 
     /**
-     * Returns a {@code LodgingDetails} built from the parameters previously set.
+     * Returns a LodgingDetails built from the parameters previously set.
      *
-     * @return a {@code LodgingDetails} built with parameters of this {@code LodgingDetails.Builder}
+     * @return a LodgingDetails built with parameters of this LodgingDetails.Builder
      */
     public LodgingDetails build() {
       return new LodgingDetails(this);
     }
   }
 }
-

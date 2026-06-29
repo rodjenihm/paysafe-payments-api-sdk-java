@@ -1,18 +1,25 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.customer.singleusecustomertoken;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.common.profile.DateOfBirth;
 import com.paysafe.payments.model.customer.Address;
 import com.paysafe.payments.model.customer.CustomerPaymentHandle;
 import com.paysafe.payments.model.customer.enums.Locale;
 import com.paysafe.payments.model.customer.enums.SingleUseCustomerTokenStatus;
 import com.paysafe.payments.model.customer.enums.SingleUseTokenPaymentType;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
  * SingleUseCustomerToken
@@ -22,7 +29,7 @@ public class SingleUseCustomerToken {
   @JsonProperty("merchantRefNum")
   private String merchantRefNum;
   @JsonProperty("paymentType")
-  private List<SingleUseTokenPaymentType> paymentType = null;
+  private List<SingleUseTokenPaymentType> paymentType;
   @JsonProperty("id")
   private String id;
   @JsonProperty("timeToLiveSeconds")
@@ -50,9 +57,9 @@ public class SingleUseCustomerToken {
   @JsonProperty("nationality")
   private String nationality;
   @JsonProperty("addresses")
-  private List<Address> addresses = null;
+  private List<Address> addresses;
   @JsonProperty("paymentHandles")
-  private List<CustomerPaymentHandle> paymentHandles = null;
+  private List<CustomerPaymentHandle> paymentHandles;
   @JsonProperty("customerId")
   private String customerId;
 
@@ -60,7 +67,7 @@ public class SingleUseCustomerToken {
     super();
   }
 
-  private SingleUseCustomerToken(Builder builder) {
+  private SingleUseCustomerToken(final Builder builder) {
     setMerchantRefNum(builder.merchantRefNum);
     setPaymentType(builder.paymentType);
     setId(builder.id);
@@ -85,6 +92,7 @@ public class SingleUseCustomerToken {
     return new Builder();
   }
 
+
   public SingleUseCustomerToken merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
     return this;
@@ -103,8 +111,25 @@ public class SingleUseCustomerToken {
     this.merchantRefNum = merchantRefNum;
   }
 
+
   public SingleUseCustomerToken paymentType(List<SingleUseTokenPaymentType> paymentType) {
     this.paymentType = paymentType;
+    return this;
+  }
+
+  public SingleUseCustomerToken addPaymentTypeItem(SingleUseTokenPaymentType paymentTypeItem) {
+    if (this.paymentType == null) {
+      this.paymentType = new ArrayList<>();
+    }
+    this.paymentType.add(paymentTypeItem);
+    return this;
+  }
+
+  public SingleUseCustomerToken removePaymentTypeItem(SingleUseTokenPaymentType paymentTypeItem) {
+    if (paymentTypeItem != null && this.paymentType != null) {
+      this.paymentType.remove(paymentTypeItem);
+    }
+
     return this;
   }
 
@@ -120,6 +145,7 @@ public class SingleUseCustomerToken {
   public void setPaymentType(List<SingleUseTokenPaymentType> paymentType) {
     this.paymentType = paymentType;
   }
+
 
   public SingleUseCustomerToken id(String id) {
     this.id = id;
@@ -139,14 +165,14 @@ public class SingleUseCustomerToken {
     this.id = id;
   }
 
+
   public SingleUseCustomerToken timeToLiveSeconds(Integer timeToLiveSeconds) {
     this.timeToLiveSeconds = timeToLiveSeconds;
     return this;
   }
 
   /**
-   * This is the period of time, in seconds, the singleUseCustomerToken is valid before expiration.  <br>
-   * Maximum: 899
+   * This is the period of time, in seconds, the singleUseCustomerToken is valid before expiration.
    *
    * @return timeToLiveSeconds
    */
@@ -158,13 +184,14 @@ public class SingleUseCustomerToken {
     this.timeToLiveSeconds = timeToLiveSeconds;
   }
 
+
   public SingleUseCustomerToken status(SingleUseCustomerTokenStatus status) {
     this.status = status;
     return this;
   }
 
   /**
-   * This is the status of the single-use customer token.
+   * Get status
    *
    * @return status
    */
@@ -175,6 +202,7 @@ public class SingleUseCustomerToken {
   public void setStatus(SingleUseCustomerTokenStatus status) {
     this.status = status;
   }
+
 
   public SingleUseCustomerToken singleUseCustomerToken(String singleUseCustomerToken) {
     this.singleUseCustomerToken = singleUseCustomerToken;
@@ -194,13 +222,14 @@ public class SingleUseCustomerToken {
     this.singleUseCustomerToken = singleUseCustomerToken;
   }
 
+
   public SingleUseCustomerToken locale(Locale locale) {
     this.locale = locale;
     return this;
   }
 
   /**
-   * This indicates the customer's locale.
+   * Get locale
    *
    * @return locale
    */
@@ -212,13 +241,14 @@ public class SingleUseCustomerToken {
     this.locale = locale;
   }
 
+
   public SingleUseCustomerToken firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
 
   /**
-   * This is the customer’s first name.
+   * This is the customer's first name
    *
    * @return firstName
    */
@@ -230,13 +260,14 @@ public class SingleUseCustomerToken {
     this.firstName = firstName;
   }
 
+
   public SingleUseCustomerToken middleName(String middleName) {
     this.middleName = middleName;
     return this;
   }
 
   /**
-   * This is the customer’s middle name.
+   * This is the customer's middle name
    *
    * @return middleName
    */
@@ -248,13 +279,14 @@ public class SingleUseCustomerToken {
     this.middleName = middleName;
   }
 
+
   public SingleUseCustomerToken lastname(String lastname) {
     this.lastname = lastname;
     return this;
   }
 
   /**
-   * This is the customer's last name.
+   * This is the customer's last name
    *
    * @return lastname
    */
@@ -266,13 +298,14 @@ public class SingleUseCustomerToken {
     this.lastname = lastname;
   }
 
+
   public SingleUseCustomerToken dateOfBirth(DateOfBirth dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
     return this;
   }
 
   /**
-   * This is the recipient's date of birth.  <b>Note:</b> Required for Pay by Bank.
+   * Get dateOfBirth
    *
    * @return dateOfBirth
    */
@@ -284,13 +317,14 @@ public class SingleUseCustomerToken {
     this.dateOfBirth = dateOfBirth;
   }
 
+
   public SingleUseCustomerToken email(String email) {
     this.email = email;
     return this;
   }
 
   /**
-   * This is the customer's email address.
+   * This is the customer's email address
    *
    * @return email
    */
@@ -302,13 +336,14 @@ public class SingleUseCustomerToken {
     this.email = email;
   }
 
+
   public SingleUseCustomerToken phone(String phone) {
     this.phone = phone;
     return this;
   }
 
   /**
-   * This is the customer's phone number.
+   * This is the customer's phone number
    *
    * @return phone
    */
@@ -320,13 +355,14 @@ public class SingleUseCustomerToken {
     this.phone = phone;
   }
 
+
   public SingleUseCustomerToken ip(String ip) {
     this.ip = ip;
     return this;
   }
 
   /**
-   * This is the customer’s IP address
+   * This is the customer's IP address
    *
    * @return ip
    */
@@ -338,13 +374,14 @@ public class SingleUseCustomerToken {
     this.ip = ip;
   }
 
+
   public SingleUseCustomerToken nationality(String nationality) {
     this.nationality = nationality;
     return this;
   }
 
   /**
-   * This is the customer’s nationality.
+   * This is the customer's nationality
    *
    * @return nationality
    */
@@ -356,29 +393,30 @@ public class SingleUseCustomerToken {
     this.nationality = nationality;
   }
 
+
   public SingleUseCustomerToken addresses(List<Address> addresses) {
     this.addresses = addresses;
     return this;
   }
 
-  public SingleUseCustomerToken addAddressesItem(Address addressItem) {
+  public SingleUseCustomerToken addAddressesItem(Address addressesItem) {
     if (this.addresses == null) {
       this.addresses = new ArrayList<>();
     }
-    this.addresses.add(addressItem);
+    this.addresses.add(addressesItem);
     return this;
   }
 
-  public SingleUseCustomerToken removeAddressesItem(Address addressItem) {
-    if (addressItem != null && this.addresses != null) {
-      this.addresses.remove(addressItem);
+  public SingleUseCustomerToken removeAddressesItem(Address addressesItem) {
+    if (addressesItem != null && this.addresses != null) {
+      this.addresses.remove(addressesItem);
     }
 
     return this;
   }
 
   /**
-   * This is an array of addresses associated with the customer.
+   * This is an array of addresses associated with the customer
    *
    * @return addresses
    */
@@ -389,6 +427,7 @@ public class SingleUseCustomerToken {
   public void setAddresses(List<Address> addresses) {
     this.addresses = addresses;
   }
+
 
   public SingleUseCustomerToken paymentHandles(List<CustomerPaymentHandle> paymentHandles) {
     this.paymentHandles = paymentHandles;
@@ -412,7 +451,7 @@ public class SingleUseCustomerToken {
   }
 
   /**
-   * This is an array of payment handles associated with the customer.
+   * This is an array of payment handles associated with the customer
    *
    * @return paymentHandles
    */
@@ -423,6 +462,7 @@ public class SingleUseCustomerToken {
   public void setPaymentHandles(List<CustomerPaymentHandle> paymentHandles) {
     this.paymentHandles = paymentHandles;
   }
+
 
   public SingleUseCustomerToken customerId(String customerId) {
     this.customerId = customerId;
@@ -450,31 +490,30 @@ public class SingleUseCustomerToken {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SingleUseCustomerToken token = (SingleUseCustomerToken) o;
-    return Objects.equals(this.merchantRefNum, token.merchantRefNum) &&
-        Objects.equals(this.paymentType, token.paymentType) &&
-        Objects.equals(this.id, token.id) &&
-        Objects.equals(this.timeToLiveSeconds, token.timeToLiveSeconds) &&
-        Objects.equals(this.status, token.status) &&
-        Objects.equals(this.singleUseCustomerToken, token.singleUseCustomerToken) &&
-        Objects.equals(this.locale, token.locale) &&
-        Objects.equals(this.firstName, token.firstName) &&
-        Objects.equals(this.middleName, token.middleName) &&
-        Objects.equals(this.lastname, token.lastname) &&
-        Objects.equals(this.dateOfBirth, token.dateOfBirth) &&
-        Objects.equals(this.email, token.email) &&
-        Objects.equals(this.phone, token.phone) &&
-        Objects.equals(this.ip, token.ip) &&
-        Objects.equals(this.nationality, token.nationality) &&
-        Objects.equals(this.addresses, token.addresses) &&
-        Objects.equals(this.paymentHandles, token.paymentHandles) &&
-        Objects.equals(this.customerId, token.customerId);
+    SingleUseCustomerToken singleUseCustomerToken = (SingleUseCustomerToken) o;
+    return Objects.equals(this.merchantRefNum, singleUseCustomerToken.merchantRefNum) &&
+        Objects.equals(this.paymentType, singleUseCustomerToken.paymentType) &&
+        Objects.equals(this.id, singleUseCustomerToken.id) &&
+        Objects.equals(this.timeToLiveSeconds, singleUseCustomerToken.timeToLiveSeconds) &&
+        Objects.equals(this.status, singleUseCustomerToken.status) &&
+        Objects.equals(this.singleUseCustomerToken, singleUseCustomerToken.singleUseCustomerToken) &&
+        Objects.equals(this.locale, singleUseCustomerToken.locale) &&
+        Objects.equals(this.firstName, singleUseCustomerToken.firstName) &&
+        Objects.equals(this.middleName, singleUseCustomerToken.middleName) &&
+        Objects.equals(this.lastname, singleUseCustomerToken.lastname) &&
+        Objects.equals(this.dateOfBirth, singleUseCustomerToken.dateOfBirth) &&
+        Objects.equals(this.email, singleUseCustomerToken.email) &&
+        Objects.equals(this.phone, singleUseCustomerToken.phone) &&
+        Objects.equals(this.ip, singleUseCustomerToken.ip) &&
+        Objects.equals(this.nationality, singleUseCustomerToken.nationality) &&
+        Objects.equals(this.addresses, singleUseCustomerToken.addresses) &&
+        Objects.equals(this.paymentHandles, singleUseCustomerToken.paymentHandles) &&
+        Objects.equals(this.customerId, singleUseCustomerToken.customerId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, paymentType, id, timeToLiveSeconds, status, singleUseCustomerToken, locale, firstName, middleName, lastname,
-        dateOfBirth, email, phone, ip, nationality, addresses, paymentHandles, customerId);
+    return Objects.hash(merchantRefNum, paymentType, id, timeToLiveSeconds, status, singleUseCustomerToken, locale, firstName, middleName, lastname, dateOfBirth, email, phone, ip, nationality, addresses, paymentHandles, customerId);
   }
 
   @Override
@@ -514,7 +553,7 @@ public class SingleUseCustomerToken {
   }
 
   /**
-   * {@code SingleUseCustomerToken} builder static inner class.
+   * SingleUseCustomerToken builder static inner class.
    */
   public static final class Builder {
     private String merchantRefNum;
@@ -540,9 +579,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
+     * @param merchantRefNum the merchantRefNum to set
      * @return a reference to this Builder
      */
     public Builder merchantRefNum(String merchantRefNum) {
@@ -551,9 +592,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code paymentType} and returns a reference to this Builder enabling method chaining.
+     * This specifies the payment type for which you are creating the single-use token.
+     * <p>
+     * Sets the paymentType and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentType the {@code paymentType} to set
+     * @param paymentType the paymentType to set
      * @return a reference to this Builder
      */
     public Builder paymentType(List<SingleUseTokenPaymentType> paymentType) {
@@ -562,9 +605,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
+     * This is the ID returned in the response. This ID can be used for future associated requests, e.g., to look up the Payment Handle.
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -573,9 +618,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code timeToLiveSeconds} and returns a reference to this Builder enabling method chaining.
+     * This is the period of time, in seconds, the singleUseCustomerToken is valid before expiration.
+     * <p>
+     * Sets the timeToLiveSeconds and returns a reference to this Builder enabling method chaining.
      *
-     * @param timeToLiveSeconds the {@code timeToLiveSeconds} to set
+     * @param timeToLiveSeconds the timeToLiveSeconds to set
      * @return a reference to this Builder
      */
     public Builder timeToLiveSeconds(Integer timeToLiveSeconds) {
@@ -584,9 +631,9 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code status} and returns a reference to this Builder enabling method chaining.
+     * Sets the status and returns a reference to this Builder enabling method chaining.
      *
-     * @param status the {@code status} to set
+     * @param status the status to set
      * @return a reference to this Builder
      */
     public Builder status(SingleUseCustomerTokenStatus status) {
@@ -595,9 +642,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code singleUseCustomerToken} and returns a reference to this Builder enabling method chaining.
+     * This token can be used in the Payments Checkout to populate the checkout with customer information.
+     * <p>
+     * Sets the singleUseCustomerToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param singleUseCustomerToken the {@code singleUseCustomerToken} to set
+     * @param singleUseCustomerToken the singleUseCustomerToken to set
      * @return a reference to this Builder
      */
     public Builder singleUseCustomerToken(String singleUseCustomerToken) {
@@ -606,9 +655,9 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code locale} and returns a reference to this Builder enabling method chaining.
+     * Sets the locale and returns a reference to this Builder enabling method chaining.
      *
-     * @param locale the {@code locale} to set
+     * @param locale the locale to set
      * @return a reference to this Builder
      */
     public Builder locale(Locale locale) {
@@ -617,9 +666,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code firstName} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's first name
+     * <p>
+     * Sets the firstName and returns a reference to this Builder enabling method chaining.
      *
-     * @param firstName the {@code firstName} to set
+     * @param firstName the firstName to set
      * @return a reference to this Builder
      */
     public Builder firstName(String firstName) {
@@ -628,9 +679,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code middleName} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's middle name
+     * <p>
+     * Sets the middleName and returns a reference to this Builder enabling method chaining.
      *
-     * @param middleName the {@code middleName} to set
+     * @param middleName the middleName to set
      * @return a reference to this Builder
      */
     public Builder middleName(String middleName) {
@@ -639,9 +692,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code lastname} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's last name
+     * <p>
+     * Sets the lastname and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastname the {@code lastname} to set
+     * @param lastname the lastname to set
      * @return a reference to this Builder
      */
     public Builder lastname(String lastname) {
@@ -650,9 +705,9 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code dateOfBirth} and returns a reference to this Builder enabling method chaining.
+     * Sets the dateOfBirth and returns a reference to this Builder enabling method chaining.
      *
-     * @param dateOfBirth the {@code dateOfBirth} to set
+     * @param dateOfBirth the dateOfBirth to set
      * @return a reference to this Builder
      */
     public Builder dateOfBirth(DateOfBirth dateOfBirth) {
@@ -661,9 +716,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code email} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's email address
+     * <p>
+     * Sets the email and returns a reference to this Builder enabling method chaining.
      *
-     * @param email the {@code email} to set
+     * @param email the email to set
      * @return a reference to this Builder
      */
     public Builder email(String email) {
@@ -672,9 +729,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code phone} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's phone number
+     * <p>
+     * Sets the phone and returns a reference to this Builder enabling method chaining.
      *
-     * @param phone the {@code phone} to set
+     * @param phone the phone to set
      * @return a reference to this Builder
      */
     public Builder phone(String phone) {
@@ -683,9 +742,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code ip} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's IP address
+     * <p>
+     * Sets the ip and returns a reference to this Builder enabling method chaining.
      *
-     * @param ip the {@code ip} to set
+     * @param ip the ip to set
      * @return a reference to this Builder
      */
     public Builder ip(String ip) {
@@ -694,9 +755,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code nationality} and returns a reference to this Builder enabling method chaining.
+     * This is the customer's nationality
+     * <p>
+     * Sets the nationality and returns a reference to this Builder enabling method chaining.
      *
-     * @param nationality the {@code nationality} to set
+     * @param nationality the nationality to set
      * @return a reference to this Builder
      */
     public Builder nationality(String nationality) {
@@ -705,9 +768,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code addresses} and returns a reference to this Builder enabling method chaining.
+     * This is an array of addresses associated with the customer
+     * <p>
+     * Sets the addresses and returns a reference to this Builder enabling method chaining.
      *
-     * @param addresses the {@code addresses} to set
+     * @param addresses the addresses to set
      * @return a reference to this Builder
      */
     public Builder addresses(List<Address> addresses) {
@@ -716,9 +781,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code paymentHandles} and returns a reference to this Builder enabling method chaining.
+     * This is an array of payment handles associated with the customer
+     * <p>
+     * Sets the paymentHandles and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentHandles the {@code paymentHandles} to set
+     * @param paymentHandles the paymentHandles to set
      * @return a reference to this Builder
      */
     public Builder paymentHandles(List<CustomerPaymentHandle> paymentHandles) {
@@ -727,9 +794,11 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Sets the {@code customerId} and returns a reference to this Builder enabling method chaining.
+     * This is the ID of the customer profile used for this request.
+     * <p>
+     * Sets the customerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param customerId the {@code customerId} to set
+     * @param customerId the customerId to set
      * @return a reference to this Builder
      */
     public Builder customerId(String customerId) {
@@ -738,13 +807,12 @@ public class SingleUseCustomerToken {
     }
 
     /**
-     * Returns a {@code SingleUseCustomerToken} built from the parameters previously set.
+     * Returns a SingleUseCustomerToken built from the parameters previously set.
      *
-     * @return a {@code SingleUseCustomerToken} built with parameters of this {@code SingleUseCustomerToken.Builder}
+     * @return a SingleUseCustomerToken built with parameters of this SingleUseCustomerToken.Builder
      */
     public SingleUseCustomerToken build() {
       return new SingleUseCustomerToken(this);
     }
   }
 }
-

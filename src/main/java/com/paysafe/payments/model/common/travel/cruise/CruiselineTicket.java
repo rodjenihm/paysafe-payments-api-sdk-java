@@ -1,15 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.cruise;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * Information about the Cruise line Ticket Number and if the ticket is restricted.  <br>
- * Required during settlement.
- * <b>Note:</b> This object is only for Cruise line Merchants.
+ * Information about the Cruise line Ticket Number and if the ticket is restricted. Required during settlement. <br>**Note:** This object is only for Cruise line Merchants.
  */
 public class CruiselineTicket {
 
@@ -22,7 +28,7 @@ public class CruiselineTicket {
     super();
   }
 
-  private CruiselineTicket(Builder builder) {
+  private CruiselineTicket(final Builder builder) {
     setTicketNumber(builder.ticketNumber);
     setIsRestrictedTicket(builder.isRestrictedTicket);
   }
@@ -31,13 +37,14 @@ public class CruiselineTicket {
     return new Builder();
   }
 
+
   public CruiselineTicket ticketNumber(String ticketNumber) {
     this.ticketNumber = ticketNumber;
     return this;
   }
 
   /**
-   * Cruise ticket number * Required during settlement
+   * Cruise ticket number. Required during settlement
    *
    * @return ticketNumber
    */
@@ -49,19 +56,14 @@ public class CruiselineTicket {
     this.ticketNumber = ticketNumber;
   }
 
+
   public CruiselineTicket isRestrictedTicket(Boolean isRestrictedTicket) {
     this.isRestrictedTicket = isRestrictedTicket;
     return this;
   }
 
   /**
-   * Indicates whether this ticket is non-refundable. This entry should be supplied on CPS/Passenger Transport 1 or 2 transactions
-   * if the ticket was purchased as a non-refundable ticket. Valid values are:
-   * <ul>
-   * <li>false - No restriction (default) </li>
-   * <li>true - Restricted (non-refundable) ticket </li>
-   * </ul>
-   * Required during settlement request for integration with TSYS processor.
+   * Indicates whether this ticket is non-refundable. false - No restriction (default), true - Restricted (non-refundable) ticket. Required during settlement request for integration with TSYS processor
    *
    * @return isRestrictedTicket
    */
@@ -112,7 +114,7 @@ public class CruiselineTicket {
   }
 
   /**
-   * {@code CruiselineTicket} builder static inner class.
+   * Information about the Cruise line Ticket Number and if the ticket is restricted. Required during settlement. <br>**Note:** This object is only for Cruise line Merchants. builder static inner class.
    */
   public static final class Builder {
     private String ticketNumber;
@@ -122,9 +124,11 @@ public class CruiselineTicket {
     }
 
     /**
-     * Sets the {@code ticketNumber} and returns a reference to this Builder enabling method chaining.
+     * Cruise ticket number. Required during settlement
+     * <p>
+     * Sets the ticketNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param ticketNumber the {@code ticketNumber} to set
+     * @param ticketNumber the ticketNumber to set
      * @return a reference to this Builder
      */
     public Builder ticketNumber(String ticketNumber) {
@@ -133,9 +137,11 @@ public class CruiselineTicket {
     }
 
     /**
-     * Sets the {@code isRestrictedTicket} and returns a reference to this Builder enabling method chaining.
+     * Indicates whether this ticket is non-refundable. false - No restriction (default), true - Restricted (non-refundable) ticket. Required during settlement request for integration with TSYS processor
+     * <p>
+     * Sets the isRestrictedTicket and returns a reference to this Builder enabling method chaining.
      *
-     * @param isRestrictedTicket the {@code isRestrictedTicket} to set
+     * @param isRestrictedTicket the isRestrictedTicket to set
      * @return a reference to this Builder
      */
     public Builder isRestrictedTicket(Boolean isRestrictedTicket) {
@@ -144,13 +150,12 @@ public class CruiselineTicket {
     }
 
     /**
-     * Returns a {@code CruiselineTicket} built from the parameters previously set.
+     * Returns a CruiselineTicket built from the parameters previously set.
      *
-     * @return a {@code CruiselineTicket} built with parameters of this {@code CruiselineTicket.Builder}
+     * @return a CruiselineTicket built with parameters of this CruiselineTicket.Builder
      */
     public CruiselineTicket build() {
       return new CruiselineTicket(this);
     }
   }
 }
-

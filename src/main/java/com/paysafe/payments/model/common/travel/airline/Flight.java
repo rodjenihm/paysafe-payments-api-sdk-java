@@ -1,10 +1,18 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.airline;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
  * Operating Carrier Code and the Number of the airline flight to be taken on Leg of the trip (excluding the carrier code).
@@ -35,13 +43,14 @@ public class Flight {
     return new Builder();
   }
 
+
   public Flight carrierCode(String carrierCode) {
     this.carrierCode = carrierCode;
     return this;
   }
 
   /**
-   * Operating Carrier Code; the standard abbreviation code indicating name of the operating carrier like United Airlines, Jet Blue, etc.
+   * Operating Carrier Code; the standard abbreviation code indicating name of the operating carrier like United Airlines, Jet Blue, etc
    *
    * @return carrierCode
    */
@@ -53,13 +62,14 @@ public class Flight {
     this.carrierCode = carrierCode;
   }
 
+
   public Flight flightNumber(String flightNumber) {
     this.flightNumber = flightNumber;
     return this;
   }
 
   /**
-   * Number of the airline flight to be taken on Leg of the trip excluding the carrier code.
+   * Number of the airline flight to be taken on Leg of the trip excluding the carrier code
    *
    * @return flightNumber
    */
@@ -71,8 +81,14 @@ public class Flight {
     this.flightNumber = flightNumber;
   }
 
+
+  public Flight airlineName(String airlineName) {
+    this.airlineName = airlineName;
+    return this;
+  }
+
   /**
-   * Airline full name. Required during settlement request for.
+   * Airline full name. Required during settlement request
    *
    * @return airlineName
    */
@@ -84,13 +100,14 @@ public class Flight {
     this.airlineName = airlineName;
   }
 
+
   public Flight airlineIcaoCode(String airlineIcaoCode) {
     this.airlineIcaoCode = airlineIcaoCode;
     return this;
   }
 
   /**
-   * Airline ICAO code.
+   * Airline ICAO code
    *
    * @return airlineIcaoCode
    */
@@ -145,7 +162,7 @@ public class Flight {
   }
 
   /**
-   * {@code Flight} builder static inner class.
+   * Operating Carrier Code and the Number of the airline flight to be taken on Leg of the trip (excluding the carrier code). builder static inner class.
    */
   public static final class Builder {
     private String carrierCode;
@@ -157,9 +174,11 @@ public class Flight {
     }
 
     /**
-     * Sets the {@code carrierCode} and returns a reference to this Builder enabling method chaining.
+     * Operating Carrier Code; the standard abbreviation code indicating name of the operating carrier like United Airlines, Jet Blue, etc
+     * <p>
+     * Sets the carrierCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param carrierCode the {@code carrierCode} to set
+     * @param carrierCode the carrierCode to set
      * @return a reference to this Builder
      */
     public Builder carrierCode(String carrierCode) {
@@ -168,9 +187,11 @@ public class Flight {
     }
 
     /**
-     * Sets the {@code flightNumber} and returns a reference to this Builder enabling method chaining.
+     * Number of the airline flight to be taken on Leg of the trip excluding the carrier code
+     * <p>
+     * Sets the flightNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param flightNumber the {@code flightNumber} to set
+     * @param flightNumber the flightNumber to set
      * @return a reference to this Builder
      */
     public Builder flightNumber(String flightNumber) {
@@ -179,35 +200,38 @@ public class Flight {
     }
 
     /**
-     * Sets the {@code airlineName} and returns a reference to this Builder enabling method chaining.
+     * Airline full name. Required during settlement request
+     * <p>
+     * Sets the airlineName and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code airlineName} to set
+     * @param airlineName the airlineName to set
      * @return a reference to this Builder
      */
-    public Builder airlineName(final String val) {
-      airlineName = val;
+    public Builder airlineName(String airlineName) {
+      this.airlineName = airlineName;
       return this;
     }
 
     /**
-     * Sets the {@code airlineIcaoCode} and returns a reference to this Builder enabling method chaining.
+     * Airline ICAO code
+     * <p>
+     * Sets the airlineIcaoCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param val the {@code airlineIcaoCode} to set
+     * @param airlineIcaoCode the airlineIcaoCode to set
      * @return a reference to this Builder
      */
-    public Builder airlineIcaoCode(final String val) {
-      airlineIcaoCode = val;
+    public Builder airlineIcaoCode(String airlineIcaoCode) {
+      this.airlineIcaoCode = airlineIcaoCode;
       return this;
     }
 
     /**
-     * Returns a {@code Flight} built from the parameters previously set.
+     * Returns a Flight built from the parameters previously set.
      *
-     * @return a {@code Flight} built with parameters of this {@code Flight.Builder}
+     * @return a Flight built with parameters of this Flight.Builder
      */
     public Flight build() {
       return new Flight(this);
     }
   }
 }
-

@@ -1,32 +1,27 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.threeds;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.card.enums.UserLoginAuthenticationMethod;
+
+
 
 /**
- * This is the cardholder login information.
- * <ul>
- *   <li>
- *     <b>authenticationMethod:</b> This is the mechanism used by the cardholder to authenticate to the 3DS Requestor.  <br>
- *     <i>Allowed values: NO_LOGIN, INTERNAL_CREDENTIALS, FEDERATED_ID, ISSUER_CREDENTIALS, THIRD_PARY_AUTHENTICATION,
- *     FIDO_AUTHENTICATOR</i>
- *   </li>
- *   <li>
- *     <b>data:</b> This field is reserved for future iterations of 3D Secure 2.  <br>
- *   </li>
- *   <li>
- *     <b>time:</b> This is the date and time of the cardholder authentication.
- *     The ISO 8601 date format is expected, i.e., YYYY-MM-DD-THH:MM:SSZ.  <br>
- *   </li>
- * </ul>
+ * Cardholder login information for 3DS authentication
  */
 public class UserLogin {
 
   @JsonProperty("authenticationMethod")
-  private AuthenticationMethod authenticationMethod;
+  private UserLoginAuthenticationMethod authenticationMethod;
   @JsonProperty("data")
   private String data;
   @JsonProperty("time")
@@ -36,7 +31,7 @@ public class UserLogin {
     super();
   }
 
-  private UserLogin(Builder builder) {
+  private UserLogin(final Builder builder) {
     setAuthenticationMethod(builder.authenticationMethod);
     setData(builder.data);
     setTime(builder.time);
@@ -46,23 +41,25 @@ public class UserLogin {
     return new Builder();
   }
 
-  public UserLogin authenticationMethod(AuthenticationMethod authenticationMethod) {
+
+  public UserLogin authenticationMethod(UserLoginAuthenticationMethod authenticationMethod) {
     this.authenticationMethod = authenticationMethod;
     return this;
   }
 
   /**
-   * This is the mechanism used by the cardholder to authenticate to the 3DS Requestor.
+   * Get authenticationMethod
    *
    * @return authenticationMethod
    */
-  public AuthenticationMethod getAuthenticationMethod() {
+  public UserLoginAuthenticationMethod getAuthenticationMethod() {
     return authenticationMethod;
   }
 
-  public void setAuthenticationMethod(AuthenticationMethod authenticationMethod) {
+  public void setAuthenticationMethod(UserLoginAuthenticationMethod authenticationMethod) {
     this.authenticationMethod = authenticationMethod;
   }
+
 
   public UserLogin data(String data) {
     this.data = data;
@@ -70,7 +67,7 @@ public class UserLogin {
   }
 
   /**
-   * This field is reserved for future iterations of 3D Secure 2.
+   * Field reserved for future iterations of 3D Secure 2
    *
    * @return data
    */
@@ -82,13 +79,14 @@ public class UserLogin {
     this.data = data;
   }
 
+
   public UserLogin time(String time) {
     this.time = time;
     return this;
   }
 
   /**
-   * This is the date and time of the cardholder authentication. The ISO 8601 date format is expected, i.e., YYYY-MM-DD-THH:MM:SSZ.
+   * Date and time of the cardholder authentication in ISO 8601 format (YYYY-MM-DD-THH:MM:SSZ)
    *
    * @return time
    */
@@ -141,10 +139,10 @@ public class UserLogin {
   }
 
   /**
-   * {@code UserLogin} builder static inner class.
+   * Cardholder login information for 3DS authentication builder static inner class.
    */
   public static final class Builder {
-    private AuthenticationMethod authenticationMethod;
+    private UserLoginAuthenticationMethod authenticationMethod;
     private String data;
     private String time;
 
@@ -152,20 +150,22 @@ public class UserLogin {
     }
 
     /**
-     * Sets the {@code authenticationMethod} and returns a reference to this Builder enabling method chaining.
+     * Sets the authenticationMethod and returns a reference to this Builder enabling method chaining.
      *
-     * @param authenticationMethod the {@code authenticationMethod} to set
+     * @param authenticationMethod the authenticationMethod to set
      * @return a reference to this Builder
      */
-    public Builder authenticationMethod(AuthenticationMethod authenticationMethod) {
+    public Builder authenticationMethod(UserLoginAuthenticationMethod authenticationMethod) {
       this.authenticationMethod = authenticationMethod;
       return this;
     }
 
     /**
-     * Sets the {@code data} and returns a reference to this Builder enabling method chaining.
+     * Field reserved for future iterations of 3D Secure 2
+     * <p>
+     * Sets the data and returns a reference to this Builder enabling method chaining.
      *
-     * @param data the {@code data} to set
+     * @param data the data to set
      * @return a reference to this Builder
      */
     public Builder data(String data) {
@@ -174,9 +174,11 @@ public class UserLogin {
     }
 
     /**
-     * Sets the {@code time} and returns a reference to this Builder enabling method chaining.
+     * Date and time of the cardholder authentication in ISO 8601 format (YYYY-MM-DD-THH:MM:SSZ)
+     * <p>
+     * Sets the time and returns a reference to this Builder enabling method chaining.
      *
-     * @param time the {@code time} to set
+     * @param time the time to set
      * @return a reference to this Builder
      */
     public Builder time(String time) {
@@ -185,13 +187,12 @@ public class UserLogin {
     }
 
     /**
-     * Returns a {@code UserLogin} built from the parameters previously set.
+     * Returns a UserLogin built from the parameters previously set.
      *
-     * @return a {@code UserLogin} built with parameters of this {@code UserLogin.Builder}
+     * @return a UserLogin built with parameters of this UserLogin.Builder
      */
     public UserLogin build() {
       return new UserLogin(this);
     }
   }
 }
-

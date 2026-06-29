@@ -3,7 +3,6 @@
 package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.buildQueryParameters;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
@@ -40,7 +39,7 @@ public class OriginalCreditServiceImpl implements OriginalCreditService {
       final RequestOptions requestOptions) throws PaysafeSdkException {
 
     PaysafeApiResponse response = paysafeApiClient.executePost(ORIGINAL_CREDIT_ENDPOINT, originalCreditRequest, requestOptions);
-    return processResponse(response, OriginalCredit.class);
+    return paysafeApiClient.processResponse(response, OriginalCredit.class);
   }
 
   /**
@@ -56,7 +55,7 @@ public class OriginalCreditServiceImpl implements OriginalCreditService {
   @Override public OriginalCredit getOriginalCreditById(final String originalCreditId, final RequestOptions requestOptions) throws PaysafeSdkException {
     final String path = String.format("%s/%s", ORIGINAL_CREDIT_ENDPOINT, originalCreditId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, OriginalCredit.class);
+    return paysafeApiClient.processResponse(response, OriginalCredit.class);
   }
 
   /**
@@ -75,7 +74,7 @@ public class OriginalCreditServiceImpl implements OriginalCreditService {
     final String path = String.format("%s%s", ORIGINAL_CREDIT_ENDPOINT, buildQueryParameters(merchantRefNum, endDate,
         limit, offset, startDate, null, null));
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, OriginalCreditList.class);
+    return paysafeApiClient.processResponse(response, OriginalCreditList.class);
   }
 
   /**
@@ -92,6 +91,6 @@ public class OriginalCreditServiceImpl implements OriginalCreditService {
       final RequestOptions requestOptions) throws PaysafeSdkException {
     final String path = String.format("%s/%s", ORIGINAL_CREDIT_ENDPOINT, originalCreditId);
     PaysafeApiResponse response = paysafeApiClient.executePut(path, cancelRequest, requestOptions);
-    return processResponse(response, CancelResponse.class);
+    return paysafeApiClient.processResponse(response, CancelResponse.class);
   }
 }

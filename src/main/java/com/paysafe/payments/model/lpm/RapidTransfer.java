@@ -1,10 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.customer.Customer;
+
+
 
 /**
  * These are the details of the rapid transfer used for the transaction.
@@ -20,7 +29,7 @@ public class RapidTransfer {
     super();
   }
 
-  private RapidTransfer(Builder builder) {
+  private RapidTransfer(final Builder builder) {
     setConsumerId(builder.consumerId);
     setCountryCode(builder.countryCode);
   }
@@ -28,6 +37,7 @@ public class RapidTransfer {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public RapidTransfer consumerId(String consumerId) {
     this.consumerId = consumerId;
@@ -47,16 +57,16 @@ public class RapidTransfer {
     this.consumerId = consumerId;
   }
 
+
   public RapidTransfer countryCode(String countryCode) {
     this.countryCode = countryCode;
     return this;
   }
 
   /**
-   * Two-digit unique country code to identify the area of operation of bank account and currency.
+   * Two-digit unique country code to identify the area of operation of bank account and currency. See [Country codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes)
    *
    * @return countryCode
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#country-codes>Country codes</a>
    */
   public String getCountryCode() {
     return countryCode;
@@ -105,7 +115,7 @@ public class RapidTransfer {
   }
 
   /**
-   * {@code RapidTransfer} builder static inner class.
+   * These are the details of the rapid transfer used for the transaction. builder static inner class.
    */
   public static final class Builder {
     private String consumerId;
@@ -115,9 +125,11 @@ public class RapidTransfer {
     }
 
     /**
-     * Sets the {@code consumerId} and returns a reference to this Builder enabling method chaining.
+     * Customer/end-user email id which will be the unique identifier of the user at Skrill end
+     * <p>
+     * Sets the consumerId and returns a reference to this Builder enabling method chaining.
      *
-     * @param consumerId the {@code consumerId} to set
+     * @param consumerId the consumerId to set
      * @return a reference to this Builder
      */
     public Builder consumerId(String consumerId) {
@@ -126,9 +138,11 @@ public class RapidTransfer {
     }
 
     /**
-     * Sets the {@code countryCode} and returns a reference to this Builder enabling method chaining.
+     * Two-digit unique country code to identify the area of operation of bank account and currency. See [Country codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes)
+     * <p>
+     * Sets the countryCode and returns a reference to this Builder enabling method chaining.
      *
-     * @param countryCode the {@code countryCode} to set
+     * @param countryCode the countryCode to set
      * @return a reference to this Builder
      */
     public Builder countryCode(String countryCode) {
@@ -137,13 +151,12 @@ public class RapidTransfer {
     }
 
     /**
-     * Returns a {@code RapidTransfer} built from the parameters previously set.
+     * Returns a RapidTransfer built from the parameters previously set.
      *
-     * @return a {@code RapidTransfer} built with parameters of this {@code RapidTransfer.Builder}
+     * @return a RapidTransfer built with parameters of this RapidTransfer.Builder
      */
     public RapidTransfer build() {
       return new RapidTransfer(this);
     }
   }
 }
-

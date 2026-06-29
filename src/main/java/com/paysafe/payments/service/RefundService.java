@@ -25,9 +25,9 @@ public interface RefundService {
    * <p>Endpoint:
    * <strong>POST /v1/settlements/{settlementId}/refunds</strong></p>
    *
-   * @param settlementId  The ID of the settlement for which the refund is being made
-   * @param refundRequest The request body containing the details for the refund
-   * @return A {@link Refund} object containing the result of refund processing request.
+   * @param settlementId  the ID of the settlement for which the refund is being made
+   * @param refundRequest the request body containing the details for the refund
+   * @return a {@link Refund} object containing the result of refund processing request
    * @throws PaysafeSdkException if an error occurs with the Payments API
    */
   Refund processRefund(final String settlementId, final RefundRequest refundRequest) throws PaysafeSdkException;
@@ -46,10 +46,10 @@ public interface RefundService {
    * <p>Endpoint:
    * <strong>POST /v1/settlements/{settlementId}/refunds</strong></p>
    *
-   * @param settlementId   The ID of the settlement for which the refund is being made
-   * @param refundRequest  The request body containing the details for the refund
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return A {@link Refund} object containing the result of refund processing request.
+   * @param settlementId   the ID of the settlement for which the refund is being made
+   * @param refundRequest  the request body containing the details for the refund
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return a {@link Refund} object containing the result of refund processing request
    * @throws PaysafeSdkException if an error occurs with the Payments API
    */
   Refund processRefund(final String settlementId, final RefundRequest refundRequest, final RequestOptions requestOptions) throws PaysafeSdkException;
@@ -60,9 +60,9 @@ public interface RefundService {
    * <p>Endpoint:
    * <strong>GET /v1/settlements/{settlementId}/refunds/{refundId}</strong></p>
    *
-   * @param refundId The ID of the refund
-   * @return A {@link Refund} object representing the response from Paysafe
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param refundId the ID of the refund
+   * @return a {@link Refund} object representing the response from Paysafe
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   Refund getRefundById(final String refundId) throws PaysafeSdkException;
 
@@ -73,10 +73,10 @@ public interface RefundService {
    * <p>Endpoint:
    * <strong>GET /v1/settlements/{settlementId}/refunds/{refundId}</strong></p>
    *
-   * @param refundId       The ID of the refund
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return A {@link Refund} object representing the response from Paysafe
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param refundId       the ID of the refund
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return a {@link Refund} object representing the response from Paysafe
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   Refund getRefundById(final String refundId, final RequestOptions requestOptions) throws PaysafeSdkException;
 
@@ -86,13 +86,13 @@ public interface RefundService {
    * <p>Endpoint:
    * <strong>GET /v1/settlements/{settlementId}/refunds</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the refund request.
-   * @param endDate        The end date in UTC. If null is provided, the current date will be used.
-   * @param limit          The total number of records to return. If null is provided, the default value (10) will be used.
-   * @param offset         The starting position, where 0 is the first record. If null is provided, the default value (0) will be used.
-   * @param startDate      The start date in UTC. If null is provided, the default value (30 days before the end date) will be used.
-   * @return a RefundList object containing a list of refunds and meta information for pagination.
-   * @throws PaysafeSdkException if an error occurs during the request.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the refund request
+   * @param endDate        the end date in UTC; if null is provided, the current date will be used
+   * @param limit          the total number of records to return; if null is provided, the default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, the default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, the default value (30 days before the end date) will be used
+   * @return a RefundList object containing a list of refunds and meta information for pagination
+   * @throws PaysafeSdkException if an error occurs during the request
    */
   RefundList getRefundUsingMerchantReferenceNumber(final String merchantRefNum, final String endDate,
       final Integer limit, final Integer offset, final String startDate) throws PaysafeSdkException;
@@ -105,14 +105,14 @@ public interface RefundService {
    * <p>Endpoint:
    * <strong>POST /v1/settlements/{settlementId}/refunds</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the refund request.
-   * @param endDate        The end date in UTC. If null is provided, the current date will be used.
-   * @param limit          The total number of records to return. If null is provided, the default value (10) will be used.
-   * @param offset         The starting position, where 0 is the first record. If null is provided, the default value (0) will be used.
-   * @param startDate      The start date in UTC. If null is provided, the default value (30 days before the end date) will be used.
-   * @param requestOptions Custom connectTimeout, responseTimeout, and/or maxAutomaticRetries for this request.
-   * @return a RefundList object containing a list of refunds and meta information for pagination.
-   * @throws PaysafeSdkException if an error occurs during the request.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the refund request
+   * @param endDate        the end date in UTC; if null is provided, the current date will be used
+   * @param limit          the total number of records to return; if null is provided, the default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, the default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, the default value (30 days before the end date) will be used
+   * @param requestOptions custom connectTimeout, responseTimeout, and/or maxAutomaticRetries for this request
+   * @return a RefundList object containing a list of refunds and meta information for pagination
+   * @throws PaysafeSdkException if an error occurs during the request
    */
   RefundList getRefundUsingMerchantReferenceNumber(final String merchantRefNum,
       final String endDate, final Integer limit, final Integer offset, final String startDate,
@@ -127,11 +127,11 @@ public interface RefundService {
    * <p>Endpoint:
    * <strong>PUT /v1/settlements/{settlementId}/refunds/{refundId}</strong></p>
    *
-   * @param refundId       The ID of the refund
-   * @param cancelRequest  The request body for canceling a Refund.
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
-   * @return A {@code CancelResponse} object containing details about the canceled Refund, including the status and transaction time.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param refundId       the ID of the refund
+   * @param cancelRequest  the request body for canceling a Refund
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
+   * @return a {@code CancelResponse} object containing details about the canceled Refund, including the status and transaction time
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   CancelResponse cancelRefund(final String refundId, final CancelRequest cancelRequest,
       final RequestOptions requestOptions) throws PaysafeSdkException;
@@ -143,10 +143,10 @@ public interface RefundService {
    * <p>Endpoint:
    * <strong>PUT /v1/settlements/{settlementId}/refunds/{refundId}</strong></p>
    *
-   * @param refundId      The ID of the refund
-   * @param cancelRequest The request body for canceling a Refund.
-   * @return A {@code CancelResponse} object containing details about the canceled Refund, including the status and transaction time.
-   * @throws PaysafeSdkException If the request fails or the response cannot be processed.
+   * @param refundId      the ID of the refund
+   * @param cancelRequest the request body for canceling a Refund
+   * @return a {@code CancelResponse} object containing details about the canceled Refund, including the status and transaction time
+   * @throws PaysafeSdkException if the request fails or the response cannot be processed
    */
   CancelResponse cancelRefund(final String refundId, final CancelRequest cancelRequest) throws PaysafeSdkException;
 }

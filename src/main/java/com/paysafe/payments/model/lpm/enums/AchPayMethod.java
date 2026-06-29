@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm.enums;
 
@@ -6,15 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This is the payment type. Possible values are:
- * <ul>
- * <li>WEB - Website originated debit (Personal bank accounts only) </li>
- * <li>TEL - Telephone-Initiated Entry (Personal bank accounts only) </li>
- * <li>PPD - Personal account debit (Personal bank accounts only) </li>
- * <li>CCD - Business account debit (Business bank accounts only) </li>
- * </ul>
+ * This is the payment type. Possible values are: - WEB - Website originated debit (Personal bank accounts only) - TEL - Telephone-Initiated Entry (Personal bank accounts only) - PPD - Personal account debit (Personal bank accounts only) - CCD - Business account debit (Business bank accounts only)
  */
 public enum AchPayMethod {
+
   WEB("WEB"),
 
   TEL("TEL"),

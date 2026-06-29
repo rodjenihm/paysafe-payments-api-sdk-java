@@ -1,37 +1,33 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.paysafe.payments.model.common.enums.StoredCredentialRequestOccurrence;
-import com.paysafe.payments.model.common.enums.StoredCredentialRequestType;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.card.Card;
+import com.paysafe.payments.model.common.enums.StoredCredentialOccurrence;
+import com.paysafe.payments.model.common.enums.StoredCredentialType;
+import com.paysafe.payments.model.customer.Customer;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * The storedCredential object is used to identify authorization requests that use stored credentials for a consumer,
- * in order to improve authorization rates and reduce fraud. Stored credentials can be used in two cases:
- * <ul>
- * <li> Using a payment token – An authorization request that uses a paymentToken from the [Customer Vault API]</li>
- * <li> Using a card number – An authorization request that uses a credit card number stored by the merchant.</li>
- * </ul>
- * <b>Notes: </b>
- * <ul>
- * <li>If you use a paymentToken in the authorization request but do not include the storedCredential object, Paysafe
- * will provide default information taken from Customer Vault data.</li>
- * <li>You cannot include both the storedCredential object and the recurring parameter in the same authorization request.
- * Paysafe recommends using the storedCredential object.</li>
- * <li>The cvv parameter of the [card object] is required when the occurrence parameter is set to INITIAL. However, cvv is
- * not required when the occurrence parameter is set to SUBSEQUENT.</li>
- * <li>The storedCredential object cannot be used for Apple Pay or Google Pay transactions.</li>
- * </ul>
+ * 'The storedCredential object is used to identify [authorization requests] that use stored credentials for a consumer, in order to improve authorization rates and reduce fraud. Stored credentials can be used in two cases: - Using a payment token : An authorization request that uses a paymentToken from the [Customer Vault API] - Using a card number : An authorization request that uses a credit card number stored by the merchant. **Notes:** - If you use a paymentToken in the authorization request but do not include the storedCredential object, Paysafe will provide default information taken from Customer Vault data. - You cannot include both the storedCredential object and the recurring parameter in the same authorization request. Paysafe recommends using the storedCredential object. - The cvv parameter of the [card object] is required when the occurrence parameteris set to INITIAL. However, cvv is not required when the occurrence parameter is set to SUBSEQUENT. - The storedCredential object cannot be used for Apple Pay or Google Pay transactions.'
  */
 public class StoredCredential {
 
   @JsonProperty("type")
-  private StoredCredentialRequestType type = StoredCredentialRequestType.ADHOC;
+  private StoredCredentialType type;
   @JsonProperty("occurrence")
-  private StoredCredentialRequestOccurrence occurrence = StoredCredentialRequestOccurrence.INITIAL;
+  private StoredCredentialOccurrence occurrence;
   @JsonProperty("initialTransactionId")
   private String initialTransactionId;
   @JsonProperty("externalInitialTransactionId")
@@ -41,7 +37,7 @@ public class StoredCredential {
     super();
   }
 
-  private StoredCredential(Builder builder) {
+  private StoredCredential(final Builder builder) {
     setType(builder.type);
     setOccurrence(builder.occurrence);
     setInitialTransactionId(builder.initialTransactionId);
@@ -52,41 +48,44 @@ public class StoredCredential {
     return new Builder();
   }
 
-  public StoredCredential type(StoredCredentialRequestType type) {
+
+  public StoredCredential type(StoredCredentialType type) {
     this.type = type;
     return this;
   }
 
   /**
-   * This specifies the type of request being made. <b>Note:</b> This value defaults to ADHOC.
+   * Get type
    *
    * @return type
    */
-  public StoredCredentialRequestType getType() {
+  public StoredCredentialType getType() {
     return type;
   }
 
-  public void setType(StoredCredentialRequestType type) {
+  public void setType(StoredCredentialType type) {
     this.type = type;
   }
 
-  public StoredCredential occurrence(StoredCredentialRequestOccurrence occurrence) {
+
+  public StoredCredential occurrence(StoredCredentialOccurrence occurrence) {
     this.occurrence = occurrence;
     return this;
   }
 
   /**
-   * This specifies whether this stored credential request is initial or recurring. <b>Note:</b> This value defaults to INITIAL.
+   * Get occurrence
    *
    * @return occurrence
    */
-  public StoredCredentialRequestOccurrence getOccurrence() {
+  public StoredCredentialOccurrence getOccurrence() {
     return occurrence;
   }
 
-  public void setOccurrence(StoredCredentialRequestOccurrence occurrence) {
+  public void setOccurrence(StoredCredentialOccurrence occurrence) {
     this.occurrence = occurrence;
   }
+
 
   public StoredCredential initialTransactionId(String initialTransactionId) {
     this.initialTransactionId = initialTransactionId;
@@ -94,20 +93,7 @@ public class StoredCredential {
   }
 
   /**
-   * Id of the initial Recurring Payment transaction.
-   * <p>
-   * This id should be stored from the auth response of the transaction indicated as initial with the following:
-   * <ul>
-   * <li>type=RECURRING/TOPUP, occurrence=INITIAL. </li>
-   * </ul>
-   * <p>
-   * This reference should be provided when:
-   * <ul>
-   * <li>type = RECURRING and occurrence = SUBSEQUENT </li>
-   * <li>type = TOPUP and occurrence = SUBSEQUENT </li>
-   * </ul>
-   *
-   * <b>Note:</b> This reference is a must to meet PSD 2 authentication process requirements for merchant initiated transactions successfully.
+   * 'Id of the initial Recurring Payment transaction. This id should be stored from the auth response of the transaction indicated as initial with the following: type=RECURRING/TOPUP/ADHOC, occurrence=INITIAL. This reference should be provided when:   - type = RECURRING and occurrence = SUBSEQUENT   - type = TOPUP and occurrence = SUBSEQUENT   - type = ADHOC and occurrence = SUBSEQUENT **Note:** This reference is a must to meet PSD 2 authentication process requirements for merchant initiated transactions successfully.'
    *
    * @return initialTransactionId
    */
@@ -119,20 +105,14 @@ public class StoredCredential {
     this.initialTransactionId = initialTransactionId;
   }
 
+
   public StoredCredential externalInitialTransactionId(String externalInitialTransactionId) {
     this.externalInitialTransactionId = externalInitialTransactionId;
     return this;
   }
 
   /**
-   * Card Scheme Transaction Id of the initial payment transaction in the recurring plan when it was processed through external service provider.  <br>
-   * This reference should be provided only when:
-   * <ul>
-   * <li> type=RECURRING and occurrence=SUBSEQUENT </li>
-   * <li> type=TOPUP and occurrence=SUBSEQUENT  </li>
-   * </ul>
-   *
-   * <b>Note:</b> This reference cannot be provided along with initialTransactionId.
+   * 'Card Scheme Transaction Id of the initial payment transaction in the recurring plan when it was processed through external service provider. This reference should be provided only when:   - type=RECURRING and occurrence=SUBSEQUENT   - type=TOPUP and occurrence=SUBSEQUENT **Note:** This reference cannot be provided along with initialTransactionId.  Expected format by scheme (examples):   - Amex: 15 digits (for example, 012345678901234)   - Mastercard: 9 characters + 4 digits + 2 spaces (for example, MCC9999991231 )   - Visa: 15 digits (for example, 306123456789012) '
    *
    * @return externalInitialTransactionId
    */
@@ -187,11 +167,11 @@ public class StoredCredential {
   }
 
   /**
-   * {@code StoredCredential} builder static inner class.
+   * 'The storedCredential object is used to identify [authorization requests] that use stored credentials for a consumer, in order to improve authorization rates and reduce fraud. Stored credentials can be used in two cases: - Using a payment token : An authorization request that uses a paymentToken from the [Customer Vault API] - Using a card number : An authorization request that uses a credit card number stored by the merchant. **Notes:** - If you use a paymentToken in the authorization request but do not include the storedCredential object, Paysafe will provide default information taken from Customer Vault data. - You cannot include both the storedCredential object and the recurring parameter in the same authorization request. Paysafe recommends using the storedCredential object. - The cvv parameter of the [card object] is required when the occurrence parameteris set to INITIAL. However, cvv is not required when the occurrence parameter is set to SUBSEQUENT. - The storedCredential object cannot be used for Apple Pay or Google Pay transactions.' builder static inner class.
    */
   public static final class Builder {
-    private StoredCredentialRequestType type;
-    private StoredCredentialRequestOccurrence occurrence;
+    private StoredCredentialType type;
+    private StoredCredentialOccurrence occurrence;
     private String initialTransactionId;
     private String externalInitialTransactionId;
 
@@ -199,31 +179,33 @@ public class StoredCredential {
     }
 
     /**
-     * Sets the {@code type} and returns a reference to this Builder enabling method chaining.
+     * Sets the type and returns a reference to this Builder enabling method chaining.
      *
-     * @param type the {@code type} to set
+     * @param type the type to set
      * @return a reference to this Builder
      */
-    public Builder type(StoredCredentialRequestType type) {
+    public Builder type(StoredCredentialType type) {
       this.type = type;
       return this;
     }
 
     /**
-     * Sets the {@code occurrence} and returns a reference to this Builder enabling method chaining.
+     * Sets the occurrence and returns a reference to this Builder enabling method chaining.
      *
-     * @param occurrence the {@code occurrence} to set
+     * @param occurrence the occurrence to set
      * @return a reference to this Builder
      */
-    public Builder occurrence(StoredCredentialRequestOccurrence occurrence) {
+    public Builder occurrence(StoredCredentialOccurrence occurrence) {
       this.occurrence = occurrence;
       return this;
     }
 
     /**
-     * Sets the {@code initialTransactionId} and returns a reference to this Builder enabling method chaining.
+     * 'Id of the initial Recurring Payment transaction. This id should be stored from the auth response of the transaction indicated as initial with the following: type=RECURRING/TOPUP/ADHOC, occurrence=INITIAL. This reference should be provided when:   - type = RECURRING and occurrence = SUBSEQUENT   - type = TOPUP and occurrence = SUBSEQUENT   - type = ADHOC and occurrence = SUBSEQUENT **Note:** This reference is a must to meet PSD 2 authentication process requirements for merchant initiated transactions successfully.'
+     * <p>
+     * Sets the initialTransactionId and returns a reference to this Builder enabling method chaining.
      *
-     * @param initialTransactionId the {@code initialTransactionId} to set
+     * @param initialTransactionId the initialTransactionId to set
      * @return a reference to this Builder
      */
     public Builder initialTransactionId(String initialTransactionId) {
@@ -232,9 +214,11 @@ public class StoredCredential {
     }
 
     /**
-     * Sets the {@code externalInitialTransactionId} and returns a reference to this Builder enabling method chaining.
+     * 'Card Scheme Transaction Id of the initial payment transaction in the recurring plan when it was processed through external service provider. This reference should be provided only when:   - type=RECURRING and occurrence=SUBSEQUENT   - type=TOPUP and occurrence=SUBSEQUENT **Note:** This reference cannot be provided along with initialTransactionId.  Expected format by scheme (examples):   - Amex: 15 digits (for example, 012345678901234)   - Mastercard: 9 characters + 4 digits + 2 spaces (for example, MCC9999991231 )   - Visa: 15 digits (for example, 306123456789012) '
+     * <p>
+     * Sets the externalInitialTransactionId and returns a reference to this Builder enabling method chaining.
      *
-     * @param externalInitialTransactionId the {@code externalInitialTransactionId} to set
+     * @param externalInitialTransactionId the externalInitialTransactionId to set
      * @return a reference to this Builder
      */
     public Builder externalInitialTransactionId(String externalInitialTransactionId) {
@@ -243,13 +227,12 @@ public class StoredCredential {
     }
 
     /**
-     * Returns a {@code StoredCredential} built from the parameters previously set.
+     * Returns a StoredCredential built from the parameters previously set.
      *
-     * @return a {@code StoredCredential} built with parameters of this {@code StoredCredential.Builder}
+     * @return a StoredCredential built with parameters of this StoredCredential.Builder
      */
     public StoredCredential build() {
       return new StoredCredential(this);
     }
   }
 }
-

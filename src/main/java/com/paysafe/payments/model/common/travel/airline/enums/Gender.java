@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.airline.enums;
 
@@ -6,13 +6,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This field indicates the flight passenger's gender.
+ * This field indicates the flight passenger's gender. Options: M – Male, F – Female, O – Other, N – Not Specified
  */
 public enum Gender {
+
   M("M"),
+
   F("F"),
-  O("Other"),
-  N("Not specified");
+
+  O("O"),
+
+  N("N");
 
   private final String value;
 

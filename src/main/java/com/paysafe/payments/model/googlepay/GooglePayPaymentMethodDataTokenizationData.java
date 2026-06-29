@@ -1,13 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.googlepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.payment.Payment;
+
+
 
 /**
- * The tokenization data for Google Pay.
+ * The tokenization data for Google Pay
  */
 public class GooglePayPaymentMethodDataTokenizationData {
 
@@ -22,7 +31,7 @@ public class GooglePayPaymentMethodDataTokenizationData {
     super();
   }
 
-  private GooglePayPaymentMethodDataTokenizationData(Builder builder) {
+  private GooglePayPaymentMethodDataTokenizationData(final Builder builder) {
     setToken(builder.token);
     setType(builder.type);
     setDecryptedToken(builder.decryptedToken);
@@ -32,17 +41,18 @@ public class GooglePayPaymentMethodDataTokenizationData {
     return new Builder();
   }
 
+
   public GooglePayPaymentMethodDataTokenizationData token(String token) {
     this.token = token;
     return this;
   }
 
   /**
-   * This object contains the user's payment credentials.
+   * This object contains the user's payment credentials
    *
    * @return token
    */
-  public Object getToken() {
+  public String getToken() {
     return token;
   }
 
@@ -50,13 +60,14 @@ public class GooglePayPaymentMethodDataTokenizationData {
     this.token = token;
   }
 
+
   public GooglePayPaymentMethodDataTokenizationData type(String type) {
     this.type = type;
     return this;
   }
 
   /**
-   * Type property of Google Pay Payment Method.
+   * Type property of Google Pay Payment Method
    *
    * @return type
    */
@@ -68,13 +79,14 @@ public class GooglePayPaymentMethodDataTokenizationData {
     this.type = type;
   }
 
+
   public GooglePayPaymentMethodDataTokenizationData decryptedToken(GooglePayDecryptedToken decryptedToken) {
     this.decryptedToken = decryptedToken;
     return this;
   }
 
   /**
-   * This is the payment data object generated from the Android device for Google Pay.
+   * Get decryptedToken
    *
    * @return decryptedToken
    */
@@ -94,10 +106,10 @@ public class GooglePayPaymentMethodDataTokenizationData {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GooglePayPaymentMethodDataTokenizationData GooglePayPaymentMethodDataTokenizationData = (GooglePayPaymentMethodDataTokenizationData) o;
-    return Objects.equals(this.token, GooglePayPaymentMethodDataTokenizationData.token) &&
-        Objects.equals(this.type, GooglePayPaymentMethodDataTokenizationData.type) &&
-        Objects.equals(this.decryptedToken, GooglePayPaymentMethodDataTokenizationData.decryptedToken);
+    GooglePayPaymentMethodDataTokenizationData googlePayPaymentMethodDataTokenizationData = (GooglePayPaymentMethodDataTokenizationData) o;
+    return Objects.equals(this.token, googlePayPaymentMethodDataTokenizationData.token) &&
+        Objects.equals(this.type, googlePayPaymentMethodDataTokenizationData.type) &&
+        Objects.equals(this.decryptedToken, googlePayPaymentMethodDataTokenizationData.decryptedToken);
   }
 
   @Override
@@ -127,7 +139,7 @@ public class GooglePayPaymentMethodDataTokenizationData {
   }
 
   /**
-   * {@code GooglePayPaymentMethodDataTokenizationData} builder static inner class.
+   * The tokenization data for Google Pay builder static inner class.
    */
   public static final class Builder {
     private String token;
@@ -138,9 +150,11 @@ public class GooglePayPaymentMethodDataTokenizationData {
     }
 
     /**
-     * Sets the {@code token} and returns a reference to this Builder enabling method chaining.
+     * This object contains the user's payment credentials
+     * <p>
+     * Sets the token and returns a reference to this Builder enabling method chaining.
      *
-     * @param token the {@code token} to set
+     * @param token the token to set
      * @return a reference to this Builder
      */
     public Builder token(String token) {
@@ -149,9 +163,11 @@ public class GooglePayPaymentMethodDataTokenizationData {
     }
 
     /**
-     * Sets the {@code type} and returns a reference to this Builder enabling method chaining.
+     * Type property of Google Pay Payment Method
+     * <p>
+     * Sets the type and returns a reference to this Builder enabling method chaining.
      *
-     * @param type the {@code type} to set
+     * @param type the type to set
      * @return a reference to this Builder
      */
     public Builder type(String type) {
@@ -160,9 +176,9 @@ public class GooglePayPaymentMethodDataTokenizationData {
     }
 
     /**
-     * Sets the {@code decryptedToken} and returns a reference to this Builder enabling method chaining.
+     * Sets the decryptedToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param decryptedToken the {@code decryptedToken} to set
+     * @param decryptedToken the decryptedToken to set
      * @return a reference to this Builder
      */
     public Builder decryptedToken(GooglePayDecryptedToken decryptedToken) {
@@ -171,13 +187,12 @@ public class GooglePayPaymentMethodDataTokenizationData {
     }
 
     /**
-     * Returns a {@code GooglePayPaymentMethodDataTokenizationData} built from the parameters previously set.
+     * Returns a GooglePayPaymentMethodDataTokenizationData built from the parameters previously set.
      *
-     * @return a {@code GooglePayPaymentMethodDataTokenizationData} built with parameters of this {@code GooglePayPaymentMethodDataTokenizationData.Builder}
+     * @return a GooglePayPaymentMethodDataTokenizationData built with parameters of this GooglePayPaymentMethodDataTokenizationData.Builder
      */
     public GooglePayPaymentMethodDataTokenizationData build() {
       return new GooglePayPaymentMethodDataTokenizationData(this);
     }
   }
 }
-

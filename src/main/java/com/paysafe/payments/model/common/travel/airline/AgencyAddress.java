@@ -1,22 +1,29 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.airline;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.customer.Address;
+
+
 
 /**
- * The travel agency address
+ * The travel agency address.
  */
 public class AgencyAddress {
 
   @JsonProperty("street")
   private String street;
-
   @JsonProperty("zip")
   private String zip;
-
   @JsonProperty("country")
   private String country;
 
@@ -24,7 +31,7 @@ public class AgencyAddress {
     super();
   }
 
-  private AgencyAddress(Builder builder) {
+  private AgencyAddress(final Builder builder) {
     setStreet(builder.street);
     setZip(builder.zip);
     setCountry(builder.country);
@@ -34,13 +41,14 @@ public class AgencyAddress {
     return new Builder();
   }
 
+
   public AgencyAddress street(String street) {
     this.street = street;
     return this;
   }
 
   /**
-   * Address line of the agent selling the ticket.
+   * Address line of the agent selling the ticket
    *
    * @return street
    */
@@ -52,13 +60,14 @@ public class AgencyAddress {
     this.street = street;
   }
 
+
   public AgencyAddress zip(String zip) {
     this.zip = zip;
     return this;
   }
 
   /**
-   * Postal code of the agent selling the ticket.
+   * Postal code of the agent selling the ticket
    *
    * @return zip
    */
@@ -70,16 +79,16 @@ public class AgencyAddress {
     this.zip = zip;
   }
 
+
   public AgencyAddress country(String country) {
     this.country = country;
     return this;
   }
 
   /**
-   * ISO Country code of agent selling the ticket.
+   * ISO Country code of agent selling the ticket
    *
    * @return country
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#country-codes>Country codes</a>
    */
   public String getCountry() {
     return country;
@@ -130,7 +139,7 @@ public class AgencyAddress {
   }
 
   /**
-   * {@code AgencyAddress} builder static inner class.
+   * The travel agency address. builder static inner class.
    */
   public static final class Builder {
     private String street;
@@ -141,9 +150,11 @@ public class AgencyAddress {
     }
 
     /**
-     * Sets the {@code street} and returns a reference to this Builder enabling method chaining.
+     * Address line of the agent selling the ticket
+     * <p>
+     * Sets the street and returns a reference to this Builder enabling method chaining.
      *
-     * @param street the {@code street} to set
+     * @param street the street to set
      * @return a reference to this Builder
      */
     public Builder street(String street) {
@@ -152,9 +163,11 @@ public class AgencyAddress {
     }
 
     /**
-     * Sets the {@code zip} and returns a reference to this Builder enabling method chaining.
+     * Postal code of the agent selling the ticket
+     * <p>
+     * Sets the zip and returns a reference to this Builder enabling method chaining.
      *
-     * @param zip the {@code zip} to set
+     * @param zip the zip to set
      * @return a reference to this Builder
      */
     public Builder zip(String zip) {
@@ -163,9 +176,11 @@ public class AgencyAddress {
     }
 
     /**
-     * Sets the {@code country} and returns a reference to this Builder enabling method chaining.
+     * ISO Country code of agent selling the ticket
+     * <p>
+     * Sets the country and returns a reference to this Builder enabling method chaining.
      *
-     * @param country the {@code country} to set
+     * @param country the country to set
      * @return a reference to this Builder
      */
     public Builder country(String country) {
@@ -174,13 +189,12 @@ public class AgencyAddress {
     }
 
     /**
-     * Returns a {@code AgencyAddress} built from the parameters previously set.
+     * Returns a AgencyAddress built from the parameters previously set.
      *
-     * @return a {@code AgencyAddress} built with parameters of this {@code AgencyAddress.Builder}
+     * @return a AgencyAddress built with parameters of this AgencyAddress.Builder
      */
     public AgencyAddress build() {
       return new AgencyAddress(this);
     }
   }
 }
-

@@ -1,188 +1,374 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
- * Standard ISO 4217 currencies.
+ * Currency code for transactions
  */
 public enum CurrencyCode {
-  AED("United Arab Emirates Dirham"),
-  AFN("Afghanistan Afghani"),
-  ALL("Albania Lek"),
-  AMD("Armenia Dram"),
-  ANG("Netherlands Antilles Guilder"),
-  AOA("Angola Kwanza"),
-  ARS("Argentina Peso"),
-  AUD("Australia Dollar"),
-  AWG("Aruba Guilder"),
-  AZN("Azerbaijan New Manat"),
-  BAM("Bosnia and Herzegovina Convertible Marka"),
-  BBD("Barbados Dollar"),
-  BDT("Bangladesh Taka"),
-  BGN("Bulgaria Lev"),
-  BHD("Bahrain Dinar"),
-  BIF("Burundi Franc"),
-  BMD("Bermuda Dollar"),
-  BND("Brunei Darussalam Dollar"),
-  BOB("Bolivia Boliviano"),
-  BRL("Brazil Real"),
-  BSD("Bahamas Dollar"),
-  BTN("Bhutan Ngultrum"),
-  BWP("Botswana Pula"),
-  BYR("Belarus Ruble"),
-  BZD("Belize Dollar"),
-  CAD("Canada Dollar"),
-  CDF("Congo/Kinshasa Franc"),
-  CHF("Switzerland Franc"),
-  CLP("Chile Peso"),
-  CNY("China Yuan Renminbi"),
-  COP("Colombia Peso"),
-  CRC("Costa Rica Colon"),
-  CUC("Cuba Convertible Peso"),
-  CUP("Cuba Peso"),
-  CVE("Cape Verde Escudo"),
-  CZK("Czech Republic Koruna"),
-  DJF("Djibouti Franc"),
-  DKK("Denmark Krone"),
-  DOP("Dominican Republic Peso"),
-  DZD("Algeria Dinar"),
-  EGP("Egypt Pound"),
-  ERN("Eritrea Nakfa"),
-  ETB("Ethiopia Birr"),
-  EUR("Euro Member Countries"),
-  FJD("Fiji Dollar"),
-  FKP("Falkland Islands (Malvinas) Pound"),
-  GBP("United Kingdom Pound"),
-  GEL("Georgia Lari"),
-  GGP("Guernsey Pound"),
-  GHS("Ghana Cedi"),
-  GIP("Gibraltar Pound"),
-  GMD("Gambia Dalasi"),
-  GNF("Guinea Franc"),
-  GTQ("Guatemala Quetzal"),
-  GWP("Peso da Guiné-Bissau (Portuguese)"),
-  GYD("Guyana Dollar"),
-  HKD("Hong Kong Dollar"),
-  HNL("Honduras Lempira"),
-  HRK("Croatia Kuna"),
-  HTG("Haiti Gourde"),
-  HUF("Hungary Forint"),
-  IDR("Indonesia Rupiah"),
-  ILS("Israel Shekel"),
-  IMP("Isle of Man Pound"),
-  INR("India Rupee"),
-  IQD("Iraq Dinar"),
-  IRR("Iran Rial"),
-  ISK("Iceland Krona"),
-  JEP("Jersey Pound"),
-  JMD("Jamaica Dollar"),
-  JOD("Jordan Dinar"),
-  JPY("Japan Yen"),
-  KES("Kenya Shilling"),
-  KGS("Kyrgyzstan Som"),
-  KHR("Cambodia Riel"),
-  KMF("Comoros Franc"),
-  KPW("Korea (North) Won"),
-  KRW("Korea (South) Won"),
-  KWD("Kuwait Dinar"),
-  KYD("Cayman Islands Dollar"),
-  KZT("Kazakhstan Tenge"),
-  LAK("Laos Kip"),
-  LBP("Lebanon Pound"),
-  LKR("Sri Lanka Rupee"),
-  LRD("Liberia Dollar"),
-  LSL("Lesotho Loti"),
-  LTL("Italian Lira"),
-  LVL("Latvian Lat"),
-  LYD("Libya Dinar"),
-  MAD("Morocco Dirham"),
-  MDL("Moldova Leu"),
-  MGA("Madagascar Ariary"),
-  MKD("Macedonia Denar"),
-  MMK("Myanmar (Burma) Kyat"),
-  MNT("Mongolia Tughrik"),
-  MOP("Macau Pataca"),
-  MRO("Mauritania Ouguiya"),
-  MUR("Mauritius Rupee"),
-  MVR("Maldives (Maldive Islands) Rufiyaa"),
-  MWK("Malawi Kwacha"),
-  MXN("Mexico Peso"),
-  MYR("Malaysia Ringgit"),
-  MZN("Mozambique Metical"),
-  NAD("Namibia Dollar"),
-  NGN("Nigeria Naira"),
-  NIO("Nicaragua Cordoba"),
-  NOK("Norway Krone"),
-  NPR("Nepal Rupee"),
-  NZD("New Zealand Dollar"),
-  OMR("Oman Rial"),
-  PAB("Panama Balboa"),
-  PEN("Peru Nuevo Sol"),
-  PGK("Papua New Guinea Kina"),
-  PHP("Philippines Peso"),
-  PKR("Pakistan Rupee"),
-  PLN("Poland Zloty"),
-  PYG("Paraguay Guarani"),
-  QAR("Qatar Riyal"),
-  RON("Romania New Leu"),
-  RSD("Serbia Dinar"),
-  RUB("Russia Ruble"),
-  RWF("Rwanda Franc"),
-  SAR("Saudi Arabia Riyal"),
-  SBD("Solomon Islands Dollar"),
-  SCR("Seychelles Rupee"),
-  SDG("Sudan Pound"),
-  SEK("Sweden Krona"),
-  SGD("Singapore Dollar"),
-  SHP("Saint Helena Pound"),
-  SLL("Sierra Leone Leone"),
-  SOS("Somalia Shilling"),
-  SPL("Seborga Luigino"),
-  SRD("Suriname Dollar"),
-  SSP("South Sudanese pound"),
-  STD("São Tomé and Príncipe Dobra"),
-  SVC("El Salvador Colon"),
-  SYP("Syria Pound"),
-  SZL("Swaziland Lilangeni"),
-  THB("Thailand Baht"),
-  TJS("Tajikistan Somoni"),
-  TMT("Turkmenistan Manat"),
-  TND("Tunisia Dinar"),
-  TOP("Tonga Pa'anga"),
-  TRY("Turkey Lira"),
-  TTD("Trinidad and Tobago Dollar"),
-  TVD("Tuvalu Dollar"),
-  TWD("Taiwan New Dollar"),
-  TZS("Tanzania Shilling"),
-  UAH("Ukraine Hryvnia"),
-  UGX("Uganda Shilling"),
-  USD("United States Dollar"),
-  UYU("Uruguay Peso"),
-  UZS("Uzbekistan Som"),
-  VEF("Venezuela Bolivar"),
-  VND("Viet Nam Dong"),
-  VUV("Vanuatu Vatu"),
-  WST("Samoa Tala"),
-  XAF("Communauté Financière Africaine (BEAC) CFA Franc BEAC"),
-  XCD("East Caribbean Dollar"),
-  XDR("International Monetary Fund (IMF) Special Drawing Rights"),
-  XOF("Communauté Financière Africaine (BCEAO) Franc"),
-  XPF("Comptoirs Français du Pacifique (CFP) Franc"),
-  YER("Yemen Rial"),
-  ZAR("South Africa Rand"),
-  ZMW("Zambia Kwacha"),
-  ZMK("Zambian kwacha"),
-  ZWD("Zimbabwe Dollar"),
+
+  AED("AED"),
+
+  AFN("AFN"),
+
+  ALL("ALL"),
+
+  AMD("AMD"),
+
+  ANG("ANG"),
+
+  AOA("AOA"),
+
+  ARS("ARS"),
+
+  AUD("AUD"),
+
+  AWG("AWG"),
+
+  AZN("AZN"),
+
+  BAM("BAM"),
+
+  BBD("BBD"),
+
+  BDT("BDT"),
+
+  BGN("BGN"),
+
+  BHD("BHD"),
+
+  BIF("BIF"),
+
+  BMD("BMD"),
+
+  BND("BND"),
+
+  BOB("BOB"),
+
+  BRL("BRL"),
+
+  BSD("BSD"),
+
+  BTN("BTN"),
+
+  BWP("BWP"),
+
+  BYR("BYR"),
+
+  BZD("BZD"),
+
+  CAD("CAD"),
+
+  CDF("CDF"),
+
+  CHF("CHF"),
+
+  CLP("CLP"),
+
+  CNY("CNY"),
+
+  COP("COP"),
+
+  CRC("CRC"),
+
+  CUC("CUC"),
+
+  CUP("CUP"),
+
+  CVE("CVE"),
+
+  CZK("CZK"),
+
+  DJF("DJF"),
+
+  DKK("DKK"),
+
+  DOP("DOP"),
+
+  DZD("DZD"),
+
+  EGP("EGP"),
+
+  ERN("ERN"),
+
+  ETB("ETB"),
+
+  EUR("EUR"),
+
+  FJD("FJD"),
+
+  FKP("FKP"),
+
+  GBP("GBP"),
+
+  GEL("GEL"),
+
+  GGP("GGP"),
+
+  GHS("GHS"),
+
+  GIP("GIP"),
+
+  GMD("GMD"),
+
+  GNF("GNF"),
+
+  GTQ("GTQ"),
+
+  GWP("GWP"),
+
+  GYD("GYD"),
+
+  HKD("HKD"),
+
+  HNL("HNL"),
+
+  HRK("HRK"),
+
+  HTG("HTG"),
+
+  HUF("HUF"),
+
+  IDR("IDR"),
+
+  ILS("ILS"),
+
+  IMP("IMP"),
+
+  INR("INR"),
+
+  IQD("IQD"),
+
+  IRR("IRR"),
+
+  ISK("ISK"),
+
+  JEP("JEP"),
+
+  JMD("JMD"),
+
+  JOD("JOD"),
+
+  JPY("JPY"),
+
+  KES("KES"),
+
+  KGS("KGS"),
+
+  KHR("KHR"),
+
+  KMF("KMF"),
+
+  KPW("KPW"),
+
+  KRW("KRW"),
+
+  KWD("KWD"),
+
+  KYD("KYD"),
+
+  KZT("KZT"),
+
+  LAK("LAK"),
+
+  LBP("LBP"),
+
+  LKR("LKR"),
+
+  LRD("LRD"),
+
+  LSL("LSL"),
+
+  LTL("LTL"),
+
+  LVL("LVL"),
+
+  LYD("LYD"),
+
+  MAD("MAD"),
+
+  MDL("MDL"),
+
+  MGA("MGA"),
+
+  MKD("MKD"),
+
+  MMK("MMK"),
+
+  MNT("MNT"),
+
+  MOP("MOP"),
+
+  MRO("MRO"),
+
+  MUR("MUR"),
+
+  MVR("MVR"),
+
+  MWK("MWK"),
+
+  MXN("MXN"),
+
+  MYR("MYR"),
+
+  MZN("MZN"),
+
+  NAD("NAD"),
+
+  NGN("NGN"),
+
+  NIO("NIO"),
+
+  NOK("NOK"),
+
+  NPR("NPR"),
+
+  NZD("NZD"),
+
+  OMR("OMR"),
+
+  PAB("PAB"),
+
+  PEN("PEN"),
+
+  PGK("PGK"),
+
+  PHP("PHP"),
+
+  PKR("PKR"),
+
+  PLN("PLN"),
+
+  PYG("PYG"),
+
+  QAR("QAR"),
+
+  RON("RON"),
+
+  RSD("RSD"),
+
+  RUB("RUB"),
+
+  RWF("RWF"),
+
+  SAR("SAR"),
+
+  SBD("SBD"),
+
+  SCR("SCR"),
+
+  SDG("SDG"),
+
+  SEK("SEK"),
+
+  SGD("SGD"),
+
+  SHP("SHP"),
+
+  SLL("SLL"),
+
+  SOS("SOS"),
+
+  SPL("SPL"),
+
+  SRD("SRD"),
+
+  SSP("SSP"),
+
+  STD("STD"),
+
+  SVC("SVC"),
+
+  SYP("SYP"),
+
+  SZL("SZL"),
+
+  THB("THB"),
+
+  TJS("TJS"),
+
+  TMT("TMT"),
+
+  TND("TND"),
+
+  TOP("TOP"),
+
+  TRY("TRY"),
+
+  TTD("TTD"),
+
+  TVD("TVD"),
+
+  TWD("TWD"),
+
+  TZS("TZS"),
+
+  UAH("UAH"),
+
+  UGX("UGX"),
+
+  USD("USD"),
+
+  UYU("UYU"),
+
+  UZS("UZS"),
+
+  VEF("VEF"),
+
+  VND("VND"),
+
+  VUV("VUV"),
+
+  WST("WST"),
+
+  XAF("XAF"),
+
+  XCD("XCD"),
+
+  XDR("XDR"),
+
+  XOF("XOF"),
+
+  XPF("XPF"),
+
+  YER("YER"),
+
+  ZAR("ZAR"),
+
+  ZMW("ZMW"),
+
+  ZMK("ZMK"),
+
+  ZWD("ZWD"),
+
   INVALID("INVALID");
 
-  private final String description;
+  private final String value;
 
-  CurrencyCode(String description) {
-    this.description = description;
+  CurrencyCode(String value) {
+    this.value = value;
   }
 
-  public String getDescription() {
-    return description;
+  @JsonCreator
+  public static CurrencyCode fromValue(String value) {
+    for (CurrencyCode b : CurrencyCode.values()) {
+      if (b.value.equalsIgnoreCase(value)) {
+        return b;
+      }
+    }
+    return null;
   }
 
+  @JsonValue
+  public String getValue() {
+    return value;
+  }
+
+  @Override
+  public String toString() {
+    return String.valueOf(value);
+  }
 }

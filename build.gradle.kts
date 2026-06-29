@@ -5,16 +5,19 @@ plugins {
     id("jacoco")
 }
 
-val applicationJavaVersion = "11"
+val applicationJavaVersion = 11
 val jacocoVersion = "0.8.15"
-val jacksonVersion = "2.21.2"
-val junitVersion = "5.14.3"
+val jacksonVersion = "2.22.0"
+val junitVersion = "5.14.4"
+val jknackVersion = "4.5.2"
 val wiremockVersion = "3.13.2"
 val slf4jVersion = "2.0.17"
-val apacheHttpClientVersion = "5.6"
-val jsonSmartVersion = "2.5.2"
-val eclipseJettyHttpVersion = "11.0.25"
-val commonsIoVersion = "2.19.0"
+val apacheHttpClientVersion = "5.6.1"
+val jsonSmartVersion = "2.6.0"
+val eclipseJettyHttpVersion = "11.0.26"
+val commonsIoVersion = "2.22.0"
+val mockitoVersion = "5.23.0"
+val logbackClassicVersion = "1.5.35"
 
 java {
     toolchain {
@@ -27,11 +30,16 @@ repositories {
 }
 
 dependencies {
+    // main
     implementation("org.apache.httpcomponents.client5:httpclient5:$apacheHttpClientVersion")
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("org.slf4j:slf4j-api:$slf4jVersion") {
+        exclude("com.github.jknack:handlebars:4.3.1")
+    }
+    implementation("com.github.jknack:handlebars:$jknackVersion")
 
+    // test
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion") {
         exclude("net.minidev:json-smart:2.5.0")
@@ -43,8 +51,10 @@ dependencies {
     }
     testImplementation("org.eclipse.jetty:jetty-http:$eclipseJettyHttpVersion")
     testImplementation("commons-io:commons-io:$commonsIoVersion")
+    testImplementation("org.mockito:mockito-core:$mockitoVersion")
+    testImplementation("org.mockito:mockito-junit-jupiter:$mockitoVersion")
+    testImplementation("ch.qos.logback:logback-classic:$logbackClassicVersion")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
 }
 
 tasks.test {

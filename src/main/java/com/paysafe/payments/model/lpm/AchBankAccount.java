@@ -1,13 +1,21 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
- * This are the bank details which requires in case of enrollment/payments/payouts
+ * This are the bank details which requires in case of enrollment/payments/payouts.
  */
 public class AchBankAccount {
 
@@ -32,7 +40,7 @@ public class AchBankAccount {
     super();
   }
 
-  private AchBankAccount(Builder builder) {
+  private AchBankAccount(final Builder builder) {
     setId(builder.id);
     setBankName(builder.bankName);
     setRegistrationId(builder.registrationId);
@@ -47,13 +55,14 @@ public class AchBankAccount {
     return new Builder();
   }
 
+
   public AchBankAccount id(String id) {
     this.id = id;
     return this;
   }
 
   /**
-   * The id of this bank resource.
+   * The id of this bank resource
    *
    * @return id
    */
@@ -65,13 +74,14 @@ public class AchBankAccount {
     this.id = id;
   }
 
+
   public AchBankAccount bankName(String bankName) {
     this.bankName = bankName;
     return this;
   }
 
   /**
-   * The customers bank account name.
+   * The customers bank account name
    *
    * @return bankName
    */
@@ -83,13 +93,14 @@ public class AchBankAccount {
     this.bankName = bankName;
   }
 
+
   public AchBankAccount registrationId(String registrationId) {
     this.registrationId = registrationId;
     return this;
   }
 
   /**
-   * The corresponding registrationId associated with this bank account.
+   * The corresponding registrationId associated with this bank account
    *
    * @return registrationId
    */
@@ -101,13 +112,14 @@ public class AchBankAccount {
     this.registrationId = registrationId;
   }
 
+
   public AchBankAccount routingNumber(String routingNumber) {
     this.routingNumber = routingNumber;
     return this;
   }
 
   /**
-   * The routing number of the bank.
+   * The routing number of the bank
    *
    * @return routingNumber
    */
@@ -119,13 +131,14 @@ public class AchBankAccount {
     this.routingNumber = routingNumber;
   }
 
+
   public AchBankAccount accountNumber(String accountNumber) {
     this.accountNumber = accountNumber;
     return this;
   }
 
   /**
-   * The customers bank account number.
+   * The customers bank account number
    *
    * @return accountNumber
    */
@@ -137,13 +150,14 @@ public class AchBankAccount {
     this.accountNumber = accountNumber;
   }
 
+
   public AchBankAccount lastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
     return this;
   }
 
   /**
-   * The last digits of bank account number.
+   * The last digits of bank account number
    *
    * @return lastDigits
    */
@@ -154,6 +168,7 @@ public class AchBankAccount {
   public void setLastDigits(String lastDigits) {
     this.lastDigits = lastDigits;
   }
+
 
   public AchBankAccount paymentToken(String paymentToken) {
     this.paymentToken = paymentToken;
@@ -173,13 +188,14 @@ public class AchBankAccount {
     this.paymentToken = paymentToken;
   }
 
+
   public AchBankAccount paymentHandleToken(String paymentHandleToken) {
     this.paymentHandleToken = paymentHandleToken;
     return this;
   }
 
   /**
-   * The unique token associated with this bank account.
+   * The unique token associated with this bank account
    *
    * @return paymentHandleToken
    */
@@ -242,7 +258,7 @@ public class AchBankAccount {
   }
 
   /**
-   * {@code AchBankAccount} builder static inner class.
+   * This are the bank details which requires in case of enrollment/payments/payouts. builder static inner class.
    */
   public static final class Builder {
     private String id;
@@ -258,9 +274,11 @@ public class AchBankAccount {
     }
 
     /**
-     * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
+     * The id of this bank resource
+     * <p>
+     * Sets the id and returns a reference to this Builder enabling method chaining.
      *
-     * @param id the {@code id} to set
+     * @param id the id to set
      * @return a reference to this Builder
      */
     public Builder id(String id) {
@@ -269,9 +287,11 @@ public class AchBankAccount {
     }
 
     /**
-     * Sets the {@code bankName} and returns a reference to this Builder enabling method chaining.
+     * The customers bank account name
+     * <p>
+     * Sets the bankName and returns a reference to this Builder enabling method chaining.
      *
-     * @param bankName the {@code bankName} to set
+     * @param bankName the bankName to set
      * @return a reference to this Builder
      */
     public Builder bankName(String bankName) {
@@ -280,9 +300,11 @@ public class AchBankAccount {
     }
 
     /**
-     * Sets the {@code registrationId} and returns a reference to this Builder enabling method chaining.
+     * The corresponding registrationId associated with this bank account
+     * <p>
+     * Sets the registrationId and returns a reference to this Builder enabling method chaining.
      *
-     * @param registrationId the {@code registrationId} to set
+     * @param registrationId the registrationId to set
      * @return a reference to this Builder
      */
     public Builder registrationId(String registrationId) {
@@ -291,9 +313,11 @@ public class AchBankAccount {
     }
 
     /**
-     * Sets the {@code routingNumber} and returns a reference to this Builder enabling method chaining.
+     * The routing number of the bank
+     * <p>
+     * Sets the routingNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param routingNumber the {@code routingNumber} to set
+     * @param routingNumber the routingNumber to set
      * @return a reference to this Builder
      */
     public Builder routingNumber(String routingNumber) {
@@ -302,9 +326,11 @@ public class AchBankAccount {
     }
 
     /**
-     * Sets the {@code accountNumber} and returns a reference to this Builder enabling method chaining.
+     * The customers bank account number
+     * <p>
+     * Sets the accountNumber and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountNumber the {@code accountNumber} to set
+     * @param accountNumber the accountNumber to set
      * @return a reference to this Builder
      */
     public Builder accountNumber(String accountNumber) {
@@ -313,9 +339,11 @@ public class AchBankAccount {
     }
 
     /**
-     * Sets the {@code lastDigits} and returns a reference to this Builder enabling method chaining.
+     * The last digits of bank account number
+     * <p>
+     * Sets the lastDigits and returns a reference to this Builder enabling method chaining.
      *
-     * @param lastDigits the {@code lastDigits} to set
+     * @param lastDigits the lastDigits to set
      * @return a reference to this Builder
      */
     public Builder lastDigits(String lastDigits) {
@@ -324,9 +352,11 @@ public class AchBankAccount {
     }
 
     /**
-     * Sets the {@code paymentToken} and returns a reference to this Builder enabling method chaining.
+     * The unique token associated with this bank account
+     * <p>
+     * Sets the paymentToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentToken the {@code paymentToken} to set
+     * @param paymentToken the paymentToken to set
      * @return a reference to this Builder
      */
     public Builder paymentToken(String paymentToken) {
@@ -335,9 +365,11 @@ public class AchBankAccount {
     }
 
     /**
-     * Sets the {@code paymentHandleToken} and returns a reference to this Builder enabling method chaining.
+     * The unique token associated with this bank account
+     * <p>
+     * Sets the paymentHandleToken and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentHandleToken the {@code paymentHandleToken} to set
+     * @param paymentHandleToken the paymentHandleToken to set
      * @return a reference to this Builder
      */
     public Builder paymentHandleToken(String paymentHandleToken) {
@@ -346,13 +378,12 @@ public class AchBankAccount {
     }
 
     /**
-     * Returns a {@code AchBankAccount} built from the parameters previously set.
+     * Returns a AchBankAccount built from the parameters previously set.
      *
-     * @return a {@code AchBankAccount} built with parameters of this {@code AchBankAccount.Builder}
+     * @return a AchBankAccount built with parameters of this AchBankAccount.Builder
      */
     public AchBankAccount build() {
       return new AchBankAccount(this);
     }
   }
 }
-

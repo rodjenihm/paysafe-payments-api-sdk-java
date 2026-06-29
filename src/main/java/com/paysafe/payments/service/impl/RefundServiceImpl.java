@@ -3,7 +3,6 @@
 package com.paysafe.payments.service.impl;
 
 import static com.paysafe.payments.api.PaysafeApiClient.buildQueryParameters;
-import static com.paysafe.payments.api.PaysafeApiClient.processResponse;
 
 import com.paysafe.payments.api.PaysafeApiClient;
 import com.paysafe.payments.api.PaysafeApiResponse;
@@ -42,7 +41,7 @@ public class RefundServiceImpl implements RefundService {
   public Refund processRefund(final String settlementId, final RefundRequest refundRequest, final RequestOptions requestOptions) throws PaysafeSdkException {
     final String path = String.format(PROCESS_REFUND_ENDPOINT, settlementId);
     PaysafeApiResponse response = paysafeApiClient.executePost(path, refundRequest, requestOptions);
-    return processResponse(response, Refund.class);
+    return paysafeApiClient.processResponse(response, Refund.class);
   }
 
   /**
@@ -60,7 +59,7 @@ public class RefundServiceImpl implements RefundService {
   public Refund getRefundById(final String refundId, final RequestOptions requestOptions) throws PaysafeSdkException {
     final String endpoint = String.format("%s/%s", REFUND_ENDPOINT, refundId);
     PaysafeApiResponse response = paysafeApiClient.executeGet(endpoint, requestOptions);
-    return processResponse(response, Refund.class);
+    return paysafeApiClient.processResponse(response, Refund.class);
   }
 
   /**
@@ -83,7 +82,7 @@ public class RefundServiceImpl implements RefundService {
     final String path = String.format("%s%s", REFUND_ENDPOINT,
         buildQueryParameters(merchantRefNum, endDate, limit, offset, startDate, null, null));
     PaysafeApiResponse response = paysafeApiClient.executeGet(path, requestOptions);
-    return processResponse(response, RefundList.class);
+    return paysafeApiClient.processResponse(response, RefundList.class);
   }
 
   /**
@@ -95,7 +94,7 @@ public class RefundServiceImpl implements RefundService {
     final String path = String.format("%s/%s", REFUND_ENDPOINT, refundId);
     PaysafeApiResponse response = paysafeApiClient.executePut(path, cancelRequest, requestOptions);
 
-    return processResponse(response, CancelResponse.class);
+    return paysafeApiClient.processResponse(response, CancelResponse.class);
   }
 
   /**

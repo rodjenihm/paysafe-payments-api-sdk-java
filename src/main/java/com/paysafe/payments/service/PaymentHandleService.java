@@ -16,7 +16,7 @@ public interface PaymentHandleService {
    * <p>Endpoint:
    * <strong>POST /v1/paymenthandles</strong></p>
    *
-   * @param paymentHandleRequest Contains the details
+   * @param paymentHandleRequest contains the details for creating the payment handle
    * @return created payment handle
    * @throws PaysafeSdkException if an error occurs
    */
@@ -29,8 +29,8 @@ public interface PaymentHandleService {
    * <p>Endpoint:
    * <strong>POST /v1/paymenthandles</strong></p>
    *
-   * @param paymentHandleRequest Contains the details
-   * @param requestOptions       Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param paymentHandleRequest contains the details for creating the payment handle
+   * @param requestOptions       custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return created payment handle
    * @throws PaysafeSdkException if an error occurs
    */
@@ -56,7 +56,7 @@ public interface PaymentHandleService {
    * <strong>GET /v1/paymenthandles/{paymentHandleId}</strong></p>
    *
    * @param paymentHandleId the unique identifier returned when payment handle was created
-   * @param requestOptions  Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param requestOptions  custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return PaymentHandle
    * @throws PaysafeSdkException if an error occurs
    */
@@ -68,11 +68,11 @@ public interface PaymentHandleService {
    * <p>Endpoint:
    * <strong>GET /v1/paymenthandles</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the request when creating payment handle.
-   * @param endDate        This is the end date in UTC. If null is provided, current date will be used.
-   * @param limit          This is the total number of records to return. If null is provided, default value (10) will be used.
-   * @param offset         This is the starting position, where 0 is the first record. If null is provided, default value (0) will be used.
-   * @param startDate      This is the start date in UTC. If null is provided, default value (30 days before the end date) will be used.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the request when creating payment handle
+   * @param endDate        the end date in UTC; if null is provided, current date will be used
+   * @param limit          the total number of records to return; if null is provided, default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, default value (30 days before the end date) will be used
    * @return PaymentHandleList containing a list of verifications and meta information for the pagination APIs
    * @throws PaysafeSdkException if an error occurs
    */
@@ -86,12 +86,12 @@ public interface PaymentHandleService {
    * <p>Endpoint:
    * <strong>GET /v1/paymenthandles</strong></p>
    *
-   * @param merchantRefNum Unique merchant reference number created by the merchant and submitted as part of the request when creating payment handle.
-   * @param endDate        This is the end date in UTC. If null is provided, current date will be used.
-   * @param limit          This is the total number of records to return. If null is provided, default value (10) will be used.
-   * @param offset         This is the starting position, where 0 is the first record. If null is provided, default value (0) will be used.
-   * @param startDate      This is the start date in UTC. If null is provided, default value (30 days before the end date) will be used.
-   * @param requestOptions Custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request.
+   * @param merchantRefNum unique merchant reference number created by the merchant and submitted as part of the request when creating payment handle
+   * @param endDate        the end date in UTC; if null is provided, current date will be used
+   * @param limit          the total number of records to return; if null is provided, default value (10) will be used
+   * @param offset         the starting position, where 0 is the first record; if null is provided, default value (0) will be used
+   * @param startDate      the start date in UTC; if null is provided, default value (30 days before the end date) will be used
+   * @param requestOptions custom connectTimeout, responseTimeout, maxAutomaticRetries and/or simulator (if applicable) for this request
    * @return PaymentHandleList containing a list of verifications and meta information for the pagination APIs
    * @throws PaysafeSdkException if an error occurs
    */

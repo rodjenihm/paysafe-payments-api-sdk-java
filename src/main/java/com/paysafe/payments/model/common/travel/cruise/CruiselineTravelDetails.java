@@ -1,16 +1,23 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.common.travel.cruise;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.paysafe.payments.model.common.travel.airline.Passengers;
 import com.paysafe.payments.model.common.travel.cruise.enums.TravelPackageApplication;
 
+
+
 /**
- * Contains information about your cruise line travel.
- * <b>Note:</b> This object is only for Cruise line Merchants.  <br>
- * <b>Note:</b> This field has to be passed only in case of card transactions.
+ * Contains information about your cruise line travel. <br>**Note:** This object is only for Cruise line Merchants. <br>**Note:** This field has to be passed only in case of card transactions.
  */
 public class CruiselineTravelDetails {
 
@@ -29,13 +36,13 @@ public class CruiselineTravelDetails {
   @JsonProperty("originCity")
   private String originCity;
   @JsonProperty("roomRate")
-  private Integer roomRate;
+  private BigDecimal roomRate;
   @JsonProperty("travelPackageApplication")
   private TravelPackageApplication travelPackageApplication;
   @JsonProperty("ticket")
   private CruiselineTicket ticket;
   @JsonProperty("passengers")
-  private CruiselinePassengers passengers;
+  private Passengers passengers;
   @JsonProperty("tripLegs")
   private CruiselineTripLegs tripLegs;
 
@@ -43,7 +50,7 @@ public class CruiselineTravelDetails {
     super();
   }
 
-  private CruiselineTravelDetails(Builder builder) {
+  private CruiselineTravelDetails(final Builder builder) {
     setCruiseShipName(builder.cruiseShipName);
     setPassengerName(builder.passengerName);
     setDepartureDate(builder.departureDate);
@@ -62,13 +69,14 @@ public class CruiselineTravelDetails {
     return new Builder();
   }
 
+
   public CruiselineTravelDetails cruiseShipName(String cruiseShipName) {
     this.cruiseShipName = cruiseShipName;
     return this;
   }
 
   /**
-   * The ship name booked for the cruise.  Required during settlement request with AMEX for integration with TSYS processor.
+   * The ship name booked for the cruise. * Required during settlement request with AMEX for integration with TSYS processor
    *
    * @return cruiseShipName
    */
@@ -80,15 +88,14 @@ public class CruiselineTravelDetails {
     this.cruiseShipName = cruiseShipName;
   }
 
+
   public CruiselineTravelDetails passengerName(String passengerName) {
     this.passengerName = passengerName;
     return this;
   }
 
   /**
-   * Name of the passenger to whom the ticket was issued.
-   * Required during authorization request with AMEX for integration with TSYS processor.  <br>
-   * Required during settlement request with Visa or Mastercard for integration with TSYS processor.
+   * Name of the passenger to whom the ticket was issued. * Required during authorization request with AMEX for integration or TSYS processor * Required during settlement request with Visa or Mastercard for integration with TSYS processor
    *
    * @return passengerName
    */
@@ -100,15 +107,14 @@ public class CruiselineTravelDetails {
     this.passengerName = passengerName;
   }
 
+
   public CruiselineTravelDetails departureDate(String departureDate) {
     this.departureDate = departureDate;
     return this;
   }
 
   /**
-   * Date of passenger’s departure. Date format = YYYY-MM-DD, ISO 8601 expected.  <br>
-   * Required during authorization request with AMEX for integration with TSYS processor.  <br>
-   * Required during settlement request for integration with TSYS processor.
+   * Date of passenger's departure. Date format = YYYY-MM-DD, ISO 8601 expected. * Required during authorization request with AMEX for integration with TSYS processor * Required during settlement request for integration with TSYS processor _UTC Date Format_
    *
    * @return departureDate
    */
@@ -120,14 +126,14 @@ public class CruiselineTravelDetails {
     this.departureDate = departureDate;
   }
 
+
   public CruiselineTravelDetails returnDate(String returnDate) {
     this.returnDate = returnDate;
     return this;
   }
 
   /**
-   * Date of passenger’s return. Date format = YYYY-MM-DD, ISO 8601 expected.
-   * Required during settlement request with AMEX for integration with TSYS processor.
+   * Date of passenger's return. Date format = YYYY-MM-DD, ISO 8601 expected. * Required during settlement request with AMEX for integration with TSYS processor _UTC Date Format_
    *
    * @return returnDate
    */
@@ -139,17 +145,16 @@ public class CruiselineTravelDetails {
     this.returnDate = returnDate;
   }
 
+
   public CruiselineTravelDetails country(String country) {
     this.country = country;
     return this;
   }
 
   /**
-   * This field contains the country code of the cruise location.
+   * This field contains the country code of the cruise location.  See [Country Codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes).  * Required during settlement request with AMEX for integration with TSYS processor
    *
    * @return country
-   * @see <a href=https://developer.paysafe.com/en/support/reference-information/codes/#country-codes>Country codes</a>
-   * Required during settlement request with AMEX for integration with TSYS processor.
    */
   public String getCountry() {
     return country;
@@ -159,17 +164,14 @@ public class CruiselineTravelDetails {
     this.country = country;
   }
 
+
   public CruiselineTravelDetails state(String state) {
     this.state = state;
     return this;
   }
 
   /**
-   * The region code that corresponds to the state, province, or other country subdivision of the cruise location.
-   * See <a href="https://developer.paysafe.com/en/support/reference-information/codes/#province-codes">Province Codes</a>
-   * or <a href="https://developer.paysafe.com/en/support/reference-information/codes/#state-codes">State Codes</a> for Canada or the United States.
-   *  <br>
-   * Required during settlement request with AMEX for integration with TSYS processor.
+   * The region code that corresponds to the state, province, or other country subdivision of the cruise location.  See [Province Codes](https://developer.paysafe.com/en/support/reference-information/codes/#province-codes) or [State Codes](https://developer.paysafe.com/en/support/reference-information/codes/#state-codes) for Canada or the United States.  * Required during settlement request with AMEX for integration with TSYS processor
    *
    * @return state
    */
@@ -181,13 +183,14 @@ public class CruiselineTravelDetails {
     this.state = state;
   }
 
+
   public CruiselineTravelDetails originCity(String originCity) {
     this.originCity = originCity;
     return this;
   }
 
   /**
-   * Departure City where the trip originates.  Required for AMEX in case of integration with TSYS processor.
+   * Departure City where the trip originates.  * Required for AMEX in case of integration with TSYS processor
    *
    * @return originCity
    */
@@ -199,25 +202,25 @@ public class CruiselineTravelDetails {
     this.originCity = originCity;
   }
 
-  public CruiselineTravelDetails roomRate(Integer roomRate) {
+
+  public CruiselineTravelDetails roomRate(BigDecimal roomRate) {
     this.roomRate = roomRate;
     return this;
   }
 
   /**
-   * Total cost of the cruise. For onboard purchases or transactions occurring during cruise travel, this field must be zero filled.
-   * Required during settlement request with AMEX for integration with TSYS processor.  <br>
-   * Maximum: 999999999999
+   * Total cost of the cruise. For onboard purchases or transactions occurring during cruise travel, this field must be zero filled.  * Required during settlement request with AMEX for integration with TSYS processor
    *
    * @return roomRate
    */
-  public Integer getRoomRate() {
+  public BigDecimal getRoomRate() {
     return roomRate;
   }
 
-  public void setRoomRate(Integer roomRate) {
+  public void setRoomRate(BigDecimal roomRate) {
     this.roomRate = roomRate;
   }
+
 
   public CruiselineTravelDetails travelPackageApplication(TravelPackageApplication travelPackageApplication) {
     this.travelPackageApplication = travelPackageApplication;
@@ -225,7 +228,7 @@ public class CruiselineTravelDetails {
   }
 
   /**
-   * Indicates if the package includes car rental, airline flight, both or neither.
+   * Get travelPackageApplication
    *
    * @return travelPackageApplication
    */
@@ -237,15 +240,14 @@ public class CruiselineTravelDetails {
     this.travelPackageApplication = travelPackageApplication;
   }
 
+
   public CruiselineTravelDetails ticket(CruiselineTicket ticket) {
     this.ticket = ticket;
     return this;
   }
 
   /**
-   * Information about the Cruise line Ticket Number and if the ticket is restricted.
-   * Required during settlement.
-   * <b>Note:</b> This object is only for Cruise line Merchants.
+   * Get ticket
    *
    * @return ticket
    */
@@ -257,23 +259,25 @@ public class CruiselineTravelDetails {
     this.ticket = ticket;
   }
 
-  public CruiselineTravelDetails passengers(CruiselinePassengers passengers) {
+
+  public CruiselineTravelDetails passengers(Passengers passengers) {
     this.passengers = passengers;
     return this;
   }
 
   /**
-   * A grouping of up to ten cruise line passengers. <b>Note:</b> This object is only for Cruise line Merchants.
+   * Get passengers
    *
    * @return passengers
    */
-  public CruiselinePassengers getPassengers() {
+  public Passengers getPassengers() {
     return passengers;
   }
 
-  public void setPassengers(CruiselinePassengers passengers) {
+  public void setPassengers(Passengers passengers) {
     this.passengers = passengers;
   }
+
 
   public CruiselineTravelDetails tripLegs(CruiselineTripLegs tripLegs) {
     this.tripLegs = tripLegs;
@@ -281,8 +285,7 @@ public class CruiselineTravelDetails {
   }
 
   /**
-   * A grouping of up to four cruise line legs. Each leg provides detailed itinerary data.
-   * <b>Note:</b> This object is only for Cruise line Merchants.
+   * Get tripLegs
    *
    * @return tripLegs
    */
@@ -319,8 +322,7 @@ public class CruiselineTravelDetails {
 
   @Override
   public int hashCode() {
-    return Objects.hash(cruiseShipName, passengerName, departureDate, returnDate, country, state, originCity, roomRate,
-        travelPackageApplication, ticket, passengers, tripLegs);
+    return Objects.hash(cruiseShipName, passengerName, departureDate, returnDate, country, state, originCity, roomRate, travelPackageApplication, ticket, passengers, tripLegs);
   }
 
   @Override
@@ -354,7 +356,7 @@ public class CruiselineTravelDetails {
   }
 
   /**
-   * {@code CruiselineTravelDetails} builder static inner class.
+   * Contains information about your cruise line travel. <br>**Note:** This object is only for Cruise line Merchants. <br>**Note:** This field has to be passed only in case of card transactions. builder static inner class.
    */
   public static final class Builder {
     private String cruiseShipName;
@@ -364,19 +366,21 @@ public class CruiselineTravelDetails {
     private String country;
     private String state;
     private String originCity;
-    private Integer roomRate;
+    private BigDecimal roomRate;
     private TravelPackageApplication travelPackageApplication;
     private CruiselineTicket ticket;
-    private CruiselinePassengers passengers;
+    private Passengers passengers;
     private CruiselineTripLegs tripLegs;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code cruiseShipName} and returns a reference to this Builder enabling method chaining.
+     * The ship name booked for the cruise. * Required during settlement request with AMEX for integration with TSYS processor
+     * <p>
+     * Sets the cruiseShipName and returns a reference to this Builder enabling method chaining.
      *
-     * @param cruiseShipName the {@code cruiseShipName} to set
+     * @param cruiseShipName the cruiseShipName to set
      * @return a reference to this Builder
      */
     public Builder cruiseShipName(String cruiseShipName) {
@@ -385,9 +389,11 @@ public class CruiselineTravelDetails {
     }
 
     /**
-     * Sets the {@code passengerName} and returns a reference to this Builder enabling method chaining.
+     * Name of the passenger to whom the ticket was issued. * Required during authorization request with AMEX for integration or TSYS processor * Required during settlement request with Visa or Mastercard for integration with TSYS processor
+     * <p>
+     * Sets the passengerName and returns a reference to this Builder enabling method chaining.
      *
-     * @param passengerName the {@code passengerName} to set
+     * @param passengerName the passengerName to set
      * @return a reference to this Builder
      */
     public Builder passengerName(String passengerName) {
@@ -396,9 +402,11 @@ public class CruiselineTravelDetails {
     }
 
     /**
-     * Sets the {@code departureDate} and returns a reference to this Builder enabling method chaining.
+     * Date of passenger's departure. Date format = YYYY-MM-DD, ISO 8601 expected. * Required during authorization request with AMEX for integration with TSYS processor * Required during settlement request for integration with TSYS processor _UTC Date Format_
+     * <p>
+     * Sets the departureDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param departureDate the {@code departureDate} to set
+     * @param departureDate the departureDate to set
      * @return a reference to this Builder
      */
     public Builder departureDate(String departureDate) {
@@ -407,9 +415,11 @@ public class CruiselineTravelDetails {
     }
 
     /**
-     * Sets the {@code returnDate} and returns a reference to this Builder enabling method chaining.
+     * Date of passenger's return. Date format = YYYY-MM-DD, ISO 8601 expected. * Required during settlement request with AMEX for integration with TSYS processor _UTC Date Format_
+     * <p>
+     * Sets the returnDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param returnDate the {@code returnDate} to set
+     * @param returnDate the returnDate to set
      * @return a reference to this Builder
      */
     public Builder returnDate(String returnDate) {
@@ -418,9 +428,11 @@ public class CruiselineTravelDetails {
     }
 
     /**
-     * Sets the {@code country} and returns a reference to this Builder enabling method chaining.
+     * This field contains the country code of the cruise location.  See [Country Codes](https://developer.paysafe.com/en/support/reference-information/codes/#country-codes).  * Required during settlement request with AMEX for integration with TSYS processor
+     * <p>
+     * Sets the country and returns a reference to this Builder enabling method chaining.
      *
-     * @param country the {@code country} to set
+     * @param country the country to set
      * @return a reference to this Builder
      */
     public Builder country(String country) {
@@ -429,9 +441,11 @@ public class CruiselineTravelDetails {
     }
 
     /**
-     * Sets the {@code state} and returns a reference to this Builder enabling method chaining.
+     * The region code that corresponds to the state, province, or other country subdivision of the cruise location.  See [Province Codes](https://developer.paysafe.com/en/support/reference-information/codes/#province-codes) or [State Codes](https://developer.paysafe.com/en/support/reference-information/codes/#state-codes) for Canada or the United States.  * Required during settlement request with AMEX for integration with TSYS processor
+     * <p>
+     * Sets the state and returns a reference to this Builder enabling method chaining.
      *
-     * @param state the {@code state} to set
+     * @param state the state to set
      * @return a reference to this Builder
      */
     public Builder state(String state) {
@@ -440,9 +454,11 @@ public class CruiselineTravelDetails {
     }
 
     /**
-     * Sets the {@code originCity} and returns a reference to this Builder enabling method chaining.
+     * Departure City where the trip originates.  * Required for AMEX in case of integration with TSYS processor
+     * <p>
+     * Sets the originCity and returns a reference to this Builder enabling method chaining.
      *
-     * @param originCity the {@code originCity} to set
+     * @param originCity the originCity to set
      * @return a reference to this Builder
      */
     public Builder originCity(String originCity) {
@@ -451,20 +467,22 @@ public class CruiselineTravelDetails {
     }
 
     /**
-     * Sets the {@code roomRate} and returns a reference to this Builder enabling method chaining.
+     * Total cost of the cruise. For onboard purchases or transactions occurring during cruise travel, this field must be zero filled.  * Required during settlement request with AMEX for integration with TSYS processor
+     * <p>
+     * Sets the roomRate and returns a reference to this Builder enabling method chaining.
      *
-     * @param roomRate the {@code roomRate} to set
+     * @param roomRate the roomRate to set
      * @return a reference to this Builder
      */
-    public Builder roomRate(Integer roomRate) {
+    public Builder roomRate(BigDecimal roomRate) {
       this.roomRate = roomRate;
       return this;
     }
 
     /**
-     * Sets the {@code travelPackageApplication} and returns a reference to this Builder enabling method chaining.
+     * Sets the travelPackageApplication and returns a reference to this Builder enabling method chaining.
      *
-     * @param travelPackageApplication the {@code travelPackageApplication} to set
+     * @param travelPackageApplication the travelPackageApplication to set
      * @return a reference to this Builder
      */
     public Builder travelPackageApplication(TravelPackageApplication travelPackageApplication) {
@@ -473,9 +491,9 @@ public class CruiselineTravelDetails {
     }
 
     /**
-     * Sets the {@code ticket} and returns a reference to this Builder enabling method chaining.
+     * Sets the ticket and returns a reference to this Builder enabling method chaining.
      *
-     * @param ticket the {@code ticket} to set
+     * @param ticket the ticket to set
      * @return a reference to this Builder
      */
     public Builder ticket(CruiselineTicket ticket) {
@@ -484,20 +502,20 @@ public class CruiselineTravelDetails {
     }
 
     /**
-     * Sets the {@code passengers} and returns a reference to this Builder enabling method chaining.
+     * Sets the passengers and returns a reference to this Builder enabling method chaining.
      *
-     * @param passengers the {@code passengers} to set
+     * @param passengers the passengers to set
      * @return a reference to this Builder
      */
-    public Builder passengers(CruiselinePassengers passengers) {
+    public Builder passengers(Passengers passengers) {
       this.passengers = passengers;
       return this;
     }
 
     /**
-     * Sets the {@code tripLegs} and returns a reference to this Builder enabling method chaining.
+     * Sets the tripLegs and returns a reference to this Builder enabling method chaining.
      *
-     * @param tripLegs the {@code tripLegs} to set
+     * @param tripLegs the tripLegs to set
      * @return a reference to this Builder
      */
     public Builder tripLegs(CruiselineTripLegs tripLegs) {
@@ -506,13 +524,12 @@ public class CruiselineTravelDetails {
     }
 
     /**
-     * Returns a {@code CruiselineTravelDetails} built from the parameters previously set.
+     * Returns a CruiselineTravelDetails built from the parameters previously set.
      *
-     * @return a {@code CruiselineTravelDetails} built with parameters of this {@code CruiselineTravelDetails.Builder}
+     * @return a CruiselineTravelDetails built with parameters of this CruiselineTravelDetails.Builder
      */
     public CruiselineTravelDetails build() {
       return new CruiselineTravelDetails(this);
     }
   }
 }
-

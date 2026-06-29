@@ -1,0 +1,229 @@
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
+
+package com.paysafe.payments.model.common.travel.airline;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
+
+/**
+ * A grouping of four separate trip segments. Each leg contains detailed itinerary information.
+ */
+public class AirlineTripLegs {
+
+  @JsonProperty("leg1")
+  private AirlineLeg leg1;
+  @JsonProperty("leg2")
+  private AirlineLeg leg2;
+  @JsonProperty("leg3")
+  private AirlineLeg leg3;
+  @JsonProperty("leg4")
+  private AirlineLeg leg4;
+
+  public AirlineTripLegs() {
+    super();
+  }
+
+  private AirlineTripLegs(final Builder builder) {
+    setLeg1(builder.leg1);
+    setLeg2(builder.leg2);
+    setLeg3(builder.leg3);
+    setLeg4(builder.leg4);
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+
+  public AirlineTripLegs leg1(AirlineLeg leg1) {
+    this.leg1 = leg1;
+    return this;
+  }
+
+  /**
+   * Get leg1
+   *
+   * @return leg1
+   */
+  public AirlineLeg getLeg1() {
+    return leg1;
+  }
+
+  public void setLeg1(AirlineLeg leg1) {
+    this.leg1 = leg1;
+  }
+
+
+  public AirlineTripLegs leg2(AirlineLeg leg2) {
+    this.leg2 = leg2;
+    return this;
+  }
+
+  /**
+   * Get leg2
+   *
+   * @return leg2
+   */
+  public AirlineLeg getLeg2() {
+    return leg2;
+  }
+
+  public void setLeg2(AirlineLeg leg2) {
+    this.leg2 = leg2;
+  }
+
+
+  public AirlineTripLegs leg3(AirlineLeg leg3) {
+    this.leg3 = leg3;
+    return this;
+  }
+
+  /**
+   * Get leg3
+   *
+   * @return leg3
+   */
+  public AirlineLeg getLeg3() {
+    return leg3;
+  }
+
+  public void setLeg3(AirlineLeg leg3) {
+    this.leg3 = leg3;
+  }
+
+
+  public AirlineTripLegs leg4(AirlineLeg leg4) {
+    this.leg4 = leg4;
+    return this;
+  }
+
+  /**
+   * Get leg4
+   *
+   * @return leg4
+   */
+  public AirlineLeg getLeg4() {
+    return leg4;
+  }
+
+  public void setLeg4(AirlineLeg leg4) {
+    this.leg4 = leg4;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    AirlineTripLegs airlineTripLegs = (AirlineTripLegs) o;
+    return Objects.equals(this.leg1, airlineTripLegs.leg1) &&
+        Objects.equals(this.leg2, airlineTripLegs.leg2) &&
+        Objects.equals(this.leg3, airlineTripLegs.leg3) &&
+        Objects.equals(this.leg4, airlineTripLegs.leg4);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(leg1, leg2, leg3, leg4);
+  }
+
+  @Override
+  public String toString() {
+
+    return "class AirlineTripLegs {\n"
+        + "    leg1: " + toIndentedString(leg1) + "\n"
+        + "    leg2: " + toIndentedString(leg2) + "\n"
+        + "    leg3: " + toIndentedString(leg3) + "\n"
+        + "    leg4: " + toIndentedString(leg4) + "\n"
+        + "}";
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+
+  /**
+   * A grouping of four separate trip segments. Each leg contains detailed itinerary information. builder static inner class.
+   */
+  public static final class Builder {
+    private AirlineLeg leg1;
+    private AirlineLeg leg2;
+    private AirlineLeg leg3;
+    private AirlineLeg leg4;
+
+    private Builder() {
+    }
+
+    /**
+     * Sets the leg1 and returns a reference to this Builder enabling method chaining.
+     *
+     * @param leg1 the leg1 to set
+     * @return a reference to this Builder
+     */
+    public Builder leg1(AirlineLeg leg1) {
+      this.leg1 = leg1;
+      return this;
+    }
+
+    /**
+     * Sets the leg2 and returns a reference to this Builder enabling method chaining.
+     *
+     * @param leg2 the leg2 to set
+     * @return a reference to this Builder
+     */
+    public Builder leg2(AirlineLeg leg2) {
+      this.leg2 = leg2;
+      return this;
+    }
+
+    /**
+     * Sets the leg3 and returns a reference to this Builder enabling method chaining.
+     *
+     * @param leg3 the leg3 to set
+     * @return a reference to this Builder
+     */
+    public Builder leg3(AirlineLeg leg3) {
+      this.leg3 = leg3;
+      return this;
+    }
+
+    /**
+     * Sets the leg4 and returns a reference to this Builder enabling method chaining.
+     *
+     * @param leg4 the leg4 to set
+     * @return a reference to this Builder
+     */
+    public Builder leg4(AirlineLeg leg4) {
+      this.leg4 = leg4;
+      return this;
+    }
+
+    /**
+     * Returns a AirlineTripLegs built from the parameters previously set.
+     *
+     * @return a AirlineTripLegs built with parameters of this AirlineTripLegs.Builder
+     */
+    public AirlineTripLegs build() {
+      return new AirlineTripLegs(this);
+    }
+  }
+}

@@ -1,24 +1,22 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.threeds;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.card.enums.AccountCreatedRange;
 
+
+
 /**
- * These are the details of the current payment account of the cardholder.
- * <ul>
- * <li>
- * <b>createdRange:</b> This indicates the length of time that the payment account was enrolled in the cardholder’s
- * account with the 3DS Requestor.Allowed values: NO_ACCOUNT, DURING_TRANSACTION, LESS_THAN_THIRTY_DAYS, THIRTY_TO_SIXTY_DAYS, MORE_THAN_SIXTY_DAYS
- * </li>
- * <li>
- * <b>createdDate:</b> This is the date that the cardholder opened the account with the 3DS Requestor.
- * The ISO 8601 date format is expected, i.e., YYYY-MM-DD.e.
- * </li>
- * </ul>
+ * Details of the current payment account of the cardholder
  */
 public class PaymentAccountDetails {
 
@@ -31,8 +29,8 @@ public class PaymentAccountDetails {
     super();
   }
 
-  private PaymentAccountDetails(Builder builder) {
-    setCreatedRange(builder.accountCreatedRange);
+  private PaymentAccountDetails(final Builder builder) {
+    setCreatedRange(builder.createdRange);
     setCreatedDate(builder.createdDate);
   }
 
@@ -40,13 +38,14 @@ public class PaymentAccountDetails {
     return new Builder();
   }
 
-  public PaymentAccountDetails createdRange(AccountCreatedRange accountCreatedRange) {
-    this.createdRange = accountCreatedRange;
+
+  public PaymentAccountDetails createdRange(AccountCreatedRange createdRange) {
+    this.createdRange = createdRange;
     return this;
   }
 
   /**
-   * This indicates the length of time that the payment account was enrolled in the cardholder’s account with the 3DS Requestor.
+   * Get createdRange
    *
    * @return createdRange
    */
@@ -54,9 +53,10 @@ public class PaymentAccountDetails {
     return createdRange;
   }
 
-  public void setCreatedRange(AccountCreatedRange accountCreatedRange) {
-    this.createdRange = accountCreatedRange;
+  public void setCreatedRange(AccountCreatedRange createdRange) {
+    this.createdRange = createdRange;
   }
+
 
   public PaymentAccountDetails createdDate(String createdDate) {
     this.createdDate = createdDate;
@@ -64,7 +64,7 @@ public class PaymentAccountDetails {
   }
 
   /**
-   * This is the date that the cardholder opened the account with the 3DS Requestor. The ISO 8601 date format is expected, i.e., YYYY-MM-DD.e.
+   * Date that the cardholder opened the account with the 3DS Requestor (ISO 8601 format)
    *
    * @return createdDate
    */
@@ -98,7 +98,7 @@ public class PaymentAccountDetails {
   public String toString() {
 
     return "class PaymentAccountDetails {\n"
-        + "    accountCreatedRange: " + toIndentedString(createdRange) + "\n"
+        + "    createdRange: " + toIndentedString(createdRange) + "\n"
         + "    createdDate: " + toIndentedString(createdDate) + "\n"
         + "}";
   }
@@ -115,30 +115,32 @@ public class PaymentAccountDetails {
   }
 
   /**
-   * {@code PaymentAccountDetails} builder static inner class.
+   * Details of the current payment account of the cardholder builder static inner class.
    */
   public static final class Builder {
-    private AccountCreatedRange accountCreatedRange;
+    private AccountCreatedRange createdRange;
     private String createdDate;
 
     private Builder() {
     }
 
     /**
-     * Sets the {@code createdRange} and returns a reference to this Builder enabling method chaining.
+     * Sets the createdRange and returns a reference to this Builder enabling method chaining.
      *
-     * @param accountCreatedRange the {@code createdRange} to set
+     * @param createdRange the createdRange to set
      * @return a reference to this Builder
      */
-    public Builder createdRange(AccountCreatedRange accountCreatedRange) {
-      this.accountCreatedRange = accountCreatedRange;
+    public Builder createdRange(AccountCreatedRange createdRange) {
+      this.createdRange = createdRange;
       return this;
     }
 
     /**
-     * Sets the {@code createdDate} and returns a reference to this Builder enabling method chaining.
+     * Date that the cardholder opened the account with the 3DS Requestor (ISO 8601 format)
+     * <p>
+     * Sets the createdDate and returns a reference to this Builder enabling method chaining.
      *
-     * @param createdDate the {@code createdDate} to set
+     * @param createdDate the createdDate to set
      * @return a reference to this Builder
      */
     public Builder createdDate(String createdDate) {
@@ -147,13 +149,12 @@ public class PaymentAccountDetails {
     }
 
     /**
-     * Returns a {@code PaymentAccountDetails} built from the parameters previously set.
+     * Returns a PaymentAccountDetails built from the parameters previously set.
      *
-     * @return a {@code PaymentAccountDetails} built with parameters of this {@code PaymentAccountDetails.Builder}
+     * @return a PaymentAccountDetails built with parameters of this PaymentAccountDetails.Builder
      */
     public PaymentAccountDetails build() {
       return new PaymentAccountDetails(this);
     }
   }
 }
-

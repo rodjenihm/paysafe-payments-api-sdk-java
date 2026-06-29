@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.card.enums;
 
@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This indicates the length of time that the payment account was enrolled in the cardholder’s account with the 3DS Requestor.
+ * Length of time between cardholder opening the account and the current transaction.
  */
 public enum AccountCreatedRange {
+
   NO_ACCOUNT("NO_ACCOUNT"),
 
   DURING_TRANSACTION("DURING_TRANSACTION"),

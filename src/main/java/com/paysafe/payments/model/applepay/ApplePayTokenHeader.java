@@ -1,10 +1,18 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.applepay;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+
 
 /**
  * Header parameter of Apple Pay Token
@@ -22,7 +30,7 @@ public class ApplePayTokenHeader {
     super();
   }
 
-  private ApplePayTokenHeader(Builder builder) {
+  private ApplePayTokenHeader(final Builder builder) {
     setTransactionId(builder.transactionId);
     setEphemeralPublicKey(builder.ephemeralPublicKey);
     setPublicKeyHash(builder.publicKeyHash);
@@ -31,6 +39,7 @@ public class ApplePayTokenHeader {
   public static Builder builder() {
     return new Builder();
   }
+
 
   public ApplePayTokenHeader transactionId(String transactionId) {
     this.transactionId = transactionId;
@@ -50,6 +59,7 @@ public class ApplePayTokenHeader {
     this.transactionId = transactionId;
   }
 
+
   public ApplePayTokenHeader ephemeralPublicKey(String ephemeralPublicKey) {
     this.ephemeralPublicKey = ephemeralPublicKey;
     return this;
@@ -67,6 +77,7 @@ public class ApplePayTokenHeader {
   public void setEphemeralPublicKey(String ephemeralPublicKey) {
     this.ephemeralPublicKey = ephemeralPublicKey;
   }
+
 
   public ApplePayTokenHeader publicKeyHash(String publicKeyHash) {
     this.publicKeyHash = publicKeyHash;
@@ -127,7 +138,7 @@ public class ApplePayTokenHeader {
   }
 
   /**
-   * {@code ApplePayTokenHeader} builder static inner class.
+   * Header parameter of Apple Pay Token builder static inner class.
    */
   public static final class Builder {
     private String transactionId;
@@ -138,9 +149,11 @@ public class ApplePayTokenHeader {
     }
 
     /**
-     * Sets the {@code transactionId} and returns a reference to this Builder enabling method chaining.
+     * Returned by Apple Pay
+     * <p>
+     * Sets the transactionId and returns a reference to this Builder enabling method chaining.
      *
-     * @param transactionId the {@code transactionId} to set
+     * @param transactionId the transactionId to set
      * @return a reference to this Builder
      */
     public Builder transactionId(String transactionId) {
@@ -149,9 +162,11 @@ public class ApplePayTokenHeader {
     }
 
     /**
-     * Sets the {@code ephemeralPublicKey} and returns a reference to this Builder enabling method chaining.
+     * Returned by Apple Pay
+     * <p>
+     * Sets the ephemeralPublicKey and returns a reference to this Builder enabling method chaining.
      *
-     * @param ephemeralPublicKey the {@code ephemeralPublicKey} to set
+     * @param ephemeralPublicKey the ephemeralPublicKey to set
      * @return a reference to this Builder
      */
     public Builder ephemeralPublicKey(String ephemeralPublicKey) {
@@ -160,9 +175,11 @@ public class ApplePayTokenHeader {
     }
 
     /**
-     * Sets the {@code publicKeyHash} and returns a reference to this Builder enabling method chaining.
+     * Returned by Apple Pay
+     * <p>
+     * Sets the publicKeyHash and returns a reference to this Builder enabling method chaining.
      *
-     * @param publicKeyHash the {@code publicKeyHash} to set
+     * @param publicKeyHash the publicKeyHash to set
      * @return a reference to this Builder
      */
     public Builder publicKeyHash(String publicKeyHash) {
@@ -171,13 +188,12 @@ public class ApplePayTokenHeader {
     }
 
     /**
-     * Returns a {@code ApplePayTokenHeader} built from the parameters previously set.
+     * Returns a ApplePayTokenHeader built from the parameters previously set.
      *
-     * @return a {@code ApplePayTokenHeader} built with parameters of this {@code ApplePayTokenHeader.Builder}
+     * @return a ApplePayTokenHeader built with parameters of this ApplePayTokenHeader.Builder
      */
     public ApplePayTokenHeader build() {
       return new ApplePayTokenHeader(this);
     }
   }
 }
-

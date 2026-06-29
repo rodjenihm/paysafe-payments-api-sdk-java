@@ -1,0 +1,50 @@
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
+
+package com.paysafe.payments.model.card.enums;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+/**
+ * Mechanism used by the cardholder to authenticate to the 3DS Requestor.
+ */
+public enum UserLoginAuthenticationMethod {
+
+  NO_LOGIN("NO_LOGIN"),
+
+  INTERNAL_CREDENTIALS("INTERNAL_CREDENTIALS"),
+
+  FEDERATED_ID("FEDERATED_ID"),
+
+  ISSUER_CREDENTIALS("ISSUER_CREDENTIALS"),
+
+  THIRD_PARY_AUTHENTICATION("THIRD_PARY_AUTHENTICATION"),
+
+  FIDO_AUTHENTICATOR("FIDO_AUTHENTICATOR");
+
+  private final String value;
+
+  UserLoginAuthenticationMethod(String value) {
+    this.value = value;
+  }
+
+  @JsonCreator
+  public static UserLoginAuthenticationMethod fromValue(String value) {
+    for (UserLoginAuthenticationMethod b : UserLoginAuthenticationMethod.values()) {
+      if (b.value.equalsIgnoreCase(value)) {
+        return b;
+      }
+    }
+    return null;
+  }
+
+  @JsonValue
+  public String getValue() {
+    return value;
+  }
+
+  @Override
+  public String toString() {
+    return String.valueOf(value);
+  }
+}

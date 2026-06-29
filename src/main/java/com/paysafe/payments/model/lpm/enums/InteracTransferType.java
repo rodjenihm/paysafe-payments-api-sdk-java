@@ -1,17 +1,19 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.lpm.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.paysafe.payments.model.lpm.Interac;
 
 /**
  * This parameter is used to to identify if user is registered for Interac E-Transfer.
  */
 public enum InteracTransferType {
-  REGULAR("ALIAS_REGULAR"),
 
-  AUTODEPOSIT("ALIAS_AUTODEPOSIT");
+  ALIAS_REGULAR("ALIAS_REGULAR"),
+
+  ALIAS_AUTODEPOSIT("ALIAS_AUTODEPOSIT");
 
   private final String value;
 

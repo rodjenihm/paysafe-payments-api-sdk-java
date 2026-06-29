@@ -1,4 +1,4 @@
-// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2025. For more information see LICENSE
+// All Rights Reserved, Copyright © Paysafe Holdings UK Limited 2026. For more information see LICENSE
 
 package com.paysafe.payments.model.customer.singleusecustomertoken;
 
@@ -7,10 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.paysafe.payments.model.customer.enums.SingleUseTokenPaymentType;
+
+
 
 /**
  * SingleUseCustomerTokenRequest
@@ -20,8 +23,7 @@ public class SingleUseCustomerTokenRequest {
   @JsonProperty("merchantRefNum")
   private String merchantRefNum;
   @JsonProperty("paymentType")
-  private List<SingleUseTokenPaymentType> paymentType = null;
-
+  private List<SingleUseTokenPaymentType> paymentType;
   private Map<String, Object> additionalParameters;
 
   public SingleUseCustomerTokenRequest() {
@@ -31,12 +33,13 @@ public class SingleUseCustomerTokenRequest {
   private SingleUseCustomerTokenRequest(final Builder builder) {
     setMerchantRefNum(builder.merchantRefNum);
     setPaymentType(builder.paymentType);
-    setAdditionalParameters(builder.additionalParameters);
+    this.additionalParameters = builder.additionalParameters;
   }
 
   public static Builder builder() {
     return new Builder();
   }
+
 
   public SingleUseCustomerTokenRequest merchantRefNum(String merchantRefNum) {
     this.merchantRefNum = merchantRefNum;
@@ -56,22 +59,10 @@ public class SingleUseCustomerTokenRequest {
     this.merchantRefNum = merchantRefNum;
   }
 
+
   public SingleUseCustomerTokenRequest paymentType(List<SingleUseTokenPaymentType> paymentType) {
     this.paymentType = paymentType;
     return this;
-  }
-
-  /**
-   * This specifies the payment type for which you are creating the single-use token.
-   *
-   * @return paymentType
-   */
-  public List<SingleUseTokenPaymentType> getPaymentType() {
-    return paymentType;
-  }
-
-  public void setPaymentType(List<SingleUseTokenPaymentType> paymentType) {
-    this.paymentType = paymentType;
   }
 
   public SingleUseCustomerTokenRequest addPaymentTypeItem(SingleUseTokenPaymentType paymentTypeItem) {
@@ -91,15 +82,28 @@ public class SingleUseCustomerTokenRequest {
   }
 
   /**
+   * This specifies the payment type for which you are creating the single-use token.
+   *
+   * @return paymentType
+   */
+  public List<SingleUseTokenPaymentType> getPaymentType() {
+    return paymentType;
+  }
+
+  public void setPaymentType(List<SingleUseTokenPaymentType> paymentType) {
+    this.paymentType = paymentType;
+  }
+
+  /**
    * This map holds additional parameters that can be used for features not available in this client library.
    * During serialization, each key-value pair is treated as if the key were a top-level field in the serialized object,
-   * i.e. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
+   * e.g. <code>{"merchantRefNum" : "uuid", "additionalParameter1" : 100, "additionalParameter2" : "string" }</code> .
    *
    * @return additionalParameters
    */
   @JsonAnyGetter
   public Map<String, Object> getAdditionalParameters() {
-    return additionalParameters;
+    return this.additionalParameters;
   }
 
   public void setAdditionalParameters(Map<String, Object> additionalParameters) {
@@ -107,10 +111,10 @@ public class SingleUseCustomerTokenRequest {
   }
 
   public void addAdditionalParameter(String key, Object value) {
-    if (additionalParameters == null) {
-      additionalParameters = new HashMap<>();
+    if (this.additionalParameters == null) {
+      this.additionalParameters = new HashMap<>();
     }
-    additionalParameters.put(key, value);
+    this.additionalParameters.put(key, value);
   }
 
   @Override
@@ -128,7 +132,7 @@ public class SingleUseCustomerTokenRequest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(merchantRefNum, paymentType, additionalParameters);
+    return Objects.hash(merchantRefNum, paymentType);
   }
 
   @Override
@@ -137,7 +141,6 @@ public class SingleUseCustomerTokenRequest {
     return "class SingleUseCustomerTokenRequest {\n"
         + "    merchantRefNum: " + toIndentedString(merchantRefNum) + "\n"
         + "    paymentType: " + toIndentedString(paymentType) + "\n"
-        + "    additionalParameters: " + toIndentedString(additionalParameters) + "\n"
         + "}";
   }
 
@@ -153,7 +156,7 @@ public class SingleUseCustomerTokenRequest {
   }
 
   /**
-   * {@code SingleUseCustomerTokenRequest} builder static inner class.
+   * SingleUseCustomerTokenRequest builder static inner class.
    */
   public static final class Builder {
     private String merchantRefNum;
@@ -164,9 +167,11 @@ public class SingleUseCustomerTokenRequest {
     }
 
     /**
-     * Sets the {@code merchantRefNum} and returns a reference to this Builder enabling method chaining.
+     * This is the merchant reference number created by the merchant and submitted as part of the request. It must be unique for each request.
+     * <p>
+     * Sets the merchantRefNum and returns a reference to this Builder enabling method chaining.
      *
-     * @param merchantRefNum the {@code merchantRefNum} to set
+     * @param merchantRefNum the merchantRefNum to set
      * @return a reference to this Builder
      */
     public Builder merchantRefNum(String merchantRefNum) {
@@ -175,39 +180,15 @@ public class SingleUseCustomerTokenRequest {
     }
 
     /**
-     * Sets the {@code paymentType} and returns a reference to this Builder enabling method chaining.
+     * This specifies the payment type for which you are creating the single-use token.
+     * <p>
+     * Sets the paymentType and returns a reference to this Builder enabling method chaining.
      *
-     * @param paymentType the {@code paymentType} to set
+     * @param paymentType the paymentType to set
      * @return a reference to this Builder
      */
     public Builder paymentType(List<SingleUseTokenPaymentType> paymentType) {
       this.paymentType = paymentType;
-      return this;
-    }
-
-    /**
-     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAdditionalParameter(String key, Object value) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.put(key, value);
-      return this;
-    }
-
-    /**
-     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
-     *
-     * @return a reference to this Builder
-     */
-    public Builder putAllAdditionalParameters(Map<String, Object> additionalParameters) {
-      if (this.additionalParameters == null) {
-        this.additionalParameters = new HashMap<>();
-      }
-      this.additionalParameters.putAll(additionalParameters);
       return this;
     }
 
@@ -223,13 +204,41 @@ public class SingleUseCustomerTokenRequest {
     }
 
     /**
-     * Returns a {@code SingleUseCustomerTokenRequest} built from the parameters previously set.
+     * Inserts one key/value pair to additionalParameters and returns a reference to this Builder enabling method chaining.
      *
-     * @return a {@code SingleUseCustomerTokenRequest} built with parameters of this {@code SingleUseCustomerTokenRequest.Builder}
+     * @param key the key to insert
+     * @param value the value to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAdditionalParameter(String key, Object value) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.put(key, value);
+      return this;
+    }
+
+    /**
+     * Inserts provided key/value pairs to additionalParameters and returns a reference to this Builder enabling method chaining.
+     *
+     * @param additionalParameters the key/value pairs to insert
+     * @return a reference to this Builder
+     */
+    public Builder addAllAdditionalParameters(Map<String, Object> additionalParameters) {
+      if (this.additionalParameters == null) {
+        this.additionalParameters = new HashMap<>();
+      }
+      this.additionalParameters.putAll(additionalParameters);
+      return this;
+    }
+
+    /**
+     * Returns a SingleUseCustomerTokenRequest built from the parameters previously set.
+     *
+     * @return a SingleUseCustomerTokenRequest built with parameters of this SingleUseCustomerTokenRequest.Builder
      */
     public SingleUseCustomerTokenRequest build() {
       return new SingleUseCustomerTokenRequest(this);
     }
   }
 }
-
